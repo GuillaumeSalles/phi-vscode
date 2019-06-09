@@ -91,6 +91,9 @@ export type LineHeightDefinition = {
   value: number;
 };
 
+export type BreakpointsMap = Map<string, BreakpointDefinition>;
+export type BreakpointDefinition = Length;
+
 export type Refs = {
   colors: ColorsMap;
   fontSizes: FontSizesMap;

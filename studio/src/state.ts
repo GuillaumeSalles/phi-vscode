@@ -1,5 +1,12 @@
 import * as T from "./types";
 
+function px(x: number): T.Length {
+  return {
+    type: "px",
+    value: x
+  };
+}
+
 export const components: T.Component[] = [
   {
     name: "Header",
@@ -79,6 +86,13 @@ export const colors: T.ColorsMap = new Map(
     { name: "Red a700", value: "#d50000" }
   ].map(colorDef => [colorDef.name, colorDef])
 );
+
+export const breakpoints: T.BreakpointsMap = new Map([
+  ["small", px(544)],
+  ["medium", px(768)],
+  ["large", px(1012)],
+  ["xlarge", px(1280)]
+]);
 
 export const refs: T.Refs = {
   colors,

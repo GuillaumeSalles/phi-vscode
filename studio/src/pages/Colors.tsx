@@ -1,12 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../types";
-import { column, row, mainPadding, heading, primaryButton } from "../styles";
+import {
+  column,
+  row,
+  mainPadding,
+  heading,
+  primaryButton,
+  card
+} from "../styles";
 import { useState } from "react";
 import Modal from "../Modal";
 import Input from "../primitives/Input";
 import ModalButton from "../primitives/ModalButton";
 import SecondaryButton from "../primitives/SecondaryButton";
+import { del, set } from "../helpers/immutable-map";
 
 type Props = {
   colors: Map<string, T.ColorDefinition>;
@@ -55,7 +63,7 @@ function Colors({ colors, onColorsChange }: Props) {
             text="Delete"
             disabled={selectedColor === null}
             onClick={() => {
-              onColorsChange(immDelete(colors, selectedColor!));
+              onColorsChange(del(colors, selectedColor!));
               setSelectedColor(null);
             }}
           />
@@ -68,17 +76,17 @@ function Colors({ colors, onColorsChange }: Props) {
           return (
             <div
               key={c.name}
-              css={{
-                boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
-                width: "100px",
-                height: "100px",
-                cursor: "pointer",
-                margin: "0 16px 16px 0",
-                padding: selectedColor === c.name ? "8px" : "10px",
-                background: "white",
-                borderRadius: "2px",
-                border: selectedColor === c.name ? "solid #0076FF 2px" : "none"
-              }}
+              css={[
+                card,
+                {
+                  width: "100px",
+                  height: "100px",
+                  margin: "0 16px 16px 0",
+                  padding: selectedColor === c.name ? "8px" : "10px",
+                  border:
+                    selectedColor === c.name ? "solid #0076FF 2px" : "none"
+                }
+              ]}
               onClick={() =>
                 setSelectedColor(selectedColor === c.name ? null : c.name)
               }
@@ -160,7 +168,7 @@ function Colors({ colors, onColorsChange }: Props) {
                   setHasTryToSubmit(true);
                 } else {
                   onColorsChange(
-                    immSet(colors, colorName, {
+                    set(colors, colorName, {
                       name: colorName,
                       value: colorValue
                     })
@@ -177,22 +185,6 @@ function Colors({ colors, onColorsChange }: Props) {
 }
 
 export default Colors;
-
-function immSet<TKey, TValue>(
-  map: Map<TKey, TValue>,
-  key: TKey,
-  value: TValue
-) {
-  const newMap = new Map(map);
-  newMap.set(key, value);
-  return newMap;
-}
-
-function immDelete<TKey, TValue>(map: Map<TKey, TValue>, key: TKey) {
-  const newMap = new Map(map);
-  newMap.delete(key);
-  return newMap;
-}
 
 function isHexRGB(str: string) {
   return /^#[0-9a-f]{6}$/i.test(str);

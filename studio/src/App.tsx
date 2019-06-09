@@ -5,9 +5,9 @@ import Menu from "./Menu";
 import {
   components as defaultComponents,
   refs,
-  colors as defaultColors
+  colors as defaultColors,
+  breakpoints as defaultBreakpoints
 } from "./state";
-import LayersTree from "./LayersTree";
 import { useState } from "react";
 import Colors from "./pages/Colors";
 import { Route } from "react-router";
@@ -18,6 +18,7 @@ import ComponentView from "./pages/ComponentView";
 function App() {
   const [components, setComponents] = useState(defaultComponents);
   const [colors, setColors] = useState(defaultColors);
+  const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
   const [selectedComponent, setComponent] = useState(components[0]);
   const [selectedLayer, setLayer] = useState(selectedComponent.layout);
   return (
@@ -35,7 +36,16 @@ function App() {
       >
         <Menu components={components} />
       </div>
-      <div css={[{ flex: "1 1 auto", height: "100%", background: "#fafafa" }]}>
+      <div
+        css={[
+          {
+            flex: "1 1 auto",
+            height: "100%",
+            background: "#fafafa",
+            maxWidth: "calc(100% - 240px)"
+          }
+        ]}
+      >
         <Route path="/typography" component={Typography} />
         <Route
           path="/colors"
@@ -46,7 +56,15 @@ function App() {
             />
           )}
         />
-        <Route path="/breakpoints" component={Breakpoints} />
+        <Route
+          path="/breakpoints"
+          render={() => (
+            <Breakpoints
+              breakpoints={breakpoints}
+              onBreakpointsChange={breakpoints => setBreakpoints(breakpoints)}
+            />
+          )}
+        />
         <Route
           path="/components/:id"
           render={props => {

@@ -60,3 +60,14 @@ export const input = css({
   borderImage: "initial",
   outline: "0px"
 });
+
+export const card = css({
+  boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
+  cursor: "pointer",
+  background: "white",
+  borderRadius: "2px",
+  transition: "all 0.2s ease 0s",
+  ":hover": {
+    boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
+  }
+});

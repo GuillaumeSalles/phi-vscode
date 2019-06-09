@@ -7,11 +7,11 @@ type Props = {
   width?: string;
   margin?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: number;
   isInvalid?: boolean;
 };
 
-export default function Input({
+export default function InputNumber({
   placeholder,
   width,
   margin,
@@ -51,6 +51,7 @@ export default function Input({
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          type="number"
           css={{
             boxShadow: "none",
             boxSizing: "border-box",

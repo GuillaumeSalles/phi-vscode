@@ -9,7 +9,7 @@ type Props = {
 };
 
 const defaultStyle = {
-  "-webkit-appearance": "none",
+  WebkitAppearance: "none",
   position: "relative",
   display: "inline-block",
   verticalAlign: "middle",
