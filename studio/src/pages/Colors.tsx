@@ -55,7 +55,8 @@ function Colors({ colors, onColorsChange }: Props) {
             text="Delete"
             disabled={selectedColor === null}
             onClick={() => {
-              onColorsChange(immDelete(colors, colorName));
+              onColorsChange(immDelete(colors, selectedColor!));
+              setSelectedColor(null);
             }}
           />
         </div>
