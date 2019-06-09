@@ -42,7 +42,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
           }
           options={Array.from(refs.fontFamilies.entries()).map(entry => [
             entry[0],
-            entry[1].name
+            entry[0]
           ])}
         />
       </Field>

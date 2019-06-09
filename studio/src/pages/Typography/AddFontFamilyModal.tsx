@@ -36,7 +36,7 @@ function AddFontFamilyModal({ fontFamilies, onAdd, onCancel }: Props) {
         if (!isFormValid()) {
           setIsValidating(true);
         } else {
-          onAdd(name, { name, value });
+          onAdd(name, value);
         }
       }}
       onCancel={onCancel}

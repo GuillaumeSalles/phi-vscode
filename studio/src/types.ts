@@ -74,10 +74,7 @@ export type FontSizeDefinition = {
 };
 
 export type FontFamiliesMap = Map<string, FontFamilyDefinition>;
-export type FontFamilyDefinition = {
-  name: string;
-  value: string;
-};
+export type FontFamilyDefinition = string;
 
 export type FontWeightsMap = Map<string, FontWeightDefinition>;
 export type FontWeightDefinition = {

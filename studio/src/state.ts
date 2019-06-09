@@ -38,19 +38,11 @@ export const fontSizes: T.FontSizesMap = new Map(
 export const fontFamilies: T.FontFamiliesMap = new Map([
   [
     "default",
-    {
-      name: "default",
-      value:
-        '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
-    }
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
   ],
   [
     "mono",
-    {
-      name: "mono",
-      value:
-        'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace'
-    }
+    'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace'
   ]
 ]);
 

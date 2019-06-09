@@ -53,7 +53,7 @@ function fontFamilyToString(
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
   }
-  return ref.value;
+  return ref;
 }
 
 function fontWeightToNumber(fontWeight: T.Ref, fontWeights: T.FontWeightsMap) {
