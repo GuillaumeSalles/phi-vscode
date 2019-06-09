@@ -6,7 +6,8 @@ import {
   components as defaultComponents,
   refs,
   colors as defaultColors,
-  breakpoints as defaultBreakpoints
+  breakpoints as defaultBreakpoints,
+  fontFamilies as defaultFontFamilies
 } from "./state";
 import { useState } from "react";
 import Colors from "./pages/Colors";
@@ -18,6 +19,7 @@ import ComponentView from "./pages/ComponentView";
 function App() {
   const [components, setComponents] = useState(defaultComponents);
   const [colors, setColors] = useState(defaultColors);
+  const [fontFamilies, setFontFamilies] = useState(defaultFontFamilies);
   const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
   const [selectedComponent, setComponent] = useState(components[0]);
   const [selectedLayer, setLayer] = useState(selectedComponent.layout);
@@ -46,7 +48,17 @@ function App() {
           }
         ]}
       >
-        <Route path="/typography" component={Typography} />
+        <Route
+          path="/typography"
+          render={() => (
+            <Typography
+              fontFamilies={fontFamilies}
+              onFontFamiliesChange={fontFamilies =>
+                setFontFamilies(fontFamilies)
+              }
+            />
+          )}
+        />
         <Route
           path="/colors"
           render={() => (

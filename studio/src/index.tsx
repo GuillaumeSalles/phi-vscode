@@ -6,7 +6,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <MemoryRouter initialEntries={["/colors"]}>
+  <MemoryRouter initialEntries={["/typography"]}>
     <App />
   </MemoryRouter>,
   document.getElementById("root")

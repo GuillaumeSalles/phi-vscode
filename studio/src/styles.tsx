@@ -21,6 +21,12 @@ export const heading = css({
   fontSize: "24px"
 });
 
+export const subHeading = css({
+  margin: "0",
+  fontWeight: 400,
+  fontSize: "20px"
+});
+
 export const primaryButton = css({
   borderRadius: "5px",
   borderWidth: "1px",
