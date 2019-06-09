@@ -28,10 +28,7 @@ export const components: T.Component[] = [
 export const fontSizes: T.FontSizesMap = new Map(
   [12, 14, 16, 20, 24, 32, 40, 48].map((x, index) => [
     `T${index + 1}`,
-    {
-      name: `T${index + 1}`,
-      value: `${x}px`
-    }
+    `${x}px`
   ])
 );
 

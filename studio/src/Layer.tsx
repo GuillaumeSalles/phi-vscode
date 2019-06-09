@@ -42,7 +42,7 @@ function fontSizeToString(
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
   }
-  return ref.value;
+  return ref;
 }
 
 function fontFamilyToString(

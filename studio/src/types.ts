@@ -68,10 +68,7 @@ export type ColorDefinition = {
 };
 
 export type FontSizesMap = Map<string, FontSizeDefinition>;
-export type FontSizeDefinition = {
-  name: string;
-  value: string;
-};
+export type FontSizeDefinition = string;
 
 export type FontFamiliesMap = Map<string, FontFamilyDefinition>;
 export type FontFamilyDefinition = string;

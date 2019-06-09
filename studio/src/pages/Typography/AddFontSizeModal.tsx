@@ -37,7 +37,7 @@ export default function AddFontSizeModal({ items, onAdd, onCancel }: Props) {
         if (!isFormValid()) {
           setIsValidating(true);
         } else {
-          onAdd(name, { name, value: value + "px" });
+          onAdd(name, value + "px");
         }
       }}
       onCancel={onCancel}
