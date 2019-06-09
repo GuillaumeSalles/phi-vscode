@@ -7,7 +7,8 @@ import {
   refs,
   colors as defaultColors,
   breakpoints as defaultBreakpoints,
-  fontFamilies as defaultFontFamilies
+  fontFamilies as defaultFontFamilies,
+  fontSizes as defaultFontSizes
 } from "./state";
 import { useState } from "react";
 import Colors from "./pages/Colors";
@@ -20,6 +21,7 @@ function App() {
   const [components, setComponents] = useState(defaultComponents);
   const [colors, setColors] = useState(defaultColors);
   const [fontFamilies, setFontFamilies] = useState(defaultFontFamilies);
+  const [fontSizes, setFontSizes] = useState(defaultFontSizes);
   const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
   const [selectedComponent, setComponent] = useState(components[0]);
   const [selectedLayer, setLayer] = useState(selectedComponent.layout);
@@ -56,6 +58,8 @@ function App() {
               onFontFamiliesChange={fontFamilies =>
                 setFontFamilies(fontFamilies)
               }
+              fontSizes={fontSizes}
+              onFontSizesChange={fontSizes => setFontSizes(fontSizes)}
             />
           )}
         />

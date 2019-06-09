@@ -8,23 +8,20 @@ import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../primitives/SelectableCard";
 import Modal from "../../Modal";
-import AddFontFamilyModal from "./AddFontFamilyModal";
+import AddFontSizeModal from "./AddFontSizeModal";
 
 type Props = {
-  fontFamilies: T.FontFamiliesMap;
-  onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;
+  items: T.FontSizesMap;
+  onItemsChange: (items: T.FontSizesMap) => void;
 };
 
-export default function FontFamilies({
-  fontFamilies,
-  onFontFamiliesChange
-}: Props) {
+export default function FontSizes({ items, onItemsChange }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
-        <h2 css={subHeading}>Font family</h2>
+        <h2 css={subHeading}>Font sizes</h2>
         <div css={[row, { marginLeft: "28px" }]}>
           <SecondaryButton
             text="Add"
@@ -37,14 +34,14 @@ export default function FontFamilies({
             text="Delete"
             disabled={selectedItem === null}
             onClick={() => {
-              onFontFamiliesChange(del(fontFamilies, selectedItem!));
+              onItemsChange(del(items, selectedItem!));
               setSelectedItem(null);
             }}
           />
         </div>
       </div>
 
-      {Array.from(fontFamilies.entries()).map(entry => (
+      {Array.from(items.entries()).map(entry => (
         <div key={entry[0]} css={[column, { marginBottom: "20px" }]}>
           <div
             css={{
@@ -59,15 +56,17 @@ export default function FontFamilies({
             isSelected={selectedItem === entry[0]}
             onClick={() => setSelectedItem(entry[0])}
           >
-            <div css={{ fontFamily: entry[1], margin: "12px" }}>{entry[1]}</div>
+            <div css={{ fontSize: entry[1].value, margin: "12px" }}>
+              {entry[1].name}
+            </div>
           </SelectableCard>
         </div>
       ))}
       <Modal isOpen={isModalOpen}>
-        <AddFontFamilyModal
-          fontFamilies={fontFamilies}
+        <AddFontSizeModal
+          items={items}
           onAdd={(name, value) => {
-            onFontFamiliesChange(set(fontFamilies, name, value));
+            onItemsChange(set(items, name, value));
             setIsModalOpen(false);
           }}
           onCancel={() => setIsModalOpen(false)}
