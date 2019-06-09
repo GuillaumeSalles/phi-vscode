@@ -15,6 +15,7 @@ import Input from "../primitives/Input";
 import ModalButton from "../primitives/ModalButton";
 import SecondaryButton from "../primitives/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
+import SelectableCard from "../primitives/SelectableCard";
 
 type Props = {
   colors: Map<string, T.ColorDefinition>;
@@ -74,19 +75,12 @@ function Colors({ colors, onColorsChange }: Props) {
         {Array.from(colors.values()).map(c => {
           const contrast = getContrastColor(c.value);
           return (
-            <div
+            <SelectableCard
               key={c.name}
-              css={[
-                card,
-                {
-                  width: "100px",
-                  height: "100px",
-                  margin: "0 16px 16px 0",
-                  padding: selectedColor === c.name ? "8px" : "10px",
-                  border:
-                    selectedColor === c.name ? "solid #0076FF 2px" : "none"
-                }
-              ]}
+              overrides={{
+                margin: "0 16px 16px 0"
+              }}
+              isSelected={selectedColor === c.name}
               onClick={() =>
                 setSelectedColor(selectedColor === c.name ? null : c.name)
               }
@@ -99,16 +93,17 @@ function Colors({ colors, onColorsChange }: Props) {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "100%",
-                  width: "100%",
+                  height: "80px",
+                  width: "80px",
                   background: c.value,
-                  borderRadius: "3px"
+                  borderRadius: "2px",
+                  margin: "8px"
                 }}
               >
                 <div>{c.name}</div>
                 <div>{c.value}</div>
               </div>
-            </div>
+            </SelectableCard>
           );
         })}
       </div>

@@ -24,8 +24,7 @@ export default function SelectableCard({
   const styles = css(
     card,
     {
-      padding: isSelected ? "0px" : "2px",
-      border: isSelected ? "solid #0076FF 2px" : "none"
+      borderColor: isSelected ? "#0076FF" : "transparent"
     },
     css(overrides)
   );

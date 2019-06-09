@@ -67,6 +67,8 @@ export const card = css({
   background: "white",
   borderRadius: "2px",
   transition: "all 0.2s ease 0s",
+  borderWidth: "2px",
+  borderStyle: "solid",
   ":hover": {
     boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
   }
