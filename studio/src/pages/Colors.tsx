@@ -1,21 +1,15 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import React from "react";
 import * as T from "../types";
-import {
-  column,
-  row,
-  mainPadding,
-  heading,
-  primaryButton,
-  card
-} from "../styles";
+import { column, row, mainPadding, heading } from "../styles";
 import { useState } from "react";
 import Modal from "../Modal";
 import Input from "../primitives/Input";
-import ModalButton from "../primitives/ModalButton";
 import SecondaryButton from "../primitives/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../primitives/SelectableCard";
+import AddModal from "../components/AddModal";
 
 type Props = {
   colors: Map<string, T.ColorDefinition>;
@@ -108,72 +102,51 @@ function Colors({ colors, onColorsChange }: Props) {
         })}
       </div>
       <Modal isOpen={isModalOpen}>
-        <div
-          css={[
-            column,
-            {
-              boxShadow: "rgba(0, 0, 0, 0.12) 0px 20px 30px 0px;",
-              background: "white",
-              borderRadius: "8px",
-              overflow: "hidden"
+        <AddModal
+          title="Add color"
+          form={
+            <React.Fragment>
+              <p
+                css={{
+                  color: "rgb(102, 102, 102)",
+                  fontWeight: 400,
+                  fontSize: "14px",
+                  lineHeight: "24px"
+                }}
+              >
+                The name should unique. <br /> The value should be in
+                hexadecimal (e.g: #AABBCC).
+              </p>
+              <Input
+                placeholder="Name"
+                margin="0 0 12px"
+                value={colorName}
+                onChange={e => setColorName(e.target.value)}
+                isInvalid={hasTryToSubmit && !isColorNameValid()}
+              />
+              <Input
+                placeholder="Value in hex. (e.g: #AABBCC)"
+                value={colorValue}
+                onChange={e => setColorValue(e.target.value)}
+                isInvalid={hasTryToSubmit && !isColorValueValid()}
+              />
+            </React.Fragment>
+          }
+          onCancel={() => setIsModalOpen(false)}
+          onAdd={() => {
+            if (!isFormValid()) {
+              setHasTryToSubmit(true);
+            } else {
+              onColorsChange(
+                set(colors, colorName, {
+                  name: colorName,
+                  value: colorValue
+                })
+              );
+              setIsModalOpen(false);
             }
-          ]}
-        >
-          <header
-            css={[
-              column,
-              {
-                padding: "30px 45px"
-              }
-            ]}
-          >
-            <h1 css={[heading, { alignSelf: "center" }]}>Add color</h1>
-            <p
-              css={{
-                color: "rgb(102, 102, 102)",
-                fontWeight: 400,
-                fontSize: "14px",
-                lineHeight: "24px"
-              }}
-            >
-              The name should unique. <br /> The value should be in hexadecimal
-              (e.g: #AABBCC).
-            </p>
-            <Input
-              placeholder="Name"
-              margin="0 0 12px"
-              value={colorName}
-              onChange={e => setColorName(e.target.value)}
-              isInvalid={hasTryToSubmit && !isColorNameValid()}
-            />
-            <Input
-              placeholder="Value in hex. (e.g: #AABBCC)"
-              value={colorValue}
-              onChange={e => setColorValue(e.target.value)}
-              isInvalid={hasTryToSubmit && !isColorValueValid()}
-            />
-          </header>
-
-          <div css={[row, { borderTop: "1px solid rgb(234, 234, 234)" }]}>
-            <ModalButton text="cancel" onClick={() => setIsModalOpen(false)} />
-            <ModalButton
-              text="Add"
-              onClick={() => {
-                if (!isFormValid()) {
-                  setHasTryToSubmit(true);
-                } else {
-                  onColorsChange(
-                    set(colors, colorName, {
-                      name: colorName,
-                      value: colorValue
-                    })
-                  );
-                  setIsModalOpen(false);
-                }
-              }}
-            />
-          </div>
-        </div>
+          }}
+        />
       </Modal>
     </div>
   );
