@@ -21,6 +21,17 @@ export const heading = css({
   fontSize: "24px"
 });
 
+export const leftMenuHeading = css({
+  paddingLeft: "24px",
+  paddingBottom: "16px",
+  margin: 0,
+  fontSize: "13px",
+  textTransform: "uppercase",
+  letterSpacing: "1.3px",
+  fontWeight: 400,
+  color: "rgb(136, 136, 136)"
+});
+
 export const subHeading = css({
   margin: "0",
   fontWeight: 400,

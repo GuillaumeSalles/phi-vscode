@@ -1,5 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import * as T from "./types";
+import { useState } from "react";
+import { Route } from "react-router";
 import { row, column } from "./styles";
 import Menu from "./Menu";
 import {
@@ -10,9 +13,7 @@ import {
   fontFamilies as defaultFontFamilies,
   fontSizes as defaultFontSizes
 } from "./state";
-import { useState } from "react";
 import Colors from "./pages/Colors";
-import { Route } from "react-router";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
@@ -23,8 +24,15 @@ function App() {
   const [fontFamilies, setFontFamilies] = useState(defaultFontFamilies);
   const [fontSizes, setFontSizes] = useState(defaultFontSizes);
   const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
-  const [selectedComponent, setComponent] = useState(components[0]);
+  const [selectedComponent, setSelectedComponent] = useState(components[0]);
   const [selectedLayer, setLayer] = useState(selectedComponent.layout);
+
+  function setComponent(newComponent: T.Component) {
+    setComponents(
+      components.map(c => (c.name === newComponent.name ? newComponent : c))
+    );
+  }
+
   return (
     <div css={[row, { height: "100%", width: "100%" }]}>
       <div
@@ -90,7 +98,13 @@ function App() {
             if (component == null) {
               throw new Error("Component not found");
             }
-            return <ComponentView component={component} refs={refs} />;
+            return (
+              <ComponentView
+                component={component}
+                onComponentChange={component => setComponent(component)}
+                refs={refs}
+              />
+            );
           }}
         />
       </div>

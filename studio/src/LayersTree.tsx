@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "./types";
-import { column, row } from "./styles";
+import { column, row, leftMenuHeading } from "./styles";
 
 type Props = {
   root: T.Layer;
@@ -24,7 +24,7 @@ function flatten<T>(arrOfArr: T[][]): T[] {
   return result;
 }
 
-function flattenLayer(layer: T.Layer, depth: number): LayersTreeItem[] {
+function flattenLayer(layer: T.Layer, depth: number = 0): LayersTreeItem[] {
   const results = [{ layer, depth }];
   if (layer.type === "container") {
     for (let child of flatten(
@@ -69,20 +69,30 @@ function layerToIcon(layer: T.Layer) {
 
 function LayersTree({ root, onSelectLayer, selectedLayer }: Props) {
   return (
-    <div css={[column]}>
-      <h3>Layers</h3>
-      {flattenLayer(root, 0).map(item => (
-        <button
+    <div
+      css={[
+        column,
+        {
+          paddingBottom: "24px",
+          paddingTop: "24px"
+        }
+      ]}
+    >
+      <h2 css={leftMenuHeading}>Layers</h2>
+      {flattenLayer(root).map(item => (
+        <div
           key={item.layer.id}
           css={[
             row,
             {
-              paddingLeft: (item.depth + 1) * 8 + "px",
+              paddingLeft: (item.depth + 1) * 22 + "px",
               paddingTop: "2px",
               paddingBottom: "2px",
               paddingRight: "8px",
-              background: item.layer === selectedLayer ? "#EEE" : "none",
-              border: "none",
+              borderStyle: "solid",
+              borderWidth: "2px",
+              borderColor:
+                item.layer === selectedLayer ? "#0076FF" : "transparent",
               alignItems: "center",
               fontSize: "14px"
             }
@@ -91,7 +101,7 @@ function LayersTree({ root, onSelectLayer, selectedLayer }: Props) {
         >
           {layerToIcon(item.layer)}
           <span css={{ marginLeft: "4px" }}>{item.layer.name}</span>
-        </button>
+        </div>
       ))}
     </div>
   );
