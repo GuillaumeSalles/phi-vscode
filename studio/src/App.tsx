@@ -7,11 +7,12 @@ import { row, column } from "./styles";
 import Menu from "./Menu";
 import {
   components as defaultComponents,
-  refs,
   colors as defaultColors,
   breakpoints as defaultBreakpoints,
   fontFamilies as defaultFontFamilies,
-  fontSizes as defaultFontSizes
+  fontSizes as defaultFontSizes,
+  fontWeights,
+  lineHeights
 } from "./state";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -24,8 +25,13 @@ function App() {
   const [fontFamilies, setFontFamilies] = useState(defaultFontFamilies);
   const [fontSizes, setFontSizes] = useState(defaultFontSizes);
   const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
-  const [selectedComponent, setSelectedComponent] = useState(components[0]);
-  const [selectedLayer, setLayer] = useState(selectedComponent.layout);
+  const refs: T.Refs = {
+    colors,
+    fontFamilies,
+    fontSizes,
+    fontWeights,
+    lineHeights
+  };
 
   function setComponent(newComponent: T.Component) {
     setComponents(

@@ -82,11 +82,3 @@ export const breakpoints: T.BreakpointsMap = new Map([
   ["large", px(1012)],
   ["xlarge", px(1280)]
 ]);
-
-export const refs: T.Refs = {
-  colors,
-  fontSizes,
-  fontFamilies,
-  fontWeights,
-  lineHeights
-};
