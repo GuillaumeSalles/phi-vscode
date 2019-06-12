@@ -72,12 +72,11 @@ function lineHeightToCss(lineHeight: T.Ref, lineHeights: T.LineHeightMap) {
   return ref.value;
 }
 
-function letterSpacingToCss(letterSpacing: T.LetterSpacing | undefined) {
-  if (letterSpacing === undefined) {
+function lengthToCss(length: T.Length | undefined) {
+  if (length === undefined) {
     return undefined;
   }
-
-  return `${letterSpacing.value}px`;
+  return `${length.value}px`;
 }
 
 function makeTextLayerStyle(
@@ -91,8 +90,8 @@ function makeTextLayerStyle(
     fontSize: fontSizeToString(layer.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
-    lineHeight: lineHeightToCss(layer.lineHeight, refs.lineHeights),
-    letterSpacing: letterSpacingToCss(layer.letterSpacing)
+    lineHeight: lengthToCss(layer.lineHeight),
+    letterSpacing: lengthToCss(layer.letterSpacing)
   };
 }
 

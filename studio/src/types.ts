@@ -21,19 +21,14 @@ export type TextLayer = {
   name: string;
   tag: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   text?: string;
-  letterSpacing?: LetterSpacing;
+  letterSpacing?: Length;
+  lineHeight?: Length;
   color?: Color;
   fontSize: Ref;
   fontFamily: Ref;
   fontWeight: Ref;
-  lineHeight: Ref;
 } & Background &
   Dimensions;
-
-export type LetterSpacing = {
-  type: "px";
-  value: number;
-};
 
 export type Dimensions = {
   height?: Length;

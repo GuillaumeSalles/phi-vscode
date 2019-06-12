@@ -9,8 +9,8 @@ type Props = {
 
 function Field({ label, children }: Props) {
   return (
-    <div css={[column]}>
-      <label>{label}</label>
+    <div css={[column, { margin: "4px 8px" }]}>
+      <label css={{ fontSize: "12px", color: "#999" }}>{label}</label>
       {children}
     </div>
   );

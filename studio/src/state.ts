@@ -20,7 +20,8 @@ export const components: T.Component[] = [
       fontSize: { type: "ref", id: "T2" },
       fontFamily: { type: "ref", id: "default" },
       fontWeight: { type: "ref", id: "light" },
-      lineHeight: { type: "ref", id: "normal" }
+      lineHeight: { type: "px", value: 12 },
+      color: { type: "ref", id: "Red 800" }
     }
   }
 ];

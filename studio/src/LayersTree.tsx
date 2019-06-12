@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "./types";
-import { column, row, leftMenuHeading } from "./styles";
+import { column, row, leftMenuHeading, colors } from "./styles";
 
 type Props = {
   root: T.Layer;
@@ -92,7 +92,7 @@ function LayersTree({ root, onSelectLayer, selectedLayer }: Props) {
               borderStyle: "solid",
               borderWidth: "2px",
               borderColor:
-                item.layer === selectedLayer ? "#0076FF" : "transparent",
+                item.layer === selectedLayer ? colors.primary : "transparent",
               alignItems: "center",
               fontSize: "14px"
             }

@@ -91,8 +91,8 @@ function ComponentView({ component, onComponentChange, refs }: Props) {
             css={[
               column,
               {
-                width: "280px",
-                minWidth: "280px",
+                width: "236px",
+                minWidth: "236px",
                 bottom: 0,
                 paddingBottom: "24px",
                 paddingLeft: "16px",

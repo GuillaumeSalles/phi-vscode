@@ -6,7 +6,7 @@ import {
   InterpolationWithTheme,
   Interpolation
 } from "@emotion/core";
-import { card } from "../styles";
+import { card, colors } from "../styles";
 
 type Props = {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export default function SelectableCard({
   const styles = css(
     card,
     {
-      borderColor: isSelected ? "#0076FF" : "transparent"
+      borderColor: isSelected ? colors.primary : "transparent"
     },
     css(overrides)
   );

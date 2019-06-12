@@ -1,6 +1,10 @@
 /** @jsx jsx */
 import { css } from "@emotion/core";
 
+export const colors = {
+  primary: "#0076FF"
+};
+
 export const column = css({
   display: "flex",
   flexDirection: "column"
