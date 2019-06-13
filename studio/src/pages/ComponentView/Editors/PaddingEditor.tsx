@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, column } from "../../../styles";
+import { row, column, sectionTitle } from "../../../styles";
 import Field from "../../../components/Field";
 import LengthInput from "../../../components/LengthInput";
 
@@ -16,16 +16,14 @@ export default function PaddingEditor({ padding, onChange }: Props) {
   }
 
   return (
-    <div css={[column]}>
+    <div css={[column, { padding: "0 8px" }]}>
       <h4
-        css={{
-          margin: "8px",
-          fontSize: "13px",
-          textTransform: "uppercase",
-          letterSpacing: "1.3px",
-          fontWeight: 400,
-          color: "rgb(136,136,136)"
-        }}
+        css={[
+          sectionTitle,
+          {
+            margin: "8px"
+          }
+        ]}
       >
         Padding
       </h4>

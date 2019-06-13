@@ -33,8 +33,12 @@ export type TextLayer = {
   Padding;
 
 export type Dimensions = {
-  height?: Length;
-  width?: Length;
+  height?: string;
+  minHeight?: string;
+  maxHeight?: string;
+  width?: string;
+  minWidth?: string;
+  maxWidth?: string;
 };
 
 export type Margin = {

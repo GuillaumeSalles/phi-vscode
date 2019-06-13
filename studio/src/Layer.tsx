@@ -137,8 +137,12 @@ function makeChildren(layer: T.Layer, refs: T.Refs) {
 
 function makeDimensionsStyle(layer: T.Dimensions) {
   return {
-    height: layer.height ? lengthToString(layer.height) : undefined,
-    width: layer.width ? lengthToString(layer.width) : undefined
+    height: layer.height ? layer.height : "auto",
+    minHeight: layer.minHeight ? layer.minHeight : "auto",
+    maxHeight: layer.maxHeight ? layer.maxHeight : "auto",
+    width: layer.width ? layer.width : "auto",
+    minWidth: layer.minWidth ? layer.minWidth : "auto",
+    maxWidth: layer.maxWidth ? layer.maxWidth : "auto"
   };
 }
 
