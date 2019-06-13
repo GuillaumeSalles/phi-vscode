@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { colors } from "./styles";
+import { colors } from "../styles";
 
 type Props = {
   value: number | null;
@@ -25,6 +25,8 @@ function NumberInput({ value, onChange, min, max, step }: Props) {
         boxSizing: "border-box",
         outline: "none",
         width: "36px",
+        transition:
+          "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
         ":focus": {
           borderColor: colors.primary
         }
@@ -32,7 +34,9 @@ function NumberInput({ value, onChange, min, max, step }: Props) {
       type="number"
       value={value !== null ? value : ""}
       onChange={e =>
-        onChange(e.target.valueAsNumber === NaN ? null : e.target.valueAsNumber)
+        onChange(
+          Number.isNaN(e.target.valueAsNumber) ? null : e.target.valueAsNumber
+        )
       }
       min={min}
       max={max}

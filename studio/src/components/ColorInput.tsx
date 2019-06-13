@@ -1,42 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "./types";
+import * as T from "../types";
 import Select from "./Select";
-import { getContrastColor } from "./utils";
+import { getContrastColor } from "../utils";
 
 type Props = {
   value?: T.Color;
   colors: T.ColorsMap;
   onChange: (color: T.Color) => void;
 };
-
-function colorToValue(color?: T.Color) {
-  if (color == null) {
-    return "";
-  }
-  switch (color.type) {
-    case "ref":
-      return color.id;
-    case "hex":
-      return color.value;
-    default:
-      throw new Error("Invalid color type");
-  }
-}
-
-function colorToCss(color: T.Color | undefined, colors: T.ColorsMap) {
-  if (color == null) {
-    return "";
-  }
-  switch (color.type) {
-    case "ref":
-      return colors.get(color.id)!.value;
-    case "hex":
-      return color.value;
-    default:
-      throw new Error("Invalid color type");
-  }
-}
 
 function ColorInput({ value, colors, onChange }: Props) {
   if (value === undefined || value.type === "hex") {

@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "./types";
-import { column } from "./styles";
-import Select from "./Select";
-import Field from "./Field";
-import DimensionsEditor from "./DimensionsEditor";
-import ColorInput from "./ColorInput";
+import * as T from "../../../types";
+import { column } from "../../../styles";
+import Select from "../../../components/Select";
+import Field from "../../../components/Field";
+import DimensionsEditor from "../../../pages/ComponentView/Editors/DimensionsEditor";
+import ColorInput from "../../../components/ColorInput";
 
 type Props = {
   layer: T.ContainerLayer;

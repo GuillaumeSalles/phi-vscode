@@ -1,11 +1,5 @@
 /** @jsx jsx */
-import {
-  jsx,
-  css,
-  SerializedStyles,
-  InterpolationWithTheme,
-  Interpolation
-} from "@emotion/core";
+import { jsx, css, Interpolation } from "@emotion/core";
 import { card, colors } from "../styles";
 
 type Props = {

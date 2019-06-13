@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { column } from "./styles";
+import { column } from "../styles";
 
 type Props = {
   label: string;

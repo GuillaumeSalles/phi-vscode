@@ -1,13 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
-import { column, heading, row, card } from "../../styles";
-import SecondaryButton from "../../primitives/SecondaryButton";
+import { column, heading, row } from "../../styles";
+import SecondaryButton from "../../components/SecondaryButton";
 import AddBreakpointsModal from "./AddBreakpointModal";
 import { set, del } from "../../helpers/immutable-map";
 import Modal from "../../Modal";
 import { useState } from "react";
-import SelectableCard from "../../primitives/SelectableCard";
+import SelectableCard from "../../components/SelectableCard";
 
 type Props = {
   breakpoints: T.BreakpointsMap;

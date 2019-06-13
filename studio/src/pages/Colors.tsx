@@ -5,10 +5,10 @@ import * as T from "../types";
 import { column, row, mainPadding, heading } from "../styles";
 import { useState } from "react";
 import Modal from "../Modal";
-import Input from "../primitives/Input";
-import SecondaryButton from "../primitives/SecondaryButton";
+import Input from "../components/Input";
+import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
-import SelectableCard from "../primitives/SelectableCard";
+import SelectableCard from "../components/SelectableCard";
 import AddModal from "../components/AddModal";
 import { getContrastColor } from "../utils";
 

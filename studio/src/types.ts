@@ -28,11 +28,27 @@ export type TextLayer = {
   fontFamily: Ref;
   fontWeight: Ref;
 } & Background &
-  Dimensions;
+  Dimensions &
+  Margin &
+  Padding;
 
 export type Dimensions = {
   height?: Length;
   width?: Length;
+};
+
+export type Margin = {
+  marginTop?: Length;
+  marginRight?: Length;
+  marginBottom?: Length;
+  marginLeft?: Length;
+};
+
+export type Padding = {
+  paddingTop?: Length;
+  paddingRight?: Length;
+  paddingBottom?: Length;
+  paddingLeft?: Length;
 };
 
 export type Background = {

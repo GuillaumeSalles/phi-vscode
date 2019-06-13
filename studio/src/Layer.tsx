@@ -7,6 +7,13 @@ type Props = {
   refs: T.Refs;
 };
 
+function lengthToCss(
+  length: T.Length | undefined,
+  defaultValue?: string
+): string | undefined {
+  return length ? lengthToString(length) : defaultValue;
+}
+
 function lengthToString(length: T.Length) {
   switch (length.type) {
     case "px":
@@ -72,26 +79,21 @@ function lineHeightToCss(lineHeight: T.Ref, lineHeights: T.LineHeightMap) {
   return ref.value;
 }
 
-function lengthToCss(length: T.Length | undefined) {
-  if (length === undefined) {
-    return undefined;
-  }
-  return `${length.value}px`;
-}
-
 function makeTextLayerStyle(
   layer: T.TextLayer,
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
     ...makeDimensionsStyle(layer),
+    ...makeMarginStyle(layer),
+    ...makePaddingStyle(layer),
     ...makeBackgroundStyle(layer, refs.colors),
     color: layer.color ? colorToString(layer.color, refs.colors) : undefined,
     fontSize: fontSizeToString(layer.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
     lineHeight: lengthToCss(layer.lineHeight),
-    letterSpacing: lengthToCss(layer.letterSpacing)
+    letterSpacing: lengthToCss(layer.letterSpacing, "0")
   };
 }
 
@@ -137,6 +139,24 @@ function makeDimensionsStyle(layer: T.Dimensions) {
   return {
     height: layer.height ? lengthToString(layer.height) : undefined,
     width: layer.width ? lengthToString(layer.width) : undefined
+  };
+}
+
+function makeMarginStyle(layer: T.Margin) {
+  return {
+    marginTop: lengthToCss(layer.marginTop, "0"),
+    marginRight: lengthToCss(layer.marginRight, "0"),
+    marginBottom: lengthToCss(layer.marginBottom, "0"),
+    marginLeft: lengthToCss(layer.marginLeft, "0")
+  };
+}
+
+function makePaddingStyle(layer: T.Padding) {
+  return {
+    paddingTop: lengthToCss(layer.paddingTop, "0"),
+    paddingRight: lengthToCss(layer.paddingRight, "0"),
+    paddingBottom: lengthToCss(layer.paddingBottom, "0"),
+    paddingLeft: lengthToCss(layer.paddingLeft, "0")
   };
 }
 

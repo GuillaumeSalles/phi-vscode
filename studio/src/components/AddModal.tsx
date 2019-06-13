@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import React from "react";
 import { row, column, heading } from "../styles";
-import ModalButton from "../primitives/ModalButton";
+import ModalButton from "./ModalButton";
 
 type Props = {
   title: string;

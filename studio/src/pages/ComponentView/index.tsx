@@ -1,13 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
-import { column, mainPadding, heading, primaryButton, row } from "../../styles";
+import { column, mainPadding, heading, row } from "../../styles";
 import * as T from "../../types";
 import Component from "../../Component";
-import SecondaryButton from "../../primitives/SecondaryButton";
+import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../LayersTree";
-import LayerEditor from "./LayerEditor";
+import LayerEditor from "./Editors/LayerEditor";
 
 type Props = {
   component: T.Component;

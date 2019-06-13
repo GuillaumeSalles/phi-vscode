@@ -3,10 +3,10 @@ import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
 import { column, subHeading, row } from "../../styles";
-import SecondaryButton from "../../primitives/SecondaryButton";
+import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
-import SelectableCard from "../../primitives/SelectableCard";
+import SelectableCard from "../../components/SelectableCard";
 import Modal from "../../Modal";
 import AddFontSizeModal from "./AddFontSizeModal";
 

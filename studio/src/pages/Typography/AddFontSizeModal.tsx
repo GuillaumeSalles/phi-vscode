@@ -3,9 +3,9 @@ import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
 import { useState } from "react";
-import Input from "../../primitives/Input";
+import Input from "../../components/Input";
 import AddModal from "../../components/AddModal";
-import InputNumber from "../../primitives/InputNumber";
+import InputNumber from "../../components/InputNumber";
 
 type Props = {
   items: T.FontSizesMap;

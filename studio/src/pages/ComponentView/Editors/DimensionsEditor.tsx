@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "./types";
-import { column } from "./styles";
-import Field from "./Field";
-import NumberInput from "./NumberInput";
+import * as T from "../../../types";
+import { row } from "../../../styles";
+import Field from "../../../components/Field";
+import NumberInput from "../../../components/NumberInput";
 
 type Props = {
   dimensions: T.Dimensions;
@@ -16,8 +16,7 @@ function DimensionsEditor({ dimensions, onChange }: Props) {
   }
 
   return (
-    <div css={[column]}>
-      <h4>Dimensions</h4>
+    <div css={[row]}>
       <Field label="Height">
         <NumberInput
           value={dimensions.height ? dimensions.height.value : null}

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { colors } from "./styles";
+import { colors } from "../styles";
 
 type Props<TValue extends string> = {
   value: TValue;
@@ -42,7 +42,7 @@ function Select<TValue extends string>({
         borderImage: "initial",
         overflow: "hidden",
         transition:
-          "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s, box-shadow 0.2s ease 0s",
+          "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
         ":focus-within": {
           borderColor: colors.primary
         }

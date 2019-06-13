@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from "@emotion/core";
+import { jsx } from "@emotion/core";
 import { column, leftMenuHeading } from "./styles";
 import * as T from "./types";
 import { Link } from "react-router-dom";

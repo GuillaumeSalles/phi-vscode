@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "../../types";
-import ContainerLayerEditor from "../../ContainerLayerEditor";
-import TextLayerEditor from "../../TextLayerEditor";
+import * as T from "../../../types";
+import ContainerLayerEditor from "./ContainerLayerEditor";
+import TextLayerEditor from "./TextLayerEditor";
 
 type Props = {
   layer: T.Layer;

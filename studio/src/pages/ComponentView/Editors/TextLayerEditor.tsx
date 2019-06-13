@@ -1,12 +1,14 @@
 /** @jsx jsx */
-import { jsx, css } from "@emotion/core";
-import * as T from "./types";
-import { column, row } from "./styles";
-import Field from "./Field";
+import { jsx } from "@emotion/core";
+import * as T from "../../../types";
+import { column, row } from "../../../styles";
+import Field from "../../../components/Field";
 import DimensionsEditor from "./DimensionsEditor";
-import Select from "./Select";
-import ColorInput from "./ColorInput";
-import NumberInput from "./NumberInput";
+import Select from "../../../components/Select";
+import ColorInput from "../../../components/ColorInput";
+import NumberInput from "../../../components/NumberInput";
+import MarginEditor from "./MarginEditor";
+import PaddingEditor from "./PaddingEditor";
 
 type Props = {
   layer: T.TextLayer;
@@ -100,10 +102,9 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
           onChange={value => updateLayer({ backgroundColor: value })}
         />
       </Field> */}
-      <DimensionsEditor
-        dimensions={layer}
-        onChange={dimensions => updateLayer(dimensions)}
-      />
+      <DimensionsEditor dimensions={layer} onChange={updateLayer} />
+      <MarginEditor margin={layer} onChange={updateLayer} />
+      <PaddingEditor padding={layer} onChange={updateLayer} />
     </div>
   );
 }
