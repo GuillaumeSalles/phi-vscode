@@ -93,7 +93,8 @@ function makeTextLayerStyle(
     fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
     lineHeight: lengthToCss(layer.lineHeight),
-    letterSpacing: lengthToCss(layer.letterSpacing, "0")
+    letterSpacing: lengthToCss(layer.letterSpacing, "0"),
+    textAlign: layer.textAlign
   };
 }
 

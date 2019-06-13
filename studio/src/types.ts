@@ -27,10 +27,13 @@ export type TextLayer = {
   fontSize: Ref;
   fontFamily: Ref;
   fontWeight: Ref;
+  textAlign: TextAlignProperty;
 } & Background &
   Dimensions &
   Margin &
   Padding;
+
+export type TextAlignProperty = "left" | "center" | "right" | "justify";
 
 export type Dimensions = {
   height?: string;

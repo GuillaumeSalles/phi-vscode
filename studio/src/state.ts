@@ -16,6 +16,7 @@ export const components: T.Component[] = [
       name: "heading",
       tag: "h1",
       text: "hey",
+      textAlign: "right",
       backgroundColor: { type: "ref", id: "Red 200" },
       fontSize: { type: "ref", id: "T2" },
       fontFamily: { type: "ref", id: "default" },

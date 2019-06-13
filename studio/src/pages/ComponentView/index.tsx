@@ -94,8 +94,7 @@ function ComponentView({ component, onComponentChange, refs }: Props) {
                 width: "236px",
                 minWidth: "236px",
                 bottom: 0,
-                paddingBottom: "24px",
-                paddingTop: "24px",
+                paddingTop: "8px",
                 background: "white"
               }
             ]}

@@ -9,6 +9,7 @@ import ColorInput from "../../../components/ColorInput";
 import NumberInput from "../../../components/NumberInput";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
+import TextAlignEditor from "./TextAlignEditor";
 
 type Props = {
   layer: T.TextLayer;
@@ -111,6 +112,13 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
             />
           </Field>
         </div>
+        <TextAlignEditor
+          value={layer.textAlign}
+          onChange={value => {
+            const textAlign = value as T.TextAlignProperty;
+            updateLayer({ textAlign: textAlign });
+          }}
+        />
       </div>
       {/* <Field label="Background Color" gridArea="3 0">
         <ColorInput
