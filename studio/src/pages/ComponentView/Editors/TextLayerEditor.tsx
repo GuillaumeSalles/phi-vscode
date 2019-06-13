@@ -114,10 +114,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
         </div>
         <TextAlignEditor
           value={layer.textAlign}
-          onChange={value => {
-            const textAlign = value as T.TextAlignProperty;
-            updateLayer({ textAlign: textAlign });
-          }}
+          onChange={textAlign => updateLayer({ textAlign })}
         />
       </div>
       {/* <Field label="Background Color" gridArea="3 0">

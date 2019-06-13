@@ -5,8 +5,8 @@ import { row, colors } from "../../../styles";
 import RadioIconGroup from "../../../components/RadioIconGroup";
 
 type Props = {
-  value: string,
-  onChange: (value: string) => void
+  value: T.TextAlignProperty;
+  onChange: (value: T.TextAlignProperty) => void;
 };
 
 const Center = ({ fill }: { fill: string }) => (

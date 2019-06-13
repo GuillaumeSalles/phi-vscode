@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import { colors, row } from "../styles";
 import React from "react";
 
-const RadioIconInput = ({
+function RadioIconInput<TValue extends string>({
   icon,
   value,
   isSelected,
@@ -11,11 +11,11 @@ const RadioIconInput = ({
   onChange
 }: {
   icon: (props: { isSelected: boolean }) => React.ReactNode;
-  value: string;
+  value: TValue;
   isSelected: boolean;
   name: string;
-  onChange: (value: string) => void;
-}) => {
+  onChange: (value: TValue) => void;
+}) {
   return (
     <label
       css={{
@@ -35,26 +35,26 @@ const RadioIconInput = ({
         name={name}
         value={value}
         checked={isSelected}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value as TValue)}
       />
       {icon({ isSelected })}
     </label>
   );
-};
+}
 
-type Props = {
-  value: string | undefined;
-  onChange: (value: string) => void;
+type Props<TValue extends string> = {
+  value: TValue;
+  onChange: (value: TValue) => void;
   name: string;
-  options: [string, (props: { isSelected: boolean }) => React.ReactNode][];
+  options: [TValue, (props: { isSelected: boolean }) => React.ReactNode][];
 };
 
-export default function RadioIconGroup({
+export default function RadioIconGroup<TValue extends string>({
   options,
   name,
   value,
   onChange
-}: Props) {
+}: Props<TValue>) {
   return (
     <React.Fragment>
       {options.map(option => (
