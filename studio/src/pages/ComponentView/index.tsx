@@ -91,6 +91,7 @@ function ComponentView({ component, onComponentChange, refs }: Props) {
             css={[
               column,
               {
+                flexShrink: 0,
                 width: "236px",
                 minWidth: "236px",
                 bottom: 0,

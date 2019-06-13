@@ -30,7 +30,8 @@ function App() {
     fontFamilies,
     fontSizes,
     fontWeights,
-    lineHeights
+    lineHeights,
+    breakpoints
   };
 
   function setComponent(newComponent: T.Component) {
@@ -59,7 +60,7 @@ function App() {
           {
             flex: "1 1 auto",
             height: "100%",
-            background: "#fafafa",
+            background: "#f7f7f7",
             maxWidth: "calc(100% - 240px)"
           }
         ]}

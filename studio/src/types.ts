@@ -112,4 +112,5 @@ export type Refs = {
   fontFamilies: FontFamiliesMap;
   fontWeights: FontWeightsMap;
   lineHeights: LineHeightMap;
+  breakpoints: BreakpointsMap;
 };
