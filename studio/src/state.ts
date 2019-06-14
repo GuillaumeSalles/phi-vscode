@@ -8,39 +8,116 @@ function px(x: number): T.Length {
   };
 }
 
+function ref(id: string): T.Ref {
+  return { type: "ref", id };
+}
+
 export const components: T.ComponentMap = new Map([
   [
     uuid(),
     {
-      name: "Header",
+      name: "H1Heading",
       layout: {
-        id: "heading",
+        id: "root",
         type: "text",
-        name: "heading",
+        name: "root",
         tag: "h1",
-        text: "hey",
+        text: "The Evil Rabbit Jumped over the Fence",
         textAlign: "left",
-        fontSize: { type: "ref", id: "T2" },
-        fontFamily: { type: "ref", id: "default" },
-        fontWeight: { type: "ref", id: "light" },
-        lineHeight: { type: "px", value: 12 },
-        color: { type: "ref", id: "Red 800" }
+        fontSize: ref("T6"),
+        fontFamily: ref("default"),
+        fontWeight: ref("normal"),
+        lineHeight: 1.3125,
+        color: ref("Black")
+      }
+    }
+  ],
+  [
+    uuid(),
+    {
+      name: "H2Heading",
+      layout: {
+        id: "root",
+        type: "text",
+        name: "root",
+        tag: "h2",
+        text: "The Evil Rabbit Jumped over the Fence",
+        textAlign: "left",
+        fontSize: ref("T4"),
+        fontFamily: ref("default"),
+        fontWeight: ref("normal"),
+        lineHeight: 1.2,
+        color: ref("Black")
+      }
+    }
+  ],
+  [
+    uuid(),
+    {
+      name: "H3Heading",
+      layout: {
+        id: "root",
+        type: "text",
+        name: "root",
+        tag: "h3",
+        text: "The Evil Rabbit Jumped over the Fence",
+        textAlign: "left",
+        fontSize: ref("T5"),
+        fontFamily: ref("default"),
+        fontWeight: ref("bold"),
+        lineHeight: 1,
+        color: ref("Black")
+      }
+    }
+  ],
+  [
+    uuid(),
+    {
+      name: "H4Heading",
+      layout: {
+        id: "root",
+        type: "text",
+        name: "root",
+        tag: "h4",
+        text: "The Evil Rabbit Jumped over the Fence",
+        textAlign: "left",
+        fontSize: ref("T3"),
+        fontFamily: ref("default"),
+        fontWeight: ref("bold"),
+        lineHeight: 1,
+        color: ref("Black")
+      }
+    }
+  ],
+  [
+    uuid(),
+    {
+      name: "SubHeading",
+      layout: {
+        id: "root",
+        type: "text",
+        name: "root",
+        tag: "span",
+        text: "The Evil Rabbit Jumped over the Fence",
+        textAlign: "left",
+        fontSize: ref("T1"),
+        fontFamily: ref("default"),
+        fontWeight: ref("normal"),
+        lineHeight: 1.2,
+        color: ref("Gray500")
       }
     }
   ]
 ]);
 
 export const fontSizes: T.FontSizesMap = new Map(
-  [12, 14, 16, 20, 24, 32, 40, 48].map((x, index) => [
-    `T${index + 1}`,
-    `${x}px`
-  ])
+  [14, 16, 18, 24, 26, 32].map((x, index) => [`T${index + 1}`, `${x}px`])
 );
 
 export const fontFamilies: T.FontFamiliesMap = new Map([
   [
     "default",
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
   ],
   [
     "mono",
@@ -52,7 +129,7 @@ export const fontWeights = new Map(
   [
     { name: "light", value: 300 },
     { name: "normal", value: 400 },
-    { name: "bold", value: 600 }
+    { name: "bold", value: 700 }
   ].map(x => [x.name, x])
 );
 
@@ -64,6 +141,8 @@ export const lineHeights = new Map(
 
 export const colors: T.ColorsMap = new Map(
   [
+    { name: "Black", value: "#000000" },
+    { name: "Gray500", value: "#999999" },
     { name: "Red 50", value: "#ffebee" },
     { name: "Red 100", value: "#ffcdd2" },
     { name: "Red 200", value: "#ef9a9a" },

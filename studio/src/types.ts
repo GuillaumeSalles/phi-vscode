@@ -24,7 +24,7 @@ export type TextLayer = {
   tag: TextLayerTag;
   text?: string;
   letterSpacing?: Length;
-  lineHeight?: Length;
+  lineHeight: number;
   color?: Color;
   fontSize: Ref;
   fontFamily: Ref;
@@ -35,7 +35,15 @@ export type TextLayer = {
   Margin &
   Padding;
 
-export type TextLayerTag = "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+export type TextLayerTag =
+  | "span"
+  | "p"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6";
 
 export type TextAlignProperty = "left" | "center" | "right" | "justify";
 

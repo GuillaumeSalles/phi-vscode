@@ -24,7 +24,16 @@ const separator = {
   borderTop: "solid 1px #DDD"
 };
 
-const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
+const tags: T.TextLayerTag[] = [
+  "p",
+  "span",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6"
+];
 const tagsOptions: [T.TextLayerTag, string][] = tags.map(t => [t, t]);
 
 function TextLayerEditor({ layer, onChange, refs }: Props) {
@@ -122,10 +131,10 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
         <div css={row}>
           <Field label="Line">
             <NumberInput
-              value={layer.lineHeight ? layer.lineHeight.value : 0}
-              onChange={value =>
+              value={layer.lineHeight}
+              onChange={lineHeight =>
                 updateLayer({
-                  lineHeight: value !== null ? { type: "px", value } : undefined
+                  lineHeight: lineHeight === null ? 1.2 : lineHeight
                 })
               }
             />
