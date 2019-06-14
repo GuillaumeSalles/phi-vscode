@@ -44,7 +44,8 @@ function Menu({ components }: Props) {
         column,
         {
           paddingBottom: "24px",
-          paddingTop: "24px"
+          paddingTop: "24px",
+          width: "240px"
         }
       ]}
     >

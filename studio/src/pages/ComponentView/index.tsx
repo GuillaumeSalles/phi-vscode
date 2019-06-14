@@ -8,14 +8,22 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
+import Menu from "../../Menu";
+import { Layout } from "../../components/Layout";
 
 type Props = {
+  components: T.Component[];
   component: T.Component;
   onComponentChange: (component: T.Component) => void;
   refs: T.Refs;
 };
 
-function ComponentView({ component, onComponentChange, refs }: Props) {
+function ComponentView({
+  components,
+  component,
+  onComponentChange,
+  refs
+}: Props) {
   const [layer, setLayer] = useState(component.layout);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -44,49 +52,45 @@ function ComponentView({ component, onComponentChange, refs }: Props) {
   }
 
   return (
-    <div css={[row, { height: "100%", width: "100%" }]}>
-      <div css={[column, mainPadding, { flex: "1 1 auto" }]}>
-        <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
-          <h1 css={heading}>{component.name}</h1>
-          <div css={[row, { marginLeft: "28px" }]}>
-            {isEditing ? (
-              <SecondaryButton
-                text="Save"
-                onClick={() => setIsEditing(false)}
-              />
-            ) : (
-              <React.Fragment>
+    <Layout
+      left={
+        isEditing ? (
+          <LayersTree
+            root={component.layout}
+            onSelectLayer={() => {}}
+            selectedLayer={component.layout}
+          />
+        ) : (
+          <Menu components={components} />
+        )
+      }
+      center={
+        <div css={[column, mainPadding, { flex: "1 1 auto" }]}>
+          <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
+            <h1 css={heading}>{component.name}</h1>
+            <div css={[row, { marginLeft: "28px" }]}>
+              {isEditing ? (
                 <SecondaryButton
-                  text="Edit"
-                  onClick={() => setIsEditing(true)}
-                  margin="0 10px 0 0"
+                  text="Save"
+                  onClick={() => setIsEditing(false)}
                 />
-                <SecondaryButton text="Delete" onClick={() => {}} />
-              </React.Fragment>
-            )}
+              ) : (
+                <React.Fragment>
+                  <SecondaryButton
+                    text="Edit"
+                    onClick={() => setIsEditing(true)}
+                    margin="0 10px 0 0"
+                  />
+                  <SecondaryButton text="Delete" onClick={() => {}} />
+                </React.Fragment>
+              )}
+            </div>
           </div>
+          <Component component={component} refs={refs} />
         </div>
-        <Component component={component} refs={refs} />
-      </div>
-      {isEditing && (
-        <React.Fragment>
-          {/* Refactor to avoid this hack */}
-          <div
-            css={{
-              position: "fixed",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: "240px",
-              background: "white"
-            }}
-          >
-            <LayersTree
-              root={component.layout}
-              onSelectLayer={() => {}}
-              selectedLayer={component.layout}
-            />
-          </div>
+      }
+      right={
+        isEditing ? (
           <div
             css={[
               column,
@@ -106,9 +110,9 @@ function ComponentView({ component, onComponentChange, refs }: Props) {
               onChange={updateComponentLayer}
             />
           </div>
-        </React.Fragment>
-      )}
-    </div>
+        ) : null
+      }
+    />
   );
 }
 

@@ -18,12 +18,13 @@ function Component({ component, refs }: Props) {
             css={{
               color: "rgb(153, 153, 153)",
               fontSize: "12px",
-              margin: "0 0 4px 0"
+              margin: "0 0 4px 0",
+              fontWeight: 400
             }}
           >
             {entry[0]} - {entry[1].value}px
           </h3>
-          {/* <div
+          <div
             css={[
               card,
               {
@@ -35,7 +36,7 @@ function Component({ component, refs }: Props) {
             ]}
           >
             <Layer layer={component.layout} refs={refs} />
-          </div> */}
+          </div>
         </div>
       ))}
     </div>
