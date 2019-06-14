@@ -7,6 +7,10 @@ type Props = {
   onClick?: () => void;
 };
 
-export default function Button({ text }: Props) {
-  return <button css={primaryButton}>{text}</button>;
+export default function Button({ text, onClick }: Props) {
+  return (
+    <button css={primaryButton} onClick={onClick}>
+      {text}
+    </button>
+  );
 }

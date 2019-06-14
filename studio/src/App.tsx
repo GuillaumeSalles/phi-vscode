@@ -18,13 +18,22 @@ import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
 import { set } from "./helpers/immutable-map";
+import Home from "./pages/Home";
+import { useRouter } from "./useRouter";
+import { makeDefaultProject } from "./factories";
 
 function App() {
-  const [components, setComponents] = useState(defaultComponents);
-  const [colors, setColors] = useState(defaultColors);
-  const [fontFamilies, setFontFamilies] = useState(defaultFontFamilies);
-  const [fontSizes, setFontSizes] = useState(defaultFontSizes);
-  const [breakpoints, setBreakpoints] = useState(defaultBreakpoints);
+  const router = useRouter();
+  const [components, setComponents] = useState<Map<string, T.Component>>(
+    new Map()
+  );
+  const [colors, setColors] = useState<T.ColorsMap>(new Map());
+  const [fontWeights, setFontWeights] = useState<T.FontWeightsMap>(new Map());
+  const [fontFamilies, setFontFamilies] = useState<T.FontFamiliesMap>(
+    new Map()
+  );
+  const [fontSizes, setFontSizes] = useState<T.FontSizesMap>(new Map());
+  const [breakpoints, setBreakpoints] = useState<T.BreakpointsMap>(new Map());
   const refs: T.Refs = {
     colors,
     fontFamilies,
@@ -38,8 +47,27 @@ function App() {
     setComponents(set(components, id, newComponent));
   }
 
+  function createProject() {
+    console.log("create");
+    const project = makeDefaultProject();
+    setColors(project.colors);
+    setFontSizes(project.fontSizes);
+    setFontWeights(project.fontWeight);
+    setFontFamilies(project.fontFamilies);
+    setBreakpoints(project.breakpoints);
+    setComponents(project.components);
+    router.history.push(
+      `/components/${Array.from(project.components.keys())[0]}`
+    );
+  }
+
   return (
     <React.Fragment>
+      <Route
+        path="/"
+        exact
+        render={() => <Home onNewProjectClick={createProject} />}
+      />
       <Route
         path="/typography"
         render={() => (
