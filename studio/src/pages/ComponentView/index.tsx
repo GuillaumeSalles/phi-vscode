@@ -12,7 +12,7 @@ import Menu from "../../Menu";
 import { Layout } from "../../components/Layout";
 
 type Props = {
-  components: T.Component[];
+  components: T.ComponentMap;
   component: T.Component;
   onComponentChange: (component: T.Component) => void;
   refs: T.Refs;

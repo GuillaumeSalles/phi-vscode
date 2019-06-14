@@ -12,7 +12,7 @@ import { Layout } from "../../components/Layout";
 import Menu from "../../Menu";
 
 type Props = {
-  components: T.Component[];
+  components: T.ComponentMap;
   breakpoints: T.BreakpointsMap;
   onBreakpointsChange: (newBp: T.BreakpointsMap) => void;
 };

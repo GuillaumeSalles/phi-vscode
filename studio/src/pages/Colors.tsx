@@ -15,7 +15,7 @@ import { Layout } from "../components/Layout";
 import Menu from "../Menu";
 
 type Props = {
-  components: T.Component[];
+  components: T.ComponentMap;
   colors: Map<string, T.ColorDefinition>;
   onColorsChange: (newColors: Map<string, T.ColorDefinition>) => void;
 };

@@ -8,7 +8,7 @@ import { Layout } from "../../components/Layout";
 import Menu from "../../Menu";
 
 type Props = {
-  components: T.Component[];
+  components: T.ComponentMap;
 
   fontFamilies: T.FontFamiliesMap;
   onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;

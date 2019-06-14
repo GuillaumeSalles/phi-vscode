@@ -3,6 +3,8 @@ export type Component = {
   layout: Layer;
 };
 
+export type ComponentMap = Map<string, Component>;
+
 export type Layer = ContainerLayer | TextLayer;
 
 export type ContainerLayer = {

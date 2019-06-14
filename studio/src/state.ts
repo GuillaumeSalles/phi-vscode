@@ -1,4 +1,5 @@
 import * as T from "./types";
+import uuid from "uuid/v4";
 
 function px(x: number): T.Length {
   return {
@@ -7,24 +8,27 @@ function px(x: number): T.Length {
   };
 }
 
-export const components: T.Component[] = [
-  {
-    name: "Header",
-    layout: {
-      id: "heading",
-      type: "text",
-      name: "heading",
-      tag: "h1",
-      text: "hey",
-      textAlign: "left",
-      fontSize: { type: "ref", id: "T2" },
-      fontFamily: { type: "ref", id: "default" },
-      fontWeight: { type: "ref", id: "light" },
-      lineHeight: { type: "px", value: 12 },
-      color: { type: "ref", id: "Red 800" }
+export const components: T.ComponentMap = new Map([
+  [
+    uuid(),
+    {
+      name: "Header",
+      layout: {
+        id: "heading",
+        type: "text",
+        name: "heading",
+        tag: "h1",
+        text: "hey",
+        textAlign: "left",
+        fontSize: { type: "ref", id: "T2" },
+        fontFamily: { type: "ref", id: "default" },
+        fontWeight: { type: "ref", id: "light" },
+        lineHeight: { type: "px", value: 12 },
+        color: { type: "ref", id: "Red 800" }
+      }
     }
-  }
-];
+  ]
+]);
 
 export const fontSizes: T.FontSizesMap = new Map(
   [12, 14, 16, 20, 24, 32, 40, 48].map((x, index) => [

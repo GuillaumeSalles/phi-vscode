@@ -17,6 +17,7 @@ import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
+import { set } from "./helpers/immutable-map";
 
 function App() {
   const [components, setComponents] = useState(defaultComponents);
@@ -33,10 +34,8 @@ function App() {
     breakpoints
   };
 
-  function setComponent(newComponent: T.Component) {
-    setComponents(
-      components.map(c => (c.name === newComponent.name ? newComponent : c))
-    );
+  function setComponent(id: string, newComponent: T.Component) {
+    setComponents(set(components, id, newComponent));
   }
 
   return (
@@ -76,9 +75,7 @@ function App() {
       <Route
         path="/components/:id"
         render={props => {
-          const component = components.find(
-            c => c.name === props.match.params.id
-          );
+          const component = components.get(props.match.params.id);
           if (component == null) {
             throw new Error("Component not found");
           }
@@ -86,7 +83,9 @@ function App() {
             <ComponentView
               components={components}
               component={component}
-              onComponentChange={component => setComponent(component)}
+              onComponentChange={component =>
+                setComponent(props.match.params.id, component)
+              }
               refs={refs}
             />
           );

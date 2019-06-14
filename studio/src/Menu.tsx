@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useRouter } from "./useRouter";
 
 type Props = {
-  components: T.Component[];
+  components: T.ComponentMap;
 };
 
 function MenuItem({ href, text }: { href: string; text: string }) {
@@ -54,8 +54,12 @@ function Menu({ components }: Props) {
       <MenuItem href="/colors" text="Colors" />
       <MenuItem href="/breakpoints" text="Breakpoints" />
       <span css={[leftMenuHeading, { marginTop: "40px" }]}>Components</span>
-      {components.map(c => (
-        <MenuItem key={c.name} href={`/components/${c.name}`} text={c.name} />
+      {Array.from(components.entries()).map(entry => (
+        <MenuItem
+          key={entry[0]}
+          href={`/components/${entry[0]}`}
+          text={entry[1].name}
+        />
       ))}
     </div>
   );
