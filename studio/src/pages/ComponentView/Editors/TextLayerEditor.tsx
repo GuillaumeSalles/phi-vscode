@@ -10,6 +10,7 @@ import NumberInput from "../../../components/NumberInput";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import TextAlignEditor from "./TextAlignEditor";
+import TextAreaInput from "../../../components/TextAreaInput";
 
 type Props = {
   layer: T.TextLayer;
@@ -23,6 +24,9 @@ const separator = {
   borderTop: "solid 1px #DDD"
 };
 
+const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
+const tagsOptions: [T.TextLayerTag, string][] = tags.map(t => [t, t]);
+
 function TextLayerEditor({ layer, onChange, refs }: Props) {
   function updateLayer(newProps: Partial<T.TextLayer>) {
     onChange({ ...layer, ...newProps });
@@ -30,6 +34,33 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
 
   return (
     <div css={column}>
+      <div css={[column, { padding: "8px" }]}>
+        <h4
+          css={[
+            sectionTitle,
+            {
+              margin: "8px"
+            }
+          ]}
+        >
+          HTML
+        </h4>
+        <Field label="Tag">
+          <Select
+            value={layer.tag}
+            onChange={tag => updateLayer({ tag })}
+            options={tagsOptions}
+          />
+        </Field>
+        <div css={{ padding: "0 4px" }}>
+          <TextAreaInput
+            placeholder="Text"
+            value={layer.text}
+            onChange={text => updateLayer({ text })}
+          />
+        </div>
+      </div>
+      <hr css={separator} />
       <div css={[column, { padding: "8px" }]}>
         <h4
           css={[

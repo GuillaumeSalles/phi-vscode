@@ -19,7 +19,7 @@ export type TextLayer = {
   type: "text";
   id: string;
   name: string;
-  tag: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  tag: TextLayerTag;
   text?: string;
   letterSpacing?: Length;
   lineHeight?: Length;
@@ -32,6 +32,8 @@ export type TextLayer = {
   Dimensions &
   Margin &
   Padding;
+
+export type TextLayerTag = "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 export type TextAlignProperty = "left" | "center" | "right" | "justify";
 
