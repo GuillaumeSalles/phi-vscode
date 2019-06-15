@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "./types";
+import * as T from "../../types";
 import Layer from "./Layer";
-import { column, card } from "./styles";
+import { column, card } from "../../styles";
 
 type Props = {
   component: T.Component;

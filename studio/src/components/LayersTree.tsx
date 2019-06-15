@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "./types";
-import { column, row, leftMenuHeading, colors } from "./styles";
+import * as T from "../types";
+import { column, row, leftMenuHeading, colors } from "../styles";
 
 type Props = {
   root: T.Layer;

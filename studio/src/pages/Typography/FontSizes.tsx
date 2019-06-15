@@ -7,7 +7,7 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
-import Modal from "../../Modal";
+import Modal from "../../components/Modal";
 import AddFontSizeModal from "./AddFontSizeModal";
 
 type Props = {

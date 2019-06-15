@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, InterpolationWithTheme } from "@emotion/core";
-import * as T from "./types";
+import * as T from "../../types";
 
 type Props = {
   layer: T.Layer;

@@ -5,7 +5,7 @@ import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
 import AddBreakpointsModal from "./AddBreakpointModal";
 import { set, del } from "../../helpers/immutable-map";
-import Modal from "../../Modal";
+import Modal from "../../components/Modal";
 import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";

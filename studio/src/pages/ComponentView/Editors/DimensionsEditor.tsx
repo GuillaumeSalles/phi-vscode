@@ -3,8 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row, column, sectionTitle } from "../../../styles";
 import Field from "../../../components/Field";
-import NumberInput from "../../../components/NumberInput";
-import TextInput from "../../../TextInput";
+import TextInput from "../../../components/TextInput";
 
 type Props = {
   dimensions: T.Dimensions;

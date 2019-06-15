@@ -4,7 +4,7 @@ import React from "react";
 import * as T from "../types";
 import { column, row, mainPadding, heading } from "../styles";
 import { useState } from "react";
-import Modal from "../Modal";
+import Modal from "../components/Modal";
 import Input from "../components/Input";
 import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
