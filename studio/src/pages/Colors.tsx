@@ -75,17 +75,19 @@ function Colors({ refs, colors, onColorsChange }: Props) {
           </div>
 
           <div css={[row, { flexWrap: "wrap" }]}>
-            {Array.from(colors.values()).map(c => {
-              const contrast = getContrastColor(c.value);
+            {Array.from(colors.entries()).map(entry => {
+              const contrast = getContrastColor(entry[1].value);
               return (
                 <SelectableCard
-                  key={c.name}
+                  key={entry[0]}
                   overrides={{
                     margin: "0 16px 16px 0"
                   }}
-                  isSelected={selectedColor === c.name}
+                  isSelected={selectedColor === entry[0]}
                   onClick={() =>
-                    setSelectedColor(selectedColor === c.name ? null : c.name)
+                    setSelectedColor(
+                      selectedColor === entry[0] ? null : entry[0]
+                    )
                   }
                 >
                   <div
@@ -98,13 +100,13 @@ function Colors({ refs, colors, onColorsChange }: Props) {
                       alignItems: "center",
                       height: "80px",
                       width: "80px",
-                      background: c.value,
+                      background: entry[1].value,
                       borderRadius: "2px",
                       margin: "8px"
                     }}
                   >
-                    <div>{c.name}</div>
-                    <div>{c.value}</div>
+                    <div>{entry[1].name}</div>
+                    <div>{entry[1].value}</div>
                   </div>
                 </SelectableCard>
               );
