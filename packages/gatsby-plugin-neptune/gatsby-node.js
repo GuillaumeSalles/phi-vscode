@@ -15,7 +15,7 @@ function onCreateWebpackConfig({ actions, loaders }) {
       rules: [
         {
           test: /\.neptune$/,
-          use: [jsLoader, require.resolve("./js-loader")]
+          use: [jsLoader, require.resolve("./dist/js-loader")]
         }
       ]
     }

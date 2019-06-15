@@ -1,7 +1,7 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
-import MyComponent from "../NewProject.neptune"
+import { HelloWorld } from "../NewProject.neptune"
 
 const Header = ({ siteTitle }) => (
   <header
@@ -25,7 +25,7 @@ const Header = ({ siteTitle }) => (
             textDecoration: `none`,
           }}
         >
-          <MyComponent />
+          <HelloWorld />
         </Link>
       </h1>
     </div>

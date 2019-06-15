@@ -1,4 +1,4 @@
-module.exports = function cssLoader(source) {
+export default function cssLoader(source: string) {
   console.log("Inside neptune-css-loader");
 
   return `
@@ -6,4 +6,4 @@ module.exports = function cssLoader(source) {
     background: blue;
   }
   `;
-};
+}
