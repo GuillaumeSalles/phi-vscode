@@ -42,8 +42,8 @@ function mapToArray(map: Map<string, any>) {
 
 function arrayToMap(array: any[]) {
   return new Map(
-    array.map((color: any) => {
-      const { id, ...rest } = color;
+    array.map((item: any) => {
+      const { id, ...rest } = item;
       return [id, rest];
     })
   );

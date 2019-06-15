@@ -1,4 +1,7 @@
 import ts from "typescript";
+import * as T from "../../../studio/src/types";
+import loaderUtils from "loader-utils";
+import { arrayToMap } from "./shared";
 
 function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   const resultFile = ts.createSourceFile(
@@ -20,7 +23,38 @@ function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   );
 }
 
-function createFunctionalComponent(component: any) {
+function createLayerJsx(componentName: string, layer: T.Layer) {
+  switch (layer.type) {
+    case "text":
+      return createTextLayerJsx(componentName, layer);
+    default:
+      throw new Error("Unsupported layer type");
+  }
+}
+
+function createTextLayerJsx(componentName: string, layer: T.TextLayer) {
+  return createSimpleJsxElement(layer.tag, [
+    ts.createJsxAttribute(
+      ts.createIdentifier("className"),
+      ts.createJsxExpression(
+        undefined,
+        ts.createElementAccess(
+          ts.createIdentifier("styles"),
+          ts.createStringLiteral(`${componentName}-${layer.name}`)
+        )
+      )
+    ),
+    ts.createJsxAttribute(
+      ts.createIdentifier("children"),
+      ts.createJsxExpression(
+        undefined,
+        ts.createStringLiteral(layer.text || "")
+      )
+    )
+  ]);
+}
+
+function createComponentJsx(component: T.Component) {
   return ts.createFunctionDeclaration(
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
@@ -30,17 +64,7 @@ function createFunctionalComponent(component: any) {
     [],
     undefined,
     ts.createBlock([
-      ts.createReturn(
-        createSimpleJsxElement(component.layout.tag, [
-          ts.createJsxAttribute(
-            ts.createIdentifier("children"),
-            ts.createJsxExpression(
-              undefined,
-              ts.createStringLiteral(component.layout.text)
-            )
-          )
-        ])
-      )
+      ts.createReturn(createLayerJsx(component.name, component.layout))
     ])
   );
 }
@@ -72,12 +96,17 @@ function createJsxClosingFragment() {
 }
 
 export function neptuneToJs(data: any) {
-  return tsNodesToString([createFunctionalComponent(data.components[0])]);
+  const components: T.ComponentMap = arrayToMap(data.components);
+
+  return tsNodesToString(
+    Array.from(components.values()).map(createComponentJsx)
+  );
 }
 
 export default function gatsbyJsLoader(source: string) {
   console.log("Inside gatsby-js-loader");
-  console.log(source);
+  console.log(this.context);
+  console.log(this.resourcePath);
 
   const data = JSON.parse(source);
 
@@ -85,7 +114,9 @@ export default function gatsbyJsLoader(source: string) {
 
   return `
 import React from "react"
-import styles from "style-loader!css-loader?modules=true!gatsby-plugin-neptune/dist/css-loader?modules!./NewProject.neptune"
+import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-neptune/dist/css-loader?modules!${
+    this.resourcePath
+  }"
 
 ${result}
 `;

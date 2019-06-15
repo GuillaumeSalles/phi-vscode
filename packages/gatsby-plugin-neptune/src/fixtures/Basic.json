@@ -1,0 +1,129 @@
+{
+  "colors": [
+    {
+      "id": "0e206ad9-39c2-42f2-900d-7a02b6c6a15d",
+      "name": "black",
+      "value": "#000000"
+    },
+    {
+      "id": "d088a3a7-69d5-4f05-878d-fd97c52c0309",
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "id": "676549dc-9f50-4037-b11d-dd6de999fa3f",
+      "name": "primary",
+      "value": "#0076FF"
+    }
+  ],
+  "fontSizes": [
+    {
+      "id": "4aba58f5-f1ac-4c24-bf38-4746036bb973",
+      "name": "FS1",
+      "value": "14px"
+    },
+    {
+      "id": "193208a2-827c-45b2-a68a-c7c6a1780065",
+      "name": "FS2",
+      "value": "16px"
+    },
+    {
+      "id": "4d010720-9571-440c-baf6-af5bc6f569ff",
+      "name": "FS3",
+      "value": "18px"
+    },
+    {
+      "id": "5d9fa958-d455-4a39-b0a8-dec827cde1f9",
+      "name": "FS4",
+      "value": "24px"
+    },
+    {
+      "id": "991a63de-a3f6-4882-afd4-764ebbfe908c",
+      "name": "FS5",
+      "value": "26px"
+    },
+    {
+      "id": "1b8887a1-bbf1-4050-a5f5-59546827357c",
+      "name": "FS6",
+      "value": "32px"
+    }
+  ],
+  "fontWeights": [
+    {
+      "id": "06c59e4a-3dc8-40e5-a507-974b735630ed",
+      "name": "light",
+      "value": 300
+    },
+    {
+      "id": "74728848-2faa-4f0f-a14f-a5966cd5ac60",
+      "name": "normal",
+      "value": 400
+    },
+    {
+      "id": "27b6414f-3ad3-4e1c-8c76-f2d74fb7c752",
+      "name": "bold",
+      "value": 700
+    }
+  ],
+  "fontFamilies": [
+    {
+      "id": "151077a0-0532-456f-959f-a4d1496e8401",
+      "name": "default",
+      "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", sans-serif"
+    }
+  ],
+  "lineHeights": [
+    { "id": "condensed", "name": "condensed", "value": 1.25 },
+    { "id": "normal", "name": "normal", "value": 1.5 }
+  ],
+  "breakpoints": [
+    {
+      "id": "78bf7c9d-2077-4d17-8417-e16dd3730af4",
+      "name": "small",
+      "value": { "type": "px", "value": 544 }
+    },
+    {
+      "id": "7e963ea8-d3a5-4a62-b47d-e21ce5f2be45",
+      "name": "medium",
+      "value": { "type": "px", "value": 768 }
+    },
+    {
+      "id": "d0eb26c7-b332-4591-a9e5-e61457c994a2",
+      "name": "large",
+      "value": { "type": "px", "value": 1012 }
+    },
+    {
+      "id": "24d6d66b-53ae-4ba0-97c7-6862960c42a1",
+      "name": "xlarge",
+      "value": { "type": "px", "value": 1280 }
+    }
+  ],
+  "components": [
+    {
+      "id": "a01eb8e6-85fe-4b11-baef-3c2df47b58b0",
+      "name": "HelloWorld",
+      "layout": {
+        "id": "755d94d3-16e1-4ef6-91e9-eab6d8394de7",
+        "type": "text",
+        "name": "root",
+        "tag": "h3",
+        "text": "Hello ",
+        "textAlign": "left",
+        "fontSize": {
+          "type": "ref",
+          "id": "1b8887a1-bbf1-4050-a5f5-59546827357c"
+        },
+        "fontFamily": {
+          "type": "ref",
+          "id": "151077a0-0532-456f-959f-a4d1496e8401"
+        },
+        "fontWeight": {
+          "type": "ref",
+          "id": "74728848-2faa-4f0f-a14f-a5966cd5ac60"
+        },
+        "lineHeight": 1.2,
+        "color": { "type": "ref", "id": "676549dc-9f50-4037-b11d-dd6de999fa3f" }
+      }
+    }
+  ]
+}

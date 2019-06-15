@@ -1,10 +1,6 @@
-import { neptuneToJs } from "./js-loader";
+import { neptuneToCss } from "./css-loader";
+import basic from "./fixtures/Basic.json";
 
 test("basic", () => {
-  expect(
-    neptuneToJs({
-      components: [{ name: "HelloWorld", layout: { text: "Hey", tag: "h1" } }]
-    })
-  ).toBe(`export function HelloWorld() { return <h1 children={"Hey"}></h1>; }
-`);
+  expect(neptuneToCss(basic)).toBe("");
 });
