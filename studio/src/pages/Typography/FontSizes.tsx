@@ -50,13 +50,13 @@ export default function FontSizes({ items, onItemsChange }: Props) {
               margin: "0px 0px 12px"
             }}
           >
-            {entry[0]} - {entry[1]}
+            {entry[1].name} - {entry[1].value}
           </div>
           <SelectableCard
             isSelected={selectedItem === entry[0]}
             onClick={() => setSelectedItem(entry[0])}
           >
-            <div css={{ fontSize: entry[1], margin: "12px" }}>
+            <div css={{ fontSize: entry[1].value, margin: "12px" }}>
               Saturn studio - closing the gap between developers and designers
             </div>
           </SelectableCard>

@@ -49,18 +49,18 @@ function fontSizeToString(
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
   }
-  return ref;
+  return ref.value;
 }
 
 function fontFamilyToString(
   fontFamily: T.Ref,
   fontFamilies: T.FontFamiliesMap
-) {
+): string {
   const ref = fontFamilies.get(fontFamily.id);
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
   }
-  return ref;
+  return ref.value;
 }
 
 function fontWeightToNumber(fontWeight: T.Ref, fontWeights: T.FontWeightsMap) {
@@ -90,7 +90,7 @@ function makeTextLayerStyle(
     ...makeBackgroundStyle(layer, refs.colors),
     color: layer.color ? colorToString(layer.color, refs.colors) : undefined,
     fontSize: fontSizeToString(layer.fontSize, refs.fontSizes),
-    fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies).value,
+    fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
     lineHeight: layer.lineHeight,
     letterSpacing: lengthToCss(layer.letterSpacing, "0"),

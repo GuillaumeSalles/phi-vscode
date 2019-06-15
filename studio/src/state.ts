@@ -1,13 +1,6 @@
 import * as T from "./types";
 import uuid from "uuid/v4";
 
-function px(x: number): T.Length {
-  return {
-    type: "px",
-    value: x
-  };
-}
-
 function ref(id: string): T.Ref {
   return { type: "ref", id };
 }
@@ -109,10 +102,6 @@ export const components: T.ComponentMap = new Map([
     }
   ]
 ]);
-
-export const fontSizes: T.FontSizesMap = new Map(
-  [14, 16, 18, 24, 26, 32].map((x, index) => [`T${index + 1}`, `${x}px`])
-);
 
 export const fontWeights = new Map(
   [

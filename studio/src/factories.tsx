@@ -6,7 +6,7 @@ function ref(id: string): T.Ref {
   return { type: "ref", id };
 }
 
-function entry<TValue>(value: TValue): [string, TValue] {
+export function entry<TValue>(value: TValue): [string, TValue] {
   return [uuid(), value];
 }
 
@@ -36,9 +36,14 @@ export function makeDefaultProject() {
   const normal = entry({ name: "normal", value: 400 });
   const bold = entry({ name: "bold", value: 700 });
 
-  const fontSizes: [string, string][] = [14, 16, 18, 24, 26, 32].map(
-    (x, index) => [`FS${index + 1}`, `${x}px`]
-  );
+  const fontSizes: [string, T.FontSizeDefinition][] = [
+    14,
+    16,
+    18,
+    24,
+    26,
+    32
+  ].map((x, index) => entry({ name: `FS${index + 1}`, value: `${x}px` }));
 
   const helloWorldTextLayer: T.TextLayer = {
     id: uuid(),

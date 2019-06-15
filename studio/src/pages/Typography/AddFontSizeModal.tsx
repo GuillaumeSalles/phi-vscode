@@ -6,6 +6,7 @@ import { useState } from "react";
 import Input from "../../components/Input";
 import AddModal from "../../components/AddModal";
 import InputNumber from "../../components/InputNumber";
+import uuid from "uuid/v4";
 
 type Props = {
   items: T.FontSizesMap;
@@ -37,7 +38,7 @@ export default function AddFontSizeModal({ items, onAdd, onCancel }: Props) {
         if (!isFormValid()) {
           setIsValidating(true);
         } else {
-          onAdd(name, value + "px");
+          onAdd(uuid(), { name, value: value + "px" });
         }
       }}
       onCancel={onCancel}
