@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as T from "./types";
 import { useState } from "react";
 import { Route } from "react-router";
+import { electron } from "./node";
 import { lineHeights } from "./state";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -13,7 +14,7 @@ import { set } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
-import { electron, writeFile } from "./node";
+import { save } from "./actions";
 
 function App() {
   const router = useRouter();
@@ -30,6 +31,7 @@ function App() {
   const [fontSizes, setFontSizes] = useState<T.FontSizesMap>(new Map());
   const [breakpoints, setBreakpoints] = useState<T.BreakpointsMap>(new Map());
   const refs: T.Refs = {
+    fileName,
     colors,
     fontFamilies,
     fontSizes,
@@ -44,67 +46,11 @@ function App() {
     fresh.current = refs;
   });
 
-  async function save() {
-    const current = fresh.current;
-
-    const path =
-      fileName === undefined
-        ? electron.remote.dialog.showSaveDialog({
-            title: "Save project",
-            defaultPath: "NewProject.neptune"
-          })
-        : fileName;
-
-    if (!path) {
-      return;
-    }
-    try {
-      await writeFile(
-        path,
-        JSON.stringify({
-          colors: Array.from(current.colors.entries()).map(entry => ({
-            id: entry[0],
-            ...entry[1]
-          })),
-          fontSizes: Array.from(current.fontSizes.entries()).map(entry => ({
-            id: entry[0],
-            value: entry[1]
-          })),
-          fontWeights: Array.from(current.fontWeights.entries()).map(entry => ({
-            id: entry[0],
-            ...entry[1]
-          })),
-          fontFamilies: Array.from(current.fontFamilies.entries()).map(
-            entry => ({
-              id: entry[0],
-              value: entry[1]
-            })
-          ),
-          lineHeights: Array.from(current.lineHeights.entries()).map(entry => ({
-            id: entry[0],
-            ...entry[1]
-          })),
-          breakpoints: Array.from(current.breakpoints.entries()).map(entry => ({
-            id: entry[0],
-            ...entry[1]
-          })),
-          components: Array.from(current.components.entries()).map(entry => ({
-            id: entry[0],
-            ...entry[1]
-          }))
-        })
-      );
-    } catch (er) {
-      console.log(er);
-    }
-
-    setFileName(path);
-  }
-
   useEffect(() => {
-    function listener(event: string, message: string) {
+    async function listener(event: string, message: string) {
       if (message === "save") {
-        save();
+        const fileName = await save(fresh.current);
+        setFileName(fileName);
       }
     }
     electron.ipcRenderer.on("actions", listener);
