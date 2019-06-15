@@ -14,7 +14,7 @@ import { set } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
-import { save } from "./actions";
+import { save, open } from "./actions";
 
 function App() {
   const router = useRouter();
@@ -51,6 +51,13 @@ function App() {
       if (message === "save") {
         const fileName = await save(fresh.current);
         setFileName(fileName);
+      } else if (message === "open") {
+        const refs = await open();
+        if (refs) {
+          setColors(refs.colors);
+          setFileName(refs.fileName);
+          router.history.push("/colors");
+        }
       }
     }
     electron.ipcRenderer.on("actions", listener);

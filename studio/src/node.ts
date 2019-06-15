@@ -5,3 +5,4 @@ const fs = r("fs") as typeof import("fs");
 const util = r("util") as typeof import("util");
 
 export const writeFile = util.promisify(fs.writeFile);
+export const readFile = util.promisify(fs.readFile);

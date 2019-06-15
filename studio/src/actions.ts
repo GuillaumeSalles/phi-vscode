@@ -1,5 +1,5 @@
 import * as T from "./types";
-import { electron, writeFile } from "./node";
+import { electron, writeFile, readFile } from "./node";
 
 export async function save(current: T.Refs): Promise<string | undefined> {
   const path =
@@ -52,4 +52,38 @@ export async function save(current: T.Refs): Promise<string | undefined> {
   }
 
   return path;
+}
+
+function jsonToRefs(fileName: string, data: any): T.Refs {
+  return {
+    fileName,
+    components: new Map(),
+    fontSizes: new Map(),
+    fontWeights: new Map(),
+    fontFamilies: new Map(),
+    breakpoints: new Map(),
+    lineHeights: new Map(),
+    colors: new Map(
+      data.colors.map((color: any) => {
+        const { id, ...rest } = color;
+        return [id, rest];
+      })
+    )
+  };
+}
+
+export async function open(): Promise<T.Refs | undefined> {
+  const path = electron.remote.dialog.showOpenDialog({});
+  if (!path) {
+    return;
+  }
+
+  try {
+    const str = await readFile(path[0], "utf-8");
+    const data = JSON.parse(str);
+    return jsonToRefs(path[0], data);
+  } catch (er) {
+    console.log(er);
+    return;
+  }
 }

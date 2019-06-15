@@ -20,8 +20,11 @@ function createWindow() {
   function onSave() {
     mainWindow.webContents.send("actions", "save");
   }
+  function onOpen() {
+    mainWindow.webContents.send("actions", "open");
+  }
 
-  electron.Menu.setApplicationMenu(makeMenu({ onSave }));
+  electron.Menu.setApplicationMenu(makeMenu({ onSave, onOpen }));
 
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
