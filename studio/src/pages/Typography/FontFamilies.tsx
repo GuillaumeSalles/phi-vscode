@@ -53,13 +53,15 @@ export default function FontFamilies({
               margin: "0px 0px 12px"
             }}
           >
-            {entry[0]}
+            {entry[1].name}
           </div>
           <SelectableCard
             isSelected={selectedItem === entry[0]}
             onClick={() => setSelectedItem(entry[0])}
           >
-            <div css={{ fontFamily: entry[1], margin: "12px" }}>{entry[1]}</div>
+            <div css={{ fontFamily: entry[1].value, margin: "12px" }}>
+              {entry[1].value}
+            </div>
           </SelectableCard>
         </div>
       ))}

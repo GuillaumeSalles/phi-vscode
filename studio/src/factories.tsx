@@ -15,10 +15,10 @@ export function px(value: number): T.Length {
 }
 
 export function makeDefaultProject() {
-  const defaultFontFamily: [string, string] = [
-    "default",
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
-  ];
+  const defaultFontFamily = entry({
+    name: "default",
+    value: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
+  });
   const fontFamilies: T.FontFamiliesMap = new Map([defaultFontFamily]);
 
   const white = entry({ name: "white", value: "#FFFFFF" });

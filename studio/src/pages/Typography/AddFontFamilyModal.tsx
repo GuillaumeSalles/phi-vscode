@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
+import uuid from "uuid/v4";
 import * as T from "../../types";
 import { useState } from "react";
 import Input from "../../components/Input";
@@ -8,7 +9,7 @@ import AddModal from "../../components/AddModal";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
-  onAdd: (name: string, item: T.FontFamilyDefinition) => void;
+  onAdd: (id: string, item: T.FontFamilyDefinition) => void;
   onCancel: () => void;
 };
 
@@ -36,7 +37,7 @@ function AddFontFamilyModal({ fontFamilies, onAdd, onCancel }: Props) {
         if (!isFormValid()) {
           setIsValidating(true);
         } else {
-          onAdd(name, value);
+          onAdd(uuid(), { name, value });
         }
       }}
       onCancel={onCancel}

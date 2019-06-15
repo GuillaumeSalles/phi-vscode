@@ -90,7 +90,7 @@ function makeTextLayerStyle(
     ...makeBackgroundStyle(layer, refs.colors),
     color: layer.color ? colorToString(layer.color, refs.colors) : undefined,
     fontSize: fontSizeToString(layer.fontSize, refs.fontSizes),
-    fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
+    fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies).value,
     fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
     lineHeight: layer.lineHeight,
     letterSpacing: lengthToCss(layer.letterSpacing, "0"),

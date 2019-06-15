@@ -114,17 +114,6 @@ export const fontSizes: T.FontSizesMap = new Map(
   [14, 16, 18, 24, 26, 32].map((x, index) => [`T${index + 1}`, `${x}px`])
 );
 
-export const fontFamilies: T.FontFamiliesMap = new Map([
-  [
-    "default",
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
-  ],
-  [
-    "mono",
-    'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace'
-  ]
-]);
-
 export const fontWeights = new Map(
   [
     { name: "light", value: 300 },
