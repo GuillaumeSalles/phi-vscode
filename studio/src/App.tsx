@@ -54,8 +54,13 @@ function App() {
       } else if (message === "open") {
         const refs = await open();
         if (refs) {
-          setColors(refs.colors);
           setFileName(refs.fileName);
+          setColors(refs.colors);
+          setFontSizes(refs.fontSizes);
+          setFontWeights(refs.fontWeights);
+          setFontFamilies(refs.fontFamilies);
+          setBreakpoints(refs.breakpoints);
+          setComponents(refs.components);
           router.history.push("/colors");
         }
       }
@@ -74,7 +79,7 @@ function App() {
     const project = makeDefaultProject();
     setColors(project.colors);
     setFontSizes(project.fontSizes);
-    setFontWeights(project.fontWeight);
+    setFontWeights(project.fontWeights);
     setFontFamilies(project.fontFamilies);
     setBreakpoints(project.breakpoints);
     setComponents(project.components);

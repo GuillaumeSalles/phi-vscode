@@ -17,34 +17,13 @@ export async function save(current: T.Refs): Promise<string | undefined> {
     await writeFile(
       path,
       JSON.stringify({
-        colors: Array.from(current.colors.entries()).map(entry => ({
-          id: entry[0],
-          ...entry[1]
-        })),
-        fontSizes: Array.from(current.fontSizes.entries()).map(entry => ({
-          id: entry[0],
-          value: entry[1]
-        })),
-        fontWeights: Array.from(current.fontWeights.entries()).map(entry => ({
-          id: entry[0],
-          ...entry[1]
-        })),
-        fontFamilies: Array.from(current.fontFamilies.entries()).map(entry => ({
-          id: entry[0],
-          value: entry[1]
-        })),
-        lineHeights: Array.from(current.lineHeights.entries()).map(entry => ({
-          id: entry[0],
-          ...entry[1]
-        })),
-        breakpoints: Array.from(current.breakpoints.entries()).map(entry => ({
-          id: entry[0],
-          ...entry[1]
-        })),
-        components: Array.from(current.components.entries()).map(entry => ({
-          id: entry[0],
-          ...entry[1]
-        }))
+        colors: mapToArray(current.colors),
+        fontSizes: mapToArray(current.fontSizes),
+        fontWeights: mapToArray(current.fontWeights),
+        fontFamilies: mapToArray(current.fontFamilies),
+        lineHeights: mapToArray(current.lineHeights),
+        breakpoints: mapToArray(current.breakpoints),
+        components: mapToArray(current.components)
       })
     );
   } catch (er) {
@@ -52,6 +31,13 @@ export async function save(current: T.Refs): Promise<string | undefined> {
   }
 
   return path;
+}
+
+function mapToArray(map: Map<string, any>) {
+  return Array.from(map.entries()).map(entry => ({
+    id: entry[0],
+    ...entry[1]
+  }));
 }
 
 function arrayToMap(array: any[]) {
@@ -67,11 +53,11 @@ function jsonToRefs(fileName: string, data: any): T.Refs {
   return {
     fileName,
     components: arrayToMap(data.components),
-    fontSizes: new Map(),
-    fontWeights: new Map(),
-    fontFamilies: new Map(),
+    fontSizes: arrayToMap(data.fontSizes),
+    fontWeights: arrayToMap(data.fontWeights),
+    fontFamilies: arrayToMap(data.fontFamilies),
     breakpoints: arrayToMap(data.breakpoints),
-    lineHeights: new Map(),
+    lineHeights: arrayToMap(data.lineHeights),
     colors: arrayToMap(data.colors)
   };
 }

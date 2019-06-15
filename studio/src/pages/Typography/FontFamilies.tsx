@@ -19,6 +19,7 @@ export default function FontFamilies({
   fontFamilies,
   onFontFamiliesChange
 }: Props) {
+  console.log(fontFamilies);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (

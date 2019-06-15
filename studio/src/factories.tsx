@@ -70,7 +70,7 @@ export function makeDefaultProject() {
     colors: new Map([black, white, primary]),
     fontFamilies: new Map(fontFamilies),
     fontSizes: new Map(fontSizes),
-    fontWeight: new Map([light, normal, bold]),
+    fontWeights: new Map([light, normal, bold]),
     breakpoints: new Map(breakpoints),
     components
   };
