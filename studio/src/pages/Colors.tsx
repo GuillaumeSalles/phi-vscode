@@ -12,7 +12,7 @@ import SelectableCard from "../components/SelectableCard";
 import AddModal from "../components/AddModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
-import Menu from "../Menu";
+import Menu from "../components/Menu";
 
 type Props = {
   components: T.ComponentMap;

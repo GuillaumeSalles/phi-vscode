@@ -125,4 +125,5 @@ export type Refs = {
   fontWeights: FontWeightsMap;
   lineHeights: LineHeightMap;
   breakpoints: BreakpointsMap;
+  components: ComponentMap;
 };

@@ -9,7 +9,7 @@ import Modal from "../../Modal";
 import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
-import Menu from "../../Menu";
+import Menu from "../../components/Menu";
 
 type Props = {
   components: T.ComponentMap;

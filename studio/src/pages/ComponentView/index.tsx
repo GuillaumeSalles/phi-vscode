@@ -8,7 +8,7 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
-import Menu from "../../Menu";
+import Menu from "../../components/Menu";
 import { Layout } from "../../components/Layout";
 
 type Props = {

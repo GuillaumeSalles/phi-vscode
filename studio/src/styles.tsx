@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import { css } from "@emotion/core";
 
+const tmp =
+  "radial-gradient(ellipse at 15px 35px, rgb(101,129,223)0%,rgb(61,77,128)100%);";
+
 export const colors = {
   primary: "#0076FF"
 };

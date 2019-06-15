@@ -5,7 +5,7 @@ import { column, mainPadding, heading } from "../../styles";
 import FontFamilies from "./FontFamilies";
 import FontSizes from "./FontSizes";
 import { Layout } from "../../components/Layout";
-import Menu from "../../Menu";
+import Menu from "../../components/Menu";
 
 type Props = {
   components: T.ComponentMap;

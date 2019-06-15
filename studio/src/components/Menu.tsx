@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { column, leftMenuHeading } from "./styles";
-import * as T from "./types";
+import { column, leftMenuHeading } from "../styles";
+import * as T from "../types";
 import { Link } from "react-router-dom";
-import { useRouter } from "./useRouter";
+import { useRouter } from "../useRouter";
 
 type Props = {
   components: T.ComponentMap;

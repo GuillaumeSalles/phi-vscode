@@ -4,11 +4,24 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require("path");
 const url = require("url");
+const { makeMenu } = require("./menu");
 
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 800, height: 600 });
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  function onSave() {
+    mainWindow.webContents.send("actions", "save");
+  }
+
+  electron.Menu.setApplicationMenu(makeMenu({ onSave }));
 
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
