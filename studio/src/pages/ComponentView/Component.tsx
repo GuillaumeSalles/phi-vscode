@@ -22,7 +22,7 @@ function Component({ component, refs }: Props) {
               fontWeight: 400
             }}
           >
-            {entry[0]} - {entry[1].value}px
+            {entry[0]} - {entry[1].value.value}px
           </h3>
           <div
             css={[

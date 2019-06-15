@@ -54,21 +54,25 @@ export async function save(current: T.Refs): Promise<string | undefined> {
   return path;
 }
 
+function arrayToMap(array: any[]) {
+  return new Map(
+    array.map((color: any) => {
+      const { id, ...rest } = color;
+      return [id, rest];
+    })
+  );
+}
+
 function jsonToRefs(fileName: string, data: any): T.Refs {
   return {
     fileName,
-    components: new Map(),
+    components: arrayToMap(data.components),
     fontSizes: new Map(),
     fontWeights: new Map(),
     fontFamilies: new Map(),
-    breakpoints: new Map(),
+    breakpoints: arrayToMap(data.breakpoints),
     lineHeights: new Map(),
-    colors: new Map(
-      data.colors.map((color: any) => {
-        const { id, ...rest } = color;
-        return [id, rest];
-      })
-    )
+    colors: arrayToMap(data.colors)
   };
 }
 

@@ -26,10 +26,10 @@ export function makeDefaultProject() {
   const primary = entry({ name: "primary", value: colors.primary });
 
   const breakpoints = new Map([
-    ["small", px(544)],
-    ["medium", px(768)],
-    ["large", px(1012)],
-    ["xlarge", px(1280)]
+    entry({ name: "small", value: px(544) }),
+    entry({ name: "medium", value: px(768) }),
+    entry({ name: "large", value: px(1012) }),
+    entry({ name: "xlarge", value: px(1280) })
   ]);
 
   const light = entry({ name: "light", value: 300 });

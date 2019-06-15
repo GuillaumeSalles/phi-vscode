@@ -159,10 +159,3 @@ export const colors: T.ColorsMap = new Map(
     { name: "Red a700", value: "#d50000" }
   ].map(colorDef => [colorDef.name, colorDef])
 );
-
-export const breakpoints: T.BreakpointsMap = new Map([
-  ["small", px(544)],
-  ["medium", px(768)],
-  ["large", px(1012)],
-  ["xlarge", px(1280)]
-]);

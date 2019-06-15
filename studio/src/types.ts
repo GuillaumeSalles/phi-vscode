@@ -116,7 +116,7 @@ export type LineHeightDefinition = {
 };
 
 export type BreakpointsMap = Map<string, BreakpointDefinition>;
-export type BreakpointDefinition = Length;
+export type BreakpointDefinition = { name: string; value: Length };
 
 export type Refs = {
   fileName: string | undefined;

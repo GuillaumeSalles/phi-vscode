@@ -6,6 +6,8 @@ import { useState } from "react";
 import Input from "../../components/Input";
 import InputNumber from "../../components/InputNumber";
 import AddModal from "../../components/AddModal";
+import uuid from "uuid/v4";
+import { px } from "../../factories";
 
 type Props = {
   breakpoints: T.BreakpointsMap;
@@ -38,7 +40,7 @@ function AddBreakpointsModal({ breakpoints, onAdd, onCancel }: Props) {
         if (!isFormValid()) {
           setIsValidating(true);
         } else {
-          onAdd(name, { value, type: "px" });
+          onAdd(uuid(), { name, value: px(value) });
         }
       }}
       form={

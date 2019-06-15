@@ -62,7 +62,7 @@ function Breakpoints({ components, breakpoints, onBreakpointsChange }: Props) {
           >
             {Array.from(breakpoints.entries())
               .map(e => ({ name: e[0], width: e[1] }))
-              .sort((a, b) => a.width.value - b.width.value)
+              .sort((a, b) => a.width.value.value - b.width.value.value)
               .map(b => (
                 <SelectableCard
                   key={b.name}
