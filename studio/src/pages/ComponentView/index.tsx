@@ -10,6 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import Menu from "../../components/Menu";
 import { Layout } from "../../components/Layout";
+import TopBar from "../../components/TopBar";
 
 type Props = {
   components: T.ComponentMap;
@@ -53,6 +54,7 @@ function ComponentView({
 
   return (
     <Layout
+      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
       left={
         isEditing ? (
           <LayersTree

@@ -51,6 +51,7 @@ function arrayToMap(array: any[]) {
 
 function jsonToRefs(fileName: string, data: any): T.Refs {
   return {
+    isSaved: true,
     fileName,
     components: arrayToMap(data.components),
     fontSizes: arrayToMap(data.fontSizes),

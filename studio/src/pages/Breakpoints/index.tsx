@@ -10,21 +10,23 @@ import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
 import Menu from "../../components/Menu";
+import TopBar from "../../components/TopBar";
 
 type Props = {
-  components: T.ComponentMap;
+  refs: T.Refs;
   breakpoints: T.BreakpointsMap;
   onBreakpointsChange: (newBp: T.BreakpointsMap) => void;
 };
 
-function Breakpoints({ components, breakpoints, onBreakpointsChange }: Props) {
+function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBreakpoint, setSelectedBreakpoint] = useState<string | null>(
     null
   );
   return (
     <Layout
-      left={<Menu components={components} />}
+      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
+      left={<Menu components={refs.components} />}
       center={
         <div css={[column]}>
           <div

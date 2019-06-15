@@ -119,6 +119,7 @@ export type BreakpointsMap = Map<string, BreakpointDefinition>;
 export type BreakpointDefinition = { name: string; value: Length };
 
 export type Refs = {
+  isSaved: boolean;
   fileName: string | undefined;
   colors: ColorsMap;
   fontSizes: FontSizesMap;

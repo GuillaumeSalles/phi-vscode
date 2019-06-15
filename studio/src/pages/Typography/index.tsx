@@ -6,9 +6,10 @@ import FontFamilies from "./FontFamilies";
 import FontSizes from "./FontSizes";
 import { Layout } from "../../components/Layout";
 import Menu from "../../components/Menu";
+import TopBar from "../../components/TopBar";
 
 type Props = {
-  components: T.ComponentMap;
+  refs: T.Refs;
 
   fontFamilies: T.FontFamiliesMap;
   onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;
@@ -18,7 +19,7 @@ type Props = {
 };
 
 function Typography({
-  components,
+  refs,
   fontFamilies,
   onFontFamiliesChange,
   fontSizes,
@@ -26,7 +27,8 @@ function Typography({
 }: Props) {
   return (
     <Layout
-      left={<Menu components={components} />}
+      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
+      left={<Menu components={refs.components} />}
       center={
         <div css={[column, mainPadding]}>
           <h1 css={[heading, { marginBottom: "20px" }]}>Typography</h1>

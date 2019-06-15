@@ -13,14 +13,15 @@ import AddModal from "../components/AddModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import Menu from "../components/Menu";
+import TopBar from "../components/TopBar";
 
 type Props = {
-  components: T.ComponentMap;
+  refs: T.Refs;
   colors: Map<string, T.ColorDefinition>;
   onColorsChange: (newColors: Map<string, T.ColorDefinition>) => void;
 };
 
-function Colors({ components, colors, onColorsChange }: Props) {
+function Colors({ refs, colors, onColorsChange }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [colorName, setColorName] = useState("");
   const [colorValue, setColorValue] = useState("");
@@ -47,7 +48,8 @@ function Colors({ components, colors, onColorsChange }: Props) {
 
   return (
     <Layout
-      left={<Menu components={components} />}
+      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
+      left={<Menu components={refs.components} />}
       center={
         <div css={[column, mainPadding]}>
           <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>

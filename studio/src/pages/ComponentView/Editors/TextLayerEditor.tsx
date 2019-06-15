@@ -90,7 +90,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
               }
               options={Array.from(refs.fontSizes.entries()).map(entry => [
                 entry[0],
-                entry[0]
+                entry[1].name
               ])}
             />
           </Field>
@@ -111,7 +111,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
               }
               options={Array.from(refs.fontFamilies.entries()).map(entry => [
                 entry[0],
-                entry[0]
+                entry[1].name
               ])}
             />
           </Field>

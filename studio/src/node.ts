@@ -3,6 +3,7 @@ const r = (window as any).require;
 export const electron = r("electron") as Electron.AllElectron;
 const fs = r("fs") as typeof import("fs");
 const util = r("util") as typeof import("util");
+export const path = r("path") as typeof import("path");
 
 export const writeFile = util.promisify(fs.writeFile);
 export const readFile = util.promisify(fs.readFile);

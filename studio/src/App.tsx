@@ -20,6 +20,7 @@ function App() {
   const router = useRouter();
 
   const [fileName, setFileName] = useState<string | undefined>(undefined);
+  const [isSaved, setIsSaved] = useState<boolean>(true);
   const [components, setComponents] = useState<Map<string, T.Component>>(
     new Map()
   );
@@ -31,6 +32,7 @@ function App() {
   const [fontSizes, setFontSizes] = useState<T.FontSizesMap>(new Map());
   const [breakpoints, setBreakpoints] = useState<T.BreakpointsMap>(new Map());
   const refs: T.Refs = {
+    isSaved,
     fileName,
     colors,
     fontFamilies,
@@ -50,7 +52,10 @@ function App() {
     async function listener(event: string, message: string) {
       if (message === "save") {
         const fileName = await save(fresh.current);
-        setFileName(fileName);
+        if (fileName) {
+          setFileName(fileName);
+          setIsSaved(true);
+        }
       } else if (message === "open") {
         const refs = await open();
         if (refs) {
@@ -61,7 +66,7 @@ function App() {
           setFontFamilies(refs.fontFamilies);
           setBreakpoints(refs.breakpoints);
           setComponents(refs.components);
-          router.history.push("/colors");
+          navigateToFirstComponent(refs.components);
         }
       }
     }
@@ -70,6 +75,10 @@ function App() {
       electron.ipcRenderer.removeListener("actions", listener);
     };
   }, []);
+
+  function navigateToFirstComponent(components: T.ComponentMap) {
+    router.history.push(`/components/${Array.from(components.keys())[0]}`);
+  }
 
   function setComponent(id: string, newComponent: T.Component) {
     setComponents(set(components, id, newComponent));
@@ -83,9 +92,7 @@ function App() {
     setFontFamilies(project.fontFamilies);
     setBreakpoints(project.breakpoints);
     setComponents(project.components);
-    router.history.push(
-      `/components/${Array.from(project.components.keys())[0]}`
-    );
+    navigateToFirstComponent(project.components);
   }
 
   return (
@@ -99,11 +106,17 @@ function App() {
         path="/typography"
         render={() => (
           <Typography
-            components={components}
+            refs={refs}
             fontFamilies={fontFamilies}
-            onFontFamiliesChange={fontFamilies => setFontFamilies(fontFamilies)}
+            onFontFamiliesChange={fontFamilies => {
+              setFontFamilies(fontFamilies);
+              setIsSaved(false);
+            }}
             fontSizes={fontSizes}
-            onFontSizesChange={fontSizes => setFontSizes(fontSizes)}
+            onFontSizesChange={fontSizes => {
+              setFontSizes(fontSizes);
+              setIsSaved(false);
+            }}
           />
         )}
       />
@@ -111,9 +124,12 @@ function App() {
         path="/colors"
         render={() => (
           <Colors
-            components={components}
+            refs={refs}
             colors={colors}
-            onColorsChange={colors => setColors(colors)}
+            onColorsChange={colors => {
+              setColors(colors)
+              setIsSaved(false);
+            }}
           />
         )}
       />
@@ -121,9 +137,12 @@ function App() {
         path="/breakpoints"
         render={() => (
           <Breakpoints
-            components={components}
+            refs={refs}
             breakpoints={breakpoints}
-            onBreakpointsChange={breakpoints => setBreakpoints(breakpoints)}
+            onBreakpointsChange={breakpoints => {
+              setBreakpoints(breakpoints)
+              setIsSaved(false);
+            }}
           />
         )}
       />
@@ -138,9 +157,10 @@ function App() {
             <ComponentView
               components={components}
               component={component}
-              onComponentChange={component =>
+              onComponentChange={component => {
                 setComponent(props.match.params.id, component)
-              }
+                setIsSaved(false)
+              }}
               refs={refs}
             />
           );
