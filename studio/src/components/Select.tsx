@@ -8,6 +8,7 @@ type Props<TValue extends string> = {
   onChange: (value: TValue) => void;
   color?: string;
   backgroundColor?: string;
+  width?: string;
 };
 
 function Select<TValue extends string>({
@@ -15,7 +16,8 @@ function Select<TValue extends string>({
   onChange,
   options,
   color = "black",
-  backgroundColor = "transparent"
+  backgroundColor = "transparent",
+  width = "88px"
 }: Props<TValue>) {
   return (
     <div
@@ -32,8 +34,8 @@ function Select<TValue extends string>({
         position: "relative",
         whiteSpace: "nowrap",
         lineHeight: 0,
-        width: "88px",
-        minWidth: "88px",
+        width,
+        minWidth: width,
         background: "rgb(255, 255, 255)",
         outline: "none",
         borderWidth: "0 0 1px 0",

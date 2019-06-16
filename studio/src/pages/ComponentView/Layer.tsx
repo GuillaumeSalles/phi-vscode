@@ -5,6 +5,7 @@ import * as T from "../../types";
 type Props = {
   layer: T.Layer;
   refs: T.Refs;
+  width: number;
 };
 
 function lengthToCss(
@@ -79,22 +80,43 @@ function lineHeightToCss(lineHeight: T.Ref, lineHeights: T.LineHeightMap) {
   return ref.value;
 }
 
-function makeTextLayerStyle(
+function makeTextLayerStyleWithBreakpoint(
   layer: T.TextLayer,
-  refs: T.Refs
+  refs: T.Refs,
+  width: number
 ): InterpolationWithTheme<any> {
+  const defaultStyle = makeTextLayerStyle(layer.style, refs);
+  return layer.mediaQueries
+    .map(mq => {
+      return {
+        minWidth: refs.breakpoints.get(mq.minWidth.id)!.value.value,
+        style: mq.style
+      };
+    })
+    .filter(mq => mq.minWidth <= width)
+    .sort((a, b) => a.minWidth - b.minWidth)
+    .map(mq => makeTextLayerStyle(mq.style, refs))
+    .reduce((previousStyle, currentStyle) => {
+      return {
+        ...previousStyle,
+        ...currentStyle
+      };
+    }, defaultStyle);
+}
+
+function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
   return {
-    ...makeDimensionsStyle(layer),
-    ...makeMarginStyle(layer),
-    ...makePaddingStyle(layer),
-    ...makeBackgroundStyle(layer, refs.colors),
-    color: layer.color ? colorToString(layer.color, refs.colors) : undefined,
-    fontSize: fontSizeToString(layer.fontSize, refs.fontSizes),
-    fontFamily: fontFamilyToString(layer.fontFamily, refs.fontFamilies),
-    fontWeight: fontWeightToNumber(layer.fontWeight, refs.fontWeights),
-    lineHeight: layer.lineHeight,
-    letterSpacing: lengthToCss(layer.letterSpacing, "0"),
-    textAlign: layer.textAlign
+    ...makeDimensionsStyle(style),
+    ...makeMarginStyle(style),
+    ...makePaddingStyle(style),
+    ...makeBackgroundStyle(style, refs.colors),
+    color: style.color ? colorToString(style.color, refs.colors) : undefined,
+    fontSize: fontSizeToString(style.fontSize, refs.fontSizes),
+    fontFamily: fontFamilyToString(style.fontFamily, refs.fontFamilies),
+    fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),
+    lineHeight: style.lineHeight,
+    letterSpacing: lengthToCss(style.letterSpacing, "0"),
+    textAlign: style.textAlign
   };
 }
 
@@ -111,11 +133,12 @@ function makeContainerLayerStyle(
 
 function makeLayerStyle(
   layer: T.Layer,
-  refs: T.Refs
+  refs: T.Refs,
+  width: number
 ): InterpolationWithTheme<any> {
   switch (layer.type) {
     case "text":
-      return makeTextLayerStyle(layer, refs);
+      return makeTextLayerStyleWithBreakpoint(layer, refs, width);
     case "container":
       return makeContainerLayerStyle(layer, refs);
     default:
@@ -123,13 +146,13 @@ function makeLayerStyle(
   }
 }
 
-function makeChildren(layer: T.Layer, refs: T.Refs) {
+function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
   switch (layer.type) {
     case "text":
       return layer.text;
     case "container":
       return layer.children.map(c => (
-        <Layer key={c.name} layer={c} refs={refs} />
+        <Layer key={c.name} layer={c} refs={refs} width={width} />
       ));
     default:
       throw new Error("Invalid layer style");
@@ -173,16 +196,16 @@ function makeBackgroundStyle(layer: T.Background, colors: T.ColorsMap) {
   };
 }
 
-function Layer({ layer, refs }: Props) {
+function Layer({ layer, refs, width }: Props) {
   switch (layer.type) {
     case "text":
   }
   return jsx(
     layer.tag,
     {
-      css: makeLayerStyle(layer, refs)
+      css: makeLayerStyle(layer, refs, width)
     },
-    makeChildren(layer, refs)
+    makeChildren(layer, refs, width)
   );
 }
 

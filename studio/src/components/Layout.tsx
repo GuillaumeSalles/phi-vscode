@@ -21,7 +21,9 @@ export function Layout({ left, center, right, topBar }: Props) {
           position: "relative",
           flex: "1 1 auto",
           background: "#F7F7F7",
-          height: "100%"
+          height: "100%",
+          width: "100%",
+          overflowX: "auto"
         }}
       >
         <div

@@ -73,7 +73,7 @@ function ComponentView({
             <div css={[row, { marginLeft: "28px" }]}>
               {isEditing ? (
                 <SecondaryButton
-                  text="Save"
+                  text="Done"
                   onClick={() => setIsEditing(false)}
                 />
               ) : (
@@ -100,9 +100,9 @@ function ComponentView({
                 flexShrink: 0,
                 width: "236px",
                 minWidth: "236px",
-                bottom: 0,
                 paddingTop: "8px",
-                background: "white"
+                background: "white",
+                height: "100%"
               }
             ]}
           >

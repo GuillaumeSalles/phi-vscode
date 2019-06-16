@@ -101,29 +101,54 @@ function fontWeightToCss(item: T.Ref | undefined, map: T.FontWeightsMap) {
   return getRefValue(item, map).value.toString();
 }
 
+function textLayerStyleToCss(
+  componentName: string,
+  layerName: string,
+  style: T.TextLayerStyle,
+  refs: T.Refs
+) {
+  return `.${componentName}-${layerName} {
+    ${marginToCss(style)}
+    ${paddingToCss(style)}
+    ${dimensionToCss(style)}
+    ${cssProp("letter-spacing", lengthToCss(style.letterSpacing, "1.2"))}
+    ${cssProp("line-height", style.lineHeight.toString())}
+    ${cssProp("text-align", style.textAlign)}
+    ${cssProp("color", colorToCss(style.color, refs.colors))}
+    ${cssProp(
+      "font-family",
+      fontFamilyToCss(style.fontFamily, refs.fontFamilies)
+    )}
+    ${cssProp("font-size", fontSizeToCss(style.fontSize, refs.fontSizes))}
+    ${cssProp(
+      "font-weight",
+      fontWeightToCss(style.fontWeight, refs.fontWeights)
+    )}
+}`;
+}
+
 function textLayerToCss(
   componentName: string,
   layer: T.TextLayer,
   refs: T.Refs
 ) {
-  return `.${componentName}-${layer.name} {
-    ${marginToCss(layer)}
-    ${paddingToCss(layer)}
-    ${dimensionToCss(layer)}
-    ${cssProp("letter-spacing", lengthToCss(layer.letterSpacing, "1.2"))}
-    ${cssProp("line-height", layer.lineHeight.toString())}
-    ${cssProp("text-align", layer.textAlign)}
-    ${cssProp("color", colorToCss(layer.color, refs.colors))}
-    ${cssProp(
-      "font-family",
-      fontFamilyToCss(layer.fontFamily, refs.fontFamilies)
-    )}
-    ${cssProp("font-size", fontSizeToCss(layer.fontSize, refs.fontSizes))}
-    ${cssProp(
-      "font-weight",
-      fontWeightToCss(layer.fontWeight, refs.fontWeights)
-    )}
-}`;
+  const defaultStyle = textLayerStyleToCss(
+    componentName,
+    layer.name,
+    layer.style,
+    refs
+  );
+  const mqStyles = Array.from(layer.mediaQueries.values()).map(mq => {
+    const bp = refs.breakpoints.get(mq.minWidth.id);
+    if (!bp) {
+      throw new Error("Breakpoint not found");
+    }
+    return `@media (min-width: ${bp.value.value}px) {
+      ${textLayerStyleToCss(componentName, layer.name, mq.style, refs)}
+    }`;
+  });
+
+  return [defaultStyle].concat(mqStyles).join("\n");
 }
 
 function componentToCss(component: T.Component, refs: T.Refs) {

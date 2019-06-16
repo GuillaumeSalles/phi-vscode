@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, colors } from "../../../styles";
+import { row } from "../../../styles";
 import RadioIconGroup from "../../../components/RadioIconGroup";
 
 type Props = {

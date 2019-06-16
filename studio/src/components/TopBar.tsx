@@ -30,8 +30,8 @@ export default function TopBar({ fileName, isSaved }: Props) {
       >
         <defs>
           <radialGradient id="myGradient" cx="0.4" cy="0.6">
-            <stop offset="10%" stop-color="rgb(101,129,223)" />
-            <stop offset="95%" stop-color="rgb(61,77,128)" />
+            <stop offset="10%" stopColor="rgb(101,129,223)" />
+            <stop offset="95%" stopColor="rgb(61,77,128)" />
           </radialGradient>
         </defs>
         <circle cx="25" cy="25" r="25" fill="url('#myGradient')" />

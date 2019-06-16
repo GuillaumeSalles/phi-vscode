@@ -51,12 +51,15 @@ export function makeDefaultProject() {
     name: "root",
     tag: "h1",
     text: "Hello world",
-    textAlign: "left",
-    fontSize: ref(fontSizes[5][0]),
-    fontFamily: ref(defaultFontFamily[0]),
-    fontWeight: ref(normal[0]),
-    lineHeight: 1.2,
-    color: ref(black[0])
+    mediaQueries: [],
+    style: {
+      textAlign: "left",
+      fontSize: ref(fontSizes[5][0]),
+      fontFamily: ref(defaultFontFamily[0]),
+      fontWeight: ref(normal[0]),
+      lineHeight: 1.2,
+      color: ref(black[0])
+    }
   };
 
   const helloWorld = entry({

@@ -1,73 +1,73 @@
 {
   "colors": [
     {
-      "id": "0e206ad9-39c2-42f2-900d-7a02b6c6a15d",
+      "id": "0613ae30-2c13-425c-a9f7-82c9997f7330",
       "name": "black",
       "value": "#000000"
     },
     {
-      "id": "d088a3a7-69d5-4f05-878d-fd97c52c0309",
+      "id": "2a3f368d-2606-45bd-b7a3-5a70ba96b9d2",
       "name": "white",
       "value": "#FFFFFF"
     },
     {
-      "id": "676549dc-9f50-4037-b11d-dd6de999fa3f",
+      "id": "b066f00b-443f-4952-bbd7-a1c493fc8eb3",
       "name": "primary",
       "value": "#0076FF"
     }
   ],
   "fontSizes": [
     {
-      "id": "4aba58f5-f1ac-4c24-bf38-4746036bb973",
+      "id": "480f1f5a-2555-439e-a3f7-5104e295e38f",
       "name": "FS1",
       "value": "14px"
     },
     {
-      "id": "193208a2-827c-45b2-a68a-c7c6a1780065",
+      "id": "3a02d561-7347-4857-8086-655ab5ea29c3",
       "name": "FS2",
       "value": "16px"
     },
     {
-      "id": "4d010720-9571-440c-baf6-af5bc6f569ff",
+      "id": "8ebbf59d-64ea-492d-ab70-7f6918e1652d",
       "name": "FS3",
       "value": "18px"
     },
     {
-      "id": "5d9fa958-d455-4a39-b0a8-dec827cde1f9",
+      "id": "af51d623-a892-474c-8ac8-9d097465f3a9",
       "name": "FS4",
       "value": "24px"
     },
     {
-      "id": "991a63de-a3f6-4882-afd4-764ebbfe908c",
+      "id": "99c8aeb0-593d-43c9-b4be-f3bb4edf704a",
       "name": "FS5",
       "value": "26px"
     },
     {
-      "id": "1b8887a1-bbf1-4050-a5f5-59546827357c",
+      "id": "4c5043b1-baea-4be8-8388-888fd27e8e45",
       "name": "FS6",
       "value": "32px"
     }
   ],
   "fontWeights": [
     {
-      "id": "06c59e4a-3dc8-40e5-a507-974b735630ed",
+      "id": "854d06a5-3bdc-4713-9c33-54522c76dc3e",
       "name": "light",
       "value": 300
     },
     {
-      "id": "74728848-2faa-4f0f-a14f-a5966cd5ac60",
+      "id": "9de9a72e-d5f0-40c3-a646-ceaedb7dded8",
       "name": "normal",
       "value": 400
     },
     {
-      "id": "27b6414f-3ad3-4e1c-8c76-f2d74fb7c752",
+      "id": "53271a6b-8324-4b76-b9f8-2abb07a70a93",
       "name": "bold",
       "value": 700
     }
   ],
   "fontFamilies": [
     {
-      "id": "151077a0-0532-456f-959f-a4d1496e8401",
+      "id": "c93a9e39-e38a-43bd-98ef-c209b44e06d4",
       "name": "default",
       "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", sans-serif"
     }
@@ -78,51 +78,85 @@
   ],
   "breakpoints": [
     {
-      "id": "78bf7c9d-2077-4d17-8417-e16dd3730af4",
+      "id": "08357b3e-ff9c-47f2-996b-bdcf6e2d00b0",
       "name": "small",
       "value": { "type": "px", "value": 544 }
     },
     {
-      "id": "7e963ea8-d3a5-4a62-b47d-e21ce5f2be45",
+      "id": "3696fbbf-5086-452a-82cb-c0627d9f1309",
       "name": "medium",
       "value": { "type": "px", "value": 768 }
     },
     {
-      "id": "d0eb26c7-b332-4591-a9e5-e61457c994a2",
+      "id": "89e0296f-735d-4543-af20-91d11975dc42",
       "name": "large",
       "value": { "type": "px", "value": 1012 }
     },
     {
-      "id": "24d6d66b-53ae-4ba0-97c7-6862960c42a1",
+      "id": "035ed73f-1fa0-4696-a713-e07bcdbbf801",
       "name": "xlarge",
       "value": { "type": "px", "value": 1280 }
     }
   ],
   "components": [
     {
-      "id": "a01eb8e6-85fe-4b11-baef-3c2df47b58b0",
+      "id": "3c5c461e-c312-4ad9-8df6-fb52e209e67f",
       "name": "HelloWorld",
       "layout": {
-        "id": "755d94d3-16e1-4ef6-91e9-eab6d8394de7",
+        "id": "a11f5a72-3fc7-4208-a02c-a4346e36dd4a",
         "type": "text",
         "name": "root",
-        "tag": "h3",
-        "text": "Hello ",
-        "textAlign": "left",
-        "fontSize": {
-          "type": "ref",
-          "id": "1b8887a1-bbf1-4050-a5f5-59546827357c"
-        },
-        "fontFamily": {
-          "type": "ref",
-          "id": "151077a0-0532-456f-959f-a4d1496e8401"
-        },
-        "fontWeight": {
-          "type": "ref",
-          "id": "74728848-2faa-4f0f-a14f-a5966cd5ac60"
-        },
-        "lineHeight": 1.2,
-        "color": { "type": "ref", "id": "676549dc-9f50-4037-b11d-dd6de999fa3f" }
+        "tag": "h1",
+        "text": "Hello world",
+        "mediaQueries": [
+          {
+            "id": "c7aa5a02-04e7-4cac-95e7-773446ce71ad",
+            "minWidth": {
+              "type": "ref",
+              "id": "3696fbbf-5086-452a-82cb-c0627d9f1309"
+            },
+            "style": {
+              "textAlign": "left",
+              "fontSize": {
+                "type": "ref",
+                "id": "4c5043b1-baea-4be8-8388-888fd27e8e45"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "c93a9e39-e38a-43bd-98ef-c209b44e06d4"
+              },
+              "fontWeight": {
+                "type": "ref",
+                "id": "9de9a72e-d5f0-40c3-a646-ceaedb7dded8"
+              },
+              "lineHeight": 1.2,
+              "color": {
+                "type": "ref",
+                "id": "b066f00b-443f-4952-bbd7-a1c493fc8eb3"
+              }
+            }
+          }
+        ],
+        "style": {
+          "textAlign": "left",
+          "fontSize": {
+            "type": "ref",
+            "id": "4c5043b1-baea-4be8-8388-888fd27e8e45"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "c93a9e39-e38a-43bd-98ef-c209b44e06d4"
+          },
+          "fontWeight": {
+            "type": "ref",
+            "id": "9de9a72e-d5f0-40c3-a646-ceaedb7dded8"
+          },
+          "lineHeight": 1.2,
+          "color": {
+            "type": "ref",
+            "id": "0613ae30-2c13-425c-a9f7-82c9997f7330"
+          }
+        }
       }
     }
   ]

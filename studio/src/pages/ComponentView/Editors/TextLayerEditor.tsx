@@ -11,6 +11,9 @@ import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import TextAlignEditor from "./TextAlignEditor";
 import TextAreaInput from "../../../components/TextAreaInput";
+import { useState } from "react";
+import MediaQueriesEditor from "./MediaQueriesEditor";
+import { set } from "../../../helpers/immutable-map";
 
 type Props = {
   layer: T.TextLayer;
@@ -24,26 +27,40 @@ const separator = {
   borderTop: "solid 1px #DDD"
 };
 
-const tags: T.TextLayerTag[] = [
-  "p",
-  "span",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6"
-];
+const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
 const tagsOptions: [T.TextLayerTag, string][] = tags.map(t => [t, t]);
 
 function TextLayerEditor({ layer, onChange, refs }: Props) {
+  const [mediaQuery, setMediaQuery] = useState("default");
+  const isDefault = mediaQuery === "default";
+  const style = isDefault
+    ? layer.style
+    : layer.mediaQueries.find(mq => mq.id === mediaQuery)!.style;
+
   function updateLayer(newProps: Partial<T.TextLayer>) {
     onChange({ ...layer, ...newProps });
   }
 
+  function updateLayerStyle(newProps: Partial<T.TextLayerStyle>) {
+    if (isDefault) updateLayer({ style: { ...style, ...newProps } });
+    else {
+      const mq = layer.mediaQueries.find(mq => mq.id === mediaQuery)!;
+      updateLayer({
+        mediaQueries: layer.mediaQueries.map(mq =>
+          mq.id === mediaQuery
+            ? {
+                ...mq,
+                style: { ...style, ...newProps }
+              }
+            : mq
+        )
+      });
+    }
+  }
+
   return (
     <div css={column}>
-      <div css={[column, { padding: "8px" }]}>
+      <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
         <h4
           css={[
             sectionTitle,
@@ -70,106 +87,120 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
         </div>
       </div>
       <hr css={separator} />
-      <div css={[column, { padding: "8px" }]}>
-        <h4
-          css={[
-            sectionTitle,
-            {
-              margin: "8px"
-            }
-          ]}
-        >
-          Typography
-        </h4>
-        <div css={[row]}>
-          <Field label="Font size">
-            <Select
-              value={layer.fontSize.id}
-              onChange={value =>
-                updateLayer({ fontSize: { type: "ref", id: value } })
+      <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
+        <div css={[column, { padding: "8px" }]}>
+          <h4
+            css={[
+              sectionTitle,
+              {
+                margin: "8px"
               }
-              options={Array.from(refs.fontSizes.entries()).map(entry => [
-                entry[0],
-                entry[1].name
-              ])}
-            />
-          </Field>
-          <Field label="Color">
-            <ColorInput
-              colors={refs.colors}
-              value={layer.color}
-              onChange={value => updateLayer({ color: value })}
-            />
-          </Field>
+            ]}
+          >
+            Typography
+          </h4>
+          <div css={[row]}>
+            <Field label="Font size">
+              <Select
+                value={style.fontSize.id}
+                onChange={value =>
+                  updateLayerStyle({ fontSize: { type: "ref", id: value } })
+                }
+                options={Array.from(refs.fontSizes.entries()).map(entry => [
+                  entry[0],
+                  entry[1].name
+                ])}
+              />
+            </Field>
+            <Field label="Color">
+              <ColorInput
+                colors={refs.colors}
+                value={style.color}
+                onChange={value => updateLayerStyle({ color: value })}
+              />
+            </Field>
+          </div>
+          <div css={row}>
+            <Field label="Font family">
+              <Select
+                value={style.fontFamily.id}
+                onChange={value =>
+                  updateLayerStyle({ fontFamily: { type: "ref", id: value } })
+                }
+                options={Array.from(refs.fontFamilies.entries()).map(entry => [
+                  entry[0],
+                  entry[1].name
+                ])}
+              />
+            </Field>
+            <Field label="Font weight">
+              <Select
+                value={style.fontWeight.id}
+                onChange={value =>
+                  updateLayerStyle({ fontWeight: { type: "ref", id: value } })
+                }
+                options={Array.from(refs.fontWeights.entries()).map(entry => [
+                  entry[0],
+                  entry[1].name
+                ])}
+              />
+            </Field>
+          </div>
+          <div css={row}>
+            <Field label="Line">
+              <NumberInput
+                value={style.lineHeight}
+                onChange={lineHeight =>
+                  updateLayerStyle({
+                    lineHeight: lineHeight === null ? 1.2 : lineHeight
+                  })
+                }
+              />
+            </Field>
+            <Field label="Letter">
+              <NumberInput
+                step={0.5}
+                value={style.letterSpacing ? style.letterSpacing.value : 0}
+                onChange={value =>
+                  updateLayerStyle({
+                    letterSpacing:
+                      value !== null ? { type: "px", value } : undefined
+                  })
+                }
+              />
+            </Field>
+          </div>
+          <TextAlignEditor
+            value={style.textAlign}
+            onChange={textAlign => updateLayerStyle({ textAlign })}
+          />
         </div>
-        <div css={row}>
-          <Field label="Font family">
-            <Select
-              value={layer.fontFamily.id}
-              onChange={value =>
-                updateLayer({ fontFamily: { type: "ref", id: value } })
-              }
-              options={Array.from(refs.fontFamilies.entries()).map(entry => [
-                entry[0],
-                entry[1].name
-              ])}
-            />
-          </Field>
-          <Field label="Font weight">
-            <Select
-              value={layer.fontWeight.id}
-              onChange={value =>
-                updateLayer({ fontWeight: { type: "ref", id: value } })
-              }
-              options={Array.from(refs.fontWeights.entries()).map(entry => [
-                entry[0],
-                entry[1].name
-              ])}
-            />
-          </Field>
-        </div>
-        <div css={row}>
-          <Field label="Line">
-            <NumberInput
-              value={layer.lineHeight}
-              onChange={lineHeight =>
-                updateLayer({
-                  lineHeight: lineHeight === null ? 1.2 : lineHeight
-                })
-              }
-            />
-          </Field>
-          <Field label="Letter">
-            <NumberInput
-              step={0.5}
-              value={layer.letterSpacing ? layer.letterSpacing.value : 0}
-              onChange={value =>
-                updateLayer({
-                  letterSpacing:
-                    value !== null ? { type: "px", value } : undefined
-                })
-              }
-            />
-          </Field>
-        </div>
-        <TextAlignEditor
-          value={layer.textAlign}
-          onChange={textAlign => updateLayer({ textAlign })}
-        />
+        <hr css={separator} />
+        <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
+        <hr css={separator} />
+        <MarginEditor margin={style} onChange={updateLayerStyle} />
+        <PaddingEditor padding={style} onChange={updateLayerStyle} />
       </div>
-      {/* <Field label="Background Color" gridArea="3 0">
-        <ColorInput
-          colors={refs.colors}
-          value={layer.backgroundColor}
-          onChange={value => updateLayer({ backgroundColor: value })}
-        />
-      </Field> */}
       <hr css={separator} />
-      <DimensionsEditor dimensions={layer} onChange={updateLayer} />
-      <hr css={separator} />
-      <MarginEditor margin={layer} onChange={updateLayer} />
-      <PaddingEditor padding={layer} onChange={updateLayer} />
-      <hr css={separator} />
+      <MediaQueriesEditor
+        selectedId={mediaQuery}
+        items={layer.mediaQueries}
+        onAdd={(id, breakpoint) => {
+          updateLayer({
+            mediaQueries: [
+              ...layer.mediaQueries,
+              {
+                id,
+                minWidth: breakpoint,
+                style: { ...layer.style }
+              }
+            ]
+          });
+          setMediaQuery(id);
+        }}
+        onChange={setMediaQuery}
+        refs={refs}
+      />
     </div>
   );
 }

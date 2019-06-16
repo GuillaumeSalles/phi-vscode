@@ -31,11 +31,15 @@ function Component({ component, refs }: Props) {
                 border: "none",
                 minHeight: "100px",
                 background: "white",
-                width: entry[1].value + "px"
+                width: entry[1].value.value + "px"
               }
             ]}
           >
-            <Layer layer={component.layout} refs={refs} />
+            <Layer
+              layer={component.layout}
+              refs={refs}
+              width={entry[1].value.value}
+            />
           </div>
         </div>
       ))}
