@@ -7,6 +7,8 @@ export type ComponentMap = Map<string, Component>;
 
 export type Layer = ContainerLayer | TextLayer;
 
+export type LayerType = "container" | "text";
+
 export type ContainerLayer = {
   type: "container";
   id: string;

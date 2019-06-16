@@ -59,11 +59,28 @@ function Menu({ components }: Props) {
           }
         ]}
       >
-        <span css={leftMenuHeading}>Styles</span>
+        <span
+          css={[
+            leftMenuHeading,
+            {
+              paddingLeft: "24px",
+              paddingBottom: "16px"
+            }
+          ]}
+        >
+          Styles
+        </span>
         <MenuItem href="/typography" text="Typography" />
         <MenuItem href="/colors" text="Colors" />
         <MenuItem href="/breakpoints" text="Breakpoints" />
-        <span css={[leftMenuHeading, { marginTop: "40px" }]}>Components</span>
+        <span
+          css={[
+            leftMenuHeading,
+            { marginTop: "40px", paddingLeft: "24px", paddingBottom: "16px" }
+          ]}
+        >
+          Components
+        </span>
         {Array.from(components.entries()).map(entry => (
           <MenuItem
             key={entry[0]}

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css, Interpolation } from "@emotion/core";
-import { card, colors } from "../styles";
+import { selectableCard, colors } from "../styles";
 
 type Props = {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ export default function SelectableCard({
   overrides
 }: Props) {
   const styles = css(
-    card,
+    selectableCard,
     {
       borderColor: isSelected ? colors.primary : "transparent"
     },

@@ -58,6 +58,7 @@ function ComponentView({
       left={
         isEditing ? (
           <LayersTree
+            onAddLayer={type => {}}
             root={component.layout}
             onSelectLayer={() => {}}
             selectedLayer={component.layout}

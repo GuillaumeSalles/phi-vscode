@@ -2,11 +2,13 @@
 import { jsx } from "@emotion/core";
 import * as T from "../types";
 import { column, row, leftMenuHeading, colors } from "../styles";
+import AddLayerPopover from "./AddLayerPopover";
 
 type Props = {
   root: T.Layer;
   onSelectLayer: (layer: T.Layer) => void;
   selectedLayer: T.Layer;
+  onAddLayer: (layerType: T.LayerType) => void;
 };
 
 type LayersTreeItem = {
@@ -36,8 +38,8 @@ function flattenLayer(layer: T.Layer, depth: number = 0): LayersTreeItem[] {
   return results;
 }
 
-function layerToIcon(layer: T.Layer) {
-  switch (layer.type) {
+export function layerTypeToIcon(type: T.LayerType) {
+  switch (type) {
     case "text":
       return (
         <svg
@@ -67,19 +69,25 @@ function layerToIcon(layer: T.Layer) {
   }
 }
 
-function LayersTree({ root, onSelectLayer, selectedLayer }: Props) {
+function LayersTree({ root, onAddLayer, onSelectLayer, selectedLayer }: Props) {
   return (
     <div
       css={[
         column,
         {
-          paddingBottom: "24px",
-          paddingTop: "24px",
           width: "240px"
         }
       ]}
     >
-      <h2 css={leftMenuHeading}>Layers</h2>
+      <div
+        css={[
+          row,
+          { justifyContent: "space-between", margin: "24px 24px 16px 24px" }
+        ]}
+      >
+        <h2 css={leftMenuHeading}>Layers</h2>
+        <AddLayerPopover onAdd={onAddLayer} disabled={false} />
+      </div>
       {flattenLayer(root).map(item => (
         <div
           key={item.layer.id}
@@ -100,7 +108,7 @@ function LayersTree({ root, onSelectLayer, selectedLayer }: Props) {
           ]}
           onClick={() => onSelectLayer(item.layer)}
         >
-          {layerToIcon(item.layer)}
+          {layerTypeToIcon(item.layer.type)}
           <span css={{ marginLeft: "4px" }}>{item.layer.name}</span>
         </div>
       ))}

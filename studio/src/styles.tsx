@@ -35,8 +35,6 @@ export const sectionTitle = css({
 });
 
 export const leftMenuHeading = css({
-  paddingLeft: "24px",
-  paddingBottom: "16px",
   margin: 0,
   fontSize: "13px",
   textTransform: "uppercase",
@@ -91,7 +89,7 @@ export const input = css({
   outline: "0px"
 });
 
-export const card = css({
+export const selectableCard = css({
   boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
   cursor: "pointer",
   background: "white",
@@ -102,4 +100,11 @@ export const card = css({
   ":hover": {
     boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
   }
+});
+
+export const card = css({
+  boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",
+  background: "white",
+  borderRadius: "2px",
+  transition: "all 0.2s ease 0s"
 });

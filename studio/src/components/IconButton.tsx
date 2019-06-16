@@ -11,7 +11,14 @@ export default function IconButton({ icon, onClick, disabled }: Props) {
   return (
     <button
       disabled={disabled}
-      css={{ border: "none", margin: 0, padding: 0 }}
+      css={{
+        border: "none",
+        margin: 0,
+        padding: 0,
+        ":focus": {
+          outline: "none"
+        }
+      }}
       onClick={onClick}
     >
       {icon}

@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
-import { column, card } from "../../styles";
+import { column, selectableCard } from "../../styles";
 
 type Props = {
   component: T.Component;
@@ -26,10 +26,9 @@ function Component({ component, refs }: Props) {
           </h3>
           <div
             css={[
-              card,
+              selectableCard,
               {
                 border: "none",
-                minHeight: "100px",
                 background: "white",
                 width: entry[1].value.value + "px"
               }
