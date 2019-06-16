@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { column, row, sectionTitle } from "../../../styles";
+import { column, row, sectionTitle, separator } from "../../../styles";
 import Field from "../../../components/Field";
 import DimensionsEditor from "./DimensionsEditor";
 import Select from "../../../components/Select";
@@ -13,18 +13,11 @@ import TextAlignEditor from "./TextAlignEditor";
 import TextAreaInput from "../../../components/TextAreaInput";
 import { useState } from "react";
 import MediaQueriesEditor from "./MediaQueriesEditor";
-import { set } from "../../../helpers/immutable-map";
 
 type Props = {
   layer: T.TextLayer;
   onChange: (layer: T.TextLayer) => void;
   refs: T.Refs;
-};
-
-const separator = {
-  margin: "4px 0",
-  border: "none",
-  borderTop: "solid 1px #DDD"
 };
 
 const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];

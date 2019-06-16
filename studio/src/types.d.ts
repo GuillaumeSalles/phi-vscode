@@ -14,8 +14,13 @@ export type ContainerLayer = {
   id: string;
   name: string;
   tag: "div";
-  flexDirection: "row" | "column";
   children: Layer[];
+  style: ContainerLayerStyle;
+  mediaQueries: Array<MediaQuery<ContainerLayerStyle>>;
+};
+
+export type ContainerLayerStyle = {
+  flexDirection: "row" | "column";
 } & Background &
   Dimensions;
 

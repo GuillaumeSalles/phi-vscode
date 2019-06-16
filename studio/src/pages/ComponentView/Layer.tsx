@@ -121,13 +121,13 @@ function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
 }
 
 function makeContainerLayerStyle(
-  layer: T.ContainerLayer,
+  style: T.ContainerLayerStyle,
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
-    ...makeDimensionsStyle(layer),
-    ...makeBackgroundStyle(layer, refs.colors),
-    flexDirection: layer.flexDirection
+    ...makeDimensionsStyle(style),
+    ...makeBackgroundStyle(style, refs.colors),
+    flexDirection: style.flexDirection
   };
 }
 
@@ -140,7 +140,7 @@ function makeLayerStyle(
     case "text":
       return makeTextLayerStyleWithBreakpoint(layer, refs, width);
     case "container":
-      return makeContainerLayerStyle(layer, refs);
+      return makeContainerLayerStyle(layer.style, refs);
     default:
       throw new Error("Invalid layer style");
   }

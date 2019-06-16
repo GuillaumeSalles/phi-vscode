@@ -15,6 +15,17 @@ export function px(value: number): T.Length {
   return { type: "px", value };
 }
 
+export function makeLayer(type: T.LayerType, refs: T.Refs): T.Layer {
+  switch (type) {
+    case "text":
+      return makeTextLayer(refs);
+    case "container":
+      return makeContainerLayer(refs);
+    default:
+      throw new Error("Invalid layer type");
+  }
+}
+
 export function makeTextLayer(refs: T.Refs): T.TextLayer {
   return {
     type: "text",
@@ -30,6 +41,20 @@ export function makeTextLayer(refs: T.Refs): T.TextLayer {
       fontSize: ref(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2
+    }
+  };
+}
+
+export function makeContainerLayer(refs: T.Refs): T.ContainerLayer {
+  return {
+    type: "container",
+    id: uuid(),
+    name: "Container",
+    tag: "div",
+    mediaQueries: [],
+    children: [],
+    style: {
+      flexDirection: "column"
     }
   };
 }

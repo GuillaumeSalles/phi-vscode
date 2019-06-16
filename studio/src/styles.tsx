@@ -34,6 +34,12 @@ export const sectionTitle = css({
   color: "rgb(136, 136, 136)"
 });
 
+export const separator = {
+  margin: "4px 0",
+  border: "none",
+  borderTop: "solid 1px #DDD"
+};
+
 export const subHeading = css({
   margin: "0",
   fontWeight: 400,

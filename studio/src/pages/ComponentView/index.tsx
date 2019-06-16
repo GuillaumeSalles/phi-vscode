@@ -10,7 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
-import { makeTextLayer } from "../../factories";
+import { makeTextLayer, makeLayer } from "../../factories";
 
 type Props = {
   menu: React.ReactNode;
@@ -33,7 +33,7 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
   }
 
   function addLayer(type: T.LayerType) {
-    updateComponentLayer(makeTextLayer(refs));
+    updateComponentLayer(makeLayer(type, refs));
   }
 
   function updateLayer(

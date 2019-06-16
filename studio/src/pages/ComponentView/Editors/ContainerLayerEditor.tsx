@@ -1,11 +1,18 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { column } from "../../../styles";
+import { column, sectionTitle, row, separator } from "../../../styles";
 import Select from "../../../components/Select";
 import Field from "../../../components/Field";
 import DimensionsEditor from "../../../pages/ComponentView/Editors/DimensionsEditor";
 import ColorInput from "../../../components/ColorInput";
+import { useState } from "react";
+import TextAreaInput from "../../../components/TextAreaInput";
+import NumberInput from "../../../components/NumberInput";
+import TextAlignEditor from "./TextAlignEditor";
+import MarginEditor from "./MarginEditor";
+import PaddingEditor from "./PaddingEditor";
+import MediaQueriesEditor from "./MediaQueriesEditor";
 
 type Props = {
   layer: T.ContainerLayer;
@@ -14,30 +21,73 @@ type Props = {
 };
 
 function ContainerLayerEditor({ layer, onChange, refs }: Props) {
+  const [mediaQuery, setMediaQuery] = useState("default");
+  const isDefault = mediaQuery === "default";
+  const style = isDefault
+    ? layer.style
+    : layer.mediaQueries.find(mq => mq.id === mediaQuery)!.style;
+
   function updateLayer(newProps: Partial<T.ContainerLayer>) {
     onChange({ ...layer, ...newProps });
   }
 
+  function updateLayerStyle(newProps: Partial<T.ContainerLayerStyle>) {
+    if (isDefault) updateLayer({ style: { ...style, ...newProps } });
+    else {
+      const mq = layer.mediaQueries.find(mq => mq.id === mediaQuery)!;
+      updateLayer({
+        mediaQueries: layer.mediaQueries.map(mq =>
+          mq.id === mediaQuery
+            ? {
+                ...mq,
+                style: { ...style, ...newProps }
+              }
+            : mq
+        )
+      });
+    }
+  }
+
   return (
-    <div css={[column]}>
-      <h4>Layout</h4>
-      <Field label="Direction">
-        <Select
-          options={[["row", "Row"], ["column", "Column"]]}
-          value={layer.flexDirection}
-          onChange={flexDirection => updateLayer({ flexDirection })}
-        />
-      </Field>
-      <Field label="Background Color">
-        <ColorInput
-          value={layer.backgroundColor}
-          colors={refs.colors}
-          onChange={value => updateLayer({ backgroundColor: value })}
-        />
-      </Field>
-      <DimensionsEditor
-        dimensions={layer}
-        onChange={dimensions => updateLayer(dimensions)}
+    <div css={column}>
+      <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
+        <h4
+          css={[
+            sectionTitle,
+            {
+              margin: "8px"
+            }
+          ]}
+        >
+          HTML
+        </h4>
+        {/* <Field label="Tag">
+          <Select
+            value={layer.tag}
+            onChange={tag => updateLayer({ tag })}
+            options={tagsOptions}
+          />
+        </Field> */}
+      </div>
+      <hr css={separator} />
+      <MediaQueriesEditor
+        selectedId={mediaQuery}
+        items={layer.mediaQueries}
+        onAdd={(id, breakpoint) => {
+          updateLayer({
+            mediaQueries: [
+              ...layer.mediaQueries,
+              {
+                id,
+                minWidth: breakpoint,
+                style: { ...layer.style }
+              }
+            ]
+          });
+          setMediaQuery(id);
+        }}
+        onChange={setMediaQuery}
+        refs={refs}
       />
     </div>
   );
