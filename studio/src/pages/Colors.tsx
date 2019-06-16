@@ -4,12 +4,11 @@ import React from "react";
 import * as T from "../types";
 import { column, row, mainPadding, heading } from "../styles";
 import { useState } from "react";
-import Modal from "../components/Modal";
 import Input from "../components/Input";
 import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../components/SelectableCard";
-import AddModal from "../components/AddModal";
+import AddModal, { useOkCancelModal } from "../components/AddModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import Menu from "../components/Menu";
@@ -22,7 +21,7 @@ type Props = {
 };
 
 function Colors({ refs, colors, onColorsChange }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useOkCancelModal();
   const [colorName, setColorName] = useState("");
   const [colorValue, setColorValue] = useState("");
   const [hasTryToSubmit, setHasTryToSubmit] = useState(false);
@@ -59,7 +58,7 @@ function Colors({ refs, colors, onColorsChange }: Props) {
                 text="Add"
                 onClick={() => {
                   resetForm();
-                  setIsModalOpen(true);
+                  modal.open();
                 }}
                 margin="0 10px 0 0"
               />
@@ -112,53 +111,47 @@ function Colors({ refs, colors, onColorsChange }: Props) {
               );
             })}
           </div>
-          <Modal isOpen={isModalOpen}>
-            <AddModal
-              title="Add color"
-              form={
-                <React.Fragment>
-                  <p
-                    css={{
-                      color: "rgb(102, 102, 102)",
-                      fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "24px"
-                    }}
-                  >
-                    The name should unique. <br /> The value should be in
-                    hexadecimal (e.g: #AABBCC).
-                  </p>
-                  <Input
-                    placeholder="Name"
-                    margin="0 0 12px"
-                    value={colorName}
-                    onChange={e => setColorName(e.target.value)}
-                    isInvalid={hasTryToSubmit && !isColorNameValid()}
-                  />
-                  <Input
-                    placeholder="Value in hex. (e.g: #AABBCC)"
-                    value={colorValue}
-                    onChange={e => setColorValue(e.target.value)}
-                    isInvalid={hasTryToSubmit && !isColorValueValid()}
-                  />
-                </React.Fragment>
+          <AddModal
+            isOpen={modal.isOpen}
+            title="Add color"
+            description={
+              <>
+                The name should unique. <br /> The value should be in
+                hexadecimal (e.g: #AABBCC).
+              </>
+            }
+            form={
+              <React.Fragment>
+                <Input
+                  placeholder="Name"
+                  margin="0 0 12px"
+                  value={colorName}
+                  onChange={e => setColorName(e.target.value)}
+                  isInvalid={hasTryToSubmit && !isColorNameValid()}
+                />
+                <Input
+                  placeholder="Value in hex. (e.g: #AABBCC)"
+                  value={colorValue}
+                  onChange={e => setColorValue(e.target.value)}
+                  isInvalid={hasTryToSubmit && !isColorValueValid()}
+                />
+              </React.Fragment>
+            }
+            onCancel={modal.close}
+            onAdd={() => {
+              if (!isFormValid()) {
+                setHasTryToSubmit(true);
+              } else {
+                onColorsChange(
+                  set(colors, colorName, {
+                    name: colorName,
+                    value: colorValue
+                  })
+                );
+                modal.close();
               }
-              onCancel={() => setIsModalOpen(false)}
-              onAdd={() => {
-                if (!isFormValid()) {
-                  setHasTryToSubmit(true);
-                } else {
-                  onColorsChange(
-                    set(colors, colorName, {
-                      name: colorName,
-                      value: colorValue
-                    })
-                  );
-                  setIsModalOpen(false);
-                }
-              }}
-            />
-          </Modal>
+            }}
+          />
         </div>
       }
     />

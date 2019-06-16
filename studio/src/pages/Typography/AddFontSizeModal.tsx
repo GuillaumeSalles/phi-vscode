@@ -9,12 +9,18 @@ import InputNumber from "../../components/InputNumber";
 import uuid from "uuid/v4";
 
 type Props = {
+  isOpen: boolean;
   items: T.FontSizesMap;
   onAdd: (name: string, item: T.FontSizeDefinition) => void;
   onCancel: () => void;
 };
 
-export default function AddFontSizeModal({ items, onAdd, onCancel }: Props) {
+export default function AddFontSizeModal({
+  isOpen,
+  items,
+  onAdd,
+  onCancel
+}: Props) {
   const [name, setName] = useState("");
   const [value, setValue] = useState(16);
   const [isValidating, setIsValidating] = useState(false);
@@ -33,7 +39,9 @@ export default function AddFontSizeModal({ items, onAdd, onCancel }: Props) {
 
   return (
     <AddModal
+      isOpen={isOpen}
       title="Add font size"
+      description="The name should unique."
       onAdd={() => {
         if (!isFormValid()) {
           setIsValidating(true);
@@ -44,16 +52,6 @@ export default function AddFontSizeModal({ items, onAdd, onCancel }: Props) {
       onCancel={onCancel}
       form={
         <React.Fragment>
-          <p
-            css={{
-              color: "rgb(102, 102, 102)",
-              fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "24px"
-            }}
-          >
-            The name should unique.
-          </p>
           <Input
             placeholder="Name"
             margin="0 0 12px"

@@ -7,6 +7,7 @@ import AddModal from "../../../components/AddModal";
 import Select from "../../../components/Select";
 
 type Props<TStyle> = {
+  isOpen: boolean;
   onAdd: (id: string, breakpoint: T.Ref) => void;
   onCancel: () => void;
   refs: T.Refs;
@@ -20,6 +21,7 @@ function breakpointEntryToOption(
 }
 
 export default function AddMediaQueryModal<TStyle>({
+  isOpen,
   onAdd,
   onCancel,
   existingMediaQueries,
@@ -32,21 +34,13 @@ export default function AddMediaQueryModal<TStyle>({
   const [selectedItem, setSelectedItem] = useState(options[0][0]);
   return (
     <AddModal
+      isOpen={isOpen}
       title="Add new media query"
+      description="Select a breakpoint that has not been used before on this layer."
       onAdd={() => onAdd(uuid(), { type: "ref", id: selectedItem })}
       onCancel={onCancel}
       form={
         <React.Fragment>
-          <p
-            css={{
-              color: "rgb(102, 102, 102)",
-              fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "24px"
-            }}
-          >
-            Select a breakpoint that has not been used before on this layer.
-          </p>
           <Select
             width="100%"
             options={options}

@@ -5,12 +5,12 @@ import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
 import AddBreakpointsModal from "./AddBreakpointModal";
 import { set, del } from "../../helpers/immutable-map";
-import Modal from "../../components/Modal";
 import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
 import Menu from "../../components/Menu";
 import TopBar from "../../components/TopBar";
+import { useOkCancelModal } from "../../components/AddModal";
 
 type Props = {
   refs: T.Refs;
@@ -19,7 +19,7 @@ type Props = {
 };
 
 function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useOkCancelModal();
   const [selectedBreakpoint, setSelectedBreakpoint] = useState<string | null>(
     null
   );
@@ -39,9 +39,7 @@ function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
             <div css={[row, { marginLeft: "28px" }]}>
               <SecondaryButton
                 text="Add"
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
+                onClick={modal.open}
                 margin="0 10px 0 0"
               />
               <SecondaryButton
@@ -67,9 +65,9 @@ function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
               .sort((a, b) => a.width.value - b.width.value)
               .map(b => (
                 <SelectableCard
-                  key={b.name}
-                  isSelected={b.name === selectedBreakpoint}
-                  onClick={() => setSelectedBreakpoint(b.name)}
+                  key={b.id}
+                  isSelected={b.id === selectedBreakpoint}
+                  onClick={() => setSelectedBreakpoint(b.id)}
                   overrides={{
                     width: b.width.value + "px",
                     height: "48px",
@@ -93,16 +91,15 @@ function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
                 </SelectableCard>
               ))}
           </div>
-          <Modal isOpen={isModalOpen}>
-            <AddBreakpointsModal
-              breakpoints={breakpoints}
-              onAdd={(name, value) => {
-                onBreakpointsChange(set(breakpoints, name, value));
-                setIsModalOpen(false);
-              }}
-              onCancel={() => setIsModalOpen(false)}
-            />
-          </Modal>
+          <AddBreakpointsModal
+            isOpen={modal.isOpen}
+            breakpoints={breakpoints}
+            onAdd={(id, value) => {
+              onBreakpointsChange(set(breakpoints, id, value));
+              modal.close();
+            }}
+            onCancel={modal.close}
+          />
         </div>
       }
     />

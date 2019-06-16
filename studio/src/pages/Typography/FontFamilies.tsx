@@ -7,8 +7,8 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
-import Modal from "../../components/Modal";
 import AddFontFamilyModal from "./AddFontFamilyModal";
+import { useOkCancelModal } from "../../components/AddModal";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
@@ -19,7 +19,7 @@ export default function FontFamilies({
   fontFamilies,
   onFontFamiliesChange
 }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useOkCancelModal();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (
     <React.Fragment>
@@ -28,9 +28,7 @@ export default function FontFamilies({
         <div css={[row, { marginLeft: "28px" }]}>
           <SecondaryButton
             text="Add"
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
+            onClick={modal.open}
             margin="0 10px 0 0"
           />
           <SecondaryButton
@@ -65,16 +63,15 @@ export default function FontFamilies({
           </SelectableCard>
         </div>
       ))}
-      <Modal isOpen={isModalOpen}>
-        <AddFontFamilyModal
-          fontFamilies={fontFamilies}
-          onAdd={(name, value) => {
-            onFontFamiliesChange(set(fontFamilies, name, value));
-            setIsModalOpen(false);
-          }}
-          onCancel={() => setIsModalOpen(false)}
-        />
-      </Modal>
+      <AddFontFamilyModal
+        isOpen={modal.isOpen}
+        fontFamilies={fontFamilies}
+        onAdd={(name, value) => {
+          onFontFamiliesChange(set(fontFamilies, name, value));
+          modal.close();
+        }}
+        onCancel={modal.close}
+      />
     </React.Fragment>
   );
 }

@@ -8,12 +8,13 @@ import Input from "../../components/Input";
 import AddModal from "../../components/AddModal";
 
 type Props = {
+  isOpen: boolean;
   fontFamilies: T.FontFamiliesMap;
   onAdd: (id: string, item: T.FontFamilyDefinition) => void;
   onCancel: () => void;
 };
 
-function AddFontFamilyModal({ fontFamilies, onAdd, onCancel }: Props) {
+function AddFontFamilyModal({ isOpen, fontFamilies, onAdd, onCancel }: Props) {
   const [name, setName] = useState("");
   const [value, setValue] = useState("");
   const [isValidating, setIsValidating] = useState(false);
@@ -32,7 +33,9 @@ function AddFontFamilyModal({ fontFamilies, onAdd, onCancel }: Props) {
 
   return (
     <AddModal
+      isOpen={isOpen}
       title="Add font-family"
+      description="The name should unique."
       onAdd={() => {
         if (!isFormValid()) {
           setIsValidating(true);
@@ -43,16 +46,6 @@ function AddFontFamilyModal({ fontFamilies, onAdd, onCancel }: Props) {
       onCancel={onCancel}
       form={
         <React.Fragment>
-          <p
-            css={{
-              color: "rgb(102, 102, 102)",
-              fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "24px"
-            }}
-          >
-            The name should unique.
-          </p>
           <Input
             placeholder="Name"
             margin="0 0 12px"

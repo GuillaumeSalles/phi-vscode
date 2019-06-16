@@ -7,8 +7,8 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
-import Modal from "../../components/Modal";
 import AddFontSizeModal from "./AddFontSizeModal";
+import { useOkCancelModal } from "../../components/AddModal";
 
 type Props = {
   items: T.FontSizesMap;
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function FontSizes({ items, onItemsChange }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useOkCancelModal();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (
     <React.Fragment>
@@ -25,9 +25,7 @@ export default function FontSizes({ items, onItemsChange }: Props) {
         <div css={[row, { marginLeft: "28px" }]}>
           <SecondaryButton
             text="Add"
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
+            onClick={modal.open}
             margin="0 10px 0 0"
           />
           <SecondaryButton
@@ -62,16 +60,15 @@ export default function FontSizes({ items, onItemsChange }: Props) {
           </SelectableCard>
         </div>
       ))}
-      <Modal isOpen={isModalOpen}>
-        <AddFontSizeModal
-          items={items}
-          onAdd={(name, value) => {
-            onItemsChange(set(items, name, value));
-            setIsModalOpen(false);
-          }}
-          onCancel={() => setIsModalOpen(false)}
-        />
-      </Modal>
+      <AddFontSizeModal
+        isOpen={modal.isOpen}
+        items={items}
+        onAdd={(name, value) => {
+          onItemsChange(set(items, name, value));
+          modal.close();
+        }}
+        onCancel={modal.close}
+      />
     </React.Fragment>
   );
 }

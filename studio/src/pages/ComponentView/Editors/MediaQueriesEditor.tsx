@@ -6,9 +6,9 @@ import Field from "../../../components/Field";
 import Select from "../../../components/Select";
 import IconButton from "../../../components/IconButton";
 import { Add } from "../../../icons";
-import Modal from "../../../components/Modal";
 import { useState } from "react";
 import AddMediaQueryModal from "./AddMediaQueryModal";
+import { useOkCancelModal } from "../../../components/AddModal";
 
 type Props<TStyle> = {
   items: T.MediaQuery<TStyle>[];
@@ -36,7 +36,7 @@ export default function MediaQueriesEditor<TStyle>({
   onChange,
   refs
 }: Props<TStyle>) {
-  const [isOpen, setIsOpen] = useState(false);
+  const modal = useOkCancelModal();
 
   const defaultMediaQuery: [string, string] = ["default", "default"];
   const options = [defaultMediaQuery].concat(
@@ -62,7 +62,7 @@ export default function MediaQueriesEditor<TStyle>({
           icon={
             <Add color={canAddMediaQueries ? "black" : "rgb(204, 204, 204)"} />
           }
-          onClick={() => setIsOpen(true)}
+          onClick={modal.open}
         />
       </div>
       <Field label="Breakpoint">
@@ -73,17 +73,16 @@ export default function MediaQueriesEditor<TStyle>({
           options={options}
         />
       </Field>
-      <Modal isOpen={isOpen}>
-        <AddMediaQueryModal
-          refs={refs}
-          existingMediaQueries={items}
-          onAdd={(newId, breakpoint) => {
-            onAdd(newId, breakpoint);
-            setIsOpen(false);
-          }}
-          onCancel={() => setIsOpen(false)}
-        />
-      </Modal>
+      <AddMediaQueryModal
+        isOpen={modal.isOpen}
+        refs={refs}
+        existingMediaQueries={items}
+        onAdd={(newId, breakpoint) => {
+          onAdd(newId, breakpoint);
+          modal.close();
+        }}
+        onCancel={modal.close}
+      />
     </div>
   );
 }

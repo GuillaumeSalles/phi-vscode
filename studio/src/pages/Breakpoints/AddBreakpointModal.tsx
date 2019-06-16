@@ -10,12 +10,13 @@ import uuid from "uuid/v4";
 import { px } from "../../factories";
 
 type Props = {
+  isOpen: boolean;
   breakpoints: T.BreakpointsMap;
   onAdd: (name: string, newBp: T.BreakpointDefinition) => void;
   onCancel: () => void;
 };
 
-function AddBreakpointsModal({ breakpoints, onAdd, onCancel }: Props) {
+function AddBreakpointsModal({ isOpen, breakpoints, onAdd, onCancel }: Props) {
   const [name, setName] = useState("");
   const [value, setValue] = useState(600);
   const [isValidating, setIsValidating] = useState(false);
@@ -34,7 +35,9 @@ function AddBreakpointsModal({ breakpoints, onAdd, onCancel }: Props) {
 
   return (
     <AddModal
+      isOpen={isOpen}
       title="Add breakpoint"
+      description="The name should unique."
       onCancel={onCancel}
       onAdd={() => {
         if (!isFormValid()) {
@@ -45,16 +48,6 @@ function AddBreakpointsModal({ breakpoints, onAdd, onCancel }: Props) {
       }}
       form={
         <React.Fragment>
-          <p
-            css={{
-              color: "rgb(102, 102, 102)",
-              fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "24px"
-            }}
-          >
-            The name should unique.
-          </p>
           <Input
             placeholder="Name"
             margin="0 0 12px"
