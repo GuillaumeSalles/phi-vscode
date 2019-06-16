@@ -1,6 +1,6 @@
 export type Component = {
   name: string;
-  layout: Layer;
+  layout?: Layer;
 };
 
 export type ComponentMap = Map<string, Component>;

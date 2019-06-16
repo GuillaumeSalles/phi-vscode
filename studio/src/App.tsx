@@ -15,6 +15,8 @@ import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
 import { save, open } from "./actions";
+import Menu from "./components/Menu";
+import uuid from "uuid/v4";
 
 function App() {
   const router = useRouter();
@@ -95,6 +97,19 @@ function App() {
     navigateToFirstComponent(project.components);
   }
 
+  function menu() {
+    return (
+      <Menu
+        components={components}
+        onAddComponent={name => {
+          const id = uuid();
+          setComponents(set(components, id, { name }));
+          router.history.push(`/components/${id}`);
+        }}
+      />
+    );
+  }
+
   return (
     <React.Fragment>
       <Route
@@ -106,6 +121,7 @@ function App() {
         path="/typography"
         render={() => (
           <Typography
+            menu={menu()}
             refs={refs}
             fontFamilies={fontFamilies}
             onFontFamiliesChange={fontFamilies => {
@@ -124,10 +140,11 @@ function App() {
         path="/colors"
         render={() => (
           <Colors
+            menu={menu()}
             refs={refs}
             colors={colors}
             onColorsChange={colors => {
-              setColors(colors)
+              setColors(colors);
               setIsSaved(false);
             }}
           />
@@ -138,9 +155,10 @@ function App() {
         render={() => (
           <Breakpoints
             refs={refs}
+            menu={menu()}
             breakpoints={breakpoints}
             onBreakpointsChange={breakpoints => {
-              setBreakpoints(breakpoints)
+              setBreakpoints(breakpoints);
               setIsSaved(false);
             }}
           />
@@ -155,11 +173,11 @@ function App() {
           }
           return (
             <ComponentView
-              components={components}
+              menu={menu()}
               component={component}
               onComponentChange={component => {
-                setComponent(props.match.params.id, component)
-                setIsSaved(false)
+                setComponent(props.match.params.id, component);
+                setIsSaved(false);
               }}
               refs={refs}
             />

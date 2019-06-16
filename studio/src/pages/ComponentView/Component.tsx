@@ -34,11 +34,13 @@ function Component({ component, refs }: Props) {
               }
             ]}
           >
-            <Layer
-              layer={component.layout}
-              refs={refs}
-              width={entry[1].value.value}
-            />
+            {component.layout && (
+              <Layer
+                layer={component.layout}
+                refs={refs}
+                width={entry[1].value.value}
+              />
+            )}
           </div>
         </div>
       ))}

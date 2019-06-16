@@ -13,12 +13,13 @@ import TopBar from "../../components/TopBar";
 import { useOkCancelModal } from "../../components/AddModal";
 
 type Props = {
+  menu: React.ReactNode;
   refs: T.Refs;
   breakpoints: T.BreakpointsMap;
   onBreakpointsChange: (newBp: T.BreakpointsMap) => void;
 };
 
-function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
+function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
   const modal = useOkCancelModal();
   const [selectedBreakpoint, setSelectedBreakpoint] = useState<string | null>(
     null
@@ -26,7 +27,7 @@ function Breakpoints({ refs, breakpoints, onBreakpointsChange }: Props) {
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
-      left={<Menu components={refs.components} />}
+      left={menu}
       center={
         <div css={[column]}>
           <div

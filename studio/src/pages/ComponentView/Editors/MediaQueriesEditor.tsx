@@ -4,11 +4,9 @@ import * as T from "../../../types";
 import { column, sectionTitle, row } from "../../../styles";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
-import IconButton from "../../../components/IconButton";
-import { Add } from "../../../icons";
-import { useState } from "react";
 import AddMediaQueryModal from "./AddMediaQueryModal";
 import { useOkCancelModal } from "../../../components/AddModal";
+import AddButton from "../../../components/AddButton";
 
 type Props<TStyle> = {
   items: T.MediaQuery<TStyle>[];
@@ -57,13 +55,7 @@ export default function MediaQueriesEditor<TStyle>({
         ]}
       >
         <h4 css={[sectionTitle]}>Media Queries</h4>
-        <IconButton
-          disabled={!canAddMediaQueries}
-          icon={
-            <Add color={canAddMediaQueries ? "black" : "rgb(204, 204, 204)"} />
-          }
-          onClick={modal.open}
-        />
+        <AddButton disabled={!canAddMediaQueries} onClick={modal.open} />
       </div>
       <Field label="Breakpoint">
         <Select

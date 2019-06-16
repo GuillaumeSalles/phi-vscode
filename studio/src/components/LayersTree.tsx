@@ -1,13 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../types";
-import { column, row, leftMenuHeading, colors } from "../styles";
+import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
 
 type Props = {
-  root: T.Layer;
+  root?: T.Layer;
   onSelectLayer: (layer: T.Layer) => void;
-  selectedLayer: T.Layer;
+  selectedLayer?: T.Layer;
   onAddLayer: (layerType: T.LayerType) => void;
 };
 
@@ -26,7 +26,13 @@ function flatten<T>(arrOfArr: T[][]): T[] {
   return result;
 }
 
-function flattenLayer(layer: T.Layer, depth: number = 0): LayersTreeItem[] {
+function flattenLayer(
+  layer: T.Layer | undefined,
+  depth: number = 0
+): LayersTreeItem[] {
+  if (!layer) {
+    return [];
+  }
   const results = [{ layer, depth }];
   if (layer.type === "container") {
     for (let child of flatten(
@@ -85,7 +91,7 @@ function LayersTree({ root, onAddLayer, onSelectLayer, selectedLayer }: Props) {
           { justifyContent: "space-between", margin: "24px 24px 16px 24px" }
         ]}
       >
-        <h2 css={leftMenuHeading}>Layers</h2>
+        <h2 css={sectionTitle}>Layers</h2>
         <AddLayerPopover onAdd={onAddLayer} disabled={false} />
       </div>
       {flattenLayer(root).map(item => (

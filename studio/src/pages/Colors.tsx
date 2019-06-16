@@ -15,12 +15,13 @@ import Menu from "../components/Menu";
 import TopBar from "../components/TopBar";
 
 type Props = {
+  menu: React.ReactNode;
   refs: T.Refs;
   colors: Map<string, T.ColorDefinition>;
   onColorsChange: (newColors: Map<string, T.ColorDefinition>) => void;
 };
 
-function Colors({ refs, colors, onColorsChange }: Props) {
+function Colors({ menu, refs, colors, onColorsChange }: Props) {
   const modal = useOkCancelModal();
   const [colorName, setColorName] = useState("");
   const [colorValue, setColorValue] = useState("");
@@ -48,7 +49,7 @@ function Colors({ refs, colors, onColorsChange }: Props) {
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
-      left={<Menu components={refs.components} />}
+      left={menu}
       center={
         <div css={[column, mainPadding]}>
           <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>

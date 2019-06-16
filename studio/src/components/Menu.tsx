@@ -1,12 +1,17 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { column, leftMenuHeading } from "../styles";
+import { column, row, sectionTitle } from "../styles";
 import * as T from "../types";
 import { Link } from "react-router-dom";
 import { useRouter } from "../useRouter";
+import AddButton from "./AddButton";
+import AddModal, { useOkCancelModal } from "./AddModal";
+import React, { useState } from "react";
+import Input from "./Input";
 
 type Props = {
   components: T.ComponentMap;
+  onAddComponent: (name: string) => void;
 };
 
 function MenuItem({ href, text }: { href: string; text: string }) {
@@ -37,7 +42,11 @@ function MenuItem({ href, text }: { href: string; text: string }) {
   );
 }
 
-function Menu({ components }: Props) {
+function Menu({ components, onAddComponent }: Props) {
+  const modal = useOkCancelModal();
+  const [name, setName] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
+  console.log(components);
   return (
     <div
       css={[
@@ -61,7 +70,7 @@ function Menu({ components }: Props) {
       >
         <span
           css={[
-            leftMenuHeading,
+            sectionTitle,
             {
               paddingLeft: "24px",
               paddingBottom: "16px"
@@ -73,14 +82,15 @@ function Menu({ components }: Props) {
         <MenuItem href="/typography" text="Typography" />
         <MenuItem href="/colors" text="Colors" />
         <MenuItem href="/breakpoints" text="Breakpoints" />
-        <span
+        <div
           css={[
-            leftMenuHeading,
-            { marginTop: "40px", paddingLeft: "24px", paddingBottom: "16px" }
+            row,
+            { margin: "40px 24px 16px 24px", justifyContent: "space-between" }
           ]}
         >
-          Components
-        </span>
+          <span css={[sectionTitle]}>Components</span>
+          <AddButton onClick={modal.open} />
+        </div>
         {Array.from(components.entries()).map(entry => (
           <MenuItem
             key={entry[0]}
@@ -89,6 +99,27 @@ function Menu({ components }: Props) {
           />
         ))}
       </div>
+      <AddModal
+        isOpen={modal.isOpen}
+        title="Create new component"
+        description="Name should be unique"
+        onAdd={() => {
+          onAddComponent(name);
+          modal.close();
+        }}
+        onCancel={modal.close}
+        form={
+          <React.Fragment>
+            <Input
+              placeholder="Name"
+              margin="0 0 12px"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              isInvalid={isValidating && name.length > 0}
+            />
+          </React.Fragment>
+        }
+      />
     </div>
   );
 }

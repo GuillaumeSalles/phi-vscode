@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { row, column, heading } from "../styles";
 import ModalButton from "./ModalButton";
 import Modal from "./Modal";
+import { useToggle } from "../hooks";
 
 type Props = {
   isOpen: boolean;
@@ -15,11 +16,11 @@ type Props = {
 };
 
 export function useOkCancelModal() {
-  const [isOpen, setIsOpen] = useState(false);
+  const toggle = useToggle(false);
   return {
-    isOpen,
-    open: () => setIsOpen(true),
-    close: () => setIsOpen(false)
+    isOpen: toggle.isActive,
+    open: toggle.activate,
+    close: toggle.deactivate
   };
 }
 

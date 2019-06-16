@@ -5,10 +5,10 @@ import { column, mainPadding, heading } from "../../styles";
 import FontFamilies from "./FontFamilies";
 import FontSizes from "./FontSizes";
 import { Layout } from "../../components/Layout";
-import Menu from "../../components/Menu";
 import TopBar from "../../components/TopBar";
 
 type Props = {
+  menu: React.ReactNode;
   refs: T.Refs;
 
   fontFamilies: T.FontFamiliesMap;
@@ -19,6 +19,7 @@ type Props = {
 };
 
 function Typography({
+  menu,
   refs,
   fontFamilies,
   onFontFamiliesChange,
@@ -28,7 +29,7 @@ function Typography({
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
-      left={<Menu components={refs.components} />}
+      left={menu}
       center={
         <div css={[column, mainPadding]}>
           <h1 css={[heading, { marginBottom: "20px" }]}>Typography</h1>

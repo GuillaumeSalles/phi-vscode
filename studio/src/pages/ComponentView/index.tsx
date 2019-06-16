@@ -8,23 +8,17 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
-import Menu from "../../components/Menu";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 
 type Props = {
-  components: T.ComponentMap;
+  menu: React.ReactNode;
   component: T.Component;
   onComponentChange: (component: T.Component) => void;
   refs: T.Refs;
 };
 
-function ComponentView({
-  components,
-  component,
-  onComponentChange,
-  refs
-}: Props) {
+function ComponentView({ menu, component, onComponentChange, refs }: Props) {
   const [layer, setLayer] = useState(component.layout);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -37,7 +31,14 @@ function ComponentView({
     onComponentChange(newComponent);
   }
 
-  function updateLayer(rootLayer: T.Layer, newLayer: T.Layer): T.Layer {
+  function updateLayer(
+    rootLayer: T.Layer | undefined,
+    newLayer: T.Layer
+  ): T.Layer {
+    if (!rootLayer) {
+      return newLayer;
+    }
+
     if (rootLayer.id === newLayer.id) {
       return newLayer;
     }
@@ -64,7 +65,7 @@ function ComponentView({
             selectedLayer={component.layout}
           />
         ) : (
-          <Menu components={components} />
+          menu
         )
       }
       center={
@@ -107,11 +108,13 @@ function ComponentView({
               }
             ]}
           >
-            <LayerEditor
-              layer={component.layout}
-              refs={refs}
-              onChange={updateComponentLayer}
-            />
+            {component.layout && (
+              <LayerEditor
+                layer={component.layout}
+                refs={refs}
+                onChange={updateComponentLayer}
+              />
+            )}
           </div>
         ) : null
       }
