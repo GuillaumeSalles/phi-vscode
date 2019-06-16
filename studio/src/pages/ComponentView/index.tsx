@@ -10,6 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
+import { makeTextLayer } from "../../factories";
 
 type Props = {
   menu: React.ReactNode;
@@ -29,6 +30,10 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
     };
     setLayer(newLayer);
     onComponentChange(newComponent);
+  }
+
+  function addLayer(type: T.LayerType) {
+    updateComponentLayer(makeTextLayer(refs));
   }
 
   function updateLayer(
@@ -59,7 +64,7 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
       left={
         isEditing ? (
           <LayersTree
-            onAddLayer={type => {}}
+            onAddLayer={addLayer}
             root={component.layout}
             onSelectLayer={() => {}}
             selectedLayer={component.layout}

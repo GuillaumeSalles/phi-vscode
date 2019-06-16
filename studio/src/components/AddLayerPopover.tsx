@@ -48,6 +48,8 @@ export default function AddLayerPopover({ disabled, onAdd }: Props) {
                   alignItems: "center",
                   padding: "8px 16px",
                   border: "none",
+                  width: "100%",
+                  fontSize: "14px",
                   ":hover": {
                     backgroundColor: "#EAEAEA"
                   }

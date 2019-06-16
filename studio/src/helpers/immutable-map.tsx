@@ -13,3 +13,13 @@ export function del<TKey, TValue>(map: Map<TKey, TValue>, key: TKey) {
   newMap.delete(key);
   return newMap;
 }
+
+export function firstEntry<TKey, TValue>(
+  map: Map<TKey, TValue>
+): [TKey, TValue] {
+  return map.entries().next().value;
+}
+
+export function firstKey<TKey, TValue>(map: Map<TKey, TValue>): TKey {
+  return map.keys().next().value;
+}

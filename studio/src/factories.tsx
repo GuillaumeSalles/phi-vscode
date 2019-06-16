@@ -1,6 +1,7 @@
 import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
+import { firstEntry, firstKey } from "./helpers/immutable-map";
 
 function ref(id: string): T.Ref {
   return { type: "ref", id };
@@ -12,6 +13,25 @@ export function entry<TValue>(value: TValue): [string, TValue] {
 
 export function px(value: number): T.Length {
   return { type: "px", value };
+}
+
+export function makeTextLayer(refs: T.Refs): T.TextLayer {
+  return {
+    type: "text",
+    id: uuid(),
+    name: "Text",
+    tag: "p",
+    text: "",
+    mediaQueries: [],
+    style: {
+      color: ref(firstKey(refs.colors)),
+      fontFamily: ref(firstKey(refs.fontFamilies)),
+      fontWeight: ref(firstKey(refs.fontWeights)),
+      fontSize: ref(firstKey(refs.fontSizes)),
+      textAlign: "left",
+      lineHeight: 1.2
+    }
+  };
 }
 
 export function makeDefaultProject() {
