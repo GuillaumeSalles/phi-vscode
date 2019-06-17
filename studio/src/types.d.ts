@@ -1,13 +1,15 @@
+export type ComponentMap = Map<string, Component>;
+
 export type Component = {
   name: string;
   layout?: Layer;
 };
 
-export type ComponentMap = Map<string, Component>;
-
 export type Layer = ContainerLayer | TextLayer;
 
 export type LayerType = "container" | "text";
+
+export type LayerStyle = ContainerLayerStyle | TextLayerStyle;
 
 export type ContainerLayer = {
   type: "container";
@@ -19,12 +21,19 @@ export type ContainerLayer = {
   mediaQueries: Array<MediaQuery<ContainerLayerStyle>>;
 };
 
-export type ContainerLayerStyle = {
-  flexDirection: FlexDirection;
-} & Background &
+export type ContainerLayerStyle = FlexContainerStyle &
+  Background &
   Dimensions &
   Margin &
   Padding;
+
+export type FlexContainerStyle = {
+  flexDirection: FlexDirection;
+  flexWrap: FlexWrap;
+  justifyContent: JustifyContent;
+  alignItems: AlignItems;
+  alignContent: AlignContent;
+};
 
 export type TextLayer = {
   type: "text";
@@ -56,6 +65,31 @@ export type TextLayerStyle = {
   Padding;
 
 export type FlexDirection = "column" | "row" | "column-reverse" | "row-reverse";
+
+export type FlexWrap = "nowrap" | "wrap" | "wrap-reverse";
+
+export type JustifyContent =
+  | "flex-start"
+  | "flex-end"
+  | "center"
+  | "space-between"
+  | "space-around"
+  | "space-evenly";
+
+export type AlignItems =
+  | "stretch"
+  | "flex-start"
+  | "flex-end"
+  | "center"
+  | "baseline";
+
+export type AlignContent =
+  | "flex-start"
+  | "flex-end"
+  | "center"
+  | "space-between"
+  | "space-around"
+  | "stretch";
 
 export type TextLayerTag = "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 

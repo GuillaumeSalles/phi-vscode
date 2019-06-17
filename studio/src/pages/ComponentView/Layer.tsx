@@ -80,13 +80,13 @@ function lineHeightToCss(lineHeight: T.Ref, lineHeights: T.LineHeightMap) {
   return ref.value;
 }
 
-function makeTextLayerStyleWithBreakpoint(
-  layer: T.TextLayer,
+function getLayerStyles<TStyle>(
+  defaultStyle: TStyle,
+  mediaQueries: T.MediaQuery<TStyle>[],
   refs: T.Refs,
   width: number
-): InterpolationWithTheme<any> {
-  const defaultStyle = makeTextLayerStyle(layer.style, refs);
-  return layer.mediaQueries
+) {
+  const styles = mediaQueries
     .map(mq => {
       return {
         minWidth: refs.breakpoints.get(mq.minWidth.id)!.value.value,
@@ -95,13 +95,18 @@ function makeTextLayerStyleWithBreakpoint(
     })
     .filter(mq => mq.minWidth <= width)
     .sort((a, b) => a.minWidth - b.minWidth)
-    .map(mq => makeTextLayerStyle(mq.style, refs))
-    .reduce((previousStyle, currentStyle) => {
-      return {
-        ...previousStyle,
-        ...currentStyle
-      };
-    }, defaultStyle);
+    .map(mq => mq.style);
+  styles.unshift(defaultStyle);
+  return styles;
+}
+
+function merge<TItem>(array: TItem[]): TItem {
+  return array.reduce((previousItem, currentItem) => {
+    return {
+      ...previousItem,
+      ...currentItem
+    };
+  });
 }
 
 function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
@@ -120,6 +125,16 @@ function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
   };
 }
 
+function makeFlexContainerStyle(style: T.FlexContainerStyle) {
+  return {
+    flexDirection: style.flexDirection,
+    flexWrap: style.flexWrap,
+    justifyContent: style.justifyContent,
+    alignItems: style.alignItems,
+    alignContent: style.alignContent
+  };
+}
+
 function makeContainerLayerStyle(
   style: T.ContainerLayerStyle,
   refs: T.Refs
@@ -128,7 +143,7 @@ function makeContainerLayerStyle(
     display: "flex",
     ...makeDimensionsStyle(style),
     ...makeBackgroundStyle(style, refs.colors),
-    flexDirection: style.flexDirection
+    ...makeFlexContainerStyle(style)
   };
 }
 
@@ -137,14 +152,22 @@ function makeLayerStyle(
   refs: T.Refs,
   width: number
 ): InterpolationWithTheme<any> {
-  switch (layer.type) {
-    case "text":
-      return makeTextLayerStyleWithBreakpoint(layer, refs, width);
-    case "container":
-      return makeContainerLayerStyle(layer.style, refs);
-    default:
-      throw new Error("Invalid layer style");
-  }
+  const styles = getLayerStyles(
+    layer.style,
+    layer.mediaQueries,
+    refs,
+    width
+  ).map(style => {
+    switch (layer.type) {
+      case "text":
+        return makeTextLayerStyle(style as T.TextLayerStyle, refs);
+      case "container":
+        return makeContainerLayerStyle(style as T.ContainerLayerStyle, refs);
+      default:
+        throw new Error("Layer type not found");
+    }
+  });
+  return merge(styles);
 }
 
 function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {

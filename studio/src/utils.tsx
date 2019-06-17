@@ -15,3 +15,9 @@ export function getContrastColor(hex: string) {
   // http://stackoverflow.com/a/3943023/112731
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#FFFFFF";
 }
+
+export function listToEntries<TKey extends string>(
+  items: TKey[]
+): Array<[TKey, string]> {
+  return items.map(item => [item, item]);
+}

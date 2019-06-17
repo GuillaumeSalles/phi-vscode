@@ -54,7 +54,11 @@ export function makeContainerLayer(refs: T.Refs): T.ContainerLayer {
     mediaQueries: [],
     children: [],
     style: {
-      flexDirection: "column"
+      flexDirection: "column",
+      flexWrap: "nowrap",
+      justifyContent: "flex-start",
+      alignItems: "stretch",
+      alignContent: "stretch"
     }
   };
 }
