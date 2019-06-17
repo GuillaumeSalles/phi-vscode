@@ -125,6 +125,7 @@ function makeContainerLayerStyle(
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
+    display: "flex",
     ...makeDimensionsStyle(style),
     ...makeBackgroundStyle(style, refs.colors),
     flexDirection: style.flexDirection
@@ -152,7 +153,7 @@ function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
       return layer.text;
     case "container":
       return layer.children.map(c => (
-        <Layer key={c.name} layer={c} refs={refs} width={width} />
+        <Layer key={c.id} layer={c} refs={refs} width={width} />
       ));
     default:
       throw new Error("Invalid layer style");

@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, column, sectionTitle } from "../../../styles";
+import { row } from "../../../styles";
 import Field from "../../../components/Field";
 import LengthInput from "../../../components/LengthInput";
+import Section from "./Section";
 
 type Props = {
   padding: T.Padding;
@@ -16,17 +17,7 @@ export default function PaddingEditor({ padding, onChange }: Props) {
   }
 
   return (
-    <div css={[column, { padding: "0 8px" }]}>
-      <h4
-        css={[
-          sectionTitle,
-          {
-            margin: "8px"
-          }
-        ]}
-      >
-        Padding
-      </h4>
+    <Section title="Padding">
       <div css={row}>
         <Field label="Top">
           <LengthInput
@@ -57,6 +48,6 @@ export default function PaddingEditor({ padding, onChange }: Props) {
           />
         </Field>
       </div>
-    </div>
+    </Section>
   );
 }

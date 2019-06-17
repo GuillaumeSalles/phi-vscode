@@ -13,6 +13,7 @@ import TextAlignEditor from "./TextAlignEditor";
 import TextAreaInput from "../../../components/TextAreaInput";
 import { useState } from "react";
 import MediaQueriesEditor from "./MediaQueriesEditor";
+import Section from "./Section";
 
 type Props = {
   layer: T.TextLayer;
@@ -81,17 +82,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
       </div>
       <hr css={separator} />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
-        <div css={[column, { padding: "8px" }]}>
-          <h4
-            css={[
-              sectionTitle,
-              {
-                margin: "8px"
-              }
-            ]}
-          >
-            Typography
-          </h4>
+        <Section title="Typography">
           <div css={[row]}>
             <Field label="Font size">
               <Select
@@ -167,7 +158,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
             value={style.textAlign}
             onChange={textAlign => updateLayerStyle({ textAlign })}
           />
-        </div>
+        </Section>
         <hr css={separator} />
         <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
         <hr css={separator} />

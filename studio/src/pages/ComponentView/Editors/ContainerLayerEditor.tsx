@@ -13,12 +13,18 @@ import TextAlignEditor from "./TextAlignEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
+import Section from "./Section";
+import { flexDirections } from "../../../constants";
 
 type Props = {
   layer: T.ContainerLayer;
   onChange: (layer: T.ContainerLayer) => void;
   refs: T.Refs;
 };
+
+const flexDirectionsOptions: [T.FlexDirection, string][] = flexDirections.map(
+  x => [x, x]
+);
 
 function ContainerLayerEditor({ layer, onChange, refs }: Props) {
   const [mediaQuery, setMediaQuery] = useState("default");
@@ -69,6 +75,20 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
           />
         </Field> */}
       </div>
+      <hr css={separator} />
+      <Section title="Flex Container">
+        <Field label="Direction">
+          <Select
+            value={style.flexDirection}
+            onChange={flexDirection => updateLayerStyle({ flexDirection })}
+            options={flexDirectionsOptions}
+          />
+        </Field>
+      </Section>
+      <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
+      <hr css={separator} />
+      <MarginEditor margin={style} onChange={updateLayerStyle} />
+      <PaddingEditor padding={style} onChange={updateLayerStyle} />
       <hr css={separator} />
       <MediaQueriesEditor
         selectedId={mediaQuery}

@@ -115,6 +115,7 @@ function Menu({ components, onAddComponent }: Props) {
               value={name}
               onChange={e => setName(e.target.value)}
               isInvalid={isValidating && name.length > 0}
+              autoFocus
             />
           </React.Fragment>
         }

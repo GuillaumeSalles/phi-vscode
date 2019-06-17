@@ -20,9 +20,11 @@ export type ContainerLayer = {
 };
 
 export type ContainerLayerStyle = {
-  flexDirection: "row" | "column";
+  flexDirection: FlexDirection;
 } & Background &
-  Dimensions;
+  Dimensions &
+  Margin &
+  Padding;
 
 export type TextLayer = {
   type: "text";
@@ -52,6 +54,8 @@ export type TextLayerStyle = {
   Dimensions &
   Margin &
   Padding;
+
+export type FlexDirection = "column" | "row" | "column-reverse" | "row-reverse";
 
 export type TextLayerTag = "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 

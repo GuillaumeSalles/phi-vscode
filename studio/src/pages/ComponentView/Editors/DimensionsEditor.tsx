@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, column, sectionTitle } from "../../../styles";
+import { row } from "../../../styles";
 import Field from "../../../components/Field";
 import TextInput from "../../../components/TextInput";
+import Section from "./Section";
 
 type Props = {
   dimensions: T.Dimensions;
@@ -16,17 +17,7 @@ function DimensionsEditor({ dimensions, onChange }: Props) {
   }
 
   return (
-    <div css={[column, { padding: "0 8px" }]}>
-      <h4
-        css={[
-          sectionTitle,
-          {
-            margin: "8px"
-          }
-        ]}
-      >
-        Dimensions
-      </h4>
+    <Section title="Dimensions">
       <div css={[row]}>
         <Field label="Width">
           <TextInput
@@ -92,7 +83,7 @@ function DimensionsEditor({ dimensions, onChange }: Props) {
           />
         </Field>
       </div>
-    </div>
+    </Section>
   );
 }
 

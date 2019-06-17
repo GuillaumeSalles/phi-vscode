@@ -9,9 +9,11 @@ type Props = {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   isInvalid?: boolean;
+  autoFocus?: boolean;
 };
 
 export default function Input({
+  autoFocus,
   placeholder,
   width,
   margin,
@@ -51,6 +53,7 @@ export default function Input({
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          autoFocus={autoFocus}
           css={{
             boxShadow: "none",
             boxSizing: "border-box",

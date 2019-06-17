@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, column, sectionTitle } from "../../../styles";
+import { row } from "../../../styles";
 import Field from "../../../components/Field";
 import LengthInput from "../../../components/LengthInput";
+import Section from "./Section";
 
 type Props = {
   margin: T.Margin;
@@ -16,17 +17,7 @@ export default function MarginEditor({ margin, onChange }: Props) {
   }
 
   return (
-    <div css={[column, { padding: "0 8px" }]}>
-      <h4
-        css={[
-          sectionTitle,
-          {
-            margin: "8px"
-          }
-        ]}
-      >
-        Margin
-      </h4>
+    <Section title="Margin">
       <div css={row}>
         <Field label="Top">
           <LengthInput
@@ -57,6 +48,6 @@ export default function MarginEditor({ margin, onChange }: Props) {
           />
         </Field>
       </div>
-    </div>
+    </Section>
   );
 }
