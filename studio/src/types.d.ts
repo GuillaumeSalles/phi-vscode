@@ -5,21 +5,28 @@ export type Component = {
   layout?: Layer;
 };
 
+export interface ILayer<TStyle> {
+  id: string;
+  name: string;
+  style: TStyle;
+  mediaQueries: Array<MediaQuery<TStyle>>;
+}
+
 export type Layer = ContainerLayer | TextLayer;
 
 export type LayerType = "container" | "text";
 
-export type LayerStyle = ContainerLayerStyle | TextLayerStyle;
-
-export type ContainerLayer = {
+export interface ContainerLayer extends ILayer<ContainerLayerStyle> {
   type: "container";
-  id: string;
-  name: string;
   tag: "div";
   children: Layer[];
-  style: ContainerLayerStyle;
-  mediaQueries: Array<MediaQuery<ContainerLayerStyle>>;
-};
+}
+
+export interface TextLayer extends ILayer<TextLayerStyle> {
+  type: "text";
+  tag: TextLayerTag;
+  text: string;
+}
 
 export type ContainerLayerStyle = FlexContainerStyle &
   Background &
@@ -33,16 +40,6 @@ export type FlexContainerStyle = {
   justifyContent: JustifyContent;
   alignItems: AlignItems;
   alignContent: AlignContent;
-};
-
-export type TextLayer = {
-  type: "text";
-  id: string;
-  name: string;
-  style: TextLayerStyle;
-  tag: TextLayerTag;
-  text: string;
-  mediaQueries: Array<MediaQuery<TextLayerStyle>>;
 };
 
 export type MediaQuery<TStyle> = {

@@ -168,7 +168,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
       <hr css={separator} />
       <MediaQueriesEditor
         selectedId={mediaQuery}
-        items={layer.mediaQueries}
+        layer={layer}
         onAdd={(id, breakpoint) => {
           updateLayer({
             mediaQueries: [

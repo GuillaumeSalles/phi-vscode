@@ -152,7 +152,9 @@ function textLayerToCss(
 }
 
 function componentToCss(component: T.Component, refs: T.Refs) {
-  return layerToCss(component.name, component.layout, refs);
+  return component.layout
+    ? layerToCss(component.name, component.layout, refs)
+    : "";
 }
 
 export function neptuneToCss(data: any) {

@@ -9,7 +9,7 @@ import { useOkCancelModal } from "../../../components/AddModal";
 import AddButton from "../../../components/AddButton";
 
 type Props<TStyle> = {
-  items: T.MediaQuery<TStyle>[];
+  layer: T.ILayer<TStyle>;
   onChange: (id: string) => void;
   onAdd: (id: string, breakpoint: T.Ref) => void;
   selectedId: string;
@@ -28,7 +28,7 @@ function mediaQueryToString<TStyle>(
 }
 
 export default function MediaQueriesEditor<TStyle>({
-  items,
+  layer,
   selectedId,
   onAdd,
   onChange,
@@ -38,7 +38,7 @@ export default function MediaQueriesEditor<TStyle>({
 
   const defaultMediaQuery: [string, string] = ["default", "default"];
   const options = [defaultMediaQuery].concat(
-    items.map(mq => [mq.id, mediaQueryToString(mq, refs)])
+    layer.mediaQueries.map(mq => [mq.id, mediaQueryToString(mq, refs)])
   );
 
   const canAddMediaQueries = options.length < refs.breakpoints.size + 1;
@@ -68,7 +68,7 @@ export default function MediaQueriesEditor<TStyle>({
       <AddMediaQueryModal
         isOpen={modal.isOpen}
         refs={refs}
-        existingMediaQueries={items}
+        layer={layer}
         onAdd={(newId, breakpoint) => {
           onAdd(newId, breakpoint);
           modal.close();

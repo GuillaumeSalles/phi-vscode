@@ -11,7 +11,7 @@ type Props<TStyle> = {
   onAdd: (id: string, breakpoint: T.Ref) => void;
   onCancel: () => void;
   refs: T.Refs;
-  existingMediaQueries: T.MediaQuery<TStyle>[];
+  layer: T.ILayer<TStyle>;
 };
 
 function breakpointEntryToOption(
@@ -24,31 +24,40 @@ export default function AddMediaQueryModal<TStyle>({
   isOpen,
   onAdd,
   onCancel,
-  existingMediaQueries,
+  layer,
   refs
 }: Props<TStyle>) {
-  const existing = new Set(existingMediaQueries.map(m => m.minWidth.id));
+  const [selectedItem, setSelectedItem] = useState<string | undefined>(
+    undefined
+  );
+
+  const existing = new Set(layer.mediaQueries.map(m => m.minWidth.id));
   const options = Array.from(refs.breakpoints.entries())
     .filter(entry => !existing.has(entry[0]))
     .map(breakpointEntryToOption);
-  const [selectedItem, setSelectedItem] = useState(options[0][0]);
-  return (
+
+  return options.length > 0 ? (
     <AddModal
       isOpen={isOpen}
       title="Add new media query"
       description="Select a breakpoint that has not been used before on this layer."
-      onAdd={() => onAdd(uuid(), { type: "ref", id: selectedItem })}
+      onAdd={() =>
+        onAdd(uuid(), {
+          type: "ref",
+          id: selectedItem != null ? selectedItem : options[0][0]
+        })
+      }
       onCancel={onCancel}
       form={
         <React.Fragment>
           <Select
             width="100%"
             options={options}
-            value={selectedItem}
+            value={selectedItem != null ? selectedItem : options[0][0]}
             onChange={setSelectedItem}
           />
         </React.Fragment>
       }
     />
-  );
+  ) : null;
 }

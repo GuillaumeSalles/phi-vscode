@@ -64,7 +64,7 @@ function createComponentJsx(component: T.Component) {
     [],
     undefined,
     ts.createBlock([
-      ts.createReturn(createLayerJsx(component.name, component.layout))
+      ts.createReturn(createLayerJsx(component.name, component.layout!))
     ])
   );
 }
@@ -99,14 +99,14 @@ export function neptuneToJs(data: any) {
   const components: T.ComponentMap = arrayToMap(data.components);
 
   return tsNodesToString(
-    Array.from(components.values()).map(createComponentJsx)
+    Array.from(components.values())
+      .filter(c => c.layout != null)
+      .map(createComponentJsx)
   );
 }
 
 export default function gatsbyJsLoader(source: string) {
   console.log("Inside gatsby-js-loader");
-  console.log(this.context);
-  console.log(this.resourcePath);
 
   const data = JSON.parse(source);
 
