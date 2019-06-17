@@ -46,7 +46,6 @@ function Menu({ components, onAddComponent }: Props) {
   const modal = useOkCancelModal();
   const [name, setName] = useState("");
   const [isValidating, setIsValidating] = useState(false);
-  console.log(components);
   return (
     <div
       css={[

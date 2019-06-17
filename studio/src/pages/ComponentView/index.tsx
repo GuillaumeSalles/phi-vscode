@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { column, mainPadding, heading, row } from "../../styles";
 import * as T from "../../types";
 import Component from "./Component";
@@ -14,13 +14,20 @@ import { makeTextLayer, makeLayer } from "../../factories";
 
 type Props = {
   menu: React.ReactNode;
-  component: T.Component;
+  componentId: string;
   onComponentChange: (component: T.Component) => void;
   refs: T.Refs;
 };
 
-function ComponentView({ menu, component, onComponentChange, refs }: Props) {
+function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
+  const component = refs.components.get(componentId)!;
   const [layer, setLayer] = useState(component.layout);
+
+  // Select component layer root when componentId change
+  useEffect(() => {
+    setLayer(component.layout);
+  }, [componentId]);
+
   const [isEditing, setIsEditing] = useState(false);
 
   function updateComponentLayer(newLayer: T.Layer) {
@@ -33,7 +40,14 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
   }
 
   function addLayer(type: T.LayerType) {
-    updateComponentLayer(makeLayer(type, refs));
+    if (!layer) {
+      updateComponentLayer(makeLayer(type, refs));
+    } else if (layer.type === "container") {
+      updateComponentLayer({
+        ...layer,
+        children: [...layer.children].concat(makeLayer(type, refs))
+      });
+    }
   }
 
   function updateLayer(
@@ -66,8 +80,8 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
           <LayersTree
             onAddLayer={addLayer}
             root={component.layout}
-            onSelectLayer={() => {}}
-            selectedLayer={component.layout}
+            onSelectLayer={setLayer}
+            selectedLayer={layer}
           />
         ) : (
           menu
@@ -113,9 +127,9 @@ function ComponentView({ menu, component, onComponentChange, refs }: Props) {
               }
             ]}
           >
-            {component.layout && (
+            {layer && (
               <LayerEditor
-                layer={component.layout}
+                layer={layer}
                 refs={refs}
                 onChange={updateComponentLayer}
               />

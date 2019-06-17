@@ -167,14 +167,10 @@ function App() {
       <Route
         path="/components/:id"
         render={props => {
-          const component = components.get(props.match.params.id);
-          if (component == null) {
-            throw new Error("Component not found");
-          }
           return (
             <ComponentView
               menu={menu()}
-              component={component}
+              componentId={props.match.params.id}
               onComponentChange={component => {
                 setComponent(props.match.params.id, component);
                 setIsSaved(false);
