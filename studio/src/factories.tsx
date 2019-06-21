@@ -1,7 +1,7 @@
 import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
-import { firstEntry, firstKey } from "./helpers/immutable-map";
+import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
 
 function ref(id: string): T.Ref {
   return { type: "ref", id };
@@ -26,7 +26,10 @@ export function makeLayer(type: T.LayerType, refs: T.Refs): T.Layer {
   }
 }
 
-export function makeTextLayer(refs: T.Refs): T.TextLayer {
+export function makeTextLayer(
+  refs: T.Refs,
+  props: Partial<T.TextLayer> = {}
+): T.TextLayer {
   return {
     type: "text",
     id: uuid(),
@@ -41,11 +44,23 @@ export function makeTextLayer(refs: T.Refs): T.TextLayer {
       fontSize: ref(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2
-    }
+    },
+    ...props
   };
 }
 
-export function makeContainerLayer(refs: T.Refs): T.ContainerLayer {
+export function makeDefaultLineHeights(): T.LineHeightMap {
+  return new Map(
+    [{ name: "condensed", value: 1.25 }, { name: "normal", value: 1.5 }].map(
+      x => [x.name, x]
+    )
+  );
+}
+
+export function makeContainerLayer(
+  refs: T.Refs,
+  props: Partial<T.ContainerLayer> = {}
+): T.ContainerLayer {
   return {
     type: "container",
     id: uuid(),
@@ -59,40 +74,57 @@ export function makeContainerLayer(refs: T.Refs): T.ContainerLayer {
       justifyContent: "flex-start",
       alignItems: "stretch",
       alignContent: "stretch"
-    }
+    },
+    ...props
   };
 }
 
-export function makeDefaultProject() {
+export function makeDefaultFontFamilies(): T.FontFamiliesMap {
   const defaultFontFamily = entry({
     name: "default",
     value: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
   });
-  const fontFamilies: T.FontFamiliesMap = new Map([defaultFontFamily]);
+  return new Map([defaultFontFamily]);
+}
 
+export function makeDefaultColors(): T.ColorsMap {
   const white = entry({ name: "white", value: "#FFFFFF" });
   const black = entry({ name: "black", value: "#000000" });
   const primary = entry({ name: "primary", value: colors.primary });
+  return new Map([black, white, primary]);
+}
 
-  const breakpoints = new Map([
+export function makeDefaultBreakpoints(): T.BreakpointsMap {
+  return new Map([
     entry({ name: "small", value: px(544) }),
     entry({ name: "medium", value: px(768) }),
     entry({ name: "large", value: px(1012) }),
     entry({ name: "xlarge", value: px(1280) })
   ]);
+}
 
+export function makeDefaultFontWeights(): T.FontWeightsMap {
   const light = entry({ name: "light", value: 300 });
   const normal = entry({ name: "normal", value: 400 });
   const bold = entry({ name: "bold", value: 700 });
+  return new Map([light, normal, bold]);
+}
 
-  const fontSizes: [string, T.FontSizeDefinition][] = [
-    14,
-    16,
-    18,
-    24,
-    26,
-    32
-  ].map((x, index) => entry({ name: `FS${index + 1}`, value: `${x}px` }));
+export function makeDefaultFontSizes(): T.FontSizesMap {
+  const fontSizes = new Map(
+    [14, 16, 18, 24, 26, 32].map((x, index) =>
+      entry({ name: `FS${index + 1}`, value: `${x}px` })
+    )
+  );
+  return fontSizes;
+}
+
+export function makeDefaultProject() {
+  const fontFamilies = makeDefaultFontFamilies();
+  const colors = makeDefaultColors();
+  const breakpoints = makeDefaultBreakpoints();
+  const fontWeights = makeDefaultFontWeights();
+  const fontSizes = makeDefaultFontSizes();
 
   const helloWorldTextLayer: T.TextLayer = {
     id: uuid(),
@@ -103,11 +135,11 @@ export function makeDefaultProject() {
     mediaQueries: [],
     style: {
       textAlign: "left",
-      fontSize: ref(fontSizes[5][0]),
-      fontFamily: ref(defaultFontFamily[0]),
-      fontWeight: ref(normal[0]),
+      fontSize: ref(getKeyByIndex(fontSizes, 5)),
+      fontFamily: ref(firstKey(fontFamilies)),
+      fontWeight: ref(getKeyByIndex(fontWeights, 1)),
       lineHeight: 1.2,
-      color: ref(black[0])
+      color: ref(getKeyByIndex(colors, 1))
     }
   };
 
@@ -119,11 +151,11 @@ export function makeDefaultProject() {
   const components: T.ComponentMap = new Map([helloWorld]);
 
   return {
-    colors: new Map([black, white, primary]),
-    fontFamilies: new Map(fontFamilies),
+    colors,
+    fontFamilies,
     fontSizes: new Map(fontSizes),
-    fontWeights: new Map([light, normal, bold]),
-    breakpoints: new Map(breakpoints),
+    fontWeights,
+    breakpoints,
     components
   };
 }

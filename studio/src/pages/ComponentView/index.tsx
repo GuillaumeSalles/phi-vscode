@@ -39,6 +39,15 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
     onComponentChange(newComponent);
   }
 
+  function updateComponentRootLayer(newLayer: T.Layer) {
+    const newComponent = {
+      ...component,
+      layout: newLayer
+    };
+    setLayer(newLayer);
+    onComponentChange(newComponent);
+  }
+
   function addLayer(type: T.LayerType) {
     if (!layer) {
       updateComponentLayer(makeLayer(type, refs));
@@ -82,6 +91,7 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
             root={component.layout}
             onSelectLayer={setLayer}
             selectedLayer={layer}
+            onLayerChange={updateComponentRootLayer}
           />
         ) : (
           menu

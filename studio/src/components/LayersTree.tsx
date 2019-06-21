@@ -1,20 +1,34 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
+import { useRef, useState, useMemo } from "react";
 
 type Props = {
   root?: T.Layer;
   onSelectLayer: (layer: T.Layer) => void;
   selectedLayer?: T.Layer;
   onAddLayer: (layerType: T.LayerType) => void;
+  onLayerChange: (layer: T.Layer) => void;
 };
 
-type LayersTreeItem = {
+export type LayersTreeItem = {
+  parent?: LayersTreeItem;
   layer: T.Layer;
   depth: number;
 };
+
+type DropPosition = {
+  index: number;
+  depth: number;
+};
+
+type InsertPosition = { parentId: string; position: number };
+
+const itemHeight = 32;
+const depthOffset = 22;
+const leftOffset = 22;
 
 function flatten<T>(arrOfArr: T[][]): T[] {
   const result = [];
@@ -26,23 +40,30 @@ function flatten<T>(arrOfArr: T[][]): T[] {
   return result;
 }
 
-function flattenLayer(
+export function flattenLayer(
   layer: T.Layer | undefined,
+  parent?: LayersTreeItem,
   depth: number = 0
 ): LayersTreeItem[] {
   if (!layer) {
     return [];
   }
-  const results = [{ layer, depth }];
+  const item = { parent, layer, depth };
+  const results: LayersTreeItem[] = [item];
   if (layer.type === "container") {
     for (let child of flatten(
-      layer.children.map(child => flattenLayer(child, depth + 1))
+      layer.children.map(child => flattenLayer(child, item, depth + 1))
     )) {
       results.push(child);
     }
   }
   return results;
 }
+
+type DepthsBoundaries = {
+  min: number;
+  max: number;
+};
 
 export function layerTypeToIcon(type: T.LayerType) {
   switch (type) {
@@ -75,13 +96,217 @@ export function layerTypeToIcon(type: T.LayerType) {
   }
 }
 
-function LayersTree({ root, onAddLayer, onSelectLayer, selectedLayer }: Props) {
+type DraggedData = {
+  layer: T.Layer;
+  index: number;
+};
+
+export function getDepthsBoundaries(
+  items: LayersTreeItem[],
+  dragIndex: number,
+  dropPosition: DropPosition
+): DepthsBoundaries {
+  const beforeItem = items[dropPosition.index];
+  const nextItem = items[dropPosition.index + 1];
+
+  // At this point, if beforeItem is part of the subtree, it should be the last item of the subtree
+  if (isPartOfSubtree(beforeItem, items[dragIndex])) {
+    return {
+      min: nextItem ? nextItem.depth : 1,
+      max: items[dragIndex].depth
+    };
+  }
+
+  return {
+    min: nextItem ? nextItem.depth : 1,
+    max:
+      beforeItem.layer.type === "container"
+        ? beforeItem.depth + 1
+        : beforeItem.depth
+  };
+}
+
+export function getDragIndicatorLeft(
+  items: LayersTreeItem[],
+  dragIndex: number,
+  dropPosition: DropPosition
+) {
+  const boundaries = getDepthsBoundaries(items, dragIndex, dropPosition);
+  if (dropPosition.depth > boundaries.max) {
+    return boundaries.max;
+  }
+  if (dropPosition.depth < boundaries.min) {
+    return boundaries.min;
+  }
+  return dropPosition.depth;
+}
+
+function isPartOfSubtree(child: LayersTreeItem, root: LayersTreeItem) {
+  let current = child;
+  while (current && current.parent) {
+    if (current.parent.layer === root.layer) {
+      return true;
+    }
+    current = current.parent;
+  }
+  return false;
+}
+
+export function isValidDropIndex(
+  items: LayersTreeItem[],
+  draggedIndex: number,
+  index: number
+): boolean {
+  return (
+    index >= 0 &&
+    index < items.length &&
+    !isPartOfSubtree(items[index + 1], items[draggedIndex])
+  );
+}
+
+function getDragIndicatorStyle(
+  items: LayersTreeItem[],
+  draggedIndex?: number,
+  dropPosition?: DropPosition
+): InterpolationWithTheme<any> {
+  if (
+    draggedIndex === undefined ||
+    dropPosition === undefined ||
+    !isValidDropIndex(items, draggedIndex, dropPosition.index)
+  ) {
+    return {
+      display: "none"
+    };
+  }
+
+  return {
+    display: "block",
+    position: "absolute",
+    top: dropPosition.index * itemHeight + itemHeight,
+    left:
+      getDragIndicatorLeft(items, draggedIndex, dropPosition) * depthOffset +
+      leftOffset,
+    right: 0,
+    height: "2px",
+    background: colors.primary
+  };
+}
+
+function deleteLayer(root: T.Layer, toDelete: T.Layer): T.Layer | undefined {
+  if (root === toDelete) {
+    return undefined;
+  }
+
+  if (root.type !== "container") {
+    return root;
+  }
+
+  return {
+    ...root,
+    children: root.children
+      .map(child => deleteLayer(child, toDelete))
+      .filter(x => x !== undefined) as T.Layer[]
+  };
+}
+
+export function findInsertionPosition(
+  items: LayersTreeItem[],
+  dropPosition: DropPosition
+): InsertPosition {
+  let position = 0;
+  let parent: T.Layer | undefined;
+
+  for (let i = dropPosition.index; i >= 0; i--) {
+    const item = items[i];
+    if (item.depth === dropPosition.depth) {
+      position++;
+    }
+    if (item.depth === dropPosition.depth - 1) {
+      parent = item.layer;
+      break;
+    }
+  }
+
+  if (!parent) {
+    throw new Error("Parent not found");
+  }
+
+  return {
+    parentId: parent.id,
+    position
+  };
+}
+
+function insertLayer(
+  root: T.Layer,
+  toInsert: T.Layer,
+  insertPosition: InsertPosition
+): T.Layer {
+  if (root.type === "container") {
+    if (root.id === insertPosition.parentId) {
+      return {
+        ...root,
+        children: root.children
+          .slice(0, insertPosition.position)
+          .concat([toInsert])
+          .concat(root.children.slice(insertPosition.position))
+      };
+    }
+
+    return {
+      ...root,
+      children: root.children.map(child =>
+        insertLayer(child, toInsert, insertPosition)
+      )
+    };
+  }
+
+  if (root.id === insertPosition.parentId) {
+    throw new Error("A layer can only be inserted inside a container");
+  }
+
+  return root;
+}
+
+function moveLayer(
+  root: T.Layer,
+  itemToMove: LayersTreeItem,
+  items: LayersTreeItem[],
+  dropPosition: DropPosition
+) {
+  const tmp = deleteLayer(root, itemToMove.layer);
+  if (!tmp) {
+    throw new Error(
+      "Temporary layer after delete should exist. If not, the root has been deleted"
+    );
+  }
+  return insertLayer(
+    tmp,
+    itemToMove.layer,
+    findInsertionPosition(items, dropPosition)
+  );
+}
+
+function LayersTree({
+  root,
+  onAddLayer,
+  onSelectLayer,
+  selectedLayer,
+  onLayerChange
+}: Props) {
+  const [draggedIndex, setDraggedIndex] = useState<number | undefined>();
+  const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
+    DropPosition | undefined
+  >(undefined);
+  const treeViewRef = useRef<HTMLDivElement>(null);
+  const flattenLayers = useMemo(() => flattenLayer(root), [root]);
   return (
     <div
       css={[
         column,
         {
-          width: "240px"
+          width: "240px",
+          height: "100%"
         }
       ]}
     >
@@ -94,30 +319,81 @@ function LayersTree({ root, onAddLayer, onSelectLayer, selectedLayer }: Props) {
         <h2 css={sectionTitle}>Layers</h2>
         <AddLayerPopover onAdd={onAddLayer} disabled={false} />
       </div>
-      {flattenLayer(root).map(item => (
+      <div
+        ref={treeViewRef}
+        css={[column, { position: "relative", height: "100%" }]}
+        onDragOver={e => {
+          const boundingRect = e.currentTarget.getBoundingClientRect();
+          const relativeX = e.pageX - boundingRect.left;
+          const relativeY = e.pageY - boundingRect.top;
+          const index = Math.min(
+            Math.round((relativeY - itemHeight) / itemHeight),
+            flattenLayers.length - 1
+          );
+          const depth = Math.round((relativeX - leftOffset) / depthOffset);
+          if (
+            dragIndicatorPosition == null ||
+            dragIndicatorPosition.index !== index ||
+            dragIndicatorPosition.depth !== depth
+          ) {
+            setDragIndicatorPosition({
+              index,
+              depth
+            });
+          }
+          e.preventDefault();
+          // Set the dropEffect to move
+          e.dataTransfer.dropEffect = "move";
+        }}
+        onDrop={e => {
+          e.preventDefault();
+          onLayerChange(
+            moveLayer(root!, flattenLayers[draggedIndex!], flattenLayers, {
+              index: dragIndicatorPosition!.index,
+              depth: getDragIndicatorLeft(
+                flattenLayers,
+                draggedIndex!,
+                dragIndicatorPosition!
+              )
+            })
+          );
+        }}
+      >
         <div
-          key={item.layer.id}
-          css={[
-            row,
-            {
-              paddingLeft: (item.depth + 1) * 22 + "px",
-              paddingTop: "2px",
-              paddingBottom: "2px",
-              paddingRight: "8px",
-              borderStyle: "solid",
-              borderWidth: "2px",
-              borderColor:
-                item.layer === selectedLayer ? colors.primary : "transparent",
-              alignItems: "center",
-              fontSize: "14px"
-            }
-          ]}
-          onClick={() => onSelectLayer(item.layer)}
-        >
-          {layerTypeToIcon(item.layer.type)}
-          <span css={{ marginLeft: "4px" }}>{item.layer.name}</span>
-        </div>
-      ))}
+          css={getDragIndicatorStyle(
+            flattenLayers,
+            draggedIndex,
+            dragIndicatorPosition
+          )}
+        />
+        {flattenLayers.map((item, index) => (
+          <div
+            key={item.layer.id}
+            draggable
+            onDragStart={() => setDraggedIndex(index)}
+            onDragEnd={() => setDragIndicatorPosition(undefined)}
+            css={[
+              row,
+              {
+                paddingLeft: (item.depth + 1) * 22 + "px",
+                paddingTop: "2px",
+                paddingBottom: "2px",
+                paddingRight: "8px",
+                borderStyle: "solid",
+                borderWidth: "2px",
+                borderColor:
+                  item.layer === selectedLayer ? colors.primary : "transparent",
+                alignItems: "center",
+                fontSize: "14px"
+              }
+            ]}
+            onClick={() => onSelectLayer(item.layer)}
+          >
+            {layerTypeToIcon(item.layer.type)}
+            <span css={{ marginLeft: "4px" }}>{item.layer.name}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

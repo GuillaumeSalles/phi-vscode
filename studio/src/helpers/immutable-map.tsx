@@ -23,3 +23,10 @@ export function firstEntry<TKey, TValue>(
 export function firstKey<TKey, TValue>(map: Map<TKey, TValue>): TKey {
   return map.keys().next().value;
 }
+
+export function getKeyByIndex<TKey, TValue>(
+  map: Map<TKey, TValue>,
+  index: number
+): TKey {
+  return Array.from(map.keys())[index];
+}
