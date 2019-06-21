@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useState } from "react";
+import React from "react";
 import { row, column, heading } from "../styles";
 import ModalButton from "./ModalButton";
 import Modal from "./Modal";

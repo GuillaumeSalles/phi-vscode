@@ -11,7 +11,6 @@ import SelectableCard from "../components/SelectableCard";
 import AddModal, { useOkCancelModal } from "../components/AddModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
-import Menu from "../components/Menu";
 import TopBar from "../components/TopBar";
 
 type Props = {

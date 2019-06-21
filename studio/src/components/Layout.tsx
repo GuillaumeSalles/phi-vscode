@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
-import { row, column } from "../styles";
+import { row } from "../styles";
 
 type Props = {
   left: React.ReactNode;

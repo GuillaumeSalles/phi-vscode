@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { colors, row } from "../styles";
+import { colors } from "../styles";
 import React from "react";
 
 function RadioIconInput<TValue extends string>({

@@ -72,14 +72,6 @@ function fontWeightToNumber(fontWeight: T.Ref, fontWeights: T.FontWeightsMap) {
   return ref.value;
 }
 
-function lineHeightToCss(lineHeight: T.Ref, lineHeights: T.LineHeightMap) {
-  const ref = lineHeights.get(lineHeight.id);
-  if (ref == null) {
-    throw new Error("Invalid line height ref");
-  }
-  return ref.value;
-}
-
 function getLayerStyles<TStyle>(
   defaultStyle: TStyle,
   mediaQueries: T.MediaQuery<TStyle>[],
