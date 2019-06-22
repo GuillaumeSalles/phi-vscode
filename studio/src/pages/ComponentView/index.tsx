@@ -10,7 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
-import { makeTextLayer, makeLayer } from "../../factories";
+import { findLayerById } from "../../layerUtils";
 
 type Props = {
   menu: React.ReactNode;
@@ -21,42 +21,37 @@ type Props = {
 
 function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
   const component = refs.components.get(componentId)!;
-  const [layer, setLayer] = useState(component.layout);
+  const [layerId, setLayerId] = useState<string | undefined>(
+    component.layout ? component.layout.id : undefined
+  );
 
   // Select component layer root when componentId change
   useEffect(() => {
-    setLayer(component.layout);
+    setLayerId(component.layout ? component.layout.id : undefined);
   }, [componentId]);
 
   const [isEditing, setIsEditing] = useState(false);
+  const selectedLayer =
+    component.layout && layerId
+      ? findLayerById(component.layout, layerId)
+      : undefined;
 
   function updateComponentLayer(newLayer: T.Layer) {
     const newComponent = {
       ...component,
       layout: updateLayer(component.layout, newLayer)
     };
-    setLayer(newLayer);
+    setLayerId(newLayer.id);
     onComponentChange(newComponent);
   }
 
-  function updateComponentRootLayer(newLayer: T.Layer) {
+  function updateComponentRootLayer(newLayer: T.Layer | undefined) {
     const newComponent = {
       ...component,
       layout: newLayer
     };
-    setLayer(newLayer);
+    setLayerId(newLayer ? newLayer.id : undefined);
     onComponentChange(newComponent);
-  }
-
-  function addLayer(type: T.LayerType) {
-    if (!layer) {
-      updateComponentLayer(makeLayer(type, refs));
-    } else if (layer.type === "container") {
-      updateComponentLayer({
-        ...layer,
-        children: [...layer.children].concat(makeLayer(type, refs))
-      });
-    }
   }
 
   function updateLayer(
@@ -87,11 +82,11 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
       left={
         isEditing ? (
           <LayersTree
-            onAddLayer={addLayer}
             root={component.layout}
-            onSelectLayer={setLayer}
-            selectedLayer={layer}
+            onSelectLayer={setLayerId}
+            selectedLayerId={layerId}
             onLayerChange={updateComponentRootLayer}
+            refs={refs}
           />
         ) : (
           menu
@@ -137,9 +132,9 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
               }
             ]}
           >
-            {layer && (
+            {selectedLayer && (
               <LayerEditor
-                layer={layer}
+                layer={selectedLayer}
                 refs={refs}
                 onChange={updateComponentLayer}
               />

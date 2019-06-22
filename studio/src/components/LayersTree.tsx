@@ -4,13 +4,17 @@ import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo } from "react";
+import { Delete } from "../icons";
+import IconButton from "./IconButton";
+import { makeLayer } from "../factories";
+import { findLayerById } from "../layerUtils";
 
 type Props = {
   root?: T.Layer;
-  onSelectLayer: (layer: T.Layer) => void;
-  selectedLayer?: T.Layer;
-  onAddLayer: (layerType: T.LayerType) => void;
-  onLayerChange: (layer: T.Layer) => void;
+  onSelectLayer: (layerId: string | undefined) => void;
+  selectedLayerId?: string;
+  onLayerChange: (layer: T.Layer | undefined) => void;
+  refs: T.Refs;
 };
 
 export type LayersTreeItem = {
@@ -237,6 +241,55 @@ export function findInsertionPosition(
   };
 }
 
+function addLayer(
+  root: T.Layer | undefined,
+  selectedLayerId: string | undefined,
+  newLayer: T.Layer
+): T.Layer | undefined {
+  if (!root) {
+    return newLayer;
+  }
+
+  if (!selectedLayerId) {
+    return;
+  }
+
+  const selectedLayer = findLayerById(root, selectedLayerId);
+
+  if (!selectedLayer) {
+    throw new Error(`Layer with id ${selectedLayerId} not found in root`);
+  }
+
+  if (selectedLayer.type === "container") {
+    return updateLayer(root, {
+      ...selectedLayer,
+      children: [...selectedLayer.children].concat(newLayer)
+    });
+  }
+}
+
+function updateLayer(
+  rootLayer: T.Layer | undefined,
+  newLayer: T.Layer
+): T.Layer {
+  if (!rootLayer) {
+    return newLayer;
+  }
+
+  if (rootLayer.id === newLayer.id) {
+    return newLayer;
+  }
+
+  if (rootLayer.type === "container") {
+    return {
+      ...rootLayer,
+      children: rootLayer.children.map(child => updateLayer(child, newLayer))
+    };
+  }
+
+  return rootLayer;
+}
+
 function insertLayer(
   root: T.Layer,
   toInsert: T.Layer,
@@ -289,10 +342,10 @@ function moveLayer(
 
 function LayersTree({
   root,
-  onAddLayer,
   onSelectLayer,
-  selectedLayer,
-  onLayerChange
+  selectedLayerId,
+  onLayerChange,
+  refs
 }: Props) {
   const [draggedIndex, setDraggedIndex] = useState<number | undefined>();
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
@@ -317,7 +370,14 @@ function LayersTree({
         ]}
       >
         <h2 css={sectionTitle}>Layers</h2>
-        <AddLayerPopover onAdd={onAddLayer} disabled={false} />
+        <AddLayerPopover
+          onAdd={type => {
+            const newLayer = makeLayer(type, refs);
+            onLayerChange(addLayer(root, selectedLayerId, newLayer));
+            onSelectLayer(newLayer.id);
+          }}
+          disabled={false}
+        />
       </div>
       <div
         ref={treeViewRef}
@@ -342,7 +402,6 @@ function LayersTree({
             });
           }
           e.preventDefault();
-          // Set the dropEffect to move
           e.dataTransfer.dropEffect = "move";
         }}
         onDrop={e => {
@@ -375,22 +434,41 @@ function LayersTree({
             css={[
               row,
               {
-                paddingLeft: (item.depth + 1) * 22 + "px",
+                paddingLeft: item.depth * depthOffset + leftOffset + "px",
                 paddingTop: "2px",
                 paddingBottom: "2px",
                 paddingRight: "8px",
                 borderStyle: "solid",
                 borderWidth: "2px",
                 borderColor:
-                  item.layer === selectedLayer ? colors.primary : "transparent",
+                  item.layer.id === selectedLayerId
+                    ? colors.primary
+                    : "transparent",
                 alignItems: "center",
-                fontSize: "14px"
+                fontSize: "14px",
+                ":hover button": {
+                  display: "block"
+                }
               }
             ]}
-            onClick={() => onSelectLayer(item.layer)}
+            onClick={() => {
+              onSelectLayer(item.layer.id);
+            }}
           >
             {layerTypeToIcon(item.layer.type)}
-            <span css={{ marginLeft: "4px" }}>{item.layer.name}</span>
+            <span css={{ flex: "1 1 auto", marginLeft: "4px" }}>
+              {item.layer.name}
+            </span>
+            <IconButton
+              cssOverrides={{ display: "none", flex: "0 0 auto" }}
+              icon={<Delete height={20} width={20} />}
+              onClick={e => {
+                e.stopPropagation();
+                const newRoot = deleteLayer(root!, item.layer);
+                onLayerChange(newRoot);
+                onSelectLayer(newRoot ? newRoot.id : undefined);
+              }}
+            />
           </div>
         ))}
       </div>
