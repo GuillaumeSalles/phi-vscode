@@ -372,7 +372,7 @@ function LayersTree({
         <h2 css={sectionTitle}>Layers</h2>
         <AddLayerPopover
           onAdd={type => {
-            const newLayer = makeLayer(type, refs);
+            const newLayer = makeLayer(type, root, refs);
             onLayerChange(addLayer(root, selectedLayerId, newLayer));
             onSelectLayer(newLayer.id);
           }}

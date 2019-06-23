@@ -15,12 +15,57 @@ export function px(value: number): T.Length {
   return { type: "px", value };
 }
 
-export function makeLayer(type: T.LayerType, refs: T.Refs): T.Layer {
+export function generateUniqueLayerName(
+  type: T.LayerType,
+  root: T.Layer | undefined
+) {
+  const existingNames = new Set(
+    layerTreeToArray(root).map(layer => layer.name)
+  );
+
+  const prefix = layerTypeToNamePrefix(type);
+  let i = 1;
+  while (existingNames.has(`${prefix} ${i}`)) {
+    i++;
+  }
+
+  return `${prefix} ${i}`;
+}
+
+function layerTypeToNamePrefix(type: T.LayerType): string {
+  switch (type) {
+    case "container":
+      return "Container";
+    case "text":
+      return "Text";
+    default:
+      throw new Error(`Can't generate layer name prefix from type ${type}`);
+  }
+}
+
+export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
+  if (!root) {
+    return [];
+  }
+  const result = [root];
+  if (root.type === "container") {
+    return result.concat(root.children.map(layerTreeToArray).flat());
+  }
+  return result;
+}
+
+export function makeLayer(
+  type: T.LayerType,
+  root: T.Layer | undefined,
+  refs: T.Refs
+): T.Layer {
+  const name = generateUniqueLayerName(type, root);
+
   switch (type) {
     case "text":
-      return makeTextLayer(refs);
+      return makeTextLayer(refs, { name });
     case "container":
-      return makeContainerLayer(refs);
+      return makeContainerLayer(refs, { name });
     default:
       throw new Error("Invalid layer type");
   }
