@@ -2,12 +2,16 @@
 import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
-import { useState } from "react";
 import Input from "../../components/Input";
 import InputNumber from "../../components/InputNumber";
-import AddModal from "../../components/AddModal";
+import OkCancelModal from "../../components/OkCancelModal";
 import uuid from "uuid/v4";
 import { px } from "../../factories";
+import {
+  useForm,
+  useStringFormEntry,
+  useNumberFormEntry
+} from "../../components/Form";
 
 type Props = {
   isOpen: boolean;
@@ -17,49 +21,41 @@ type Props = {
 };
 
 function AddBreakpointsModal({ isOpen, breakpoints, onAdd, onCancel }: Props) {
-  const [name, setName] = useState("");
-  const [value, setValue] = useState(600);
-  const [isValidating, setIsValidating] = useState(false);
-
-  function isNameValid() {
-    return !breakpoints.has(name);
-  }
-
-  function isValueValid() {
-    return true;
-  }
-
-  function isFormValid() {
-    return isNameValid() && isValueValid();
-  }
+  const nameEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Breakpoint name is required";
+    }
+    if (Array.from(breakpoints.values()).some(b => b.name === value)) {
+      return "Breakpoint name must be unique";
+    }
+  });
+  const valueEntry = useNumberFormEntry(600, value => {
+    if (value <= 0) {
+      return "Breakpoint should be greater than 0px";
+    }
+  });
+  const submit = useForm([nameEntry, valueEntry], () =>
+    onAdd(uuid(), { name: nameEntry.value, value: px(valueEntry.value) })
+  );
 
   return (
-    <AddModal
+    <OkCancelModal
       isOpen={isOpen}
       title="Add breakpoint"
       description="The name should unique."
       onCancel={onCancel}
-      onAdd={() => {
-        if (!isFormValid()) {
-          setIsValidating(true);
-        } else {
-          onAdd(uuid(), { name, value: px(value) });
-        }
-      }}
+      onOk={submit}
       form={
         <React.Fragment>
           <Input
             placeholder="Name"
             margin="0 0 12px"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            isInvalid={isValidating && !isNameValid()}
+            {...nameEntry.inputProps}
           />
           <InputNumber
+            margin="0 0 12px"
             placeholder="Value in pixels."
-            value={value}
-            onChange={e => setValue(e.target.valueAsNumber)}
-            isInvalid={isValidating && !isValueValid()}
+            {...valueEntry.inputProps}
           />
         </React.Fragment>
       }

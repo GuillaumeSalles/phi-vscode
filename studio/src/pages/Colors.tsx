@@ -8,10 +8,12 @@ import Input from "../components/Input";
 import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../components/SelectableCard";
-import AddModal, { useOkCancelModal } from "../components/AddModal";
+import OkCancelModal, { useOkCancelModal } from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
+import { useStringFormEntry, useForm } from "../components/Form";
+import uuid from "uuid/v4";
 
 type Props = {
   menu: React.ReactNode;
@@ -22,28 +24,29 @@ type Props = {
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
   const modal = useOkCancelModal();
-  const [colorName, setColorName] = useState("");
-  const [colorValue, setColorValue] = useState("");
-  const [hasTryToSubmit, setHasTryToSubmit] = useState(false);
+  const nameEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Color name is required";
+    }
+  });
+  const valueEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Color value is required";
+    }
+    if (!isHexRGB(value)) {
+      return "Color value should follow the pattern #AABBCC";
+    }
+  });
+  const addColor = useForm([nameEntry, valueEntry], () => {
+    onColorsChange(
+      set(colors, uuid(), {
+        name: nameEntry.value,
+        value: valueEntry.value
+      })
+    );
+    modal.close();
+  });
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-
-  function isFormValid() {
-    return isColorNameValid() && isColorValueValid();
-  }
-
-  function isColorNameValid() {
-    return colorName.length > 0 && !colors.has(colorName);
-  }
-
-  function isColorValueValid() {
-    return isHexRGB(colorValue);
-  }
-
-  function resetForm() {
-    setColorName("");
-    setColorValue("");
-    setHasTryToSubmit(false);
-  }
 
   return (
     <Layout
@@ -57,7 +60,6 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
               <SecondaryButton
                 text="Add"
                 onClick={() => {
-                  resetForm();
                   modal.open();
                 }}
                 margin="0 10px 0 0"
@@ -111,7 +113,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
               );
             })}
           </div>
-          <AddModal
+          <OkCancelModal
             isOpen={modal.isOpen}
             title="Add color"
             description={
@@ -125,32 +127,16 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
                 <Input
                   placeholder="Name"
                   margin="0 0 12px"
-                  value={colorName}
-                  onChange={e => setColorName(e.target.value)}
-                  isInvalid={hasTryToSubmit && !isColorNameValid()}
+                  {...nameEntry.inputProps}
                 />
                 <Input
                   placeholder="Value in hex. (e.g: #AABBCC)"
-                  value={colorValue}
-                  onChange={e => setColorValue(e.target.value)}
-                  isInvalid={hasTryToSubmit && !isColorValueValid()}
+                  {...valueEntry.inputProps}
                 />
               </React.Fragment>
             }
             onCancel={modal.close}
-            onAdd={() => {
-              if (!isFormValid()) {
-                setHasTryToSubmit(true);
-              } else {
-                onColorsChange(
-                  set(colors, colorName, {
-                    name: colorName,
-                    value: colorValue
-                  })
-                );
-                modal.close();
-              }
-            }}
+            onOk={addColor}
           />
         </div>
       }

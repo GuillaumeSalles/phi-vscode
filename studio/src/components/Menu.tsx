@@ -5,9 +5,10 @@ import * as T from "../types";
 import { Link } from "react-router-dom";
 import { useRouter } from "../useRouter";
 import AddButton from "./AddButton";
-import AddModal, { useOkCancelModal } from "./AddModal";
+import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
 import React, { useState } from "react";
 import Input from "./Input";
+import { useStringFormEntry, useForm } from "./Form";
 
 type Props = {
   components: T.ComponentMap;
@@ -44,8 +45,15 @@ function MenuItem({ href, text }: { href: string; text: string }) {
 
 function Menu({ components, onAddComponent }: Props) {
   const modal = useOkCancelModal();
-  const [name, setName] = useState("");
-  const [isValidating, setIsValidating] = useState(false);
+  const nameEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Component name is required";
+    }
+  });
+  const submit = useForm([nameEntry], () => {
+    onAddComponent(nameEntry.value);
+    modal.close();
+  });
   return (
     <div
       css={[
@@ -98,24 +106,19 @@ function Menu({ components, onAddComponent }: Props) {
           />
         ))}
       </div>
-      <AddModal
+      <OkCancelModal
         isOpen={modal.isOpen}
         title="Create new component"
         description="Name should be unique"
-        onAdd={() => {
-          onAddComponent(name);
-          modal.close();
-        }}
+        onOk={submit}
         onCancel={modal.close}
         form={
           <React.Fragment>
             <Input
               placeholder="Name"
               margin="0 0 12px"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              isInvalid={isValidating && name.length > 0}
               autoFocus
+              {...nameEntry.inputProps}
             />
           </React.Fragment>
         }

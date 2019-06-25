@@ -2,6 +2,7 @@ import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
 import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
+import { layerTypeToName } from "./layerUtils";
 
 function ref(id: string): T.Ref {
   return { type: "ref", id };
@@ -23,24 +24,13 @@ export function generateUniqueLayerName(
     layerTreeToArray(root).map(layer => layer.name)
   );
 
-  const prefix = layerTypeToNamePrefix(type);
+  const prefix = layerTypeToName(type);
   let i = 1;
   while (existingNames.has(`${prefix} ${i}`)) {
     i++;
   }
 
   return `${prefix} ${i}`;
-}
-
-function layerTypeToNamePrefix(type: T.LayerType): string {
-  switch (type) {
-    case "container":
-      return "Container";
-    case "text":
-      return "Text";
-    default:
-      throw new Error(`Can't generate layer name prefix from type ${type}`);
-  }
 }
 
 export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {

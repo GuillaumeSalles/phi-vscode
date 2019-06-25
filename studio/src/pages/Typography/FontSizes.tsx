@@ -8,7 +8,7 @@ import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
 import AddFontSizeModal from "./AddFontSizeModal";
-import { useOkCancelModal } from "../../components/AddModal";
+import { useOkCancelModal } from "../../components/OkCancelModal";
 
 type Props = {
   items: T.FontSizesMap;

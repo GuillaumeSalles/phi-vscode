@@ -4,7 +4,7 @@ import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo } from "react";
-import { Delete } from "../icons";
+import { Delete, Edit } from "../icons";
 import IconButton from "./IconButton";
 import { makeLayer } from "../factories";
 import { findLayerById } from "../layerUtils";
@@ -351,6 +351,7 @@ function LayersTree({
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
     DropPosition | undefined
   >(undefined);
+  const [isRenaming, setIsRenaming] = useState(false);
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
   return (
@@ -431,6 +432,10 @@ function LayersTree({
             draggable
             onDragStart={() => setDraggedIndex(index)}
             onDragEnd={() => setDragIndicatorPosition(undefined)}
+            onDoubleClick={() => setIsRenaming(true)}
+            onClick={() => {
+              onSelectLayer(item.layer.id);
+            }}
             css={[
               row,
               {
@@ -451,14 +456,18 @@ function LayersTree({
                 }
               }
             ]}
-            onClick={() => {
-              onSelectLayer(item.layer.id);
-            }}
           >
             {layerTypeToIcon(item.layer.type)}
             <span css={{ flex: "1 1 auto", marginLeft: "4px" }}>
               {item.layer.name}
             </span>
+            <IconButton
+              cssOverrides={{ display: "none", flex: "0 0 auto" }}
+              icon={<Edit height={20} width={20} />}
+              onClick={e => {
+                e.stopPropagation();
+              }}
+            />
             <IconButton
               cssOverrides={{ display: "none", flex: "0 0 auto" }}
               icon={<Delete height={20} width={20} />}

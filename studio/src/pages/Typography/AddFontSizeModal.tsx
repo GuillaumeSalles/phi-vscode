@@ -2,11 +2,15 @@
 import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
-import { useState } from "react";
 import Input from "../../components/Input";
-import AddModal from "../../components/AddModal";
+import OkCancelModal from "../../components/OkCancelModal";
 import InputNumber from "../../components/InputNumber";
 import uuid from "uuid/v4";
+import {
+  useStringFormEntry,
+  useNumberFormEntry,
+  useForm
+} from "../../components/Form";
 
 type Props = {
   isOpen: boolean;
@@ -21,49 +25,35 @@ export default function AddFontSizeModal({
   onAdd,
   onCancel
 }: Props) {
-  const [name, setName] = useState("");
-  const [value, setValue] = useState(16);
-  const [isValidating, setIsValidating] = useState(false);
-
-  function isNameValid() {
-    return !items.has(name);
-  }
-
-  function isValueValid() {
-    return true;
-  }
-
-  function isFormValid() {
-    return isNameValid() && isValueValid();
-  }
+  const nameEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Font size name is required";
+    }
+  });
+  const valueEntry = useNumberFormEntry(16, () => {
+    return undefined;
+  });
+  const addFontSize = useForm([nameEntry, valueEntry], () => {
+    onAdd(uuid(), { name: nameEntry.value, value: valueEntry.value + "px" });
+  });
 
   return (
-    <AddModal
+    <OkCancelModal
       isOpen={isOpen}
       title="Add font size"
       description="The name should unique."
-      onAdd={() => {
-        if (!isFormValid()) {
-          setIsValidating(true);
-        } else {
-          onAdd(uuid(), { name, value: value + "px" });
-        }
-      }}
+      onOk={addFontSize}
       onCancel={onCancel}
       form={
         <React.Fragment>
           <Input
             placeholder="Name"
             margin="0 0 12px"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            isInvalid={isValidating && !isNameValid()}
+            {...nameEntry.inputProps}
           />
           <InputNumber
             placeholder="Size in pixels"
-            value={value}
-            onChange={e => setValue(e.target.valueAsNumber)}
-            isInvalid={isValidating && !isValueValid()}
+            {...valueEntry.inputProps}
           />
         </React.Fragment>
       }

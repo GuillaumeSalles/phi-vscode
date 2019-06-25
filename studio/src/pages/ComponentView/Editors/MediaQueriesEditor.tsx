@@ -5,7 +5,7 @@ import { column, sectionTitle, row } from "../../../styles";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
 import AddMediaQueryModal from "./AddMediaQueryModal";
-import { useOkCancelModal } from "../../../components/AddModal";
+import { useOkCancelModal } from "../../../components/OkCancelModal";
 import AddButton from "../../../components/AddButton";
 
 type Props<TStyle> = {

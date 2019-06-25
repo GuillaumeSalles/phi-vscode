@@ -3,9 +3,9 @@ import { jsx } from "@emotion/core";
 import React from "react";
 import uuid from "uuid/v4";
 import * as T from "../../types";
-import { useState } from "react";
 import Input from "../../components/Input";
-import AddModal from "../../components/AddModal";
+import OkCancelModal from "../../components/OkCancelModal";
+import { useStringFormEntry, useForm } from "../../components/Form";
 
 type Props = {
   isOpen: boolean;
@@ -15,49 +15,35 @@ type Props = {
 };
 
 function AddFontFamilyModal({ isOpen, fontFamilies, onAdd, onCancel }: Props) {
-  const [name, setName] = useState("");
-  const [value, setValue] = useState("");
-  const [isValidating, setIsValidating] = useState(false);
-
-  function isNameValid() {
-    return !fontFamilies.has(name);
-  }
-
-  function isValueValid() {
-    return true;
-  }
-
-  function isFormValid() {
-    return isNameValid() && isValueValid();
-  }
+  const nameEntry = useStringFormEntry("", value => {
+    if (value.length === 0) {
+      return "Font family name is required";
+    }
+  });
+  const valueEntry = useStringFormEntry("", () => {
+    return undefined;
+  });
+  const addFontFamily = useForm([nameEntry, valueEntry], () => {
+    onAdd(uuid(), { name: nameEntry.value, value: valueEntry.value });
+  });
 
   return (
-    <AddModal
+    <OkCancelModal
       isOpen={isOpen}
       title="Add font-family"
       description="The name should unique."
-      onAdd={() => {
-        if (!isFormValid()) {
-          setIsValidating(true);
-        } else {
-          onAdd(uuid(), { name, value });
-        }
-      }}
+      onOk={addFontFamily}
       onCancel={onCancel}
       form={
         <React.Fragment>
           <Input
             placeholder="Name"
             margin="0 0 12px"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            isInvalid={isValidating && !isNameValid()}
+            {...nameEntry.inputProps}
           />
           <Input
             placeholder="List of fonts separated by commas"
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            isInvalid={isValidating && !isValueValid()}
+            {...valueEntry.inputProps}
           />
         </React.Fragment>
       }

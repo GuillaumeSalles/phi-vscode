@@ -10,7 +10,7 @@ type Props = {
   isOpen: boolean;
   title: string;
   description: React.ReactNode;
-  onAdd: () => void;
+  onOk: () => void;
   onCancel: () => void;
   form: React.ReactNode;
 };
@@ -24,9 +24,9 @@ export function useOkCancelModal() {
   };
 }
 
-function AddModal({
+export default function OkCancelModal({
   isOpen,
-  onAdd,
+  onOk,
   onCancel,
   title,
   description,
@@ -69,11 +69,9 @@ function AddModal({
 
         <div css={[row, { borderTop: "1px solid rgb(234, 234, 234)" }]}>
           <ModalButton text="cancel" onClick={onCancel} />
-          <ModalButton text="Add" onClick={onAdd} />
+          <ModalButton text="Add" onClick={onOk} />
         </div>
       </div>
     </Modal>
   );
 }
-
-export default AddModal;

@@ -7,8 +7,11 @@ type Props = {
   width?: string;
   margin?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   isInvalid?: boolean;
+  error?: string;
   autoFocus?: boolean;
 };
 
@@ -18,60 +21,62 @@ export default function Input({
   width,
   margin,
   onChange,
+  onBlur,
+  onFocus,
   value,
-  isInvalid
+  error
 }: Props) {
   return (
     <div
       css={{
-        WebkitBoxAlign: "center",
+        display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        display: "inline-flex",
-        height: "37px",
         position: "relative",
         verticalAlign: "middle",
         width,
-        borderRadius: "5px",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderColor: isInvalid ? "red" : "rgb(225, 225, 225)",
-        borderImage: "initial",
-        transition: "border 0.2s ease 0s, color 0.2s ease 0s",
-        background: "rgb(255, 255, 255)",
         margin
       }}
     >
+      <input
+        placeholder={placeholder}
+        onChange={onChange}
+        onBlur={onBlur}
+        value={value}
+        onFocus={onFocus}
+        autoFocus={autoFocus}
+        css={{
+          boxShadow: "none",
+          boxSizing: "border-box",
+          display: "block",
+          fontSize: "14px",
+          lineHeight: "27px",
+          height: "28px",
+          width: "100%",
+          backgroundColor: "transparent",
+          caretColor: "rgb(0, 0, 0)",
+          border: "none",
+          outline: "0px",
+          margin: "4px 10px",
+          borderRadius: "2px",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgb(225, 225, 225)",
+          borderImage: "initial",
+          transition: "border 0.2s ease 0s, color 0.2s ease 0s",
+          background: "rgb(255, 255, 255)",
+          padding: "4px 10px"
+        }}
+      />
       <div
         css={{
-          display: "block",
-          position: "relative",
-          width: "100%",
-          margin: "4px 10px"
+          fontSize: "12px",
+          color: "red",
+          alignSelf: "flex-start",
+          display: error !== undefined ? "block" : "none"
         }}
       >
-        <input
-          placeholder={placeholder}
-          onChange={onChange}
-          value={value}
-          autoFocus={autoFocus}
-          css={{
-            boxShadow: "none",
-            boxSizing: "border-box",
-            display: "block",
-            fontSize: "14px",
-            lineHeight: "27px",
-            width: "100%",
-            color: "inherit",
-            backgroundColor: "transparent",
-            caretColor: "rgb(0, 0, 0)",
-            borderRadius: "0px",
-            borderWidth: "initial",
-            borderStyle: "none",
-            borderColor: "initial",
-            borderImage: "initial",
-            outline: "0px"
-          }}
-        />
+        {error}
       </div>
     </div>
   );

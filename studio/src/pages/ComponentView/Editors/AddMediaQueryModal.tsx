@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import React, { useState } from "react";
 import uuid from "uuid/v4";
 import * as T from "../../../types";
-import AddModal from "../../../components/AddModal";
+import OkCancelModal from "../../../components/OkCancelModal";
 import Select from "../../../components/Select";
 
 type Props<TStyle> = {
@@ -37,11 +37,11 @@ export default function AddMediaQueryModal<TStyle>({
     .map(breakpointEntryToOption);
 
   return options.length > 0 ? (
-    <AddModal
+    <OkCancelModal
       isOpen={isOpen}
       title="Add new media query"
       description="Select a breakpoint that has not been used before on this layer."
-      onAdd={() =>
+      onOk={() =>
         onAdd(uuid(), {
           type: "ref",
           id: selectedItem != null ? selectedItem : options[0][0]

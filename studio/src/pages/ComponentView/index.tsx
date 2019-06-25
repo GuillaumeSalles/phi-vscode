@@ -10,7 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
-import { findLayerById } from "../../layerUtils";
+import { findLayerById, updateLayer } from "../../layerUtils";
 
 type Props = {
   menu: React.ReactNode;
@@ -52,28 +52,6 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
     };
     setLayerId(newLayer ? newLayer.id : undefined);
     onComponentChange(newComponent);
-  }
-
-  function updateLayer(
-    rootLayer: T.Layer | undefined,
-    newLayer: T.Layer
-  ): T.Layer {
-    if (!rootLayer) {
-      return newLayer;
-    }
-
-    if (rootLayer.id === newLayer.id) {
-      return newLayer;
-    }
-
-    if (rootLayer.type === "container") {
-      return {
-        ...rootLayer,
-        children: rootLayer.children.map(child => updateLayer(child, newLayer))
-      };
-    }
-
-    return rootLayer;
   }
 
   return (

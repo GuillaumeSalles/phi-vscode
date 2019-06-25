@@ -8,17 +8,7 @@ import { layerTypeToIcon } from "./LayersTree";
 import { layerTypes } from "../constants";
 import AddButton from "./AddButton";
 import { useToggle } from "../hooks";
-
-function layerTypeToName(type: T.LayerType): string {
-  switch (type) {
-    case "text":
-      return "Text";
-    case "container":
-      return "Container";
-    default:
-      throw new Error("Unkwown layer type");
-  }
-}
+import { layerTypeToName } from "../layerUtils";
 
 type Props = {
   onAdd: (type: T.LayerType) => void;

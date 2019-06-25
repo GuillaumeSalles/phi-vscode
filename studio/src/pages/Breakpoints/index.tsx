@@ -8,9 +8,8 @@ import { set, del } from "../../helpers/immutable-map";
 import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
-import Menu from "../../components/Menu";
 import TopBar from "../../components/TopBar";
-import { useOkCancelModal } from "../../components/AddModal";
+import { useOkCancelModal } from "../../components/OkCancelModal";
 
 type Props = {
   menu: React.ReactNode;
