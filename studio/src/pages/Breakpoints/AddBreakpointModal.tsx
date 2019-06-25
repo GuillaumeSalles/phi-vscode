@@ -2,15 +2,15 @@
 import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
-import Input from "../../components/Input";
-import InputNumber from "../../components/InputNumber";
 import OkCancelModal from "../../components/OkCancelModal";
 import uuid from "uuid/v4";
 import { px } from "../../factories";
 import {
   useForm,
   useStringFormEntry,
-  useNumberFormEntry
+  useNumberFormEntry,
+  FormInput,
+  FormNumberInput
 } from "../../components/Form";
 
 type Props = {
@@ -47,13 +47,12 @@ function AddBreakpointsModal({ isOpen, breakpoints, onAdd, onCancel }: Props) {
       onOk={submit}
       form={
         <React.Fragment>
-          <Input
+          <FormInput
             placeholder="Name"
             margin="0 0 12px"
             {...nameEntry.inputProps}
           />
-          <InputNumber
-            margin="0 0 12px"
+          <FormNumberInput
             placeholder="Value in pixels."
             {...valueEntry.inputProps}
           />

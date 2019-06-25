@@ -2,14 +2,14 @@
 import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../../types";
-import Input from "../../components/Input";
 import OkCancelModal from "../../components/OkCancelModal";
-import InputNumber from "../../components/InputNumber";
 import uuid from "uuid/v4";
 import {
   useStringFormEntry,
   useNumberFormEntry,
-  useForm
+  useForm,
+  FormInput,
+  FormNumberInput
 } from "../../components/Form";
 
 type Props = {
@@ -46,12 +46,12 @@ export default function AddFontSizeModal({
       onCancel={onCancel}
       form={
         <React.Fragment>
-          <Input
+          <FormInput
             placeholder="Name"
             margin="0 0 12px"
             {...nameEntry.inputProps}
           />
-          <InputNumber
+          <FormNumberInput
             placeholder="Size in pixels"
             {...valueEntry.inputProps}
           />

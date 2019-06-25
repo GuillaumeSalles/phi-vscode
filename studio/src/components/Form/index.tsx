@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+export { default as FormInput } from "./FormInput";
+export { default as FormNumberInput } from "./FormNumberInput";
 
 type FormEntry<TValue> = {
   value: TValue;

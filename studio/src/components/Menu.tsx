@@ -6,9 +6,8 @@ import { Link } from "react-router-dom";
 import { useRouter } from "../useRouter";
 import AddButton from "./AddButton";
 import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
-import React, { useState } from "react";
-import Input from "./Input";
-import { useStringFormEntry, useForm } from "./Form";
+import React from "react";
+import { useStringFormEntry, useForm, FormInput } from "./Form";
 
 type Props = {
   components: T.ComponentMap;
@@ -114,7 +113,7 @@ function Menu({ components, onAddComponent }: Props) {
         onCancel={modal.close}
         form={
           <React.Fragment>
-            <Input
+            <FormInput
               placeholder="Name"
               margin="0 0 12px"
               autoFocus

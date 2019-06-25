@@ -4,7 +4,6 @@ import React from "react";
 import * as T from "../types";
 import { column, row, mainPadding, heading } from "../styles";
 import { useState } from "react";
-import Input from "../components/Input";
 import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../components/SelectableCard";
@@ -12,7 +11,7 @@ import OkCancelModal, { useOkCancelModal } from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
-import { useStringFormEntry, useForm } from "../components/Form";
+import { useStringFormEntry, useForm, FormInput } from "../components/Form";
 import uuid from "uuid/v4";
 
 type Props = {
@@ -124,12 +123,12 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
             }
             form={
               <React.Fragment>
-                <Input
+                <FormInput
                   placeholder="Name"
                   margin="0 0 12px"
                   {...nameEntry.inputProps}
                 />
-                <Input
+                <FormInput
                   placeholder="Value in hex. (e.g: #AABBCC)"
                   {...valueEntry.inputProps}
                 />

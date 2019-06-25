@@ -9,22 +9,19 @@ type Props = {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-  isInvalid?: boolean;
+  value?: number;
   error?: string;
-  autoFocus?: boolean;
 };
 
-export default function Input({
-  autoFocus,
+export default function FormNumberInput({
   placeholder,
   width,
   margin,
   onChange,
   onBlur,
   onFocus,
-  value,
-  error
+  error,
+  value
 }: Props) {
   return (
     <div
@@ -44,7 +41,7 @@ export default function Input({
         onBlur={onBlur}
         value={value}
         onFocus={onFocus}
-        autoFocus={autoFocus}
+        type="number"
         css={{
           boxShadow: "none",
           boxSizing: "border-box",

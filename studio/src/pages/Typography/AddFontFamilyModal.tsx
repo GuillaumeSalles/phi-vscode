@@ -3,9 +3,8 @@ import { jsx } from "@emotion/core";
 import React from "react";
 import uuid from "uuid/v4";
 import * as T from "../../types";
-import Input from "../../components/Input";
 import OkCancelModal from "../../components/OkCancelModal";
-import { useStringFormEntry, useForm } from "../../components/Form";
+import { useStringFormEntry, useForm, FormInput } from "../../components/Form";
 
 type Props = {
   isOpen: boolean;
@@ -36,12 +35,12 @@ function AddFontFamilyModal({ isOpen, fontFamilies, onAdd, onCancel }: Props) {
       onCancel={onCancel}
       form={
         <React.Fragment>
-          <Input
+          <FormInput
             placeholder="Name"
             margin="0 0 12px"
             {...nameEntry.inputProps}
           />
-          <Input
+          <FormInput
             placeholder="List of fonts separated by commas"
             {...valueEntry.inputProps}
           />
