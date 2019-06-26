@@ -1,0 +1,163 @@
+{
+  "colors": [
+    {
+      "id": "8ec4fd7e-5f4f-4664-abb9-f8279aecd99e",
+      "name": "black",
+      "value": "#000000"
+    },
+    {
+      "id": "5b02776a-574e-425b-9032-b23c56369165",
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "id": "e194996f-3483-42a4-85cf-8887313817ab",
+      "name": "primary",
+      "value": "#0076FF"
+    }
+  ],
+  "fontSizes": [
+    {
+      "id": "84842de0-5366-4b07-a0f4-09fb040d060f",
+      "name": "FS1",
+      "value": "14px"
+    },
+    {
+      "id": "ef611e9d-ca5c-4ea4-86db-27ef5d75b247",
+      "name": "FS2",
+      "value": "16px"
+    },
+    {
+      "id": "d27dfdd5-506e-49e6-b1c8-8fa4b0e6b091",
+      "name": "FS3",
+      "value": "18px"
+    },
+    {
+      "id": "7a6f8a05-b3e5-4b31-b37a-2d8c26f1c954",
+      "name": "FS4",
+      "value": "24px"
+    },
+    {
+      "id": "3b9a1153-6559-4017-830b-831709986921",
+      "name": "FS5",
+      "value": "26px"
+    },
+    {
+      "id": "b0fab0ae-5774-483d-a141-13944e89ee3d",
+      "name": "FS6",
+      "value": "32px"
+    }
+  ],
+  "fontWeights": [
+    {
+      "id": "554cca8d-ffe1-4a2c-85f0-a17fe33e30b8",
+      "name": "light",
+      "value": 300
+    },
+    {
+      "id": "17ef1b00-1f97-4bb4-9de9-76d35b757e12",
+      "name": "normal",
+      "value": 400
+    },
+    {
+      "id": "37fc38d5-f55b-48f4-92b3-2da9fdab8a27",
+      "name": "bold",
+      "value": 700
+    }
+  ],
+  "fontFamilies": [
+    {
+      "id": "a7467bbc-ee74-464f-93c1-a12853ac5e05",
+      "name": "default",
+      "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", sans-serif"
+    }
+  ],
+  "lineHeights": [
+    { "id": "condensed", "name": "condensed", "value": 1.25 },
+    { "id": "normal", "name": "normal", "value": 1.5 }
+  ],
+  "breakpoints": [
+    {
+      "id": "5174aa21-bb11-4d48-a917-40edf6ea62da",
+      "name": "small",
+      "value": { "type": "px", "value": 544 }
+    },
+    {
+      "id": "b084809e-3ebe-4589-9417-494676a1a095",
+      "name": "medium",
+      "value": { "type": "px", "value": 768 }
+    },
+    {
+      "id": "118f35b6-f3fc-4f36-8d6a-2846d834419c",
+      "name": "large",
+      "value": { "type": "px", "value": 1012 }
+    },
+    {
+      "id": "a3471936-657f-4379-bde5-0070704673cc",
+      "name": "xlarge",
+      "value": { "type": "px", "value": 1280 }
+    }
+  ],
+  "components": [
+    {
+      "id": "fcb88f8b-6611-42a5-896c-df1436e761c7",
+      "name": "HelloWorld",
+      "layout": {
+        "id": "47f40f58-2daa-466e-9926-79336f5bd996",
+        "type": "text",
+        "name": "root",
+        "tag": "h1",
+        "text": "Hello world",
+        "mediaQueries": [
+          {
+            "id": "764e740d-b229-4d5a-abeb-90d9cdb78d47",
+            "minWidth": {
+              "type": "ref",
+              "id": "118f35b6-f3fc-4f36-8d6a-2846d834419c"
+            },
+            "style": {
+              "textAlign": "left",
+              "fontSize": {
+                "type": "ref",
+                "id": "7a6f8a05-b3e5-4b31-b37a-2d8c26f1c954"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "a7467bbc-ee74-464f-93c1-a12853ac5e05"
+              },
+              "fontWeight": {
+                "type": "ref",
+                "id": "17ef1b00-1f97-4bb4-9de9-76d35b757e12"
+              },
+              "lineHeight": 1.2,
+              "color": {
+                "type": "ref",
+                "id": "8ec4fd7e-5f4f-4664-abb9-f8279aecd99e"
+              }
+            }
+          }
+        ],
+        "style": {
+          "textAlign": "left",
+          "fontSize": {
+            "type": "ref",
+            "id": "7a6f8a05-b3e5-4b31-b37a-2d8c26f1c954"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "a7467bbc-ee74-464f-93c1-a12853ac5e05"
+          },
+          "fontWeight": {
+            "type": "ref",
+            "id": "17ef1b00-1f97-4bb4-9de9-76d35b757e12"
+          },
+          "lineHeight": 1.2,
+          "color": {
+            "type": "ref",
+            "id": "e194996f-3483-42a4-85cf-8887313817ab"
+          }
+        }
+      }
+    }
+  ]
+}

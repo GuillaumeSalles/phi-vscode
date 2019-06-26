@@ -32,7 +32,7 @@ export default function FormNumberInput({
         position: "relative",
         verticalAlign: "middle",
         width,
-        margin
+        margin: "8px 0"
       }}
     >
       <input
@@ -54,7 +54,6 @@ export default function FormNumberInput({
           caretColor: "rgb(0, 0, 0)",
           border: "none",
           outline: "0px",
-          margin: "4px 10px",
           borderRadius: "2px",
           borderWidth: "1px",
           borderStyle: "solid",

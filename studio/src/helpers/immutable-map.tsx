@@ -30,3 +30,7 @@ export function getKeyByIndex<TKey, TValue>(
 ): TKey {
   return Array.from(map.keys())[index];
 }
+
+export function valuesAsArray<TKey, TValue>(map: Map<TKey, TValue>) {
+  return Array.from(map.values());
+}

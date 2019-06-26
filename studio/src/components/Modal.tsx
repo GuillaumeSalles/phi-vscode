@@ -23,7 +23,7 @@ function Modal({ isOpen, children }: Props) {
         height: "100%",
         width: "100%",
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center"
       }}
     >

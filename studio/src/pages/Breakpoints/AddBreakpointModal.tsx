@@ -12,6 +12,7 @@ import {
   FormInput,
   FormNumberInput
 } from "../../components/Form";
+import { valuesAsArray } from "../../helpers/immutable-map";
 
 type Props = {
   isOpen: boolean;
@@ -20,40 +21,46 @@ type Props = {
   onCancel: () => void;
 };
 
+const variableNameRegex = new RegExp("^[a-zA-Z][a-zA-Z0-9]*$");
+
 function AddBreakpointsModal({ isOpen, breakpoints, onAdd, onCancel }: Props) {
   const nameEntry = useStringFormEntry("", value => {
     if (value.length === 0) {
       return "Breakpoint name is required";
     }
-    if (Array.from(breakpoints.values()).some(b => b.name === value)) {
+    if (!variableNameRegex.test(value)) {
+      return "Breakpoint name should not start with number and should not contain any symbols";
+    }
+    if (valuesAsArray(breakpoints).some(b => b.name === value)) {
       return "Breakpoint name must be unique";
     }
   });
-  const valueEntry = useNumberFormEntry(600, value => {
+  const valueEntry = useNumberFormEntry(undefined, value => {
+    if (value === undefined) {
+      return "Breakpoint value is required";
+    }
     if (value <= 0) {
       return "Breakpoint should be greater than 0px";
     }
   });
   const submit = useForm([nameEntry, valueEntry], () =>
-    onAdd(uuid(), { name: nameEntry.value, value: px(valueEntry.value) })
+    onAdd(uuid(), { name: nameEntry.value, value: px(valueEntry.value!) })
   );
 
   return (
     <OkCancelModal
       isOpen={isOpen}
-      title="Add breakpoint"
-      description="The name should unique."
+      title="Create new breakpoint"
       onCancel={onCancel}
       onOk={submit}
       form={
         <React.Fragment>
           <FormInput
-            placeholder="Name"
-            margin="0 0 12px"
+            placeholder="Name your breakpoint"
             {...nameEntry.inputProps}
           />
           <FormNumberInput
-            placeholder="Value in pixels."
+            placeholder="Enter breakpoint width in pixels."
             {...valueEntry.inputProps}
           />
         </React.Fragment>

@@ -50,8 +50,8 @@ export function useStringFormEntry(
 }
 
 export function useNumberFormEntry(
-  defaultValue: number,
-  validate: (value: number) => string | undefined
+  defaultValue: number | undefined,
+  validate: (value: number | undefined) => string | undefined
 ) {
   return useFormEntry(defaultValue, validate, e => e.target.valueAsNumber);
 }
