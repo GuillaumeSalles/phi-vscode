@@ -3,9 +3,9 @@ import * as T from "./types";
 export function layerTypeToName(type: T.LayerType): string {
   switch (type) {
     case "text":
-      return "Text";
+      return "text";
     case "container":
-      return "Container";
+      return "container";
     default:
       throw new Error("Unkwown layer type");
   }

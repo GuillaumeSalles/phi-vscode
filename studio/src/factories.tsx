@@ -25,6 +25,11 @@ export function generateUniqueLayerName(
   );
 
   const prefix = layerTypeToName(type);
+
+  if (!existingNames.has(prefix)) {
+    return prefix;
+  }
+
   let i = 1;
   while (existingNames.has(`${prefix} ${i}`)) {
     i++;
