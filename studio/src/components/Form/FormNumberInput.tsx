@@ -39,7 +39,7 @@ export default function FormNumberInput({
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
-        value={value}
+        value={value === undefined ? "" : value}
         onFocus={onFocus}
         type="number"
         css={{

@@ -13,6 +13,7 @@ import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
 import { useStringFormEntry, useForm, FormInput } from "../components/Form";
 import uuid from "uuid/v4";
+import { validateColorName, validateColorValue } from "../validators";
 
 type Props = {
   menu: React.ReactNode;
@@ -23,19 +24,10 @@ type Props = {
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
   const modal = useOkCancelModal();
-  const nameEntry = useStringFormEntry("", value => {
-    if (value.length === 0) {
-      return "Color name is required";
-    }
-  });
-  const valueEntry = useStringFormEntry("", value => {
-    if (value.length === 0) {
-      return "Color value is required";
-    }
-    if (!isHexRGB(value)) {
-      return "Color value should follow the pattern #AABBCC";
-    }
-  });
+  const nameEntry = useStringFormEntry("", value =>
+    validateColorName(value, colors)
+  );
+  const valueEntry = useStringFormEntry("", validateColorValue);
   const addColor = useForm([nameEntry, valueEntry], () => {
     onColorsChange(
       set(colors, uuid(), {
@@ -115,21 +107,14 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
           <OkCancelModal
             isOpen={modal.isOpen}
             title="Add color"
-            description={
-              <>
-                The name should unique. <br /> The value should be in
-                hexadecimal (e.g: #AABBCC).
-              </>
-            }
             form={
               <React.Fragment>
                 <FormInput
-                  placeholder="Name"
-                  margin="0 0 12px"
+                  placeholder="Name your color"
                   {...nameEntry.inputProps}
                 />
                 <FormInput
-                  placeholder="Value in hex. (e.g: #AABBCC)"
+                  placeholder="Enter color in the hexadecimal format. (e.g: #AABBCC)"
                   {...valueEntry.inputProps}
                 />
               </React.Fragment>
@@ -144,7 +129,3 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
 }
 
 export default Colors;
-
-function isHexRGB(str: string) {
-  return /^#[0-9a-f]{6}$/i.test(str);
-}

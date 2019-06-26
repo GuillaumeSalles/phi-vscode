@@ -5,6 +5,7 @@ import uuid from "uuid/v4";
 import * as T from "../../types";
 import OkCancelModal from "../../components/OkCancelModal";
 import { useStringFormEntry, useForm, FormInput } from "../../components/Form";
+import { validateFontFamilyName } from "../../validators";
 
 type Props = {
   isOpen: boolean;
@@ -14,11 +15,9 @@ type Props = {
 };
 
 function AddFontFamilyModal({ isOpen, fontFamilies, onAdd, onCancel }: Props) {
-  const nameEntry = useStringFormEntry("", value => {
-    if (value.length === 0) {
-      return "Font family name is required";
-    }
-  });
+  const nameEntry = useStringFormEntry("", value =>
+    validateFontFamilyName(value, fontFamilies)
+  );
   const valueEntry = useStringFormEntry("", () => {
     return undefined;
   });
@@ -30,14 +29,12 @@ function AddFontFamilyModal({ isOpen, fontFamilies, onAdd, onCancel }: Props) {
     <OkCancelModal
       isOpen={isOpen}
       title="Add font-family"
-      description="The name should unique."
       onOk={addFontFamily}
       onCancel={onCancel}
       form={
         <React.Fragment>
           <FormInput
-            placeholder="Name"
-            margin="0 0 12px"
+            placeholder="Name your font family"
             {...nameEntry.inputProps}
           />
           <FormInput

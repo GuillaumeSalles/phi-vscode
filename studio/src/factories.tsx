@@ -99,7 +99,7 @@ export function makeContainerLayer(
   return {
     type: "container",
     id: uuid(),
-    name: "Container",
+    name: "container",
     tag: "div",
     mediaQueries: [],
     children: [],
@@ -179,7 +179,7 @@ export function makeDefaultProject() {
   };
 
   const helloWorld = entry({
-    name: "HelloWorld",
+    name: "hello-world",
     layout: helloWorldTextLayer
   });
 

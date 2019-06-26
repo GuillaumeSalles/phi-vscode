@@ -11,6 +11,7 @@ import {
   FormInput,
   FormNumberInput
 } from "../../components/Form";
+import { validateFontSizeName } from "../../validators";
 
 type Props = {
   isOpen: boolean;
@@ -25,11 +26,9 @@ export default function AddFontSizeModal({
   onAdd,
   onCancel
 }: Props) {
-  const nameEntry = useStringFormEntry("", value => {
-    if (value.length === 0) {
-      return "Font size name is required";
-    }
-  });
+  const nameEntry = useStringFormEntry("", value =>
+    validateFontSizeName(value, items)
+  );
   const valueEntry = useNumberFormEntry(16, () => {
     return undefined;
   });
@@ -41,14 +40,12 @@ export default function AddFontSizeModal({
     <OkCancelModal
       isOpen={isOpen}
       title="Add font size"
-      description="The name should unique."
       onOk={addFontSize}
       onCancel={onCancel}
       form={
         <React.Fragment>
           <FormInput
-            placeholder="Name"
-            margin="0 0 12px"
+            placeholder="Name your font size"
             {...nameEntry.inputProps}
           />
           <FormNumberInput

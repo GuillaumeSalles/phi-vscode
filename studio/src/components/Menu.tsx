@@ -8,6 +8,7 @@ import AddButton from "./AddButton";
 import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
 import React from "react";
 import { useStringFormEntry, useForm, FormInput } from "./Form";
+import { validateComponentName } from "../validators";
 
 type Props = {
   components: T.ComponentMap;
@@ -44,11 +45,9 @@ function MenuItem({ href, text }: { href: string; text: string }) {
 
 function Menu({ components, onAddComponent }: Props) {
   const modal = useOkCancelModal();
-  const nameEntry = useStringFormEntry("", value => {
-    if (value.length === 0) {
-      return "Component name is required";
-    }
-  });
+  const nameEntry = useStringFormEntry("", value =>
+    validateComponentName(value, components)
+  );
   const submit = useForm([nameEntry], () => {
     onAddComponent(nameEntry.value);
     modal.close();
@@ -108,14 +107,12 @@ function Menu({ components, onAddComponent }: Props) {
       <OkCancelModal
         isOpen={modal.isOpen}
         title="Create new component"
-        description="Name should be unique"
         onOk={submit}
         onCancel={modal.close}
         form={
           <React.Fragment>
             <FormInput
-              placeholder="Name"
-              margin="0 0 12px"
+              placeholder="Name your component"
               autoFocus
               {...nameEntry.inputProps}
             />
