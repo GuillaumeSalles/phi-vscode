@@ -429,7 +429,7 @@ function LayersTree({
         {flattenLayers.map((item, index) => (
           <div
             key={item.layer.id}
-            draggable
+            draggable={root != null && item.layer.id !== root.id}
             onDragStart={() => setDraggedIndex(index)}
             onDragEnd={() => setDragIndicatorPosition(undefined)}
             onDoubleClick={() => setIsRenaming(true)}
