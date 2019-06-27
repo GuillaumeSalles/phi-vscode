@@ -17,7 +17,12 @@ export function findLayerById(root: T.Layer, id: string): T.Layer | undefined {
   }
 
   if (root.type === "container") {
-    return root.children.find(child => findLayerById(child, id));
+    for (const child of root.children) {
+      const layer = findLayerById(child, id);
+      if (layer) {
+        return layer;
+      }
+    }
   }
 
   return;

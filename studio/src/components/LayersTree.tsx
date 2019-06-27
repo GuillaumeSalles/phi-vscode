@@ -3,7 +3,7 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
-import { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useMemo, useEffect, useCallback } from "react";
 import { Delete, Edit } from "../icons";
 import IconButton from "./IconButton";
 import { makeLayer } from "../factories";
@@ -338,8 +338,9 @@ function LayersTree({
   const layerNameEntry = useStringFormEntry("", value =>
     validateLayerName(value, root)
   );
+  const selectedLayer =
+    root && selectedLayerId ? findLayerById(root, selectedLayerId) : undefined;
   const renameDialog = useDialogForm([layerNameEntry], () => {
-    const selectedLayer = findLayerById(root!, selectedLayerId!);
     onLayerChange(
       updateLayer(root, {
         ...selectedLayer!,
@@ -347,6 +348,14 @@ function LayersTree({
       })
     );
   });
+  const addLayerCallback = useCallback(
+    (type: T.LayerType) => {
+      const newLayer = makeLayer(type, root, refs);
+      onLayerChange(addLayer(root, selectedLayerId, newLayer));
+      onSelectLayer(newLayer.id);
+    },
+    [root, selectedLayerId]
+  );
 
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
@@ -368,12 +377,29 @@ function LayersTree({
       >
         <h2 css={sectionTitle}>Layers</h2>
         <AddLayerPopover
-          onAdd={type => {
-            const newLayer = makeLayer(type, root, refs);
-            onLayerChange(addLayer(root, selectedLayerId, newLayer));
-            onSelectLayer(newLayer.id);
-          }}
-          disabled={false}
+          onAdd={addLayerCallback}
+          disabled={
+            selectedLayer !== undefined && selectedLayer.type === "text"
+          }
+        />
+        <OkCancelModal
+          title="Rename your layer"
+          {...renameDialog.dialogProps}
+          buttons={
+            <React.Fragment>
+              <SecondaryButton
+                text="Cancel"
+                {...renameDialog.cancelButtonProps}
+              />
+              <Button text="Add" {...renameDialog.okButtonProps} />
+            </React.Fragment>
+          }
+          form={
+            <FormInput
+              placeholder="Name your layer"
+              {...layerNameEntry.inputProps}
+            />
+          }
         />
       </div>
       <div
@@ -478,25 +504,6 @@ function LayersTree({
           </div>
         ))}
       </div>
-      <OkCancelModal
-        title="Rename your layer"
-        {...renameDialog.dialogProps}
-        buttons={
-          <React.Fragment>
-            <SecondaryButton
-              text="Cancel"
-              {...renameDialog.cancelButtonProps}
-            />
-            <Button text="Add" {...renameDialog.okButtonProps} />
-          </React.Fragment>
-        }
-        form={
-          <FormInput
-            placeholder="Name your layer"
-            {...layerNameEntry.inputProps}
-          />
-        }
-      />
     </div>
   );
 }

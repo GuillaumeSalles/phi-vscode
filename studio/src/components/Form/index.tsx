@@ -79,7 +79,9 @@ export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
       }
     }
   }, [entries]);
-  const close = useCallback(() => setIsOpen(false), []);
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
   if (entries[0]) {
     entries[0].inputProps.onKeyDown = e => {
