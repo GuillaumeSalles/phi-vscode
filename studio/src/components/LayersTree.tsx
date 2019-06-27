@@ -9,7 +9,7 @@ import IconButton from "./IconButton";
 import { makeLayer } from "../factories";
 import { findLayerById, updateLayer } from "../layerUtils";
 import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
-import { useStringFormEntry, useForm, FormInput } from "./Form";
+import { useStringFormEntry, useForm, FormInput, useDialogForm } from "./Form";
 import { validateLayerName } from "../validators";
 import React from "react";
 
@@ -333,11 +333,10 @@ function LayersTree({
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
     DropPosition | undefined
   >(undefined);
-  const renameLayerModal = useOkCancelModal();
   const layerNameEntry = useStringFormEntry("", value =>
     validateLayerName(value, root)
   );
-  const renameLayer = useForm([layerNameEntry], () => {
+  const renameDialog = useDialogForm([layerNameEntry], () => {
     const selectedLayer = findLayerById(root!, selectedLayerId!);
     onLayerChange(
       updateLayer(root, {
@@ -345,7 +344,6 @@ function LayersTree({
         name: layerNameEntry.value
       })
     );
-    renameLayerModal.close();
   });
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
@@ -460,7 +458,7 @@ function LayersTree({
               icon={<Edit height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
-                renameLayerModal.open();
+                renameDialog.open();
                 layerNameEntry.setValue(item.layer.name);
               }}
             />
@@ -479,9 +477,9 @@ function LayersTree({
       </div>
       <OkCancelModal
         title="Rename your layer"
-        isOpen={renameLayerModal.isOpen}
-        onCancel={renameLayerModal.close}
-        onOk={renameLayer}
+        isOpen={renameDialog.isOpen}
+        onCancel={renameDialog.close}
+        onOk={renameDialog.submit}
         form={
           <React.Fragment>
             <FormInput

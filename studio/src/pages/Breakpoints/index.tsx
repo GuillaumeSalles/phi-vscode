@@ -3,13 +3,26 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
-import AddBreakpointsModal from "./AddBreakpointModal";
 import { set, del } from "../../helpers/immutable-map";
 import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
-import { useOkCancelModal } from "../../components/OkCancelModal";
+import OkCancelModal from "../../components/OkCancelModal";
+import {
+  useStringFormEntry,
+  useNumberFormEntry,
+  useDialogForm,
+  FormInput,
+  FormNumberInput
+} from "../../components/Form";
+import {
+  validateBreakpointName,
+  validateBreakpointValue
+} from "../../validators";
+import uuid from "uuid/v4";
+import { px } from "../../factories";
+import React from "react";
 
 type Props = {
   menu: React.ReactNode;
@@ -19,7 +32,20 @@ type Props = {
 };
 
 function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
-  const modal = useOkCancelModal();
+  const nameEntry = useStringFormEntry("", value =>
+    validateBreakpointName(value, breakpoints)
+  );
+  const valueEntry = useNumberFormEntry(undefined, value =>
+    validateBreakpointValue(value)
+  );
+  const createBreakpointDialog = useDialogForm([nameEntry, valueEntry], () =>
+    onBreakpointsChange(
+      set(breakpoints, uuid(), {
+        name: nameEntry.value,
+        value: px(valueEntry.value!)
+      })
+    )
+  );
   const [selectedBreakpoint, setSelectedBreakpoint] = useState<string | null>(
     null
   );
@@ -39,7 +65,7 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
             <div css={[row, { marginLeft: "28px" }]}>
               <SecondaryButton
                 text="Add"
-                onClick={modal.open}
+                onClick={createBreakpointDialog.open}
                 margin="0 10px 0 0"
               />
               <SecondaryButton
@@ -91,14 +117,23 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
                 </SelectableCard>
               ))}
           </div>
-          <AddBreakpointsModal
-            isOpen={modal.isOpen}
-            breakpoints={breakpoints}
-            onAdd={(id, value) => {
-              onBreakpointsChange(set(breakpoints, id, value));
-              modal.close();
-            }}
-            onCancel={modal.close}
+          <OkCancelModal
+            isOpen={createBreakpointDialog.isOpen}
+            title="Create new breakpoint"
+            onCancel={createBreakpointDialog.close}
+            onOk={createBreakpointDialog.submit}
+            form={
+              <React.Fragment>
+                <FormInput
+                  placeholder="Name your breakpoint"
+                  {...nameEntry.inputProps}
+                />
+                <FormNumberInput
+                  placeholder="Enter breakpoint width in pixels"
+                  {...valueEntry.inputProps}
+                />
+              </React.Fragment>
+            }
           />
         </div>
       }

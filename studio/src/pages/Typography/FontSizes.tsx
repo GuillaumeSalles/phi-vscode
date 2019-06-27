@@ -7,8 +7,16 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
-import AddFontSizeModal from "./AddFontSizeModal";
-import { useOkCancelModal } from "../../components/OkCancelModal";
+import OkCancelModal from "../../components/OkCancelModal";
+import {
+  useStringFormEntry,
+  useNumberFormEntry,
+  FormInput,
+  FormNumberInput,
+  useDialogForm
+} from "../../components/Form";
+import { validateFontSizeName } from "../../validators";
+import uuid from "uuid/v4";
 
 type Props = {
   items: T.FontSizesMap;
@@ -16,7 +24,20 @@ type Props = {
 };
 
 export default function FontSizes({ items, onItemsChange }: Props) {
-  const modal = useOkCancelModal();
+  const nameEntry = useStringFormEntry("", value =>
+    validateFontSizeName(value, items)
+  );
+  const valueEntry = useNumberFormEntry(16, () => {
+    return undefined;
+  });
+  const addDialog = useDialogForm([nameEntry, valueEntry], () => {
+    onItemsChange(
+      set(items, uuid(), {
+        name: nameEntry.value,
+        value: valueEntry.value + "px"
+      })
+    );
+  });
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (
     <React.Fragment>
@@ -25,7 +46,7 @@ export default function FontSizes({ items, onItemsChange }: Props) {
         <div css={[row, { marginLeft: "28px" }]}>
           <SecondaryButton
             text="Add"
-            onClick={modal.open}
+            onClick={addDialog.open}
             margin="0 10px 0 0"
           />
           <SecondaryButton
@@ -60,14 +81,23 @@ export default function FontSizes({ items, onItemsChange }: Props) {
           </SelectableCard>
         </div>
       ))}
-      <AddFontSizeModal
-        isOpen={modal.isOpen}
-        items={items}
-        onAdd={(name, value) => {
-          onItemsChange(set(items, name, value));
-          modal.close();
-        }}
-        onCancel={modal.close}
+      <OkCancelModal
+        isOpen={addDialog.isOpen}
+        title="Add font size"
+        onOk={addDialog.submit}
+        onCancel={addDialog.close}
+        form={
+          <React.Fragment>
+            <FormInput
+              placeholder="Name your font size"
+              {...nameEntry.inputProps}
+            />
+            <FormNumberInput
+              placeholder="Size in pixels"
+              {...valueEntry.inputProps}
+            />
+          </React.Fragment>
+        }
       />
     </React.Fragment>
   );

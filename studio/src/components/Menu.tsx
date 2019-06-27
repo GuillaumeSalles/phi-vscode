@@ -7,7 +7,7 @@ import { useRouter } from "../useRouter";
 import AddButton from "./AddButton";
 import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
 import React from "react";
-import { useStringFormEntry, useForm, FormInput } from "./Form";
+import { useStringFormEntry, useForm, FormInput, useDialogForm } from "./Form";
 import { validateComponentName } from "../validators";
 
 type Props = {
@@ -44,13 +44,11 @@ function MenuItem({ href, text }: { href: string; text: string }) {
 }
 
 function Menu({ components, onAddComponent }: Props) {
-  const modal = useOkCancelModal();
   const nameEntry = useStringFormEntry("", value =>
     validateComponentName(value, components)
   );
-  const submit = useForm([nameEntry], () => {
+  const createComponentDialog = useDialogForm([nameEntry], () => {
     onAddComponent(nameEntry.value);
-    modal.close();
   });
   return (
     <div
@@ -94,7 +92,7 @@ function Menu({ components, onAddComponent }: Props) {
           ]}
         >
           <span css={[sectionTitle]}>Components</span>
-          <AddButton onClick={modal.open} />
+          <AddButton onClick={createComponentDialog.open} />
         </div>
         {Array.from(components.entries()).map(entry => (
           <MenuItem
@@ -105,10 +103,10 @@ function Menu({ components, onAddComponent }: Props) {
         ))}
       </div>
       <OkCancelModal
-        isOpen={modal.isOpen}
+        isOpen={createComponentDialog.isOpen}
         title="Create new component"
-        onOk={submit}
-        onCancel={modal.close}
+        onOk={createComponentDialog.submit}
+        onCancel={createComponentDialog.close}
         form={
           <React.Fragment>
             <FormInput

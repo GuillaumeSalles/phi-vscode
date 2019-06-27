@@ -11,7 +11,12 @@ import OkCancelModal, { useOkCancelModal } from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
-import { useStringFormEntry, useForm, FormInput } from "../components/Form";
+import {
+  useStringFormEntry,
+  useForm,
+  FormInput,
+  useDialogForm
+} from "../components/Form";
 import uuid from "uuid/v4";
 import { validateColorName, validateColorValue } from "../validators";
 
@@ -23,19 +28,17 @@ type Props = {
 };
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
-  const modal = useOkCancelModal();
   const nameEntry = useStringFormEntry("", value =>
     validateColorName(value, colors)
   );
   const valueEntry = useStringFormEntry("", validateColorValue);
-  const addColor = useForm([nameEntry, valueEntry], () => {
+  const addColorDialog = useDialogForm([nameEntry, valueEntry], () => {
     onColorsChange(
       set(colors, uuid(), {
         name: nameEntry.value,
         value: valueEntry.value
       })
     );
-    modal.close();
   });
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
@@ -50,9 +53,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
             <div css={[row, { marginLeft: "28px" }]}>
               <SecondaryButton
                 text="Add"
-                onClick={() => {
-                  modal.open();
-                }}
+                onClick={addColorDialog.open}
                 margin="0 10px 0 0"
               />
               <SecondaryButton
@@ -105,7 +106,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
             })}
           </div>
           <OkCancelModal
-            isOpen={modal.isOpen}
+            isOpen={addColorDialog.isOpen}
             title="Add color"
             form={
               <React.Fragment>
@@ -119,8 +120,8 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
                 />
               </React.Fragment>
             }
-            onCancel={modal.close}
-            onOk={addColor}
+            onCancel={addColorDialog.close}
+            onOk={addColorDialog.submit}
           />
         </div>
       }

@@ -7,8 +7,14 @@ import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
-import AddFontFamilyModal from "./AddFontFamilyModal";
-import { useOkCancelModal } from "../../components/OkCancelModal";
+import OkCancelModal from "../../components/OkCancelModal";
+import {
+  useStringFormEntry,
+  FormInput,
+  useDialogForm
+} from "../../components/Form";
+import { validateFontFamilyName } from "../../validators";
+import uuid from "uuid/v4";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
@@ -19,8 +25,21 @@ export default function FontFamilies({
   fontFamilies,
   onFontFamiliesChange
 }: Props) {
-  const modal = useOkCancelModal();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const nameEntry = useStringFormEntry("", value =>
+    validateFontFamilyName(value, fontFamilies)
+  );
+  const valueEntry = useStringFormEntry("", () => {
+    return undefined;
+  });
+  const addFontFamilyDialog = useDialogForm([nameEntry, valueEntry], () => {
+    onFontFamiliesChange(
+      set(fontFamilies, uuid(), {
+        name: nameEntry.value,
+        value: valueEntry.value
+      })
+    );
+  });
   return (
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
@@ -28,7 +47,7 @@ export default function FontFamilies({
         <div css={[row, { marginLeft: "28px" }]}>
           <SecondaryButton
             text="Add"
-            onClick={modal.open}
+            onClick={addFontFamilyDialog.open}
             margin="0 10px 0 0"
           />
           <SecondaryButton
@@ -63,14 +82,23 @@ export default function FontFamilies({
           </SelectableCard>
         </div>
       ))}
-      <AddFontFamilyModal
-        isOpen={modal.isOpen}
-        fontFamilies={fontFamilies}
-        onAdd={(name, value) => {
-          onFontFamiliesChange(set(fontFamilies, name, value));
-          modal.close();
-        }}
-        onCancel={modal.close}
+      <OkCancelModal
+        isOpen={addFontFamilyDialog.isOpen}
+        title="Add font-family"
+        onOk={addFontFamilyDialog.submit}
+        onCancel={addFontFamilyDialog.close}
+        form={
+          <React.Fragment>
+            <FormInput
+              placeholder="Name your font family"
+              {...nameEntry.inputProps}
+            />
+            <FormInput
+              placeholder="List of fonts separated by commas"
+              {...valueEntry.inputProps}
+            />
+          </React.Fragment>
+        }
       />
     </React.Fragment>
   );

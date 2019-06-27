@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useToggle } from "../../hooks";
 export { default as FormInput } from "./FormInput";
 export { default as FormNumberInput } from "./FormNumberInput";
 
@@ -11,8 +12,9 @@ type FormEntry<TValue> = {
     error: string | undefined;
   };
   isValid: () => boolean;
-  displayValidation: () => void;
+  displayValidation: (isVisible: boolean) => void;
   setValue: (value: TValue) => void;
+  reset: () => void;
 };
 
 function useFormEntry<TValue>(
@@ -35,12 +37,14 @@ function useFormEntry<TValue>(
     },
     value: value,
     isValid: () => validate(value) === undefined,
-    displayValidation: () => {
-      if (!isValidating) {
-        setIsValidating(true);
-      }
+    displayValidation: (isVisible: boolean) => {
+      setIsValidating(isVisible);
     },
-    setValue
+    setValue,
+    reset: () => {
+      setValue(defaultValue);
+      setIsValidating(false);
+    }
   };
 }
 
@@ -58,17 +62,45 @@ export function useNumberFormEntry(
   return useFormEntry(defaultValue, validate, e => e.target.valueAsNumber);
 }
 
-export function useForm(
-  entries: FormEntry<any>[],
-  onSubmit: () => void
-): () => void {
-  return () => {
-    if (entries.every(entry => entry.isValid())) {
-      onSubmit();
-    } else {
-      for (let entry of entries) {
-        entry.displayValidation();
+type Form = {
+  submit: () => void;
+  reset: () => void;
+};
+
+export function useForm(entries: FormEntry<any>[], onSubmit: () => void): Form {
+  return {
+    submit: () => {
+      if (entries.every(entry => entry.isValid())) {
+        onSubmit();
+      } else {
+        for (const entry of entries) {
+          entry.displayValidation(true);
+        }
       }
+    },
+    reset: () => {
+      for (const entry of entries) {
+        entry.reset();
+      }
+    }
+  };
+}
+
+export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
+  const toggle = useToggle(false);
+  const form = useForm(entries, onSubmit);
+  return {
+    isOpen: toggle.isActive,
+    open: () => {
+      form.reset();
+      toggle.activate();
+    },
+    close: () => {
+      toggle.deactivate();
+    },
+    submit: () => {
+      form.submit();
+      toggle.deactivate();
     }
   };
 }

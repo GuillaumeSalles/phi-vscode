@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import React from "react";
-import { row, column, colors } from "../styles";
+import React, { useRef } from "react";
+import { row, column } from "../styles";
 import Modal from "./Modal";
 import { useToggle } from "../hooks";
+import Button from "./Button";
 
 export function useOkCancelModal() {
   const toggle = useToggle(false);
@@ -32,6 +33,17 @@ const buttonCss = css({
   lineHeight: "0px",
   fontSize: "14px"
 });
+
+function useKeyboardTrap() {
+  const firstRef = useRef();
+  const lastRef = useRef();
+  return {
+    firstRef,
+    lastRef,
+    onFirstKeyDown: (e: any) => console.log(e),
+    onLastKeyDown: (e: any) => console.log(e)
+  };
+}
 
 export default function OkCancelModal({
   isOpen,
@@ -104,18 +116,7 @@ export default function OkCancelModal({
           >
             Cancel
           </button>
-          <button
-            css={[
-              buttonCss,
-              {
-                color: "white",
-                background: colors.primary
-              }
-            ]}
-            onClick={onOk}
-          >
-            Add
-          </button>
+          <Button onClick={onOk} text="Add" />
         </div>
       </div>
     </Modal>

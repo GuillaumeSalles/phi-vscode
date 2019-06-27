@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { primaryButton } from "../styles";
+import { primaryButton, colors } from "../styles";
 
 type Props = {
   text: string;
@@ -9,7 +9,16 @@ type Props = {
 
 export default function Button({ text, onClick }: Props) {
   return (
-    <button css={primaryButton} onClick={onClick}>
+    <button
+      css={[
+        primaryButton,
+        {
+          color: "white",
+          background: colors.primary
+        }
+      ]}
+      onClick={onClick}
+    >
       {text}
     </button>
   );
