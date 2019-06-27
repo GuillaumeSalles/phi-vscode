@@ -168,7 +168,7 @@ export function makeDefaultProject() {
       fontFamily: ref(firstKey(fontFamilies)),
       fontWeight: ref(getKeyByIndex(fontWeights, 1)),
       lineHeight: 1.2,
-      color: ref(getKeyByIndex(colors, 1))
+      color: ref(firstKey(colors))
     }
   };
 
