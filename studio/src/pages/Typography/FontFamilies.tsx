@@ -15,6 +15,7 @@ import {
 } from "../../components/Form";
 import { validateFontFamilyName } from "../../validators";
 import uuid from "uuid/v4";
+import Button from "../../components/Button";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
@@ -83,10 +84,17 @@ export default function FontFamilies({
         </div>
       ))}
       <OkCancelModal
-        isOpen={addFontFamilyDialog.isOpen}
         title="Add font-family"
-        onOk={addFontFamilyDialog.submit}
-        onCancel={addFontFamilyDialog.close}
+        {...addFontFamilyDialog.dialogProps}
+        buttons={
+          <React.Fragment>
+            <SecondaryButton
+              text="Cancel"
+              {...addFontFamilyDialog.cancelButtonProps}
+            />
+            <Button text="Add" {...addFontFamilyDialog.okButtonProps} />
+          </React.Fragment>
+        }
         form={
           <React.Fragment>
             <FormInput

@@ -5,10 +5,12 @@ import * as T from "../types";
 import { Link } from "react-router-dom";
 import { useRouter } from "../useRouter";
 import AddButton from "./AddButton";
-import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
+import OkCancelModal from "./OkCancelModal";
 import React from "react";
-import { useStringFormEntry, useForm, FormInput, useDialogForm } from "./Form";
+import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateComponentName } from "../validators";
+import SecondaryButton from "./SecondaryButton";
+import Button from "./Button";
 
 type Props = {
   components: T.ComponentMap;
@@ -103,15 +105,21 @@ function Menu({ components, onAddComponent }: Props) {
         ))}
       </div>
       <OkCancelModal
-        isOpen={createComponentDialog.isOpen}
         title="Create new component"
-        onOk={createComponentDialog.submit}
-        onCancel={createComponentDialog.close}
+        {...createComponentDialog.dialogProps}
+        buttons={
+          <React.Fragment>
+            <SecondaryButton
+              text="Cancel"
+              {...createComponentDialog.cancelButtonProps}
+            />
+            <Button text="Add" {...createComponentDialog.okButtonProps} />
+          </React.Fragment>
+        }
         form={
           <React.Fragment>
             <FormInput
               placeholder="Name your component"
-              autoFocus
               {...nameEntry.inputProps}
             />
           </React.Fragment>

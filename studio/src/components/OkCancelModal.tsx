@@ -19,9 +19,11 @@ type Props = {
   isOpen: boolean;
   title: string;
   description?: React.ReactNode;
-  onOk: () => void;
-  onCancel: () => void;
+  onOk?: () => void;
+  onCancel?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   form: React.ReactNode;
+  buttons?: React.ReactNode;
 };
 
 const buttonCss = css({
@@ -34,28 +36,20 @@ const buttonCss = css({
   fontSize: "14px"
 });
 
-function useKeyboardTrap() {
-  const firstRef = useRef();
-  const lastRef = useRef();
-  return {
-    firstRef,
-    lastRef,
-    onFirstKeyDown: (e: any) => console.log(e),
-    onLastKeyDown: (e: any) => console.log(e)
-  };
-}
-
 export default function OkCancelModal({
   isOpen,
   onOk,
   onCancel,
+  onKeyDown,
   title,
   description,
-  form
+  form,
+  buttons
 }: Props) {
   return (
     <Modal isOpen={isOpen}>
       <div
+        onKeyDown={onKeyDown}
         css={[
           column,
           {
@@ -104,19 +98,25 @@ export default function OkCancelModal({
             }
           ]}
         >
-          <button
-            css={[
-              buttonCss,
-              {
-                color: "#333333",
-                background: "#E8E8E8"
-              }
-            ]}
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <Button onClick={onOk} text="Add" />
+          {buttons ? (
+            buttons
+          ) : (
+            <React.Fragment>
+              <button
+                css={[
+                  buttonCss,
+                  {
+                    color: "#333333",
+                    background: "#E8E8E8"
+                  }
+                ]}
+                onClick={onCancel}
+              >
+                Cancel
+              </button>
+              <Button onClick={onOk} text="Add" />
+            </React.Fragment>
+          )}
         </div>
       </div>
     </Modal>

@@ -7,13 +7,12 @@ import { useState } from "react";
 import SecondaryButton from "../components/SecondaryButton";
 import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../components/SelectableCard";
-import OkCancelModal, { useOkCancelModal } from "../components/OkCancelModal";
+import OkCancelModal from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
 import {
   useStringFormEntry,
-  useForm,
   FormInput,
   useDialogForm
 } from "../components/Form";

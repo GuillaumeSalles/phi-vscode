@@ -23,6 +23,7 @@ import {
 import uuid from "uuid/v4";
 import { px } from "../../factories";
 import React from "react";
+import Button from "../../components/Button";
 
 type Props = {
   menu: React.ReactNode;
@@ -118,10 +119,17 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
               ))}
           </div>
           <OkCancelModal
-            isOpen={createBreakpointDialog.isOpen}
             title="Create new breakpoint"
-            onCancel={createBreakpointDialog.close}
-            onOk={createBreakpointDialog.submit}
+            {...createBreakpointDialog.dialogProps}
+            buttons={
+              <React.Fragment>
+                <SecondaryButton
+                  text="Cancel"
+                  {...createBreakpointDialog.cancelButtonProps}
+                />
+                <Button text="Add" {...createBreakpointDialog.okButtonProps} />
+              </React.Fragment>
+            }
             form={
               <React.Fragment>
                 <FormInput

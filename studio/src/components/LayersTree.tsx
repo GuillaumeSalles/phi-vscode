@@ -3,15 +3,17 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { Delete, Edit } from "../icons";
 import IconButton from "./IconButton";
 import { makeLayer } from "../factories";
 import { findLayerById, updateLayer } from "../layerUtils";
-import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
-import { useStringFormEntry, useForm, FormInput, useDialogForm } from "./Form";
+import OkCancelModal from "./OkCancelModal";
+import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateLayerName } from "../validators";
 import React from "react";
+import Button from "./Button";
+import SecondaryButton from "./SecondaryButton";
 
 type Props = {
   root?: T.Layer;
@@ -345,6 +347,7 @@ function LayersTree({
       })
     );
   });
+
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
   return (
@@ -477,16 +480,21 @@ function LayersTree({
       </div>
       <OkCancelModal
         title="Rename your layer"
-        isOpen={renameDialog.isOpen}
-        onCancel={renameDialog.close}
-        onOk={renameDialog.submit}
-        form={
+        {...renameDialog.dialogProps}
+        buttons={
           <React.Fragment>
-            <FormInput
-              placeholder="Name your layer"
-              {...layerNameEntry.inputProps}
+            <SecondaryButton
+              text="Cancel"
+              {...renameDialog.cancelButtonProps}
             />
+            <Button text="Add" {...renameDialog.okButtonProps} />
           </React.Fragment>
+        }
+        form={
+          <FormInput
+            placeholder="Name your layer"
+            {...layerNameEntry.inputProps}
+          />
         }
       />
     </div>

@@ -17,6 +17,7 @@ import {
 } from "../../components/Form";
 import { validateFontSizeName } from "../../validators";
 import uuid from "uuid/v4";
+import Button from "../../components/Button";
 
 type Props = {
   items: T.FontSizesMap;
@@ -82,10 +83,14 @@ export default function FontSizes({ items, onItemsChange }: Props) {
         </div>
       ))}
       <OkCancelModal
-        isOpen={addDialog.isOpen}
         title="Add font size"
-        onOk={addDialog.submit}
-        onCancel={addDialog.close}
+        {...addDialog.dialogProps}
+        buttons={
+          <React.Fragment>
+            <SecondaryButton text="Cancel" {...addDialog.cancelButtonProps} />
+            <Button text="Add" {...addDialog.okButtonProps} />
+          </React.Fragment>
+        }
         form={
           <React.Fragment>
             <FormInput

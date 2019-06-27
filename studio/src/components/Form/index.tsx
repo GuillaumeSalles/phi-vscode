@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useToggle } from "../../hooks";
 export { default as FormInput } from "./FormInput";
 export { default as FormNumberInput } from "./FormNumberInput";
@@ -9,7 +9,9 @@ type FormEntry<TValue> = {
     value: TValue;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     error: string | undefined;
+    ref: React.RefObject<HTMLInputElement>;
   };
   isValid: () => boolean;
   displayValidation: (isVisible: boolean) => void;
@@ -24,6 +26,7 @@ function useFormEntry<TValue>(
 ): FormEntry<TValue> {
   const [value, setValue] = useState(defaultValue);
   const [isValidating, setIsValidating] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
   return {
     inputProps: {
       value,
@@ -33,14 +36,15 @@ function useFormEntry<TValue>(
       onBlur: () => {
         setIsValidating(true);
       },
-      error: isValidating ? validate(value) : undefined
+      error: isValidating ? validate(value) : undefined,
+      ref
     },
     value: value,
+    setValue,
     isValid: () => validate(value) === undefined,
     displayValidation: (isVisible: boolean) => {
       setIsValidating(isVisible);
     },
-    setValue,
     reset: () => {
       setValue(defaultValue);
       setIsValidating(false);
@@ -62,45 +66,82 @@ export function useNumberFormEntry(
   return useFormEntry(defaultValue, validate, e => e.target.valueAsNumber);
 }
 
-type Form = {
-  submit: () => void;
-  reset: () => void;
-};
-
-export function useForm(entries: FormEntry<any>[], onSubmit: () => void): Form {
-  return {
-    submit: () => {
-      if (entries.every(entry => entry.isValid())) {
-        onSubmit();
-      } else {
-        for (const entry of entries) {
-          entry.displayValidation(true);
-        }
+export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
+  const [isOpen, setIsOpen] = useState(false);
+  const okButtonRef = useRef<HTMLButtonElement>(null);
+  const submit = useCallback(() => {
+    if (entries.every(entry => entry.isValid())) {
+      onSubmit();
+      setIsOpen(false);
+    } else {
+      for (const entry of entries) {
+        entry.displayValidation(true);
       }
-    },
-    reset: () => {
+    }
+  }, [entries]);
+  const close = useCallback(() => setIsOpen(false), []);
+
+  if (entries[0]) {
+    entries[0].inputProps.onKeyDown = e => {
+      if (e.key === "Tab" && e.shiftKey && okButtonRef.current) {
+        e.preventDefault();
+        okButtonRef.current.focus();
+      }
+    };
+  }
+
+  useEffect(() => {
+    if (isOpen && entries[0] != null && entries[0].inputProps.ref.current) {
+      const input = entries[0].inputProps.ref.current;
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+    }
+  }, [isOpen]);
+  return {
+    isOpen: isOpen,
+    open: () => {
       for (const entry of entries) {
         entry.reset();
       }
-    }
-  };
-}
-
-export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
-  const toggle = useToggle(false);
-  const form = useForm(entries, onSubmit);
-  return {
-    isOpen: toggle.isActive,
-    open: () => {
-      form.reset();
-      toggle.activate();
+      setIsOpen(true);
     },
-    close: () => {
-      toggle.deactivate();
+    close,
+    submit,
+    dialogProps: {
+      isOpen,
+      onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => {
+        if (e.key === "Enter") {
+          submit();
+        } else if (e.key === "Escape") {
+          close();
+        }
+      }
     },
-    submit: () => {
-      form.submit();
-      toggle.deactivate();
+    cancelButtonProps: {
+      onClick: close,
+      onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (e.key === "Enter") {
+          e.stopPropagation();
+        }
+      }
+    },
+    okButtonProps: {
+      onClick: submit,
+      ref: okButtonRef,
+      onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (e.key === "Enter") {
+          e.stopPropagation();
+        }
+        if (
+          e.key === "Tab" &&
+          e.shiftKey === false &&
+          entries[0] != null &&
+          entries[0].inputProps.ref.current
+        ) {
+          entries[0].inputProps.ref.current.focus();
+          e.preventDefault();
+        }
+      }
     }
   };
 }
