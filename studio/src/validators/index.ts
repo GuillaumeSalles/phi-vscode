@@ -1,5 +1,6 @@
 import { valuesAsArray } from "../helpers/immutable-map";
 import * as T from "../types";
+import { layerTreeToArray } from "../layerUtils";
 
 const kebabCaseRegex = new RegExp("^([a-z][a-z0-9]*)(-[a-z0-9]+)*$");
 
@@ -74,4 +75,14 @@ export function validateComponentName(
   components: T.ComponentMap
 ): string | undefined {
   return validateVariableName(value, components, "Component");
+}
+
+export function validateLayerName(
+  value: string,
+  root: T.Layer | undefined
+): string | undefined {
+  const layersArray = new Map(
+    layerTreeToArray(root).map(layer => [layer.id, layer])
+  );
+  return validateVariableName(value, layersArray, "Layer");
 }

@@ -12,6 +12,7 @@ type FormEntry<TValue> = {
   };
   isValid: () => boolean;
   displayValidation: () => void;
+  setValue: (value: TValue) => void;
 };
 
 function useFormEntry<TValue>(
@@ -38,7 +39,8 @@ function useFormEntry<TValue>(
       if (!isValidating) {
         setIsValidating(true);
       }
-    }
+    },
+    setValue
   };
 }
 

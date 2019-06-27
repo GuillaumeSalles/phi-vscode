@@ -7,7 +7,11 @@ import { useRef, useState, useMemo } from "react";
 import { Delete, Edit } from "../icons";
 import IconButton from "./IconButton";
 import { makeLayer } from "../factories";
-import { findLayerById } from "../layerUtils";
+import { findLayerById, updateLayer } from "../layerUtils";
+import OkCancelModal, { useOkCancelModal } from "./OkCancelModal";
+import { useStringFormEntry, useForm, FormInput } from "./Form";
+import { validateLayerName } from "../validators";
+import React from "react";
 
 type Props = {
   root?: T.Layer;
@@ -268,28 +272,6 @@ function addLayer(
   }
 }
 
-function updateLayer(
-  rootLayer: T.Layer | undefined,
-  newLayer: T.Layer
-): T.Layer {
-  if (!rootLayer) {
-    return newLayer;
-  }
-
-  if (rootLayer.id === newLayer.id) {
-    return newLayer;
-  }
-
-  if (rootLayer.type === "container") {
-    return {
-      ...rootLayer,
-      children: rootLayer.children.map(child => updateLayer(child, newLayer))
-    };
-  }
-
-  return rootLayer;
-}
-
 function insertLayer(
   root: T.Layer,
   toInsert: T.Layer,
@@ -351,7 +333,20 @@ function LayersTree({
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
     DropPosition | undefined
   >(undefined);
-  const [isRenaming, setIsRenaming] = useState(false);
+  const renameLayerModal = useOkCancelModal();
+  const layerNameEntry = useStringFormEntry("", value =>
+    validateLayerName(value, root)
+  );
+  const renameLayer = useForm([layerNameEntry], () => {
+    const selectedLayer = findLayerById(root!, selectedLayerId!);
+    onLayerChange(
+      updateLayer(root, {
+        ...selectedLayer!,
+        name: layerNameEntry.value
+      })
+    );
+    renameLayerModal.close();
+  });
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
   return (
@@ -432,7 +427,6 @@ function LayersTree({
             draggable={root != null && item.layer.id !== root.id}
             onDragStart={() => setDraggedIndex(index)}
             onDragEnd={() => setDragIndicatorPosition(undefined)}
-            onDoubleClick={() => setIsRenaming(true)}
             onClick={() => {
               onSelectLayer(item.layer.id);
             }}
@@ -466,6 +460,8 @@ function LayersTree({
               icon={<Edit height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
+                renameLayerModal.open();
+                layerNameEntry.setValue(item.layer.name);
               }}
             />
             <IconButton
@@ -481,6 +477,20 @@ function LayersTree({
           </div>
         ))}
       </div>
+      <OkCancelModal
+        title="Rename your layer"
+        isOpen={renameLayerModal.isOpen}
+        onCancel={renameLayerModal.close}
+        onOk={renameLayer}
+        form={
+          <React.Fragment>
+            <FormInput
+              placeholder="Name your layer"
+              {...layerNameEntry.inputProps}
+            />
+          </React.Fragment>
+        }
+      />
     </div>
   );
 }

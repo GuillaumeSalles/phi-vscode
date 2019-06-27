@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
 import React from "react";
-import { row, column, heading, colors } from "../styles";
-import ModalButton from "./ModalButton";
+import { row, column, colors } from "../styles";
 import Modal from "./Modal";
 import { useToggle } from "../hooks";
 

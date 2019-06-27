@@ -2,7 +2,7 @@ import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
 import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
-import { layerTypeToName } from "./layerUtils";
+import { layerTypeToName, layerTreeToArray } from "./layerUtils";
 
 function ref(id: string): T.Ref {
   return { type: "ref", id };
@@ -36,17 +36,6 @@ export function generateUniqueLayerName(
   }
 
   return `${prefix} ${i}`;
-}
-
-export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
-  if (!root) {
-    return [];
-  }
-  const result = [root];
-  if (root.type === "container") {
-    return result.concat(root.children.map(layerTreeToArray).flat());
-  }
-  return result;
 }
 
 export function makeLayer(

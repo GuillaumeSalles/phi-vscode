@@ -44,3 +44,14 @@ export function updateLayer(
 
   return rootLayer;
 }
+
+export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
+  if (!root) {
+    return [];
+  }
+  const result = [root];
+  if (root.type === "container") {
+    return result.concat(root.children.map(layerTreeToArray).flat());
+  }
+  return result;
+}
