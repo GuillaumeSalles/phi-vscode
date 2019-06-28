@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useEffect } from "react";
+import React from "react";
 import { column, mainPadding, heading, row } from "../../styles";
 import * as T from "../../types";
 import Component from "./Component";
@@ -11,25 +11,20 @@ import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import { findLayerById, updateLayer } from "../../layerUtils";
+import { useStateWithGetter } from "../../hooks";
 
 type Props = {
   menu: React.ReactNode;
   componentId: string;
-  onComponentChange: (component: T.Component) => void;
+  onComponentChange: (id: string, component: T.Component) => void;
   refs: T.Refs;
 };
 
 function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
   const component = refs.components.get(componentId)!;
-  const [layerId, setLayerId] = useState<string | undefined>(
+  const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
     component.layout ? component.layout.id : undefined
   );
-
-  // Select component layer root when componentId change
-  useEffect(() => {
-    setLayerId(component.layout ? component.layout.id : undefined);
-  }, [componentId]);
-
   const [isEditing, setIsEditing] = useState(false);
   const selectedLayer =
     component.layout && layerId
@@ -42,7 +37,7 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
       layout: updateLayer(component.layout, newLayer)
     };
     setLayerId(newLayer.id);
-    onComponentChange(newComponent);
+    onComponentChange(componentId, newComponent);
   }
 
   function updateComponentRootLayer(newLayer: T.Layer | undefined) {
@@ -51,7 +46,7 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
       layout: newLayer
     };
     setLayerId(newLayer ? newLayer.id : undefined);
-    onComponentChange(newComponent);
+    onComponentChange(componentId, newComponent);
   }
 
   return (

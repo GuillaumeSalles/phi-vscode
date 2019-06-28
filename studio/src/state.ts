@@ -1,5 +1,3 @@
-import * as T from "./types";
-
 export const fontWeights = new Map(
   [
     { name: "light", value: 300 },

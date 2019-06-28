@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
 import { Route } from "react-router";
@@ -68,7 +68,9 @@ function App() {
           setFontFamilies(refs.fontFamilies);
           setBreakpoints(refs.breakpoints);
           setComponents(refs.components);
-          navigateToFirstComponent(refs.components);
+          router.history.push(
+            `/components/${Array.from(refs.components.keys())[0]}`
+          );
         }
       }
     }
@@ -76,15 +78,19 @@ function App() {
     return () => {
       electron.ipcRenderer.removeListener("actions", listener);
     };
-  }, []);
+  }, [router]);
 
   function navigateToFirstComponent(components: T.ComponentMap) {
     router.history.push(`/components/${Array.from(components.keys())[0]}`);
   }
 
-  function setComponent(id: string, newComponent: T.Component) {
-    setComponents(set(components, id, newComponent));
-  }
+  const onComponentChange = useCallback(
+    (id: string, newComponent: T.Component) => {
+      setComponents(components => set(components, id, newComponent));
+      setIsSaved(false);
+    },
+    []
+  );
 
   function createProject() {
     const project = makeDefaultProject();
@@ -171,10 +177,7 @@ function App() {
             <ComponentView
               menu={menu()}
               componentId={props.match.params.id}
-              onComponentChange={component => {
-                setComponent(props.match.params.id, component);
-                setIsSaved(false);
-              }}
+              onComponentChange={onComponentChange}
               refs={refs}
             />
           );

@@ -3,9 +3,8 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
-import { useRef, useState, useMemo, useEffect, useCallback } from "react";
-import { Delete, Edit } from "../icons";
-import IconButton from "./IconButton";
+import { useRef, useState, useMemo, useCallback } from "react";
+import LayersTreeItemComponent from "./LayersTreeItem";
 import { makeLayer } from "../factories";
 import { findLayerById, updateLayer } from "../layerUtils";
 import OkCancelModal from "./OkCancelModal";
@@ -105,11 +104,6 @@ export function layerTypeToIcon(type: T.LayerType) {
       throw new Error("Invalid layer type");
   }
 }
-
-type DraggedData = {
-  layer: T.Layer;
-  index: number;
-};
 
 export function getDepthsBoundaries(
   items: LayersTreeItem[],
@@ -347,6 +341,7 @@ function LayersTree({
         name: layerNameEntry.value
       })
     );
+    onSelectLayer(selectedLayer!.id);
   });
   const addLayerCallback = useCallback(
     (type: T.LayerType) => {
@@ -354,11 +349,31 @@ function LayersTree({
       onLayerChange(addLayer(root, selectedLayerId, newLayer));
       onSelectLayer(newLayer.id);
     },
-    [root, selectedLayerId]
+    [root, selectedLayerId, onLayerChange, onSelectLayer, refs]
+  );
+
+  const onRename = useCallback(
+    (layer: T.Layer) => {
+      renameDialog.open();
+      layerNameEntry.setValue(layer.name);
+      onSelectLayer(layer.id);
+    },
+    [renameDialog, layerNameEntry, onSelectLayer]
+  );
+
+  const onDelete = useCallback(
+    (layer: T.Layer) => {
+      const newRoot = deleteLayer(root!, layer);
+      onLayerChange(newRoot);
+      onSelectLayer(newRoot ? newRoot.id : undefined);
+    },
+    [onLayerChange, onSelectLayer, root]
   );
 
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
+
+  console.log("Render Layers Tree", renameDialog.isOpen);
   return (
     <div
       css={[
@@ -449,59 +464,19 @@ function LayersTree({
           )}
         />
         {flattenLayers.map((item, index) => (
-          <div
+          <LayersTreeItemComponent
             key={item.layer.id}
+            layer={item.layer}
+            depth={item.depth}
+            index={index}
             draggable={root != null && item.layer.id !== root.id}
-            onDragStart={() => setDraggedIndex(index)}
-            onDragEnd={() => setDragIndicatorPosition(undefined)}
-            onClick={() => {
-              onSelectLayer(item.layer.id);
-            }}
-            css={[
-              row,
-              {
-                paddingLeft: item.depth * depthOffset + leftOffset + "px",
-                paddingTop: "2px",
-                paddingBottom: "2px",
-                paddingRight: "8px",
-                borderStyle: "solid",
-                borderWidth: "2px",
-                borderColor:
-                  item.layer.id === selectedLayerId
-                    ? colors.primary
-                    : "transparent",
-                alignItems: "center",
-                fontSize: "14px",
-                ":hover button": {
-                  display: "block"
-                }
-              }
-            ]}
-          >
-            {layerTypeToIcon(item.layer.type)}
-            <span css={{ flex: "1 1 auto", marginLeft: "4px" }}>
-              {item.layer.name}
-            </span>
-            <IconButton
-              cssOverrides={{ display: "none", flex: "0 0 auto" }}
-              icon={<Edit height={20} width={20} />}
-              onClick={e => {
-                e.stopPropagation();
-                renameDialog.open();
-                layerNameEntry.setValue(item.layer.name);
-              }}
-            />
-            <IconButton
-              cssOverrides={{ display: "none", flex: "0 0 auto" }}
-              icon={<Delete height={20} width={20} />}
-              onClick={e => {
-                e.stopPropagation();
-                const newRoot = deleteLayer(root!, item.layer);
-                onLayerChange(newRoot);
-                onSelectLayer(newRoot ? newRoot.id : undefined);
-              }}
-            />
-          </div>
+            onDragStart={setDraggedIndex}
+            onDragEnd={setDragIndicatorPosition}
+            onClick={onSelectLayer}
+            onRename={onRename}
+            onDelete={onDelete}
+            isSelected={item.layer.id === selectedLayerId}
+          />
         ))}
       </div>
     </div>

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useToggle } from "../../hooks";
 export { default as FormInput } from "./FormInput";
 export { default as FormNumberInput } from "./FormNumberInput";
 
@@ -69,6 +68,7 @@ export function useNumberFormEntry(
 export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
   const [isOpen, setIsOpen] = useState(false);
   const okButtonRef = useRef<HTMLButtonElement>(null);
+  const firstFormInput = entries[0].inputProps.ref;
   const submit = useCallback(() => {
     if (entries.every(entry => entry.isValid())) {
       onSubmit();
@@ -78,7 +78,7 @@ export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
         entry.displayValidation(true);
       }
     }
-  }, [entries]);
+  }, [entries, onSubmit]);
   const close = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -93,12 +93,14 @@ export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
   }
 
   useEffect(() => {
-    if (isOpen && entries[0] != null && entries[0].inputProps.ref.current) {
-      const input = entries[0].inputProps.ref.current;
-      input.focus();
-      input.setSelectionRange(0, input.value.length);
+    if (isOpen && firstFormInput.current) {
+      firstFormInput.current.focus();
+      firstFormInput.current.setSelectionRange(
+        0,
+        firstFormInput.current.value.length
+      );
     }
-  }, [isOpen]);
+  }, [isOpen, firstFormInput]);
   return {
     isOpen: isOpen,
     open: () => {

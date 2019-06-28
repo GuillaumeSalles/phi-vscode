@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import React, { useRef } from "react";
+import React from "react";
 import { row, column } from "../styles";
 import Modal from "./Modal";
 import { useToggle } from "../hooks";

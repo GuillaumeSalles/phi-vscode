@@ -36,9 +36,9 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
   }
 
   function updateLayerStyle(newProps: Partial<T.TextLayerStyle>) {
-    if (isDefault) updateLayer({ style: { ...style, ...newProps } });
-    else {
-      const mq = layer.mediaQueries.find(mq => mq.id === mediaQuery)!;
+    if (isDefault) {
+      updateLayer({ style: { ...style, ...newProps } });
+    } else {
       updateLayer({
         mediaQueries: layer.mediaQueries.map(mq =>
           mq.id === mediaQuery

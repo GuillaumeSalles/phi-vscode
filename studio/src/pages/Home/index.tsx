@@ -1,9 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
-import * as T from "../../types";
 import Button from "../../components/Button";
-import Menu from "../../components/Menu";
 
 type Props = {
   onNewProjectClick: () => void;

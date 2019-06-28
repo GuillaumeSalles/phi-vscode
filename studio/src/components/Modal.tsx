@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
 import ReactDOM from "react-dom";
 
 const modalRoot = document.getElementById("modal-root")!;
@@ -10,23 +9,23 @@ type Props = {
   children: any;
 };
 
-function Modal({ isOpen, children }: Props) {
-  if (!isOpen) {
-    modalRoot.style.display = "none";
-    return null;
-  }
-
-  modalRoot.style.display = "inline";
+export default function Modal(props: Props) {
   return ReactDOM.createPortal(
     <div
       css={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
+        display: props.isOpen ? "flex" : "none",
+        height: "100vh",
+        width: "100vw",
         alignItems: "flex-start",
-        justifyContent: "center"
+        justifyContent: "center",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
       }}
     >
+      <div css={{ zIndex: 1 }}>{props.children}</div>
       <div
         css={{
           backgroundColor: "rgb(0, 0, 0)",
@@ -38,14 +37,10 @@ function Modal({ isOpen, children }: Props) {
           position: "fixed",
           top: "0px",
           width: "100%",
-          zIndex: -1,
           transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0s"
         }}
       />
-      {children}
     </div>,
     modalRoot
   );
 }
-
-export default Modal;
