@@ -24,6 +24,7 @@ import uuid from "uuid/v4";
 import { px } from "../../factories";
 import React from "react";
 import Button from "../../components/Button";
+import AddDeleteButtons from "../../components/AddDeleteButtons";
 
 type Props = {
   menu: React.ReactNode;
@@ -63,21 +64,16 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
             ]}
           >
             <h1 css={heading}>Breakpoints</h1>
-            <div css={[row, { marginLeft: "28px" }]}>
-              <SecondaryButton
-                text="Add"
-                onClick={createBreakpointDialog.open}
-                margin="0 10px 0 0"
-              />
-              <SecondaryButton
-                text="Delete"
-                disabled={selectedBreakpoint === null}
-                onClick={() => {
-                  onBreakpointsChange(del(breakpoints, selectedBreakpoint!));
-                  setSelectedBreakpoint(null);
-                }}
-              />
-            </div>
+            <AddDeleteButtons
+              onAddClick={createBreakpointDialog.open}
+              isDeleteDisabled={
+                selectedBreakpoint === null || breakpoints.size <= 1
+              }
+              onDeleteClick={() => {
+                onBreakpointsChange(del(breakpoints, selectedBreakpoint!));
+                setSelectedBreakpoint(null);
+              }}
+            />
           </div>
           <div
             css={{

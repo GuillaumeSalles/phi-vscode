@@ -19,6 +19,7 @@ import {
 import uuid from "uuid/v4";
 import { validateColorName, validateColorValue } from "../validators";
 import Button from "../components/Button";
+import AddDeleteButtons from "../components/AddDeleteButtons";
 
 type Props = {
   menu: React.ReactNode;
@@ -50,21 +51,14 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
         <div css={[column, mainPadding]}>
           <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
             <h1 css={heading}>Colors</h1>
-            <div css={[row, { marginLeft: "28px" }]}>
-              <SecondaryButton
-                text="Add"
-                onClick={addColorDialog.open}
-                margin="0 10px 0 0"
-              />
-              <SecondaryButton
-                text="Delete"
-                disabled={selectedColor === null}
-                onClick={() => {
-                  onColorsChange(del(colors, selectedColor!));
-                  setSelectedColor(null);
-                }}
-              />
-            </div>
+            <AddDeleteButtons
+              onAddClick={addColorDialog.open}
+              isDeleteDisabled={selectedColor === null || colors.size <= 1}
+              onDeleteClick={() => {
+                onColorsChange(del(colors, selectedColor!));
+                setSelectedColor(null);
+              }}
+            />
           </div>
 
           <div css={[row, { flexWrap: "wrap" }]}>

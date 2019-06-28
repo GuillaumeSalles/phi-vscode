@@ -51,9 +51,27 @@ export const primaryButton = css({
   padding: "12px 16px",
   border: "none",
   borderRadius: "2px",
-  marginLeft: "8px",
   lineHeight: "0px",
-  fontSize: "14px"
+  fontSize: "14px",
+  color: "white",
+  background: colors.primary,
+  ":disabled": {
+    cursor: "not-allowed"
+  }
+});
+
+export const secondaryButton = css({
+  height: "32px",
+  padding: "12px 16px",
+  border: "none",
+  borderRadius: "2px",
+  lineHeight: "0px",
+  fontSize: "14px",
+  color: "#333333",
+  background: "#E8E8E8",
+  ":disabled": {
+    cursor: "not-allowed"
+  }
 });
 
 export const input = css({

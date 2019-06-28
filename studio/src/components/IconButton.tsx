@@ -20,8 +20,17 @@ export default function IconButton({
       border: "none",
       margin: 0,
       padding: 0,
+      background: "transparent",
+      opacity: 0.65,
       ":focus": {
-        outline: "none"
+        outline: "none",
+        opacity: 0.9
+      },
+      ":hover": {
+        opacity: 0.9
+      },
+      ":disabled": {
+        opacity: 0.2
       }
     },
     css(cssOverrides)

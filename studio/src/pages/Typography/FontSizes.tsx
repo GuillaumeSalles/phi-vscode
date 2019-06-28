@@ -18,6 +18,7 @@ import {
 import { validateFontSizeName } from "../../validators";
 import uuid from "uuid/v4";
 import Button from "../../components/Button";
+import AddDeleteButtons from "../../components/AddDeleteButtons";
 
 type Props = {
   items: T.FontSizesMap;
@@ -44,21 +45,14 @@ export default function FontSizes({ items, onItemsChange }: Props) {
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
         <h2 css={subHeading}>Font sizes</h2>
-        <div css={[row, { marginLeft: "28px" }]}>
-          <SecondaryButton
-            text="Add"
-            onClick={addDialog.open}
-            margin="0 10px 0 0"
-          />
-          <SecondaryButton
-            text="Delete"
-            disabled={selectedItem === null}
-            onClick={() => {
-              onItemsChange(del(items, selectedItem!));
-              setSelectedItem(null);
-            }}
-          />
-        </div>
+        <AddDeleteButtons
+          onAddClick={addDialog.open}
+          isDeleteDisabled={selectedItem === null || items.size <= 1}
+          onDeleteClick={() => {
+            onItemsChange(del(items, selectedItem!));
+            setSelectedItem(null);
+          }}
+        />
       </div>
 
       {Array.from(items.entries()).map(entry => (

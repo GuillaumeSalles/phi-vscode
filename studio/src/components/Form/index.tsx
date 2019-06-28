@@ -138,7 +138,7 @@ export function useDialogForm(
     if (isOpen) {
       entries[0].focus();
     }
-  }, [isOpen, entries]);
+  }, [isOpen, entries[0].inputProps.ref.current]);
   return {
     open: () => {
       for (const entry of entries) {

@@ -3,13 +3,15 @@ import { jsx } from "@emotion/core";
 
 type Props = {
   color?: string;
+  height?: number;
+  width?: number;
 };
 
-export function Add({ color = "black" }: Props) {
+export function Add({ color = "black", height = 14, width = 14 }: Props) {
   return (
     <svg
-      height="14px"
-      width="14px"
+      width={width}
+      height={height}
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -19,7 +21,7 @@ export function Add({ color = "black" }: Props) {
         x2="10"
         y2="20"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
       <line
@@ -28,7 +30,7 @@ export function Add({ color = "black" }: Props) {
         x2="20"
         y2="10"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>
