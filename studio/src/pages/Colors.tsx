@@ -18,6 +18,7 @@ import {
 } from "../components/Form";
 import uuid from "uuid/v4";
 import { validateColorName, validateColorValue } from "../validators";
+import Button from "../components/Button";
 
 type Props = {
   menu: React.ReactNode;
@@ -105,8 +106,17 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
             })}
           </div>
           <OkCancelModal
-            isOpen={addColorDialog.isOpen}
             title="Add color"
+            {...addColorDialog.dialogProps}
+            buttons={
+              <React.Fragment>
+                <SecondaryButton
+                  text="Cancel"
+                  {...addColorDialog.cancelButtonProps}
+                />
+                <Button text="Add" {...addColorDialog.okButtonProps} />
+              </React.Fragment>
+            }
             form={
               <React.Fragment>
                 <FormInput
@@ -119,8 +129,6 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
                 />
               </React.Fragment>
             }
-            onCancel={addColorDialog.close}
-            onOk={addColorDialog.submit}
           />
         </div>
       }

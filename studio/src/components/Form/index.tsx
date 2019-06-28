@@ -1,35 +1,42 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 export { default as FormInput } from "./FormInput";
 export { default as FormNumberInput } from "./FormNumberInput";
+export { default as FormSelect } from "./FormSelect";
 
-type FormEntry<TValue> = {
+function defaultValidator<T>(value: T) {
+  return undefined;
+}
+
+type FormEntry<TValue, TElement> = {
   value: TValue;
   inputProps: {
     value: TValue;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onChange: (e: React.ChangeEvent<TElement>) => void;
+    onBlur: (e: React.ChangeEvent<TElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<TElement>) => void;
     error: string | undefined;
-    ref: React.RefObject<HTMLInputElement>;
+    ref: React.RefObject<TElement>;
   };
   isValid: () => boolean;
   displayValidation: (isVisible: boolean) => void;
   setValue: (value: TValue) => void;
   reset: () => void;
+  focus: () => void;
 };
 
-function useFormEntry<TValue>(
+function useFormEntry<TValue, TElement>(
   defaultValue: TValue,
   validate: (value: TValue) => string | undefined,
-  getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) => TValue
-): FormEntry<TValue> {
+  getValueFromEvent: (e: React.ChangeEvent<TElement>) => TValue,
+  focus: (element: TElement) => void
+): FormEntry<TValue, TElement> {
   const [value, setValue] = useState(defaultValue);
   const [isValidating, setIsValidating] = useState(false);
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<TElement>(null);
   return {
     inputProps: {
       value,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange: (e: React.ChangeEvent<TElement>) => {
         setValue(getValueFromEvent(e));
       },
       onBlur: () => {
@@ -47,28 +54,63 @@ function useFormEntry<TValue>(
     reset: () => {
       setValue(defaultValue);
       setIsValidating(false);
+    },
+    focus: () => {
+      if (ref.current) {
+        focus(ref.current);
+      }
     }
   };
 }
 
 export function useStringFormEntry(
   defaultValue: string,
-  validate: (value: string) => string | undefined
+  validate: (value: string) => string | undefined = defaultValidator
 ) {
-  return useFormEntry(defaultValue, validate, e => e.target.value);
+  return useFormEntry<string, HTMLInputElement>(
+    defaultValue,
+    validate,
+    e => e.target.value,
+    input => {
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+    }
+  );
 }
 
 export function useNumberFormEntry(
   defaultValue: number | undefined,
-  validate: (value: number | undefined) => string | undefined
+  validate: (value: number | undefined) => string | undefined = defaultValidator
 ) {
-  return useFormEntry(defaultValue, validate, e => e.target.valueAsNumber);
+  return useFormEntry<number | undefined, HTMLInputElement>(
+    defaultValue,
+    validate,
+    e => e.target.valueAsNumber,
+    input => {
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+    }
+  );
 }
 
-export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
+export function useSelectFormEntry(
+  defaultValue: string | undefined,
+  validate: (value: string | undefined) => string | undefined = defaultValidator
+) {
+  return useFormEntry<string | undefined, HTMLSelectElement>(
+    defaultValue,
+    validate,
+    e => e.target.value,
+    input => input.focus()
+  );
+}
+
+export function useDialogForm(
+  entries: FormEntry<any, any>[],
+  onSubmit: () => void
+) {
   const [isOpen, setIsOpen] = useState(false);
   const okButtonRef = useRef<HTMLButtonElement>(null);
-  const firstFormInput = entries[0].inputProps.ref;
   const submit = useCallback(() => {
     if (entries.every(entry => entry.isValid())) {
       onSubmit();
@@ -93,24 +135,17 @@ export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
   }
 
   useEffect(() => {
-    if (isOpen && firstFormInput.current) {
-      firstFormInput.current.focus();
-      firstFormInput.current.setSelectionRange(
-        0,
-        firstFormInput.current.value.length
-      );
+    if (isOpen) {
+      entries[0].focus();
     }
-  }, [isOpen, firstFormInput]);
+  }, [isOpen, entries]);
   return {
-    isOpen: isOpen,
     open: () => {
       for (const entry of entries) {
         entry.reset();
       }
       setIsOpen(true);
     },
-    close,
-    submit,
     dialogProps: {
       isOpen,
       onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => {
@@ -136,13 +171,8 @@ export function useDialogForm(entries: FormEntry<any>[], onSubmit: () => void) {
         if (e.key === "Enter") {
           e.stopPropagation();
         }
-        if (
-          e.key === "Tab" &&
-          e.shiftKey === false &&
-          entries[0] != null &&
-          entries[0].inputProps.ref.current
-        ) {
-          entries[0].inputProps.ref.current.focus();
+        if (e.key === "Tab" && e.shiftKey === false && entries[0] != null) {
+          entries[0].focus();
           e.preventDefault();
         }
       }

@@ -373,7 +373,6 @@ function LayersTree({
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
 
-  console.log("Render Layers Tree", renameDialog.isOpen);
   return (
     <div
       css={[
@@ -406,7 +405,7 @@ function LayersTree({
                 text="Cancel"
                 {...renameDialog.cancelButtonProps}
               />
-              <Button text="Add" {...renameDialog.okButtonProps} />
+              <Button text="Rename" {...renameDialog.okButtonProps} />
             </React.Fragment>
           }
           form={

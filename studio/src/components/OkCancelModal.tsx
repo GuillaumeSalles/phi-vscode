@@ -1,10 +1,9 @@
 /** @jsx jsx */
-import { jsx, css } from "@emotion/core";
+import { jsx } from "@emotion/core";
 import React from "react";
 import { row, column } from "../styles";
 import Modal from "./Modal";
 import { useToggle } from "../hooks";
-import Button from "./Button";
 
 export function useOkCancelModal() {
   const toggle = useToggle(false);
@@ -19,27 +18,13 @@ type Props = {
   isOpen: boolean;
   title: string;
   description?: React.ReactNode;
-  onOk?: () => void;
-  onCancel?: () => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   form: React.ReactNode;
-  buttons?: React.ReactNode;
+  buttons: React.ReactNode;
 };
-
-const buttonCss = css({
-  height: "32px",
-  padding: "12px 16px",
-  border: "none",
-  borderRadius: "2px",
-  marginLeft: "8px",
-  lineHeight: "0px",
-  fontSize: "14px"
-});
 
 export default function OkCancelModal({
   isOpen,
-  onOk,
-  onCancel,
   onKeyDown,
   title,
   description,
@@ -98,25 +83,7 @@ export default function OkCancelModal({
             }
           ]}
         >
-          {buttons ? (
-            buttons
-          ) : (
-            <React.Fragment>
-              <button
-                css={[
-                  buttonCss,
-                  {
-                    color: "#333333",
-                    background: "#E8E8E8"
-                  }
-                ]}
-                onClick={onCancel}
-              >
-                Cancel
-              </button>
-              <Button onClick={onOk} text="Add" />
-            </React.Fragment>
-          )}
+          {buttons}
         </div>
       </div>
     </Modal>

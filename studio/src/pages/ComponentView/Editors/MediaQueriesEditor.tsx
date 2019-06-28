@@ -4,9 +4,17 @@ import * as T from "../../../types";
 import { column, sectionTitle, row } from "../../../styles";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
-import AddMediaQueryModal from "./AddMediaQueryModal";
-import { useOkCancelModal } from "../../../components/OkCancelModal";
+import OkCancelModal from "../../../components/OkCancelModal";
 import AddButton from "../../../components/AddButton";
+import {
+  useDialogForm,
+  FormSelect,
+  useSelectFormEntry
+} from "../../../components/Form";
+import uuid from "uuid/v4";
+import React from "react";
+import SecondaryButton from "../../../components/SecondaryButton";
+import Button from "../../../components/Button";
 
 type Props<TStyle> = {
   layer: T.ILayer<TStyle>;
@@ -27,6 +35,12 @@ function mediaQueryToString<TStyle>(
   return `@media (min-width: ${bp.name})`;
 }
 
+function breakpointEntryToOption(
+  entry: [string, T.BreakpointDefinition]
+): [string, string] {
+  return [entry[0], `@media (min-width: ${entry[1].name})`];
+}
+
 export default function MediaQueriesEditor<TStyle>({
   layer,
   selectedId,
@@ -34,14 +48,29 @@ export default function MediaQueriesEditor<TStyle>({
   onChange,
   refs
 }: Props<TStyle>) {
-  const modal = useOkCancelModal();
-
   const defaultMediaQuery: [string, string] = ["default", "default"];
   const options = [defaultMediaQuery].concat(
     layer.mediaQueries.map(mq => [mq.id, mediaQueryToString(mq, refs)])
   );
 
   const canAddMediaQueries = options.length < refs.breakpoints.size + 1;
+
+  const existing = new Set(layer.mediaQueries.map(m => m.minWidth.id));
+  const newOptions = Array.from(refs.breakpoints.entries())
+    .filter(entry => !existing.has(entry[0]))
+    .map(breakpointEntryToOption);
+
+  const selectedMediaQueryEntry = useSelectFormEntry(undefined);
+  const addMediaQueryDialog = useDialogForm([selectedMediaQueryEntry], () => {
+    onAdd(uuid(), {
+      type: "ref",
+      id:
+        selectedMediaQueryEntry.value != null
+          ? selectedMediaQueryEntry.value
+          : newOptions[0][0]
+    });
+    selectedMediaQueryEntry.setValue(undefined);
+  });
 
   return (
     <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
@@ -55,7 +84,10 @@ export default function MediaQueriesEditor<TStyle>({
         ]}
       >
         <h4 css={[sectionTitle]}>Media Queries</h4>
-        <AddButton disabled={!canAddMediaQueries} onClick={modal.open} />
+        <AddButton
+          disabled={!canAddMediaQueries}
+          onClick={addMediaQueryDialog.open}
+        />
       </div>
       <Field label="Breakpoint">
         <Select
@@ -65,16 +97,37 @@ export default function MediaQueriesEditor<TStyle>({
           options={options}
         />
       </Field>
-      <AddMediaQueryModal
-        isOpen={modal.isOpen}
-        refs={refs}
-        layer={layer}
-        onAdd={(newId, breakpoint) => {
-          onAdd(newId, breakpoint);
-          modal.close();
-        }}
-        onCancel={modal.close}
-      />
+      {newOptions.length > 0 && (
+        <OkCancelModal
+          title="Add new media query"
+          description="Select a breakpoint that has not been used before on this layer."
+          {...addMediaQueryDialog.dialogProps}
+          form={
+            <React.Fragment>
+              <FormSelect
+                width="100%"
+                options={newOptions}
+                {...selectedMediaQueryEntry.inputProps}
+                // TODO: Find a better way
+                value={
+                  selectedMediaQueryEntry.value != null
+                    ? selectedMediaQueryEntry.value
+                    : newOptions[0][0]
+                }
+              />
+            </React.Fragment>
+          }
+          buttons={
+            <React.Fragment>
+              <SecondaryButton
+                text="Cancel"
+                {...addMediaQueryDialog.cancelButtonProps}
+              />
+              <Button text="Add" {...addMediaQueryDialog.okButtonProps} />
+            </React.Fragment>
+          }
+        />
+      )}
     </div>
   );
 }
