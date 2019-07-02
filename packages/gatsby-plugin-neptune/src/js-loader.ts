@@ -1,7 +1,7 @@
 import ts from "typescript";
 import * as T from "../../../studio/src/types";
 import loaderUtils from "loader-utils";
-import { arrayToMap } from "./shared";
+import { arrayToMap, kebabToCamel } from "./shared";
 
 function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   const resultFile = ts.createSourceFile(
@@ -59,12 +59,14 @@ function createComponentJsx(component: T.Component) {
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
     undefined,
-    component.name,
+    kebabToCamel(component.name),
     undefined,
     [],
     undefined,
     ts.createBlock([
-      ts.createReturn(createLayerJsx(component.name, component.layout!))
+      ts.createReturn(
+        createLayerJsx(kebabToCamel(component.name), component.layout!)
+      )
     ])
   );
 }

@@ -24,7 +24,7 @@ import uuid from "uuid/v4";
 import { px } from "../../factories";
 import React from "react";
 import Button from "../../components/Button";
-import AddDeleteButtons from "../../components/AddDeleteButtons";
+import RefActions from "../../components/RefActions";
 
 type Props = {
   menu: React.ReactNode;
@@ -64,8 +64,9 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
             ]}
           >
             <h1 css={heading}>Breakpoints</h1>
-            <AddDeleteButtons
+            <RefActions
               onAddClick={createBreakpointDialog.open}
+              canEdit={selectedBreakpoint !== null}
               isDeleteDisabled={
                 selectedBreakpoint === null || breakpoints.size <= 1
               }

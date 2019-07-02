@@ -1,5 +1,5 @@
 import * as T from "../../../studio/src/types";
-import { arrayToMap } from "./shared";
+import { arrayToMap, kebabToCamel } from "./shared";
 
 function layerToCss(componentName: string, layer: T.Layer, refs: T.Refs) {
   switch (layer.type) {
@@ -153,7 +153,7 @@ function textLayerToCss(
 
 function componentToCss(component: T.Component, refs: T.Refs) {
   return component.layout
-    ? layerToCss(component.name, component.layout, refs)
+    ? layerToCss(kebabToCamel(component.name), component.layout, refs)
     : "";
 }
 

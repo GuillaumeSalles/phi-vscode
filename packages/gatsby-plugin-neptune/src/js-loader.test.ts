@@ -1,6 +1,6 @@
-import { neptuneToCss } from "./css-loader";
+// import { kebabToCamel } from "./js-loader";
 import basic from "./fixtures/Basic.json";
 
-test("basic", () => {
-  expect(neptuneToCss(basic)).toBe("");
-});
+// test("kebabToCamelCase", () => {
+//   expect(kebabToCamel("hello-world")).toBe("HelloWorld");
+// });

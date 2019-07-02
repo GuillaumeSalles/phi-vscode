@@ -19,7 +19,7 @@ import {
 import uuid from "uuid/v4";
 import { validateColorName, validateColorValue } from "../validators";
 import Button from "../components/Button";
-import AddDeleteButtons from "../components/AddDeleteButtons";
+import RefActions from "../components/RefActions";
 
 type Props = {
   menu: React.ReactNode;
@@ -29,20 +29,21 @@ type Props = {
 };
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const nameEntry = useStringFormEntry("", value =>
-    validateColorName(value, colors)
+    validateColorName(value, selectedColor, colors)
   );
   const valueEntry = useStringFormEntry("", validateColorValue);
+
   const addColorDialog = useDialogForm([nameEntry, valueEntry], () => {
     onColorsChange(
-      set(colors, uuid(), {
+      set(colors, isEditing ? selectedColor! : uuid(), {
         name: nameEntry.value,
         value: valueEntry.value
       })
     );
   });
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
@@ -51,8 +52,25 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
         <div css={[column, mainPadding]}>
           <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
             <h1 css={heading}>Colors</h1>
-            <AddDeleteButtons
-              onAddClick={addColorDialog.open}
+            <RefActions
+              onAddClick={() => {
+                setIsEditing(false);
+                addColorDialog.open();
+              }}
+              canEdit={selectedColor !== null}
+              onEditClick={() => {
+                if (selectedColor == null) {
+                  throw new Error("selectedColor can't be null on edit");
+                }
+                const selectedItem = colors.get(selectedColor);
+                if (selectedItem == null) {
+                  throw new Error("Color not found");
+                }
+                setIsEditing(true);
+                addColorDialog.open();
+                nameEntry.setValue(selectedItem.name);
+                valueEntry.setValue(selectedItem.value);
+              }}
               isDeleteDisabled={selectedColor === null || colors.size <= 1}
               onDeleteClick={() => {
                 onColorsChange(del(colors, selectedColor!));
@@ -100,7 +118,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
             })}
           </div>
           <OkCancelModal
-            title="Add color"
+            title={isEditing ? "Edit Color" : "Add Color"}
             {...addColorDialog.dialogProps}
             buttons={
               <React.Fragment>
@@ -108,7 +126,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
                   text="Cancel"
                   {...addColorDialog.cancelButtonProps}
                 />
-                <Button text="Add" {...addColorDialog.okButtonProps} />
+                <Button text="Save" {...addColorDialog.okButtonProps} />
               </React.Fragment>
             }
             form={

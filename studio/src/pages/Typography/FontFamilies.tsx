@@ -16,7 +16,7 @@ import {
 import { validateFontFamilyName } from "../../validators";
 import uuid from "uuid/v4";
 import Button from "../../components/Button";
-import AddDeleteButtons from "../../components/AddDeleteButtons";
+import RefActions from "../../components/RefActions";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
@@ -46,8 +46,9 @@ export default function FontFamilies({
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
         <h2 css={subHeading}>Font family</h2>
-        <AddDeleteButtons
+        <RefActions
           onAddClick={addFontFamilyDialog.open}
+          canEdit={selectedItem !== null}
           isDeleteDisabled={selectedItem === null || fontFamilies.size <= 1}
           onDeleteClick={() => {
             onFontFamiliesChange(del(fontFamilies, selectedItem!));

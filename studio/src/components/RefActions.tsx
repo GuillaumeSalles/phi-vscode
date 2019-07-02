@@ -2,16 +2,20 @@
 import { jsx } from "@emotion/core";
 import { row } from "../styles";
 import IconButton from "./IconButton";
-import { Add, Delete } from "../icons";
+import { Add, Delete, Edit } from "../icons";
 
 type Props = {
   onAddClick: () => void;
+  onEditClick?: () => void;
+  canEdit: boolean;
   onDeleteClick: () => void;
   isDeleteDisabled: boolean;
 };
 
-export default function AddDeleteButtons({
+export default function RefActions({
   onAddClick,
+  onEditClick,
+  canEdit,
   onDeleteClick,
   isDeleteDisabled
 }: Props) {
@@ -21,6 +25,12 @@ export default function AddDeleteButtons({
         cssOverrides={{ marginRight: "12px" }}
         icon={<Add />}
         onClick={onAddClick}
+      />
+      <IconButton
+        disabled={!canEdit}
+        cssOverrides={{ marginRight: "12px" }}
+        icon={<Edit height={20} width={20} />}
+        onClick={onEditClick}
       />
       <IconButton
         disabled={isDeleteDisabled}

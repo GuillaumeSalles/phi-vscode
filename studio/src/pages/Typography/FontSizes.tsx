@@ -18,7 +18,7 @@ import {
 import { validateFontSizeName } from "../../validators";
 import uuid from "uuid/v4";
 import Button from "../../components/Button";
-import AddDeleteButtons from "../../components/AddDeleteButtons";
+import RefActions from "../../components/RefActions";
 
 type Props = {
   items: T.FontSizesMap;
@@ -45,8 +45,9 @@ export default function FontSizes({ items, onItemsChange }: Props) {
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
         <h2 css={subHeading}>Font sizes</h2>
-        <AddDeleteButtons
+        <RefActions
           onAddClick={addDialog.open}
+          canEdit={selectedItem !== null}
           isDeleteDisabled={selectedItem === null || items.size <= 1}
           onDeleteClick={() => {
             onItemsChange(del(items, selectedItem!));
