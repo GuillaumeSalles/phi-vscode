@@ -7,7 +7,7 @@ function defaultValidator<T>(value: T) {
   return undefined;
 }
 
-type FormEntry<TValue, TElement> = {
+export type FormEntry<TValue, TElement> = {
   value: TValue;
   inputProps: {
     value: TValue;
@@ -157,6 +157,7 @@ export function useDialogForm(
       }
     },
     cancelButtonProps: {
+      margin: "0 8px 0 0",
       onClick: close,
       onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => {
         if (e.key === "Enter") {

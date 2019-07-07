@@ -4,21 +4,12 @@ import React from "react";
 import * as T from "../../types";
 import { column, subHeading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
-import { useState } from "react";
-import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
 import OkCancelModal from "../../components/OkCancelModal";
-import {
-  useStringFormEntry,
-  useNumberFormEntry,
-  FormInput,
-  FormNumberInput,
-  useDialogForm
-} from "../../components/Form";
-import { validateFontSizeName } from "../../validators";
-import uuid from "uuid/v4";
+import { useStringFormEntry, FormInput } from "../../components/Form";
 import Button from "../../components/Button";
 import RefActions from "../../components/RefActions";
+import { useRefManagement } from "../../hooks";
 
 type Props = {
   items: T.FontSizesMap;
@@ -26,34 +17,33 @@ type Props = {
 };
 
 export default function FontSizes({ items, onItemsChange }: Props) {
-  const nameEntry = useStringFormEntry("", value =>
-    validateFontSizeName(value, items)
-  );
-  const valueEntry = useNumberFormEntry(16, () => {
+  const valueEntry = useStringFormEntry("", () => {
     return undefined;
   });
-  const addDialog = useDialogForm([nameEntry, valueEntry], () => {
-    onItemsChange(
-      set(items, uuid(), {
-        name: nameEntry.value,
-        value: valueEntry.value + "px"
-      })
-    );
-  });
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const {
+    nameEntry,
+    selectedRefId,
+    selectRef,
+    dialog,
+    refActionsProps
+  } = useRefManagement(
+    "Font size",
+    items,
+    onItemsChange,
+    [valueEntry],
+    fontSizes => {
+      valueEntry.setValue(fontSizes.value);
+    },
+    name => ({
+      name,
+      value: valueEntry.value
+    })
+  );
   return (
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
         <h2 css={subHeading}>Font sizes</h2>
-        <RefActions
-          onAddClick={addDialog.open}
-          canEdit={selectedItem !== null}
-          isDeleteDisabled={selectedItem === null || items.size <= 1}
-          onDeleteClick={() => {
-            onItemsChange(del(items, selectedItem!));
-            setSelectedItem(null);
-          }}
-        />
+        <RefActions {...refActionsProps} />
       </div>
 
       {Array.from(items.entries()).map(entry => (
@@ -68,8 +58,8 @@ export default function FontSizes({ items, onItemsChange }: Props) {
             {entry[1].name} - {entry[1].value}
           </div>
           <SelectableCard
-            isSelected={selectedItem === entry[0]}
-            onClick={() => setSelectedItem(entry[0])}
+            isSelected={selectedRefId === entry[0]}
+            onClick={() => selectRef(entry[0])}
           >
             <div css={{ fontSize: entry[1].value, margin: "12px" }}>
               Saturn studio - closing the gap between developers and designers
@@ -79,11 +69,11 @@ export default function FontSizes({ items, onItemsChange }: Props) {
       ))}
       <OkCancelModal
         title="Add font size"
-        {...addDialog.dialogProps}
+        {...dialog.dialogProps}
         buttons={
           <React.Fragment>
-            <SecondaryButton text="Cancel" {...addDialog.cancelButtonProps} />
-            <Button text="Add" {...addDialog.okButtonProps} />
+            <SecondaryButton text="Cancel" {...dialog.cancelButtonProps} />
+            <Button text="Add" {...dialog.okButtonProps} />
           </React.Fragment>
         }
         form={
@@ -92,7 +82,7 @@ export default function FontSizes({ items, onItemsChange }: Props) {
               placeholder="Name your font size"
               {...nameEntry.inputProps}
             />
-            <FormNumberInput
+            <FormInput
               placeholder="Size in pixels"
               {...valueEntry.inputProps}
             />

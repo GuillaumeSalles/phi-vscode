@@ -3,23 +3,17 @@ import { jsx } from "@emotion/core";
 import React from "react";
 import * as T from "../types";
 import { column, row, mainPadding, heading } from "../styles";
-import { useState } from "react";
 import SecondaryButton from "../components/SecondaryButton";
-import { del, set } from "../helpers/immutable-map";
 import SelectableCard from "../components/SelectableCard";
 import OkCancelModal from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
 import TopBar from "../components/TopBar";
-import {
-  useStringFormEntry,
-  FormInput,
-  useDialogForm
-} from "../components/Form";
-import uuid from "uuid/v4";
-import { validateColorName, validateColorValue } from "../validators";
+import { useStringFormEntry, FormInput } from "../components/Form";
+import { validateColorValue } from "../validators";
 import Button from "../components/Button";
 import RefActions from "../components/RefActions";
+import { useRefManagement } from "../hooks";
 
 type Props = {
   menu: React.ReactNode;
@@ -29,21 +23,27 @@ type Props = {
 };
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const nameEntry = useStringFormEntry("", value =>
-    validateColorName(value, selectedColor, colors)
-  );
   const valueEntry = useStringFormEntry("", validateColorValue);
-
-  const addColorDialog = useDialogForm([nameEntry, valueEntry], () => {
-    onColorsChange(
-      set(colors, isEditing ? selectedColor! : uuid(), {
-        name: nameEntry.value,
-        value: valueEntry.value
-      })
-    );
-  });
+  const {
+    nameEntry,
+    selectedRefId,
+    selectRef,
+    isEditing,
+    dialog,
+    refActionsProps
+  } = useRefManagement(
+    "Color",
+    colors,
+    onColorsChange,
+    [valueEntry],
+    color => {
+      valueEntry.setValue(color.value);
+    },
+    name => ({
+      name,
+      value: valueEntry.value
+    })
+  );
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
@@ -52,31 +52,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
         <div css={[column, mainPadding]}>
           <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
             <h1 css={heading}>Colors</h1>
-            <RefActions
-              onAddClick={() => {
-                setIsEditing(false);
-                addColorDialog.open();
-              }}
-              canEdit={selectedColor !== null}
-              onEditClick={() => {
-                if (selectedColor == null) {
-                  throw new Error("selectedColor can't be null on edit");
-                }
-                const selectedItem = colors.get(selectedColor);
-                if (selectedItem == null) {
-                  throw new Error("Color not found");
-                }
-                setIsEditing(true);
-                addColorDialog.open();
-                nameEntry.setValue(selectedItem.name);
-                valueEntry.setValue(selectedItem.value);
-              }}
-              isDeleteDisabled={selectedColor === null || colors.size <= 1}
-              onDeleteClick={() => {
-                onColorsChange(del(colors, selectedColor!));
-                setSelectedColor(null);
-              }}
-            />
+            <RefActions {...refActionsProps} />
           </div>
 
           <div css={[row, { flexWrap: "wrap" }]}>
@@ -88,11 +64,9 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
                   overrides={{
                     margin: "0 16px 16px 0"
                   }}
-                  isSelected={selectedColor === entry[0]}
+                  isSelected={selectedRefId === entry[0]}
                   onClick={() =>
-                    setSelectedColor(
-                      selectedColor === entry[0] ? null : entry[0]
-                    )
+                    selectRef(selectedRefId === entry[0] ? null : entry[0])
                   }
                 >
                   <div
@@ -119,14 +93,11 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
           </div>
           <OkCancelModal
             title={isEditing ? "Edit Color" : "Add Color"}
-            {...addColorDialog.dialogProps}
+            {...dialog.dialogProps}
             buttons={
               <React.Fragment>
-                <SecondaryButton
-                  text="Cancel"
-                  {...addColorDialog.cancelButtonProps}
-                />
-                <Button text="Save" {...addColorDialog.okButtonProps} />
+                <SecondaryButton text="Cancel" {...dialog.cancelButtonProps} />
+                <Button text="Save" {...dialog.okButtonProps} />
               </React.Fragment>
             }
             form={

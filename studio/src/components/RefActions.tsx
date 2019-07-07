@@ -5,37 +5,37 @@ import IconButton from "./IconButton";
 import { Add, Delete, Edit } from "../icons";
 
 type Props = {
-  onAddClick: () => void;
-  onEditClick?: () => void;
+  onAdd: () => void;
+  onEdit: () => void;
   canEdit: boolean;
-  onDeleteClick: () => void;
-  isDeleteDisabled: boolean;
+  onDelete: () => void;
+  canDelete: boolean;
 };
 
 export default function RefActions({
-  onAddClick,
-  onEditClick,
+  onAdd,
+  onEdit,
   canEdit,
-  onDeleteClick,
-  isDeleteDisabled
+  onDelete,
+  canDelete
 }: Props) {
   return (
     <div css={[row, { marginLeft: "28px" }]}>
       <IconButton
         cssOverrides={{ marginRight: "12px" }}
         icon={<Add />}
-        onClick={onAddClick}
+        onClick={onAdd}
       />
       <IconButton
         disabled={!canEdit}
         cssOverrides={{ marginRight: "12px" }}
         icon={<Edit height={20} width={20} />}
-        onClick={onEditClick}
+        onClick={onEdit}
       />
       <IconButton
-        disabled={isDeleteDisabled}
+        disabled={!canDelete}
         icon={<Delete height={20} width={20} />}
-        onClick={onDeleteClick}
+        onClick={onDelete}
       />
     </div>
   );

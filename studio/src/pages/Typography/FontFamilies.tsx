@@ -4,19 +4,12 @@ import React from "react";
 import * as T from "../../types";
 import { column, subHeading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
-import { useState } from "react";
-import { del, set } from "../../helpers/immutable-map";
 import SelectableCard from "../../components/SelectableCard";
 import OkCancelModal from "../../components/OkCancelModal";
-import {
-  useStringFormEntry,
-  FormInput,
-  useDialogForm
-} from "../../components/Form";
-import { validateFontFamilyName } from "../../validators";
-import uuid from "uuid/v4";
+import { useStringFormEntry, FormInput } from "../../components/Form";
 import Button from "../../components/Button";
 import RefActions from "../../components/RefActions";
+import { useRefManagement } from "../../hooks";
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
@@ -27,34 +20,33 @@ export default function FontFamilies({
   fontFamilies,
   onFontFamiliesChange
 }: Props) {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const nameEntry = useStringFormEntry("", value =>
-    validateFontFamilyName(value, fontFamilies)
-  );
   const valueEntry = useStringFormEntry("", () => {
     return undefined;
   });
-  const addFontFamilyDialog = useDialogForm([nameEntry, valueEntry], () => {
-    onFontFamiliesChange(
-      set(fontFamilies, uuid(), {
-        name: nameEntry.value,
-        value: valueEntry.value
-      })
-    );
-  });
+  const {
+    nameEntry,
+    selectedRefId,
+    selectRef,
+    dialog,
+    refActionsProps
+  } = useRefManagement(
+    "Font family",
+    fontFamilies,
+    onFontFamiliesChange,
+    [valueEntry],
+    fontFamily => {
+      valueEntry.setValue(fontFamily.value);
+    },
+    name => ({
+      name,
+      value: valueEntry.value
+    })
+  );
   return (
     <React.Fragment>
       <div css={[row, { marginBottom: "20px" }]}>
         <h2 css={subHeading}>Font family</h2>
-        <RefActions
-          onAddClick={addFontFamilyDialog.open}
-          canEdit={selectedItem !== null}
-          isDeleteDisabled={selectedItem === null || fontFamilies.size <= 1}
-          onDeleteClick={() => {
-            onFontFamiliesChange(del(fontFamilies, selectedItem!));
-            setSelectedItem(null);
-          }}
-        />
+        <RefActions {...refActionsProps} />
       </div>
 
       {Array.from(fontFamilies.entries()).map(entry => (
@@ -69,8 +61,8 @@ export default function FontFamilies({
             {entry[1].name}
           </div>
           <SelectableCard
-            isSelected={selectedItem === entry[0]}
-            onClick={() => setSelectedItem(entry[0])}
+            isSelected={selectedRefId === entry[0]}
+            onClick={() => selectRef(entry[0])}
           >
             <div css={{ fontFamily: entry[1].value, margin: "12px" }}>
               {entry[1].value}
@@ -80,14 +72,11 @@ export default function FontFamilies({
       ))}
       <OkCancelModal
         title="Add font-family"
-        {...addFontFamilyDialog.dialogProps}
+        {...dialog.dialogProps}
         buttons={
           <React.Fragment>
-            <SecondaryButton
-              text="Cancel"
-              {...addFontFamilyDialog.cancelButtonProps}
-            />
-            <Button text="Add" {...addFontFamilyDialog.okButtonProps} />
+            <SecondaryButton text="Cancel" {...dialog.cancelButtonProps} />
+            <Button text="Add" {...dialog.okButtonProps} />
           </React.Fragment>
         }
         form={

@@ -3,28 +3,21 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
-import { set, del } from "../../helpers/immutable-map";
-import { useState } from "react";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import OkCancelModal from "../../components/OkCancelModal";
 import {
-  useStringFormEntry,
   useNumberFormEntry,
-  useDialogForm,
   FormInput,
   FormNumberInput
 } from "../../components/Form";
-import {
-  validateBreakpointName,
-  validateBreakpointValue
-} from "../../validators";
-import uuid from "uuid/v4";
+import { validateBreakpointValue } from "../../validators";
 import { px } from "../../factories";
 import React from "react";
 import Button from "../../components/Button";
 import RefActions from "../../components/RefActions";
+import { useRefManagement } from "../../hooks";
 
 type Props = {
   menu: React.ReactNode;
@@ -34,22 +27,28 @@ type Props = {
 };
 
 function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
-  const nameEntry = useStringFormEntry("", value =>
-    validateBreakpointName(value, breakpoints)
-  );
   const valueEntry = useNumberFormEntry(undefined, value =>
     validateBreakpointValue(value)
   );
-  const createBreakpointDialog = useDialogForm([nameEntry, valueEntry], () =>
-    onBreakpointsChange(
-      set(breakpoints, uuid(), {
-        name: nameEntry.value,
-        value: px(valueEntry.value!)
-      })
-    )
-  );
-  const [selectedBreakpoint, setSelectedBreakpoint] = useState<string | null>(
-    null
+  const {
+    nameEntry,
+    selectedRefId,
+    selectRef,
+    isEditing,
+    dialog,
+    refActionsProps
+  } = useRefManagement(
+    "Breakpoint",
+    breakpoints,
+    onBreakpointsChange,
+    [valueEntry],
+    breakpoint => {
+      valueEntry.setValue(breakpoint.value.value);
+    },
+    name => ({
+      name,
+      value: px(valueEntry.value!)
+    })
   );
   return (
     <Layout
@@ -64,17 +63,7 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
             ]}
           >
             <h1 css={heading}>Breakpoints</h1>
-            <RefActions
-              onAddClick={createBreakpointDialog.open}
-              canEdit={selectedBreakpoint !== null}
-              isDeleteDisabled={
-                selectedBreakpoint === null || breakpoints.size <= 1
-              }
-              onDeleteClick={() => {
-                onBreakpointsChange(del(breakpoints, selectedBreakpoint!));
-                setSelectedBreakpoint(null);
-              }}
-            />
+            <RefActions {...refActionsProps} />
           </div>
           <div
             css={{
@@ -90,8 +79,8 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
               .map(b => (
                 <SelectableCard
                   key={b.id}
-                  isSelected={b.id === selectedBreakpoint}
-                  onClick={() => setSelectedBreakpoint(b.id)}
+                  isSelected={b.id === selectedRefId}
+                  onClick={() => selectRef(b.id)}
                   overrides={{
                     width: b.width.value + "px",
                     height: "48px",
@@ -116,15 +105,12 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
               ))}
           </div>
           <OkCancelModal
-            title="Create new breakpoint"
-            {...createBreakpointDialog.dialogProps}
+            title={isEditing ? "Edit breakpoint" : "Add new breakpoint"}
+            {...dialog.dialogProps}
             buttons={
               <React.Fragment>
-                <SecondaryButton
-                  text="Cancel"
-                  {...createBreakpointDialog.cancelButtonProps}
-                />
-                <Button text="Add" {...createBreakpointDialog.okButtonProps} />
+                <SecondaryButton text="Cancel" {...dialog.cancelButtonProps} />
+                <Button text="Add" {...dialog.okButtonProps} />
               </React.Fragment>
             }
             form={

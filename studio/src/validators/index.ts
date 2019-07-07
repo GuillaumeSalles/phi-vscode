@@ -4,7 +4,7 @@ import { layerTreeToArray } from "../layerUtils";
 
 const kebabCaseRegex = new RegExp("^([a-z][a-z0-9]*)(-[a-z0-9]+)*$");
 
-function validateVariableName(
+export function validateRefName(
   value: string,
   existingRefId: string | null,
   map: Map<string, { name: string }>,
@@ -27,13 +27,6 @@ function validateVariableName(
   }
 }
 
-export function validateBreakpointName(
-  value: string,
-  breakpoints: T.BreakpointsMap
-): string | undefined {
-  return validateVariableName(value, null, breakpoints, "Breakpoint");
-}
-
 export function validateBreakpointValue(value: number | undefined) {
   if (value === undefined) {
     return "Breakpoint value is required";
@@ -41,14 +34,6 @@ export function validateBreakpointValue(value: number | undefined) {
   if (value <= 0) {
     return "Breakpoint should be greater than 0px";
   }
-}
-
-export function validateColorName(
-  value: string,
-  existingRefId: string | null,
-  colors: T.ColorsMap
-): string | undefined {
-  return validateVariableName(value, existingRefId, colors, "Color");
 }
 
 function isHexRGB(str: string) {
@@ -64,25 +49,11 @@ export function validateColorValue(value: string): string | undefined {
   }
 }
 
-export function validateFontFamilyName(
-  value: string,
-  fontFamilies: T.FontFamiliesMap
-): string | undefined {
-  return validateVariableName(value, null, fontFamilies, "Font family");
-}
-
-export function validateFontSizeName(
-  value: string,
-  fontSizes: T.FontSizesMap
-): string | undefined {
-  return validateVariableName(value, null, fontSizes, "Font size");
-}
-
 export function validateComponentName(
   value: string,
   components: T.ComponentMap
 ): string | undefined {
-  return validateVariableName(value, null, components, "Component");
+  return validateRefName(value, null, components, "Component");
 }
 
 export function validateLayerName(
@@ -92,5 +63,5 @@ export function validateLayerName(
   const layersArray = new Map(
     layerTreeToArray(root).map(layer => [layer.id, layer])
   );
-  return validateVariableName(value, null, layersArray, "Layer");
+  return validateRefName(value, null, layersArray, "Layer");
 }
