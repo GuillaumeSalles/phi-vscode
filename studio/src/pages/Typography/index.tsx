@@ -34,10 +34,15 @@ function Typography({
         <div css={[column, mainPadding]}>
           <h1 css={[heading, { marginBottom: "20px" }]}>Typography</h1>
           <FontFamilies
+            refs={refs}
             fontFamilies={fontFamilies}
             onFontFamiliesChange={onFontFamiliesChange}
           />
-          <FontSizes items={fontSizes} onItemsChange={onFontSizesChange} />
+          <FontSizes
+            refs={refs}
+            items={fontSizes}
+            onItemsChange={onFontSizesChange}
+          />
         </div>
       }
     />

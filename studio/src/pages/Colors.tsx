@@ -14,6 +14,7 @@ import { validateColorValue } from "../validators";
 import Button from "../components/Button";
 import RefActions from "../components/RefActions";
 import { useRefManagement } from "../hooks";
+import { isLayerUsingRef } from "../layerUtils";
 
 type Props = {
   menu: React.ReactNode;
@@ -21,6 +22,24 @@ type Props = {
   colors: Map<string, T.ColorDefinition>;
   onColorsChange: (newColors: Map<string, T.ColorDefinition>) => void;
 };
+
+function isColorUsingRef(color: T.Color | undefined, refId: string): boolean {
+  return color != null && color.type === "ref" && color.id === refId;
+}
+
+function isTextLayerStyleUsingColor(style: T.TextLayerStyle, refId: string) {
+  return (
+    isColorUsingRef(style.color, refId) ||
+    isColorUsingRef(style.backgroundColor, refId)
+  );
+}
+
+function isContainerLayerStyleUsingColor(
+  style: T.ContainerLayerStyle,
+  refId: string
+) {
+  return isColorUsingRef(style.backgroundColor, refId);
+}
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
   const valueEntry = useStringFormEntry("", validateColorValue);
@@ -30,7 +49,9 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
     selectRef,
     isEditing,
     dialog,
-    refActionsProps
+    refActionsProps,
+    deleteRefDialogProps,
+    closeDeleteRefDialogProps
   } = useRefManagement(
     "Color",
     colors,
@@ -42,7 +63,15 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
     name => ({
       name,
       value: valueEntry.value
-    })
+    }),
+    (layer, refId) =>
+      isLayerUsingRef(
+        layer,
+        refId,
+        isTextLayerStyleUsingColor,
+        isContainerLayerStyleUsingColor
+      ),
+    refs.components
   );
   return (
     <Layout
@@ -91,6 +120,12 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
               );
             })}
           </div>
+          {selectedRefId && (
+            <OkCancelModal
+              {...deleteRefDialogProps}
+              buttons={<Button text="Ok" {...closeDeleteRefDialogProps} />}
+            />
+          )}
           <OkCancelModal
             title={isEditing ? "Edit Color" : "Add Color"}
             {...dialog.dialogProps}

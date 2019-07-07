@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { validateRefName } from "../validators";
 import {
   useStringFormEntry,
   FormEntry,
   useDialogForm
 } from "../components/Form";
-import { del, set } from "../helpers/immutable-map";
+import { del, set, valuesAsArray } from "../helpers/immutable-map";
 import uuid from "uuid/v4";
+import * as T from "../types";
+import { layerTreeToArray } from "../layerUtils";
 
 export function useToggle(defaultValue: boolean) {
   const [isActive, setValue] = useState(defaultValue);
@@ -27,13 +29,81 @@ export function useStateWithGetter<T>(
   ];
 }
 
+function getComponentsThatUseRef(
+  refId: string,
+  components: T.ComponentMap,
+  isLayerUsingRef: (layer: T.Layer, refId: string) => boolean
+) {
+  return valuesAsArray(components).filter(component =>
+    layerTreeToArray(component.layout).some(l => isLayerUsingRef(l, refId))
+  );
+}
+
+export function useDeleteRefDialog<TRef extends { name: string }>(
+  refTypeName: string,
+  refs: Map<string, TRef>,
+  selectedRefId: string | null,
+  isLayerUsingRef: (layer: T.Layer, refId: string) => boolean,
+  components: T.ComponentMap
+) {
+  const [isOpen, setIsOpen] = useState(false);
+  const okButtonRef = useRef<HTMLButtonElement>(null);
+  const deleteWarningDescription = isOpen
+    ? `${refTypeName} "${
+        refs.get(selectedRefId!)!.name
+      }" is used by the following components ${getComponentsThatUseRef(
+        selectedRefId!,
+        components,
+        isLayerUsingRef
+      )
+        .map(c => `"${c.name}"`)
+        .join(", ")}.`
+    : null;
+  useEffect(() => {
+    if (isOpen) {
+      okButtonRef.current!.focus();
+    }
+  }, [isOpen]);
+  return {
+    open: () => setIsOpen(true),
+    dialogProps: {
+      isOpen: isOpen,
+      title: `Can't delete ${refTypeName.toLowerCase()}`,
+      description: deleteWarningDescription,
+      form: null,
+      onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => {
+        if (e.key === "Enter") {
+          setIsOpen(false);
+        } else if (e.key === "Escape") {
+          setIsOpen(false);
+        }
+      }
+    },
+    okProps: {
+      onClick: () => setIsOpen(false),
+      onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (e.key === "Enter") {
+          e.stopPropagation();
+        }
+        if (e.key === "Tab") {
+          okButtonRef.current!.focus();
+          e.preventDefault();
+        }
+      },
+      ref: okButtonRef
+    }
+  };
+}
+
 export function useRefManagement<TRef extends { name: string }>(
   prefix: string,
   refs: Map<string, TRef>,
   onRefsChanges: (newRefs: Map<string, TRef>) => void,
   formEntries: FormEntry<any, any>[],
   prepareEditForm: (ref: TRef) => void,
-  formToRef: (name: string) => TRef
+  formToRef: (name: string) => TRef,
+  isLayerUsingRef: (layer: T.Layer, refId: string) => boolean,
+  components: T.ComponentMap
 ) {
   const [selectedRefId, selectRef] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,12 +115,21 @@ export function useRefManagement<TRef extends { name: string }>(
       set(refs, isEditing ? selectedRefId! : uuid(), formToRef(nameEntry.value))
     );
   });
+  const deleteRefDialog = useDeleteRefDialog(
+    prefix,
+    refs,
+    selectedRefId,
+    isLayerUsingRef,
+    components
+  );
   return {
     nameEntry,
     selectedRefId,
     selectRef,
     isEditing,
     dialog,
+    deleteRefDialogProps: deleteRefDialog.dialogProps,
+    closeDeleteRefDialogProps: deleteRefDialog.okProps,
     refActionsProps: {
       onAdd: () => {
         setIsEditing(false);
@@ -72,8 +151,17 @@ export function useRefManagement<TRef extends { name: string }>(
       },
       canDelete: selectedRefId !== null && refs.size > 1,
       onDelete: () => {
-        onRefsChanges(del(refs, selectedRefId!));
-        selectRef(null);
+        const componentsThatUseRef = getComponentsThatUseRef(
+          selectedRefId!,
+          components,
+          isLayerUsingRef
+        );
+        if (componentsThatUseRef.length > 0) {
+          deleteRefDialog.open();
+        } else {
+          onRefsChanges(del(refs, selectedRefId!));
+          selectRef(null);
+        }
       }
     }
   };

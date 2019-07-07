@@ -10,13 +10,22 @@ import { useStringFormEntry, FormInput } from "../../components/Form";
 import Button from "../../components/Button";
 import RefActions from "../../components/RefActions";
 import { useRefManagement } from "../../hooks";
+import { isLayerUsingRef } from "../../layerUtils";
 
 type Props = {
   items: T.FontSizesMap;
   onItemsChange: (items: T.FontSizesMap) => void;
+  refs: T.Refs;
 };
 
-export default function FontSizes({ items, onItemsChange }: Props) {
+function isTextLayerStyleUsingFontSize(
+  style: T.TextLayerStyle,
+  refId: string
+): boolean {
+  return style.fontSize.id === refId;
+}
+
+export default function FontSizes({ items, onItemsChange, refs }: Props) {
   const valueEntry = useStringFormEntry("", () => {
     return undefined;
   });
@@ -25,7 +34,9 @@ export default function FontSizes({ items, onItemsChange }: Props) {
     selectedRefId,
     selectRef,
     dialog,
-    refActionsProps
+    refActionsProps,
+    deleteRefDialogProps,
+    closeDeleteRefDialogProps
   } = useRefManagement(
     "Font size",
     items,
@@ -37,7 +48,10 @@ export default function FontSizes({ items, onItemsChange }: Props) {
     name => ({
       name,
       value: valueEntry.value
-    })
+    }),
+    (layer, refId) =>
+      isLayerUsingRef(layer, refId, isTextLayerStyleUsingFontSize, () => false),
+    refs.components
   );
   return (
     <React.Fragment>
@@ -67,6 +81,12 @@ export default function FontSizes({ items, onItemsChange }: Props) {
           </SelectableCard>
         </div>
       ))}
+      {selectedRefId && (
+        <OkCancelModal
+          {...deleteRefDialogProps}
+          buttons={<Button text="Ok" {...closeDeleteRefDialogProps} />}
+        />
+      )}
       <OkCancelModal
         title="Add font size"
         {...dialog.dialogProps}

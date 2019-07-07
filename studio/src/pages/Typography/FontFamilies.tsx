@@ -10,15 +10,25 @@ import { useStringFormEntry, FormInput } from "../../components/Form";
 import Button from "../../components/Button";
 import RefActions from "../../components/RefActions";
 import { useRefManagement } from "../../hooks";
+import { isLayerUsingRef } from "../../layerUtils";
+
+function isTextStyleUsingFontSize(
+  style: T.TextLayerStyle,
+  refId: string
+): boolean {
+  return style.fontFamily.id === refId;
+}
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
   onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;
+  refs: T.Refs;
 };
 
 export default function FontFamilies({
   fontFamilies,
-  onFontFamiliesChange
+  onFontFamiliesChange,
+  refs
 }: Props) {
   const valueEntry = useStringFormEntry("", () => {
     return undefined;
@@ -28,7 +38,9 @@ export default function FontFamilies({
     selectedRefId,
     selectRef,
     dialog,
-    refActionsProps
+    refActionsProps,
+    deleteRefDialogProps,
+    closeDeleteRefDialogProps
   } = useRefManagement(
     "Font family",
     fontFamilies,
@@ -40,7 +52,10 @@ export default function FontFamilies({
     name => ({
       name,
       value: valueEntry.value
-    })
+    }),
+    (layer, refId) =>
+      isLayerUsingRef(layer, refId, isTextStyleUsingFontSize, () => false),
+    refs.components
   );
   return (
     <React.Fragment>
@@ -70,6 +85,12 @@ export default function FontFamilies({
           </SelectableCard>
         </div>
       ))}
+      {selectedRefId && (
+        <OkCancelModal
+          {...deleteRefDialogProps}
+          buttons={<Button text="Ok" {...closeDeleteRefDialogProps} />}
+        />
+      )}
       <OkCancelModal
         title="Add font-family"
         {...dialog.dialogProps}

@@ -36,7 +36,9 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
     selectRef,
     isEditing,
     dialog,
-    refActionsProps
+    refActionsProps,
+    deleteRefDialogProps,
+    closeDeleteRefDialogProps
   } = useRefManagement(
     "Breakpoint",
     breakpoints,
@@ -48,7 +50,12 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
     name => ({
       name,
       value: px(valueEntry.value!)
-    })
+    }),
+    (layer, refId) =>
+      layer.mediaQueries.some(
+        (mq: T.MediaQuery<any>) => mq.minWidth.id === refId
+      ),
+    refs.components
   );
   return (
     <Layout
@@ -104,6 +111,12 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
                 </SelectableCard>
               ))}
           </div>
+          {selectedRefId && (
+            <OkCancelModal
+              {...deleteRefDialogProps}
+              buttons={<Button text="Ok" {...closeDeleteRefDialogProps} />}
+            />
+          )}
           <OkCancelModal
             title={isEditing ? "Edit breakpoint" : "Add new breakpoint"}
             {...dialog.dialogProps}
