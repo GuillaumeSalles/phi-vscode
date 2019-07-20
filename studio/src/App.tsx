@@ -23,9 +23,7 @@ function App() {
 
   const [fileName, setFileName] = useState<string | undefined>(undefined);
   const [isSaved, setIsSaved] = useState<boolean>(true);
-  const [components, setComponents] = useState<Map<string, T.Component>>(
-    new Map()
-  );
+  const [components, setComponents] = useState<T.ComponentMap>(new Map());
   const [colors, setColors] = useState<T.ColorsMap>(new Map());
   const [fontWeights, setFontWeights] = useState<T.FontWeightsMap>(new Map());
   const [fontFamilies, setFontFamilies] = useState<T.FontFamiliesMap>(
@@ -109,7 +107,7 @@ function App() {
         components={components}
         onAddComponent={name => {
           const id = uuid();
-          setComponents(set(components, id, { name }));
+          setComponents(set(components, id, { name, props: [] }));
           router.history.push(`/components/${id}`);
         }}
       />

@@ -3,7 +3,23 @@ export type ComponentMap = Map<string, Component>;
 export type Component = {
   name: string;
   layout?: Layer;
+  props: ComponentProp[];
+  // logic: Assignment[];
 };
+
+export type Assignment = {
+  propId: string;
+  layerId: string;
+  layerProp: string;
+};
+
+export type ComponentProp = {
+  id: string;
+  name: string;
+  type: ComponentPropType;
+};
+
+export type ComponentPropType = "text";
 
 export interface ILayer<TStyle> {
   id: string;

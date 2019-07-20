@@ -10,6 +10,7 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
+import ComponentProps from "./ComponentProps";
 import { findLayerById, updateLayer } from "../../layerUtils";
 import { useStateWithGetter } from "../../hooks";
 
@@ -49,18 +50,31 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
     onComponentChange(componentId, newComponent);
   }
 
+  function updateComponentProps(props: T.ComponentProp[]) {
+    onComponentChange(componentId, {
+      ...component,
+      props
+    });
+  }
+
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
       left={
         isEditing ? (
-          <LayersTree
-            root={component.layout}
-            onSelectLayer={setLayerId}
-            selectedLayerId={layerId}
-            onLayerChange={updateComponentRootLayer}
-            refs={refs}
-          />
+          <>
+            <ComponentProps
+              component={component}
+              onPropsChange={updateComponentProps}
+            />
+            <LayersTree
+              root={component.layout}
+              onSelectLayer={setLayerId}
+              selectedLayerId={layerId}
+              onLayerChange={updateComponentRootLayer}
+              refs={refs}
+            />
+          </>
         ) : (
           menu
         )

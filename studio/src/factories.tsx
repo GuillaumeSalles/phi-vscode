@@ -174,7 +174,8 @@ export function makeDefaultProject() {
 
   const helloWorld = entry({
     name: "hello-world",
-    layout: helloWorldTextLayer
+    layout: helloWorldTextLayer,
+    props: []
   });
 
   const components: T.ComponentMap = new Map([helloWorld]);
