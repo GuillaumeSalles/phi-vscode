@@ -107,6 +107,7 @@ export default function MediaQueriesEditor<TStyle>({
               <FormSelect
                 width="100%"
                 options={newOptions}
+                placeholder="Select a breakpoint"
                 {...selectedMediaQueryEntry.inputProps}
                 // TODO: Find a better way
                 value={

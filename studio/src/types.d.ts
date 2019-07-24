@@ -4,10 +4,11 @@ export type Component = {
   name: string;
   layout?: Layer;
   props: ComponentProp[];
-  // logic: Assignment[];
+  overrides: Override[];
 };
 
-export type Assignment = {
+export type Override = {
+  id: string;
   propId: string;
   layerId: string;
   layerProp: string;
@@ -19,7 +20,7 @@ export type ComponentProp = {
   type: ComponentPropType;
 };
 
-export type ComponentPropType = "text";
+export type ComponentPropType = "text" | "layer";
 
 export interface ILayer<TStyle> {
   id: string;

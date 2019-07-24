@@ -18,10 +18,11 @@ import { Delete, Edit } from "../../icons";
 import React, { useState } from "react";
 import uuid from "uuid/v4";
 import { validateRefName } from "../../validators";
+import { propertyTypes } from "../../constants";
 
 type Props = {
   component: T.Component;
-  onPropsChange: (props: T.ComponentProp[]) => void;
+  onComponentChange: (newComponent: T.Component) => void;
 };
 
 function makeComponentProp(
@@ -59,7 +60,14 @@ function deleteProp(component: T.Component, id: string): T.ComponentProp[] {
   return component.props.filter(prop => prop.id !== id);
 }
 
-export default function ComponentProps({ component, onPropsChange }: Props) {
+export default function ComponentProps({
+  component,
+  onComponentChange
+}: Props) {
+  function onPropsChange(props: T.ComponentProp[]) {
+    onComponentChange({ ...component, props });
+  }
+
   const [selectedPropId, setSelectedPropId] = useState<string | null>(null);
   const nameEntry = useStringFormEntry("", str =>
     validateRefName(
@@ -70,7 +78,7 @@ export default function ComponentProps({ component, onPropsChange }: Props) {
     )
   );
   const typeEntry = useSelectFormEntry("text", str => undefined);
-  const options = [["text", "text"]] as [string, string][];
+  const options = propertyTypes.map(type => [type, type]) as [string, string][];
   const createOrUpdateDialog = useDialogForm([nameEntry], () => {
     if (selectedPropId == null) {
       onPropsChange(addProp(component, nameEntry.value, typeEntry.value!));
@@ -115,6 +123,7 @@ export default function ComponentProps({ component, onPropsChange }: Props) {
                 {...nameEntry.inputProps}
               />
               <FormSelect
+                placeholder="Select the type of your property"
                 width="100%"
                 options={options}
                 {...typeEntry.inputProps}
@@ -127,6 +136,7 @@ export default function ComponentProps({ component, onPropsChange }: Props) {
       {component.props.map(prop => {
         return (
           <div
+            key={prop.id}
             css={[
               row,
               {
@@ -142,9 +152,16 @@ export default function ComponentProps({ component, onPropsChange }: Props) {
               }
             ]}
           >
-            <span css={{ flex: "1 1 auto", marginLeft: "4px", height: "28px" }}>
+            <div
+              css={{
+                flex: "1 1 auto",
+                marginLeft: "4px",
+                height: "28px",
+                lineHeight: "28px"
+              }}
+            >
               {prop.name} - {prop.type}
-            </span>
+            </div>
             <IconButton
               cssOverrides={{ display: "none", flex: "0 0 auto" }}
               icon={<Edit height={20} width={20} />}
@@ -161,7 +178,13 @@ export default function ComponentProps({ component, onPropsChange }: Props) {
               icon={<Delete height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
-                onPropsChange(deleteProp(component, prop.id));
+                onComponentChange({
+                  ...component,
+                  props: deleteProp(component, prop.id),
+                  overrides: component.overrides.filter(
+                    override => override.propId !== prop.id
+                  )
+                });
               }}
             />
           </div>

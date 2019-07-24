@@ -107,7 +107,9 @@ function App() {
         components={components}
         onAddComponent={name => {
           const id = uuid();
-          setComponents(set(components, id, { name, props: [] }));
+          setComponents(
+            set(components, id, { name, props: [], overrides: [] })
+          );
           router.history.push(`/components/${id}`);
         }}
       />

@@ -378,8 +378,7 @@ function LayersTree({
       css={[
         column,
         {
-          width: "240px",
-          height: "100%"
+          width: "240px"
         }
       ]}
     >

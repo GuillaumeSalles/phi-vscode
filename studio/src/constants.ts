@@ -36,3 +36,5 @@ export const alignContentList: T.AlignContent[] = [
   "space-around",
   "stretch"
 ];
+
+export const propertyTypes: T.ComponentPropType[] = ["text", "layer"];

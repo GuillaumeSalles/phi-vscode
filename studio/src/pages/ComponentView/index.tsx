@@ -11,6 +11,7 @@ import LayerEditor from "./Editors/LayerEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
+import ComponentOverrides from "./ComponentOverrides";
 import { findLayerById, updateLayer } from "../../layerUtils";
 import { useStateWithGetter } from "../../hooks";
 
@@ -57,22 +58,35 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
     });
   }
 
+  function updateComponentOverrides(overrides: T.Override[]) {
+    onComponentChange(componentId, {
+      ...component,
+      overrides
+    });
+  }
+
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
       left={
         isEditing ? (
           <>
-            <ComponentProps
-              component={component}
-              onPropsChange={updateComponentProps}
-            />
             <LayersTree
               root={component.layout}
               onSelectLayer={setLayerId}
               selectedLayerId={layerId}
               onLayerChange={updateComponentRootLayer}
               refs={refs}
+            />
+            <ComponentProps
+              component={component}
+              onComponentChange={newComponent =>
+                onComponentChange(componentId, newComponent)
+              }
+            />
+            <ComponentOverrides
+              component={component}
+              onOverridesChange={updateComponentOverrides}
             />
           </>
         ) : (
