@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
+import { assertUnreachable } from "../../utils";
 
 type Props = {
   layer: T.Layer;
@@ -152,12 +153,12 @@ function makeLayerStyle(
   ).map(style => {
     switch (layer.type) {
       case "text":
+      case "link":
         return makeTextLayerStyle(style as T.TextLayerStyle, refs);
       case "container":
         return makeContainerLayerStyle(style as T.ContainerLayerStyle, refs);
-      default:
-        throw new Error("Layer type not found");
     }
+    assertUnreachable(layer);
   });
   return merge(styles);
 }
@@ -165,14 +166,14 @@ function makeLayerStyle(
 function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
   switch (layer.type) {
     case "text":
+    case "link":
       return layer.text;
     case "container":
       return layer.children.map(c => (
         <Layer key={c.id} layer={c} refs={refs} width={width} />
       ));
-    default:
-      throw new Error("Invalid layer style");
   }
+  assertUnreachable(layer);
 }
 
 function makeDimensionsStyle(layer: T.Dimensions) {
@@ -212,15 +213,26 @@ function makeBackgroundStyle(layer: T.Background, colors: T.ColorsMap) {
   };
 }
 
-function Layer({ layer, refs, width }: Props) {
+function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
   switch (layer.type) {
     case "text":
+    case "container":
+      return {
+        css: makeLayerStyle(layer, refs, width)
+      };
+    case "link":
+      return {
+        css: makeLayerStyle(layer, refs, width),
+        href: layer.href
+      };
   }
+  assertUnreachable(layer);
+}
+
+function Layer({ layer, refs, width }: Props) {
   return jsx(
     layer.tag,
-    {
-      css: makeLayerStyle(layer, refs, width)
-    },
+    makeLayerProps(layer, refs, width),
     makeChildren(layer, refs, width)
   );
 }

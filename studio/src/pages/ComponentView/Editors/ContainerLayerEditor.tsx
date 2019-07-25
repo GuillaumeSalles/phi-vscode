@@ -3,11 +3,11 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { column, sectionTitle, separator } from "../../../styles";
 import DimensionsEditor from "../../../pages/ComponentView/Editors/DimensionsEditor";
-import { useState } from "react";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import FlexContainerEditor from "./FlexContainerEditor";
+import useLayerStyleEditor from "./useLayerStyleEditor";
 
 type Props = {
   layer: T.ContainerLayer;
@@ -16,30 +16,20 @@ type Props = {
 };
 
 function ContainerLayerEditor({ layer, onChange, refs }: Props) {
-  const [mediaQuery, setMediaQuery] = useState("default");
-  const isDefault = mediaQuery === "default";
-  const style = isDefault
-    ? layer.style
-    : layer.mediaQueries.find(mq => mq.id === mediaQuery)!.style;
+  const {
+    style,
+    mediaQuery,
+    setMediaQuery,
+    updateStyle,
+    addMediaQuery
+  } = useLayerStyleEditor(layer);
 
   function updateLayer(newProps: Partial<T.ContainerLayer>) {
     onChange({ ...layer, ...newProps });
   }
 
   function updateLayerStyle(newProps: Partial<T.ContainerLayerStyle>) {
-    if (isDefault) updateLayer({ style: { ...style, ...newProps } });
-    else {
-      updateLayer({
-        mediaQueries: layer.mediaQueries.map(mq =>
-          mq.id === mediaQuery
-            ? {
-                ...mq,
-                style: { ...style, ...newProps }
-              }
-            : mq
-        )
-      });
-    }
+    updateLayer(updateStyle(newProps));
   }
 
   return (
@@ -64,32 +54,20 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
         </Field> */}
       </div>
       <hr css={separator} />
+      <MediaQueriesEditor
+        selectedId={mediaQuery}
+        layer={layer}
+        onAdd={addMediaQuery}
+        onChange={setMediaQuery}
+        refs={refs}
+      />
+      <hr css={separator} />
       <FlexContainerEditor style={style} onChange={updateLayerStyle} />
       <hr css={separator} />
       <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
       <hr css={separator} />
       <MarginEditor margin={style} onChange={updateLayerStyle} />
       <PaddingEditor padding={style} onChange={updateLayerStyle} />
-      <hr css={separator} />
-      <MediaQueriesEditor
-        selectedId={mediaQuery}
-        layer={layer}
-        onAdd={(id, breakpoint) => {
-          updateLayer({
-            mediaQueries: [
-              ...layer.mediaQueries,
-              {
-                id,
-                minWidth: breakpoint,
-                style: { ...layer.style }
-              }
-            ]
-          });
-          setMediaQuery(id);
-        }}
-        onChange={setMediaQuery}
-        refs={refs}
-      />
     </div>
   );
 }

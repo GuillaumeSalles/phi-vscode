@@ -3,6 +3,8 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import ContainerLayerEditor from "./ContainerLayerEditor";
 import TextLayerEditor from "./TextLayerEditor";
+import LinkLayerEditor from "./LinkLayerEditor";
+import { assertUnreachable } from "../../../utils";
 
 type Props = {
   layer: T.Layer;
@@ -18,7 +20,8 @@ export default function LayerEditor({ layer, onChange, refs }: Props) {
       );
     case "text":
       return <TextLayerEditor layer={layer} onChange={onChange} refs={refs} />;
-    default:
-      throw new Error("Unsupported layer type");
+    case "link":
+      return <LinkLayerEditor layer={layer} onChange={onChange} refs={refs} />;
   }
+  assertUnreachable(layer);
 }

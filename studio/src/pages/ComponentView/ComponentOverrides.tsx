@@ -12,7 +12,7 @@ import {
   useSelectFormEntry,
   FormSelect
 } from "../../components/Form";
-import { Delete, Edit, Binding } from "../../icons";
+import { Delete, Edit, Link } from "../../icons";
 import React, { useState } from "react";
 import uuid from "uuid/v4";
 import { layerTreeToArray, findLayerById } from "../../layerUtils";
@@ -306,7 +306,7 @@ export default function ComponentOverrides({
                 {override.layerProp}
               </span>
               <span css={{ margin: "6px 8px 0 8px" }}>
-                <Binding height={20} width={20} />
+                <Link height={20} width={20} />
               </span>
               <span>
                 {findLayerById(component.layout!, override.layerId)!.name}

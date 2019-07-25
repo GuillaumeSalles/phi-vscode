@@ -3,6 +3,7 @@ import * as T from "./types";
 import { colors } from "./styles";
 import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
 import { layerTypeToName, layerTreeToArray } from "./layerUtils";
+import { assertUnreachable } from "./utils";
 
 function ref(id: string): T.Ref {
   return { type: "ref", id };
@@ -44,15 +45,39 @@ export function makeLayer(
   refs: T.Refs
 ): T.Layer {
   const name = generateUniqueLayerName(type, root);
-
   switch (type) {
     case "text":
       return makeTextLayer(refs, { name });
+    case "link":
+      return makeLinkLayer(refs, { name });
     case "container":
       return makeContainerLayer(refs, { name });
-    default:
-      throw new Error("Invalid layer type");
   }
+  assertUnreachable(type);
+}
+
+export function makeLinkLayer(
+  refs: T.Refs,
+  props: Partial<T.LinkLayer> = {}
+): T.LinkLayer {
+  return {
+    type: "link",
+    id: uuid(),
+    name: "Text",
+    tag: "a",
+    text: "link",
+    href: "",
+    mediaQueries: [],
+    style: {
+      color: ref(firstKey(refs.colors)),
+      fontFamily: ref(firstKey(refs.fontFamilies)),
+      fontWeight: ref(firstKey(refs.fontWeights)),
+      fontSize: ref(firstKey(refs.fontSizes)),
+      textAlign: "left",
+      lineHeight: 1.2
+    },
+    ...props
+  };
 }
 
 export function makeTextLayer(

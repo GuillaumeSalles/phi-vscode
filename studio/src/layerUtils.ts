@@ -1,14 +1,16 @@
 import * as T from "./types";
+import { assertUnreachable } from "./utils";
 
 export function layerTypeToName(type: T.LayerType): string {
   switch (type) {
     case "text":
       return "text";
+    case "link":
+      return "link";
     case "container":
       return "container";
-    default:
-      throw new Error("Unkwown layer type");
   }
+  assertUnreachable(type);
 }
 
 export function findLayerById(root: T.Layer, id: string): T.Layer | undefined {
@@ -61,7 +63,9 @@ export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
   return result;
 }
 
-export function getTextLayerStyles(layer: T.TextLayer): T.TextLayerStyle[] {
+export function getTextLayerStyles(
+  layer: T.ILayer<T.TextLayerStyle>
+): T.TextLayerStyle[] {
   return [layer.style, ...layer.mediaQueries.map(mq => mq.style)];
 }
 
@@ -82,6 +86,7 @@ export function isLayerUsingRef(
 ): boolean {
   switch (layer.type) {
     case "text":
+    case "link":
       return getTextLayerStyles(layer).some(style =>
         isTextStyleUsingRef(style, refId)
       );
@@ -89,7 +94,6 @@ export function isLayerUsingRef(
       return getContainerLayerStyles(layer).some(style =>
         isContainerStyleUsingRef(style, refId)
       );
-    default:
-      throw new Error("Unkown layer type");
   }
+  assertUnreachable(layer);
 }

@@ -29,9 +29,9 @@ export interface ILayer<TStyle> {
   mediaQueries: Array<MediaQuery<TStyle>>;
 }
 
-export type Layer = ContainerLayer | TextLayer;
+export type Layer = ContainerLayer | TextLayer | LinkLayer;
 
-export type LayerType = "container" | "text";
+export type LayerType = "container" | "text" | "link";
 
 export interface ContainerLayer extends ILayer<ContainerLayerStyle> {
   type: "container";
@@ -43,6 +43,13 @@ export interface TextLayer extends ILayer<TextLayerStyle> {
   type: "text";
   tag: TextLayerTag;
   text: string;
+}
+
+export interface LinkLayer extends ILayer<TextLayerStyle> {
+  type: "link";
+  tag: "a";
+  text: string;
+  href: string;
 }
 
 export type ContainerLayerStyle = FlexContainerStyle &

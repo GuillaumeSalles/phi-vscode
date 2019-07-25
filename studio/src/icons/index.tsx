@@ -75,12 +75,12 @@ export function Edit({ height, width }: EditProps) {
   );
 }
 
-type BindingProps = {
+type LinkProps = {
   height: number;
   width: number;
 };
 
-export function Binding({ height, width }: BindingProps) {
+export function Link({ height, width }: LinkProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -21,3 +21,7 @@ export function listToEntries<TKey extends string>(
 ): Array<[TKey, string]> {
   return items.map(item => [item, item]);
 }
+
+export function assertUnreachable(x: never): never {
+  throw new Error("Didn't expect to get here");
+}

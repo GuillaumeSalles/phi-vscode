@@ -3,26 +3,23 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import useLayerStyleEditor from "./useLayerStyleEditor";
 import { column, separator } from "../../../styles";
-import Field from "../../../components/Field";
 import DimensionsEditor from "./DimensionsEditor";
-import Select from "../../../components/Select";
 import TypographyEditor from "./TypographyEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import TextAreaInput from "../../../components/TextAreaInput";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import Section from "./Section";
+import TextInput from "../../../components/TextInput";
+import Field from "../../../components/Field";
 
 type Props = {
-  layer: T.TextLayer;
-  onChange: (layer: T.TextLayer) => void;
+  layer: T.LinkLayer;
+  onChange: (layer: T.LinkLayer) => void;
   refs: T.Refs;
 };
 
-const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
-const tagsOptions: [T.TextLayerTag, string][] = tags.map(t => [t, t]);
-
-function TextLayerEditor({ layer, onChange, refs }: Props) {
+export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
   const {
     style,
     mediaQuery,
@@ -31,7 +28,7 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
     addMediaQuery
   } = useLayerStyleEditor(layer);
 
-  function updateLayer(newProps: Partial<T.TextLayer>) {
+  function updateLayer(newProps: Partial<T.LinkLayer>) {
     onChange({ ...layer, ...newProps });
   }
 
@@ -42,20 +39,18 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
   return (
     <div css={column}>
       <Section title="HTML">
-        <Field label="Tag">
-          <Select
-            value={layer.tag}
-            onChange={tag => updateLayer({ tag })}
-            options={tagsOptions}
-          />
-        </Field>
-        <div css={{ padding: "0 4px" }}>
-          <TextAreaInput
-            placeholder="Text"
+        <Field label="text">
+          <TextInput
             value={layer.text}
             onChange={text => updateLayer({ text })}
           />
-        </div>
+        </Field>
+        <Field label="href">
+          <TextInput
+            value={layer.href}
+            onChange={href => updateLayer({ href })}
+          />
+        </Field>
       </Section>
       <hr css={separator} />
       <MediaQueriesEditor
@@ -81,5 +76,3 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
     </div>
   );
 }
-
-export default TextLayerEditor;
