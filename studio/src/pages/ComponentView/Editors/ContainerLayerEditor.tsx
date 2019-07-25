@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { column, sectionTitle, separator } from "../../../styles";
-import DimensionsEditor from "../../../pages/ComponentView/Editors/DimensionsEditor";
+import DimensionsEditor from "./DimensionsEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";

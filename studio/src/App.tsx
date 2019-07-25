@@ -10,7 +10,7 @@ import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
-import { set } from "./helpers/immutable-map";
+import { set, del, firstKey } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
@@ -78,8 +78,12 @@ function App() {
     };
   }, [router]);
 
-  function navigateToFirstComponent(components: T.ComponentMap) {
-    router.history.push(`/components/${Array.from(components.keys())[0]}`);
+  function navigateToFirstComponentOrDefault(components: T.ComponentMap) {
+    router.history.push(
+      components.size > 0
+        ? `/components/${firstKey(components)}`
+        : `/typography`
+    );
   }
 
   const onComponentChange = useCallback(
@@ -98,7 +102,7 @@ function App() {
     setFontFamilies(project.fontFamilies);
     setBreakpoints(project.breakpoints);
     setComponents(project.components);
-    navigateToFirstComponent(project.components);
+    navigateToFirstComponentOrDefault(project.components);
   }
 
   function menu() {
@@ -178,6 +182,11 @@ function App() {
               menu={menu()}
               componentId={props.match.params.id}
               onComponentChange={onComponentChange}
+              onDelete={id => {
+                const newComponents = del(components, id);
+                navigateToFirstComponentOrDefault(newComponents);
+                setComponents(newComponents);
+              }}
               refs={refs}
             />
           );

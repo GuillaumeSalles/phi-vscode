@@ -19,10 +19,17 @@ type Props = {
   menu: React.ReactNode;
   componentId: string;
   onComponentChange: (id: string, component: T.Component) => void;
+  onDelete: (id: string) => void;
   refs: T.Refs;
 };
 
-function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
+function ComponentView({
+  menu,
+  componentId,
+  onComponentChange,
+  refs,
+  onDelete
+}: Props) {
   const component = refs.components.get(componentId)!;
   const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
     component.layout ? component.layout.id : undefined
@@ -49,13 +56,6 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
     };
     setLayerId(newLayer ? newLayer.id : undefined);
     onComponentChange(componentId, newComponent);
-  }
-
-  function updateComponentProps(props: T.ComponentProp[]) {
-    onComponentChange(componentId, {
-      ...component,
-      props
-    });
   }
 
   function updateComponentOverrides(overrides: T.Override[]) {
@@ -110,7 +110,10 @@ function ComponentView({ menu, componentId, onComponentChange, refs }: Props) {
                     onClick={() => setIsEditing(true)}
                     margin="0 10px 0 0"
                   />
-                  <SecondaryButton text="Delete" onClick={() => {}} />
+                  <SecondaryButton
+                    text="Delete"
+                    onClick={() => onDelete(componentId)}
+                  />
                 </React.Fragment>
               )}
             </div>
