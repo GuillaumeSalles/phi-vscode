@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import useLayerStyleEditor from "./useLayerStyleEditor";
-import { column, separator } from "../../../styles";
+import { column } from "../../../styles";
 import DimensionsEditor from "./DimensionsEditor";
 import TypographyEditor from "./TypographyEditor";
 import MarginEditor from "./MarginEditor";
@@ -53,7 +53,6 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
           />
         </Field>
       </Section>
-      <hr css={separator} />
       <MediaQueriesEditor
         selectedId={mediaQuery}
         layer={layer}
@@ -61,16 +60,13 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
         onChange={setMediaQuery}
         refs={refs}
       />
-      <hr css={separator} />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
         <TypographyEditor
           style={style}
           onChange={updateLayerStyle}
           refs={refs}
         />
-        <hr css={separator} />
         <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
-        <hr css={separator} />
         <MarginEditor margin={style} onChange={updateLayerStyle} />
         <PaddingEditor padding={style} onChange={updateLayerStyle} />
       </div>

@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import React from "react";
 import * as T from "../../../types";
-import { column, sectionTitle, separator } from "../../../styles";
+import { column, separator } from "../../../styles";
 import DimensionsEditor from "./DimensionsEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
@@ -61,15 +62,19 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
         onChange={setMediaQuery}
         refs={refs}
       />
-      <hr css={separator} />
       <DisplayEditor style={style} onChange={updateLayerStyle} />
-      <hr css={separator} />
-      <FlexContainerEditor style={style} onChange={updateLayerStyle} />
-      <hr css={separator} />
-      <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
-      <hr css={separator} />
-      <MarginEditor margin={style} onChange={updateLayerStyle} />
-      <PaddingEditor padding={style} onChange={updateLayerStyle} />
+      {style.display === "flex" && (
+        <FlexContainerEditor style={style} onChange={updateLayerStyle} />
+      )}
+      {(style.display === "flex" || style.display === "block") && (
+        <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
+      )}
+      {(style.display === "flex" || style.display === "block") && (
+        <MarginEditor margin={style} onChange={updateLayerStyle} />
+      )}
+      {(style.display === "flex" || style.display === "block") && (
+        <PaddingEditor padding={style} onChange={updateLayerStyle} />
+      )}
     </div>
   );
 }

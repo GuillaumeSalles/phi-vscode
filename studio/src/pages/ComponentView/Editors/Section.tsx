@@ -9,7 +9,16 @@ type Props = {
 
 export default function Section({ title, children }: Props) {
   return (
-    <div css={[column, { padding: "0 8px" }]}>
+    <div
+      css={[
+        column,
+        {
+          padding: "4px 8px",
+          margin: "4px 0",
+          borderBottom: "solid 1px #DDD"
+        }
+      ]}
+    >
       <h4
         css={[
           sectionTitle,

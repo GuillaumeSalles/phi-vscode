@@ -71,7 +71,7 @@ const Right = ({ fill }: { fill: string }) => (
 
 export default function TextAlignEditor({ value, onChange }: Props) {
   return (
-    <div css={[row, { padding: "0 0 0 8px" }]}>
+    <div css={[row]}>
       <RadioIconGroup
         name="text-align"
         options={[

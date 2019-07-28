@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import useLayerStyleEditor from "./useLayerStyleEditor";
-import { column, separator } from "../../../styles";
+import { column } from "../../../styles";
 import Field from "../../../components/Field";
 import DimensionsEditor from "./DimensionsEditor";
 import Select from "../../../components/Select";
@@ -67,7 +67,6 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
           />
         </div>
       </Section>
-      <hr css={separator} />
       <MediaQueriesEditor
         selectedId={mediaQuery}
         layer={layer}
@@ -75,16 +74,13 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
         onChange={setMediaQuery}
         refs={refs}
       />
-      <hr css={separator} />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
         <TypographyEditor
           style={style}
           onChange={updateLayerStyle}
           refs={refs}
         />
-        <hr css={separator} />
         <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
-        <hr css={separator} />
         <MarginEditor margin={style} onChange={updateLayerStyle} />
         <PaddingEditor padding={style} onChange={updateLayerStyle} />
       </div>

@@ -22,31 +22,43 @@ type Props = {
   onOverridesChange: (props: T.Override[]) => void;
 };
 
-function makeOverride(id: string, propId: string, layerId: string): T.Override {
+function makeOverride(
+  id: string,
+  propId: string,
+  layerId: string,
+  layerProp: string
+): T.Override {
   return {
     id,
     propId,
     layerId,
-    layerProp: "text"
+    layerProp
   };
 }
 
 function add(
   component: T.Component,
   propId: string,
-  layerId: string
+  layerId: string,
+  layerProp: string
 ): T.Override[] {
-  return [...component.overrides, makeOverride(uuid(), propId, layerId)];
+  return [
+    ...component.overrides,
+    makeOverride(uuid(), propId, layerId, layerProp)
+  ];
 }
 
 function edit(
   component: T.Component,
   id: string,
   propId: string,
-  layerId: string
+  layerId: string,
+  layerProp: string
 ): T.Override[] {
   return component.overrides.map(override =>
-    override.id === id ? makeOverride(uuid(), propId, layerId) : override
+    override.id === id
+      ? makeOverride(uuid(), propId, layerId, layerProp)
+      : override
   );
 }
 
@@ -196,11 +208,22 @@ export default function ComponentOverrides({
     () => {
       if (selectedId == null) {
         onOverridesChange(
-          add(component, propIdEntry.value!, layerEntry.value!)
+          add(
+            component,
+            propIdEntry.value!,
+            layerEntry.value!,
+            layerPropEntry.value!
+          )
         );
       } else {
         onOverridesChange(
-          edit(component, selectedId, propIdEntry.value!, layerEntry.value!)
+          edit(
+            component,
+            selectedId,
+            propIdEntry.value!,
+            layerEntry.value!,
+            layerPropEntry.value!
+          )
         );
       }
     }
@@ -305,15 +328,13 @@ export default function ComponentOverrides({
               ]}
             >
               <span>
-                {getComponentPropName(component, override.propId)}.
+                {findLayerById(component.layout!, override.layerId)!.name}.
                 {override.layerProp}
               </span>
               <span css={{ margin: "6px 8px 0 8px" }}>
                 <Link height={20} width={20} />
               </span>
-              <span>
-                {findLayerById(component.layout!, override.layerId)!.name}
-              </span>
+              <span>{getComponentPropName(component, override.propId)}</span>
             </div>
             <IconButton
               cssOverrides={{ display: "none", flex: "0 0 auto" }}

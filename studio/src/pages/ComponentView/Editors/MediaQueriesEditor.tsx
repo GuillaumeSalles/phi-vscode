@@ -73,7 +73,12 @@ export default function MediaQueriesEditor<TStyle>({
   });
 
   return (
-    <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
+    <div
+      css={[
+        column,
+        { flex: "0 0 auto", padding: "8px", borderBottom: "solid 1px #DDD" }
+      ]}
+    >
       <div
         css={[
           row,

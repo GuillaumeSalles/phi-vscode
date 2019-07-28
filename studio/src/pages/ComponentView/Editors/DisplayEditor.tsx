@@ -12,7 +12,7 @@ type Props = {
   onChange: (style: T.Display) => void;
 };
 
-const options = listToEntries(["flex", "block", "none"]);
+const options = listToEntries(["flex", "block", "inline", "none"]);
 
 export default function DisplayEditor({ style, onChange }: Props) {
   function updateStyle(newProps: Partial<T.Display>) {

@@ -53,7 +53,7 @@ export interface LinkLayer extends ILayer<TextLayerStyle> {
 }
 
 export type Display = {
-  display: "flex" | "block" | "none";
+  display: "flex" | "block" | "inline" | "none";
 };
 
 export type ContainerLayerStyle = Display &
