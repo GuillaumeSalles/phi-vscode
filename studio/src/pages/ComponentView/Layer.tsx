@@ -102,6 +102,20 @@ function merge<TItem>(array: TItem[]): TItem {
   });
 }
 
+function textDecorationToCss(style: T.TextDecoration) {
+  const properties = [];
+  if (style.isUnderlined) {
+    properties.push("underline");
+  }
+  if (style.isStrikedThrough) {
+    properties.push("line-through");
+  }
+  if (properties.length === 0) {
+    return "none";
+  }
+  return properties.join(" ");
+}
+
 function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
   return {
     ...makeDimensionsStyle(style),
@@ -114,7 +128,8 @@ function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
     fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),
     lineHeight: style.lineHeight,
     letterSpacing: lengthToCss(style.letterSpacing, "0"),
-    textAlign: style.textAlign
+    textAlign: style.textAlign,
+    textDecoration: textDecorationToCss(style)
   };
 }
 

@@ -40,12 +40,14 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
       <Section title="HTML">
         <Field label="text">
           <TextInput
+            cssOverrides={{ width: "100%" }}
             value={layer.text}
             onChange={text => updateLayer({ text })}
           />
         </Field>
         <Field label="href">
           <TextInput
+            cssOverrides={{ width: "100%" }}
             value={layer.href}
             onChange={href => updateLayer({ href })}
           />

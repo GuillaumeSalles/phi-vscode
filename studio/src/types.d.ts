@@ -88,7 +88,13 @@ export type TextLayerStyle = {
 } & Background &
   Dimensions &
   Margin &
-  Padding;
+  Padding &
+  TextDecoration;
+
+export type TextDecoration = {
+  isUnderlined: boolean;
+  isStrikedThrough: boolean;
+};
 
 export type FlexDirection = "column" | "row" | "column-reverse" | "row-reverse";
 

@@ -3,6 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
 import TextAlignEditor from "./TextAlignEditor";
+import TextDecorationEditor from "./TextDecorationEditor";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
 import ColorInput from "../../../components/ColorInput";
@@ -93,10 +94,16 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
           />
         </Field>
       </div>
-      <TextAlignEditor
-        value={style.textAlign}
-        onChange={textAlign => updateLayerStyle({ textAlign })}
-      />
+      <div css={[row, { padding: "0 8px" }]}>
+        <TextAlignEditor
+          value={style.textAlign}
+          onChange={textAlign => updateLayerStyle({ textAlign })}
+        />
+        <TextDecorationEditor
+          value={style}
+          onChange={style => updateLayerStyle({ ...style })}
+        />
+      </div>
     </Section>
   );
 }

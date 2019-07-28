@@ -69,6 +69,8 @@ export function makeLinkLayer(
     href: "",
     mediaQueries: [],
     style: {
+      isStrikedThrough: false,
+      isUnderlined: true,
       color: ref(firstKey(refs.colors)),
       fontFamily: ref(firstKey(refs.fontFamilies)),
       fontWeight: ref(firstKey(refs.fontWeights)),
@@ -92,6 +94,8 @@ export function makeTextLayer(
     text: "",
     mediaQueries: [],
     style: {
+      isStrikedThrough: false,
+      isUnderlined: false,
       color: ref(firstKey(refs.colors)),
       fontFamily: ref(firstKey(refs.fontFamilies)),
       fontWeight: ref(firstKey(refs.fontWeights)),
@@ -189,6 +193,8 @@ export function makeDefaultProject() {
     text: "Hello world",
     mediaQueries: [],
     style: {
+      isStrikedThrough: false,
+      isUnderlined: false,
       textAlign: "left",
       fontSize: ref(getKeyByIndex(fontSizes, 5)),
       fontFamily: ref(firstKey(fontFamilies)),

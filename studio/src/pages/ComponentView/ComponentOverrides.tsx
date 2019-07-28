@@ -220,8 +220,6 @@ export default function ComponentOverrides({
             setSelectedId(null);
             createOrUpdateDialog.open();
             propIdEntry.setValue(component.props[0].id);
-            console.log(component.props[0].id);
-            console.log(propIdEntry.value);
           }}
         />
         <OkCancelModal
