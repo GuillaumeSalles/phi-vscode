@@ -133,7 +133,7 @@ function makeContainerLayerStyle(
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
-    display: "flex",
+    display: style.display,
     ...makeDimensionsStyle(style),
     ...makeBackgroundStyle(style, refs.colors),
     ...makeFlexContainerStyle(style)

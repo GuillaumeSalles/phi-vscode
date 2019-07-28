@@ -76,7 +76,12 @@ export const propsOverrideDefinitions: PropOverrideDefinition[] = [
   {
     name: "text",
     allowedPropType: ["text"],
-    allowedLayerType: ["text"]
+    allowedLayerType: ["text", "link"]
+  },
+  {
+    name: "href",
+    allowedPropType: ["text"],
+    allowedLayerType: ["link"]
   },
   {
     name: "children",

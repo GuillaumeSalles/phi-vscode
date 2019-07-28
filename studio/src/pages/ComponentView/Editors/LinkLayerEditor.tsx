@@ -7,7 +7,6 @@ import DimensionsEditor from "./DimensionsEditor";
 import TypographyEditor from "./TypographyEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
-import TextAreaInput from "../../../components/TextAreaInput";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import Section from "./Section";
 import TextInput from "../../../components/TextInput";

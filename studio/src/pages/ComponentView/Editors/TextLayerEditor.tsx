@@ -12,6 +12,7 @@ import PaddingEditor from "./PaddingEditor";
 import TextAreaInput from "../../../components/TextAreaInput";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import Section from "./Section";
+import { listToEntries } from "../../../utils";
 
 type Props = {
   layer: T.TextLayer;
@@ -19,8 +20,17 @@ type Props = {
   refs: T.Refs;
 };
 
-const tags: T.TextLayerTag[] = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
-const tagsOptions: [T.TextLayerTag, string][] = tags.map(t => [t, t]);
+const tags: T.TextLayerTag[] = [
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "p",
+  "span"
+];
+const tagsOptions = listToEntries(tags);
 
 function TextLayerEditor({ layer, onChange, refs }: Props) {
   const {

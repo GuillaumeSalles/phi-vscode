@@ -52,7 +52,12 @@ export interface LinkLayer extends ILayer<TextLayerStyle> {
   href: string;
 }
 
-export type ContainerLayerStyle = FlexContainerStyle &
+export type Display = {
+  display: "flex" | "block" | "none";
+};
+
+export type ContainerLayerStyle = Display &
+  FlexContainerStyle &
   Background &
   Dimensions &
   Margin &
@@ -112,7 +117,15 @@ export type AlignContent =
   | "space-around"
   | "stretch";
 
-export type TextLayerTag = "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+export type TextLayerTag =
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "p"
+  | "span";
 
 export type TextAlignProperty = "left" | "center" | "right" | "justify";
 

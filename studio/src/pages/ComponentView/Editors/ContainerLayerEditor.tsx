@@ -7,6 +7,7 @@ import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import FlexContainerEditor from "./FlexContainerEditor";
+import DisplayEditor from "./DisplayEditor";
 import useLayerStyleEditor from "./useLayerStyleEditor";
 
 type Props = {
@@ -34,7 +35,7 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
 
   return (
     <div css={column}>
-      <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
+      {/* <div css={[column, { flex: "0 0 auto", padding: "8px" }]}>
         <h4
           css={[
             sectionTitle,
@@ -45,15 +46,14 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
         >
           HTML
         </h4>
-        {/* <Field label="Tag">
+        <Field label="Tag">
           <Select
             value={layer.tag}
             onChange={tag => updateLayer({ tag })}
             options={tagsOptions}
           />
-        </Field> */}
-      </div>
-      <hr css={separator} />
+        </Field>
+      </div> */}
       <MediaQueriesEditor
         selectedId={mediaQuery}
         layer={layer}
@@ -61,6 +61,8 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
         onChange={setMediaQuery}
         refs={refs}
       />
+      <hr css={separator} />
+      <DisplayEditor style={style} onChange={updateLayerStyle} />
       <hr css={separator} />
       <FlexContainerEditor style={style} onChange={updateLayerStyle} />
       <hr css={separator} />

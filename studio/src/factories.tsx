@@ -123,6 +123,7 @@ export function makeContainerLayer(
     mediaQueries: [],
     children: [],
     style: {
+      display: "flex",
       flexDirection: "column",
       flexWrap: "nowrap",
       justifyContent: "flex-start",
