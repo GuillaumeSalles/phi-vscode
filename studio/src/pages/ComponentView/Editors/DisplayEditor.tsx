@@ -20,7 +20,7 @@ export default function DisplayEditor({ style, onChange }: Props) {
   }
 
   return (
-    <Section title="Display">
+    <Section title="Layout">
       <div css={row}>
         <Field label="Display">
           <Select

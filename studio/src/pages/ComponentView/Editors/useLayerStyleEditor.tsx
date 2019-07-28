@@ -1,7 +1,10 @@
 import * as T from "../../../types";
 import { useState } from "react";
 
-export default function useLayerStyleEditor<TStyle>(layer: T.ILayer<TStyle>) {
+export default function useLayerStyleEditor<TStyle>(
+  layer: T.ILayer<TStyle>,
+  setMediaQueries: (mediaQueries: Array<T.MediaQuery<TStyle>>) => void
+) {
   const [mediaQuery, setMediaQuery] = useState("default");
   const isDefault = mediaQuery === "default";
   const style = isDefault
@@ -25,21 +28,16 @@ export default function useLayerStyleEditor<TStyle>(layer: T.ILayer<TStyle>) {
             )
           };
     },
-    addMediaQuery: (
-      id: string,
-      breakpoint: T.Ref
-    ): Partial<T.ILayer<TStyle>> => {
+    addMediaQuery: (id: string, breakpoint: T.Ref): void => {
+      setMediaQueries([
+        ...layer.mediaQueries,
+        {
+          id,
+          minWidth: breakpoint,
+          style: { ...layer.style }
+        }
+      ]);
       setMediaQuery(id);
-      return {
-        mediaQueries: [
-          ...layer.mediaQueries,
-          {
-            id,
-            minWidth: breakpoint,
-            style: { ...layer.style }
-          }
-        ]
-      };
     }
   };
 }

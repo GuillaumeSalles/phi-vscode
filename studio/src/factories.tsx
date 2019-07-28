@@ -69,6 +69,7 @@ export function makeLinkLayer(
     href: "",
     mediaQueries: [],
     style: {
+      display: "inline",
       isStrikedThrough: false,
       isUnderlined: true,
       color: ref(firstKey(refs.colors)),
@@ -94,6 +95,7 @@ export function makeTextLayer(
     text: "",
     mediaQueries: [],
     style: {
+      display: "block",
       isStrikedThrough: false,
       isUnderlined: false,
       color: ref(firstKey(refs.colors)),
@@ -193,6 +195,7 @@ export function makeDefaultProject() {
     text: "Hello world",
     mediaQueries: [],
     style: {
+      display: "block",
       isStrikedThrough: false,
       isUnderlined: false,
       textAlign: "left",

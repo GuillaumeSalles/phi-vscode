@@ -118,6 +118,7 @@ function textDecorationToCss(style: T.TextDecoration) {
 
 function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
   return {
+    display: style.display,
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
     ...makePaddingStyle(style),
@@ -150,6 +151,8 @@ function makeContainerLayerStyle(
   return {
     display: style.display,
     ...makeDimensionsStyle(style),
+    ...makeMarginStyle(style),
+    ...makePaddingStyle(style),
     ...makeBackgroundStyle(style, refs.colors),
     ...makeFlexContainerStyle(style)
   };

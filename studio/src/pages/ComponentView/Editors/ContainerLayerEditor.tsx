@@ -24,7 +24,7 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
     setMediaQuery,
     updateStyle,
     addMediaQuery
-  } = useLayerStyleEditor(layer);
+  } = useLayerStyleEditor(layer, mediaQueries => updateLayer({ mediaQueries }));
 
   function updateLayer(newProps: Partial<T.ContainerLayer>) {
     onChange({ ...layer, ...newProps });
@@ -66,13 +66,13 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
       {style.display === "flex" && (
         <FlexContainerEditor style={style} onChange={updateLayerStyle} />
       )}
-      {(style.display === "flex" || style.display === "block") && (
+      {style.display !== "none" && (
         <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
       )}
-      {(style.display === "flex" || style.display === "block") && (
+      {style.display !== "none" && (
         <MarginEditor margin={style} onChange={updateLayerStyle} />
       )}
-      {(style.display === "flex" || style.display === "block") && (
+      {style.display !== "none" && (
         <PaddingEditor padding={style} onChange={updateLayerStyle} />
       )}
     </div>

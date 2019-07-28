@@ -85,7 +85,8 @@ export type TextLayerStyle = {
   fontFamily: Ref;
   fontWeight: Ref;
   textAlign: TextAlignProperty;
-} & Background &
+} & Display &
+  Background &
   Dimensions &
   Margin &
   Padding &

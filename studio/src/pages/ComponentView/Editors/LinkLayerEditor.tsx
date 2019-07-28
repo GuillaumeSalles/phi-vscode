@@ -11,6 +11,7 @@ import MediaQueriesEditor from "./MediaQueriesEditor";
 import Section from "./Section";
 import TextInput from "../../../components/TextInput";
 import Field from "../../../components/Field";
+import DisplayEditor from "./DisplayEditor";
 
 type Props = {
   layer: T.LinkLayer;
@@ -25,7 +26,7 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
     setMediaQuery,
     updateStyle,
     addMediaQuery
-  } = useLayerStyleEditor(layer);
+  } = useLayerStyleEditor(layer, mediaQueries => updateLayer({ mediaQueries }));
 
   function updateLayer(newProps: Partial<T.LinkLayer>) {
     onChange({ ...layer, ...newProps });
@@ -61,6 +62,7 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
         refs={refs}
       />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
+        <DisplayEditor style={style} onChange={updateLayerStyle} />
         <TypographyEditor
           style={style}
           onChange={updateLayerStyle}
