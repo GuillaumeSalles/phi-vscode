@@ -53,23 +53,21 @@ export interface LinkLayer extends ILayer<TextLayerStyle> {
 }
 
 export type Display = {
-  display: "flex" | "block" | "inline" | "none";
+  display: DisplayProperty;
+  flexDirection?: FlexDirection;
+  flexWrap?: FlexWrap;
+  justifyContent?: JustifyContent;
+  alignItems?: AlignItems;
+  alignContent?: AlignContent;
 };
 
+export type DisplayProperty = "none" | "block" | "inline" | "flex";
+
 export type ContainerLayerStyle = Display &
-  FlexContainerStyle &
   Background &
   Dimensions &
   Margin &
   Padding;
-
-export type FlexContainerStyle = {
-  flexDirection: FlexDirection;
-  flexWrap: FlexWrap;
-  justifyContent: JustifyContent;
-  alignItems: AlignItems;
-  alignContent: AlignContent;
-};
 
 export type MediaQuery<TStyle> = {
   id: string;
@@ -77,7 +75,15 @@ export type MediaQuery<TStyle> = {
   style: TStyle;
 };
 
-export type TextLayerStyle = {
+export type TextLayerStyle = Typography &
+  Display &
+  Background &
+  Dimensions &
+  Margin &
+  Padding &
+  TextDecoration;
+
+export type Typography = {
   letterSpacing?: Length;
   lineHeight: number;
   color?: Color;
@@ -85,12 +91,7 @@ export type TextLayerStyle = {
   fontFamily: Ref;
   fontWeight: Ref;
   textAlign: TextAlignProperty;
-} & Display &
-  Background &
-  Dimensions &
-  Margin &
-  Padding &
-  TextDecoration;
+};
 
 export type TextDecoration = {
   isUnderlined: boolean;

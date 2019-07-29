@@ -76,7 +76,11 @@ function TextLayerEditor({ layer, onChange, refs }: Props) {
         refs={refs}
       />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
-        <DisplayEditor style={style} onChange={updateLayerStyle} />
+        <DisplayEditor
+          style={style}
+          onChange={updateLayerStyle}
+          allowedDisplays={["flex", "block", "inline", "none"]}
+        />
         <TypographyEditor
           style={style}
           onChange={updateLayerStyle}

@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
 import * as T from "../../../types";
-import { column, separator } from "../../../styles";
+import { column } from "../../../styles";
 import DimensionsEditor from "./DimensionsEditor";
 import MarginEditor from "./MarginEditor";
 import PaddingEditor from "./PaddingEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
-import FlexContainerEditor from "./FlexContainerEditor";
 import DisplayEditor from "./DisplayEditor";
 import useLayerStyleEditor from "./useLayerStyleEditor";
 
@@ -62,10 +60,11 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
         onChange={setMediaQuery}
         refs={refs}
       />
-      <DisplayEditor style={style} onChange={updateLayerStyle} />
-      {style.display === "flex" && (
-        <FlexContainerEditor style={style} onChange={updateLayerStyle} />
-      )}
+      <DisplayEditor
+        allowedDisplays={["flex", "block", "none"]}
+        style={style}
+        onChange={updateLayerStyle}
+      />
       {style.display !== "none" && (
         <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
       )}

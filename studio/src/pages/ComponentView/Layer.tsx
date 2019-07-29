@@ -134,13 +134,20 @@ function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
   };
 }
 
-function makeFlexContainerStyle(style: T.FlexContainerStyle) {
+function makeDisplayStyle(style: T.Display) {
+  if (style.display === "flex") {
+    return {
+      display: "flex",
+      flexDirection: style.flexDirection,
+      flexWrap: style.flexWrap,
+      justifyContent: style.justifyContent,
+      alignItems: style.alignItems,
+      alignContent: style.alignContent
+    };
+  }
+
   return {
-    flexDirection: style.flexDirection,
-    flexWrap: style.flexWrap,
-    justifyContent: style.justifyContent,
-    alignItems: style.alignItems,
-    alignContent: style.alignContent
+    display: style.display
   };
 }
 
@@ -149,12 +156,11 @@ function makeContainerLayerStyle(
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
-    display: style.display,
+    ...makeDisplayStyle(style),
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
     ...makePaddingStyle(style),
-    ...makeBackgroundStyle(style, refs.colors),
-    ...makeFlexContainerStyle(style)
+    ...makeBackgroundStyle(style, refs.colors)
   };
 }
 
