@@ -32,8 +32,8 @@ export default function LinkLayerEditor({ layer, onChange, refs }: Props) {
     onChange({ ...layer, ...newProps });
   }
 
-  function updateLayerStyle(newProps: Partial<T.TextLayerStyle>) {
-    updateLayer(updateStyle(newProps));
+  function updateLayerStyle(newProps: Partial<T.LayerStyle>) {
+    updateLayer(updateStyle(newProps) as T.LinkLayer);
   }
 
   return (

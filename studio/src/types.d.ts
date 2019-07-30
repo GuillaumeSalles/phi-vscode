@@ -22,35 +22,43 @@ export type ComponentProp = {
 
 export type ComponentPropType = "text" | "layer";
 
-export interface ILayer<TStyle> {
+export interface ILayer {
   id: string;
   name: string;
-  style: TStyle;
-  mediaQueries: Array<MediaQuery<TStyle>>;
+  style: LayerStyle;
+  mediaQueries: Array<MediaQuery>;
 }
 
 export type Layer = ContainerLayer | TextLayer | LinkLayer;
 
 export type LayerType = "container" | "text" | "link";
 
-export interface ContainerLayer extends ILayer<ContainerLayerStyle> {
+export interface ContainerLayer extends ILayer {
   type: "container";
   tag: "div";
   children: Layer[];
 }
 
-export interface TextLayer extends ILayer<TextLayerStyle> {
+export interface TextLayer extends ILayer {
   type: "text";
   tag: TextLayerTag;
   text: string;
 }
 
-export interface LinkLayer extends ILayer<TextLayerStyle> {
+export interface LinkLayer extends ILayer {
   type: "link";
   tag: "a";
   text: string;
   href: string;
 }
+
+type LayerStyle = Typography &
+  Display &
+  Background &
+  Dimensions &
+  Margin &
+  Padding &
+  TextDecoration;
 
 export type Display = {
   display: DisplayProperty;
@@ -63,39 +71,25 @@ export type Display = {
 
 export type DisplayProperty = "none" | "block" | "inline" | "flex";
 
-export type ContainerLayerStyle = Display &
-  Background &
-  Dimensions &
-  Margin &
-  Padding;
-
-export type MediaQuery<TStyle> = {
+export type MediaQuery = {
   id: string;
   minWidth: Ref;
-  style: TStyle;
+  style: LayerStyle;
 };
-
-export type TextLayerStyle = Typography &
-  Display &
-  Background &
-  Dimensions &
-  Margin &
-  Padding &
-  TextDecoration;
 
 export type Typography = {
   letterSpacing?: Length;
-  lineHeight: number;
+  lineHeight?: number;
   color?: Color;
-  fontSize: Ref;
-  fontFamily: Ref;
-  fontWeight: Ref;
-  textAlign: TextAlignProperty;
+  fontSize?: Ref;
+  fontFamily?: Ref;
+  fontWeight?: Ref;
+  textAlign?: TextAlignProperty;
 };
 
 export type TextDecoration = {
-  isUnderlined: boolean;
-  isStrikedThrough: boolean;
+  isUnderlined?: boolean;
+  isStrikedThrough?: boolean;
 };
 
 export type FlexDirection = "column" | "row" | "column-reverse" | "row-reverse";

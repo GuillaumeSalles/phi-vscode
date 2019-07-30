@@ -12,11 +12,8 @@ import RefActions from "../../components/RefActions";
 import { useRefManagement } from "../../hooks";
 import { isLayerUsingRef } from "../../layerUtils";
 
-function isTextStyleUsingFontSize(
-  style: T.TextLayerStyle,
-  refId: string
-): boolean {
-  return style.fontFamily.id === refId;
+function isUsingFontSize(style: T.LayerStyle, refId: string): boolean {
+  return style.fontFamily != null && style.fontFamily.id === refId;
 }
 
 type Props = {
@@ -53,8 +50,7 @@ export default function FontFamilies({
       name,
       value: valueEntry.value
     }),
-    (layer, refId) =>
-      isLayerUsingRef(layer, refId, isTextStyleUsingFontSize, () => false),
+    (layer, refId) => isLayerUsingRef(layer, refId, isUsingFontSize),
     refs.components
   );
   return (

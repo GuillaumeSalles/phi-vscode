@@ -18,11 +18,8 @@ type Props = {
   refs: T.Refs;
 };
 
-function isTextLayerStyleUsingFontSize(
-  style: T.TextLayerStyle,
-  refId: string
-): boolean {
-  return style.fontSize.id === refId;
+function isUsingFontSize(style: T.LayerStyle, refId: string): boolean {
+  return style.fontSize != null && style.fontSize.id === refId;
 }
 
 export default function FontSizes({ items, onItemsChange, refs }: Props) {
@@ -49,8 +46,7 @@ export default function FontSizes({ items, onItemsChange, refs }: Props) {
       name,
       value: valueEntry.value
     }),
-    (layer, refId) =>
-      isLayerUsingRef(layer, refId, isTextLayerStyleUsingFontSize, () => false),
+    (layer, refId) => isLayerUsingRef(layer, refId, isUsingFontSize),
     refs.components
   );
   return (

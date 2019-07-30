@@ -16,18 +16,15 @@ import React from "react";
 import SecondaryButton from "../../../components/SecondaryButton";
 import Button from "../../../components/Button";
 
-type Props<TStyle> = {
-  layer: T.ILayer<TStyle>;
+type Props = {
+  layer: T.Layer;
   onChange: (id: string) => void;
   onAdd: (id: string, breakpoint: T.Ref) => void;
   selectedId: string;
   refs: T.Refs;
 };
 
-function mediaQueryToString<TStyle>(
-  mediaQuery: T.MediaQuery<TStyle>,
-  refs: T.Refs
-) {
+function mediaQueryToString(mediaQuery: T.MediaQuery, refs: T.Refs) {
   const bp = refs.breakpoints.get(mediaQuery.minWidth.id);
   if (bp == null) {
     throw new Error("Breakpoint not found for MediaQuery");
@@ -41,13 +38,13 @@ function breakpointEntryToOption(
   return [entry[0], `@media (min-width: ${entry[1].name})`];
 }
 
-export default function MediaQueriesEditor<TStyle>({
+export default function MediaQueriesEditor({
   layer,
   selectedId,
   onAdd,
   onChange,
   refs
-}: Props<TStyle>) {
+}: Props) {
   const defaultMediaQuery: [string, string] = ["default", "default"];
   const options = [defaultMediaQuery].concat(
     layer.mediaQueries.map(mq => [mq.id, mediaQueryToString(mq, refs)])

@@ -2,6 +2,7 @@
 import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
+import { firstEntry } from "../../helpers/immutable-map";
 
 type Props = {
   layer: T.Layer;
@@ -55,9 +56,12 @@ function fontSizeToString(
 }
 
 function fontFamilyToString(
-  fontFamily: T.Ref,
+  fontFamily: T.Ref | undefined,
   fontFamilies: T.FontFamiliesMap
 ): string {
+  if (fontFamily == null) {
+    return firstEntry(fontFamilies)[1].value;
+  }
   const ref = fontFamilies.get(fontFamily.id);
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
@@ -65,7 +69,13 @@ function fontFamilyToString(
   return ref.value;
 }
 
-function fontWeightToNumber(fontWeight: T.Ref, fontWeights: T.FontWeightsMap) {
+function fontWeightToNumber(
+  fontWeight: T.Ref | undefined,
+  fontWeights: T.FontWeightsMap
+) {
+  if (fontWeight == null) {
+    return firstEntry(fontWeights)[1].value;
+  }
   const ref = fontWeights.get(fontWeight.id);
   if (ref == null) {
     throw new Error("Invalid font weight ref");
@@ -73,9 +83,9 @@ function fontWeightToNumber(fontWeight: T.Ref, fontWeights: T.FontWeightsMap) {
   return ref.value;
 }
 
-function getLayerStyles<TStyle>(
-  defaultStyle: TStyle,
-  mediaQueries: T.MediaQuery<TStyle>[],
+function getLayerStyles(
+  defaultStyle: T.LayerStyle,
+  mediaQueries: T.MediaQuery[],
   refs: T.Refs,
   width: number
 ) {
@@ -116,7 +126,7 @@ function textDecorationToCss(style: T.TextDecoration) {
   return properties.join(" ");
 }
 
-function makeTextLayerStyle(style: T.TextLayerStyle, refs: T.Refs) {
+function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
     display: style.display,
     ...makeDimensionsStyle(style),
@@ -152,7 +162,7 @@ function makeDisplayStyle(style: T.Display) {
 }
 
 function makeContainerLayerStyle(
-  style: T.ContainerLayerStyle,
+  style: T.LayerStyle,
   refs: T.Refs
 ): InterpolationWithTheme<any> {
   return {
@@ -178,9 +188,9 @@ function makeLayerStyle(
     switch (layer.type) {
       case "text":
       case "link":
-        return makeTextLayerStyle(style as T.TextLayerStyle, refs);
+        return makeTextLayerStyle(style, refs);
       case "container":
-        return makeContainerLayerStyle(style as T.ContainerLayerStyle, refs);
+        return makeContainerLayerStyle(style, refs);
     }
     assertUnreachable(layer);
   });

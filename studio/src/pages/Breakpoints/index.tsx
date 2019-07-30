@@ -52,9 +52,7 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
       value: px(valueEntry.value!)
     }),
     (layer, refId) =>
-      layer.mediaQueries.some(
-        (mq: T.MediaQuery<any>) => mq.minWidth.id === refId
-      ),
+      layer.mediaQueries.some((mq: T.MediaQuery) => mq.minWidth.id === refId),
     refs.components
   );
   return (

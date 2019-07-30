@@ -63,37 +63,12 @@ export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
   return result;
 }
 
-export function getTextLayerStyles(
-  layer: T.ILayer<T.TextLayerStyle>
-): T.TextLayerStyle[] {
-  return [layer.style, ...layer.mediaQueries.map(mq => mq.style)];
-}
-
-export function getContainerLayerStyles(
-  layer: T.ContainerLayer
-): T.ContainerLayerStyle[] {
-  return [layer.style, ...layer.mediaQueries.map(mq => mq.style)];
-}
-
 export function isLayerUsingRef(
   layer: T.Layer,
   refId: string,
-  isTextStyleUsingRef: (style: T.TextLayerStyle, refId: string) => boolean,
-  isContainerStyleUsingRef: (
-    style: T.ContainerLayerStyle,
-    refId: string
-  ) => boolean
+  isUsingRef: (style: T.LayerStyle, refId: string) => boolean
 ): boolean {
-  switch (layer.type) {
-    case "text":
-    case "link":
-      return getTextLayerStyles(layer).some(style =>
-        isTextStyleUsingRef(style, refId)
-      );
-    case "container":
-      return getContainerLayerStyles(layer).some(style =>
-        isContainerStyleUsingRef(style, refId)
-      );
-  }
-  assertUnreachable(layer);
+  return [layer.style, ...layer.mediaQueries.map(mq => mq.style)].some(style =>
+    isUsingRef(style, refId)
+  );
 }

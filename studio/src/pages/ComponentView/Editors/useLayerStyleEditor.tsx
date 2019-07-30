@@ -2,8 +2,8 @@ import * as T from "../../../types";
 import { useState } from "react";
 
 export default function useLayerStyleEditor<TStyle>(
-  layer: T.ILayer<TStyle>,
-  setMediaQueries: (mediaQueries: Array<T.MediaQuery<TStyle>>) => void
+  layer: T.Layer,
+  setMediaQueries: (mediaQueries: Array<T.MediaQuery>) => void
 ) {
   const [mediaQuery, setMediaQuery] = useState("default");
   const isDefault = mediaQuery === "default";
@@ -14,7 +14,7 @@ export default function useLayerStyleEditor<TStyle>(
     style,
     mediaQuery,
     setMediaQuery,
-    updateStyle: (newProps: Partial<TStyle>): Partial<T.ILayer<TStyle>> => {
+    updateStyle: (newProps: Partial<TStyle>): Partial<T.Layer> => {
       return isDefault
         ? { style: { ...style, ...newProps } }
         : {

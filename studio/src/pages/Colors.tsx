@@ -27,18 +27,11 @@ function isColorUsingRef(color: T.Color | undefined, refId: string): boolean {
   return color != null && color.type === "ref" && color.id === refId;
 }
 
-function isTextLayerStyleUsingColor(style: T.TextLayerStyle, refId: string) {
+function isLayerStyleUsingColor(style: T.LayerStyle, refId: string) {
   return (
     isColorUsingRef(style.color, refId) ||
     isColorUsingRef(style.backgroundColor, refId)
   );
-}
-
-function isContainerLayerStyleUsingColor(
-  style: T.ContainerLayerStyle,
-  refId: string
-) {
-  return isColorUsingRef(style.backgroundColor, refId);
 }
 
 function Colors({ menu, refs, colors, onColorsChange }: Props) {
@@ -64,13 +57,7 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
       name,
       value: valueEntry.value
     }),
-    (layer, refId) =>
-      isLayerUsingRef(
-        layer,
-        refId,
-        isTextLayerStyleUsingColor,
-        isContainerLayerStyleUsingColor
-      ),
+    (layer, refId) => isLayerUsingRef(layer, refId, isLayerStyleUsingColor),
     refs.components
   );
   return (

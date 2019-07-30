@@ -28,8 +28,8 @@ function ContainerLayerEditor({ layer, onChange, refs }: Props) {
     onChange({ ...layer, ...newProps });
   }
 
-  function updateLayerStyle(newProps: Partial<T.ContainerLayerStyle>) {
-    updateLayer(updateStyle(newProps));
+  function updateLayerStyle(newProps: Partial<T.LayerStyle>) {
+    updateLayer(updateStyle(newProps) as T.ContainerLayer);
   }
 
   return (

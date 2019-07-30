@@ -19,7 +19,7 @@ export default function TextDecorationEditor({ value, onChange }: Props) {
     <div css={[row, { padding: "0 0 0 8px" }]}>
       <ToggleButton
         name="underline"
-        isChecked={value.isUnderlined}
+        isChecked={value.isUnderlined != null ? value.isUnderlined : false}
         onChange={isUnderlined => updateLayer({ isUnderlined })}
         icon={({ isChecked }) => (
           <Underline
@@ -31,7 +31,9 @@ export default function TextDecorationEditor({ value, onChange }: Props) {
       />
       <ToggleButton
         name="underline"
-        isChecked={value.isStrikedThrough}
+        isChecked={
+          value.isStrikedThrough != null ? value.isStrikedThrough : false
+        }
         onChange={isStrikedThrough => updateLayer({ isStrikedThrough })}
         icon={({ isChecked }) => (
           <Strikethrough

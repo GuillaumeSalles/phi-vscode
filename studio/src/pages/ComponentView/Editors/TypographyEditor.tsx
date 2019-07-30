@@ -9,15 +9,16 @@ import Select from "../../../components/Select";
 import ColorInput from "../../../components/ColorInput";
 import NumberInput from "../../../components/NumberInput";
 import Section from "./Section";
+import { firstKey } from "../../../helpers/immutable-map";
 
 type Props = {
-  style: T.TextLayerStyle;
-  onChange: (style: T.TextLayerStyle) => void;
+  style: T.LayerStyle;
+  onChange: (style: T.LayerStyle) => void;
   refs: T.Refs;
 };
 
 export default function TypographyEditor({ style, onChange, refs }: Props) {
-  function updateLayerStyle(newProps: Partial<T.TextLayerStyle>) {
+  function updateLayerStyle(newProps: Partial<T.LayerStyle>) {
     onChange({ ...style, ...newProps });
   }
 
@@ -26,7 +27,11 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
       <div css={[row]}>
         <Field label="Font size">
           <Select
-            value={style.fontSize.id}
+            value={
+              style.fontSize != null
+                ? style.fontSize.id
+                : firstKey(refs.fontSizes)
+            }
             onChange={value =>
               updateLayerStyle({ fontSize: { type: "ref", id: value } })
             }
@@ -47,7 +52,11 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
       <div css={row}>
         <Field label="Font family">
           <Select
-            value={style.fontFamily.id}
+            value={
+              style.fontFamily != null
+                ? style.fontFamily.id
+                : firstKey(refs.fontFamilies)
+            }
             onChange={value =>
               updateLayerStyle({ fontFamily: { type: "ref", id: value } })
             }
@@ -59,7 +68,11 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
         </Field>
         <Field label="Font weight">
           <Select
-            value={style.fontWeight.id}
+            value={
+              style.fontWeight != null
+                ? style.fontWeight.id
+                : firstKey(refs.fontWeights)
+            }
             onChange={value =>
               updateLayerStyle({ fontWeight: { type: "ref", id: value } })
             }
@@ -73,7 +86,7 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
       <div css={row}>
         <Field label="Line">
           <NumberInput
-            value={style.lineHeight}
+            value={style.lineHeight != null ? style.lineHeight : 1.2}
             onChange={lineHeight =>
               updateLayerStyle({
                 lineHeight: lineHeight === null ? 1.2 : lineHeight
@@ -84,7 +97,7 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
         <Field label="Letter">
           <NumberInput
             step={0.5}
-            value={style.letterSpacing ? style.letterSpacing.value : 0}
+            value={style.letterSpacing != null ? style.letterSpacing.value : 0}
             onChange={value =>
               updateLayerStyle({
                 letterSpacing:
@@ -96,7 +109,7 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
       </div>
       <div css={[row, { padding: "0 8px" }]}>
         <TextAlignEditor
-          value={style.textAlign}
+          value={style.textAlign != null ? style.textAlign : "left"}
           onChange={textAlign => updateLayerStyle({ textAlign })}
         />
         <TextDecorationEditor
