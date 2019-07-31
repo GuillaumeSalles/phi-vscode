@@ -1,14 +1,5 @@
 import * as T from "../../../studio/src/types";
-import { arrayToMap, kebabToCamel } from "./shared";
-
-function layerToCss(componentName: string, layer: T.Layer, refs: T.Refs) {
-  switch (layer.type) {
-    case "text":
-      return textLayerToCss(componentName, layer, refs);
-    default:
-      throw new Error("Unsupported layer type");
-  }
-}
+import { arrayToMap, kebabToPascal, layerTreeToArray } from "./shared";
 
 function lengthToCss(length?: T.Length, defaultValue?: string) {
   if (!length) {
@@ -23,8 +14,8 @@ function lengthToCss(length?: T.Length, defaultValue?: string) {
   }
 }
 
-function cssProp(name: string, value: string) {
-  return `${name}: ${value};`;
+function cssProp(name: string, value?: string) {
+  return value != null ? `${name}: ${value};` : "";
 }
 
 function marginToCss(margin: T.Margin) {
@@ -68,7 +59,7 @@ function getRefValue<TValue>(item: T.Ref, map: Map<string, TValue>) {
 
 function colorToCss(color: T.Color | undefined, colors: T.ColorsMap) {
   if (!color) {
-    return "";
+    return undefined;
   }
 
   switch (color.type) {
@@ -82,37 +73,52 @@ function colorToCss(color: T.Color | undefined, colors: T.ColorsMap) {
 
 function fontSizeToCss(item: T.Ref | undefined, map: T.FontSizesMap) {
   if (!item) {
-    return "";
+    return undefined;
   }
   return getRefValue(item, map).value;
 }
 
 function fontFamilyToCss(item: T.Ref | undefined, map: T.FontFamiliesMap) {
   if (!item) {
-    return "";
+    return undefined;
   }
   return getRefValue(item, map).value;
 }
 
 function fontWeightToCss(item: T.Ref | undefined, map: T.FontWeightsMap) {
   if (!item) {
-    return "";
+    return undefined;
   }
   return getRefValue(item, map).value.toString();
 }
 
-function textLayerStyleToCss(
+function displayToCss(style: T.LayerStyle) {
+  return `
+    ${cssProp("display", style.display)}
+    ${cssProp("flex-direction", style.flexDirection)}
+    ${cssProp("flex-wrap", style.flexWrap)}
+    ${cssProp("align-items", style.alignItems)}
+    ${cssProp("align-content", style.alignContent)}
+    ${cssProp("justify-content", style.justifyContent)}
+  `;
+}
+
+function layerStyleToCss(
   componentName: string,
   layerName: string,
-  style: T.TextLayerStyle,
+  style: T.LayerStyle,
   refs: T.Refs
 ) {
   return `.${componentName}-${layerName} {
+    ${displayToCss(style)}
     ${marginToCss(style)}
     ${paddingToCss(style)}
     ${dimensionToCss(style)}
     ${cssProp("letter-spacing", lengthToCss(style.letterSpacing, "1.2"))}
-    ${cssProp("line-height", style.lineHeight.toString())}
+    ${cssProp(
+      "line-height",
+      style.lineHeight != null ? style.lineHeight.toString() : undefined
+    )}
     ${cssProp("text-align", style.textAlign)}
     ${cssProp("color", colorToCss(style.color, refs.colors))}
     ${cssProp(
@@ -127,12 +133,8 @@ function textLayerStyleToCss(
 }`;
 }
 
-function textLayerToCss(
-  componentName: string,
-  layer: T.TextLayer,
-  refs: T.Refs
-) {
-  const defaultStyle = textLayerStyleToCss(
+function layerToCss(componentName: string, layer: T.Layer, refs: T.Refs) {
+  const defaultStyle = layerStyleToCss(
     componentName,
     layer.name,
     layer.style,
@@ -144,7 +146,7 @@ function textLayerToCss(
       throw new Error("Breakpoint not found");
     }
     return `@media (min-width: ${bp.value.value}px) {
-      ${textLayerStyleToCss(componentName, layer.name, mq.style, refs)}
+      ${layerStyleToCss(componentName, layer.name, mq.style, refs)}
     }`;
   });
 
@@ -152,9 +154,9 @@ function textLayerToCss(
 }
 
 function componentToCss(component: T.Component, refs: T.Refs) {
-  return component.layout
-    ? layerToCss(kebabToCamel(component.name), component.layout, refs)
-    : "";
+  return layerTreeToArray(component.layout)
+    .map(layer => layerToCss(kebabToPascal(component.name), layer, refs))
+    .join("\n\n");
 }
 
 export function neptuneToCss(data: any) {

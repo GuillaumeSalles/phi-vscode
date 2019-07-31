@@ -1,7 +1,12 @@
 import ts from "typescript";
 import * as T from "../../../studio/src/types";
 import loaderUtils from "loader-utils";
-import { arrayToMap, kebabToCamel } from "./shared";
+import {
+  arrayToMap,
+  kebabToPascal,
+  assertUnreachable,
+  kebabToCamel
+} from "./shared";
 
 function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   const resultFile = ts.createSourceFile(
@@ -23,35 +28,131 @@ function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   );
 }
 
-function createLayerJsx(componentName: string, layer: T.Layer) {
-  switch (layer.type) {
-    case "text":
-      return createTextLayerJsx(componentName, layer);
-    default:
-      throw new Error("Unsupported layer type");
-  }
+function createLayerJsx(
+  component: T.Component,
+  componentName: string,
+  layer: T.Layer
+) {
+  return createSimpleJsxElement(
+    layer.tag,
+    [
+      ts.createJsxAttribute(
+        ts.createIdentifier("className"),
+        ts.createJsxExpression(
+          undefined,
+          ts.createElementAccess(
+            ts.createIdentifier("styles"),
+            ts.createStringLiteral(`${componentName}-${layer.name}`)
+          )
+        )
+      ),
+      ...createLayerPropertiesJsx(component, layer)
+    ],
+    createLayerChildrenJsx(component, componentName, layer)
+  );
 }
 
-function createTextLayerJsx(componentName: string, layer: T.TextLayer) {
-  return createSimpleJsxElement(layer.tag, [
-    ts.createJsxAttribute(
-      ts.createIdentifier("className"),
-      ts.createJsxExpression(
-        undefined,
-        ts.createElementAccess(
-          ts.createIdentifier("styles"),
-          ts.createStringLiteral(`${componentName}-${layer.name}`)
-        )
-      )
-    ),
-    ts.createJsxAttribute(
-      ts.createIdentifier("children"),
-      ts.createJsxExpression(
-        undefined,
-        ts.createStringLiteral(layer.text || "")
-      )
+function createStringAttributeJsx(
+  attributeName: string,
+  stringLiteral: string
+) {
+  return ts.createJsxAttribute(
+    ts.createIdentifier(attributeName),
+    ts.createJsxExpression(undefined, ts.createStringLiteral(stringLiteral))
+  );
+}
+
+function createGenericHtmlAttributeMap(
+  layer: T.Layer
+): Map<string, ts.Expression> {
+  switch (layer.type) {
+    case "text":
+      return new Map([["children", ts.createStringLiteral(layer.text)]]);
+    case "link":
+      return new Map([
+        ["children", ts.createStringLiteral(layer.text)],
+        ["href", ts.createStringLiteral(layer.href)]
+      ]);
+    case "container":
+      return new Map();
+  }
+  assertUnreachable(layer);
+}
+
+function layerPropNameToJsxAttributeName(layerPropName: string): string {
+  const map = new Map([["text", "children"], ["href", "href"]]);
+  return map.get(layerPropName)!;
+}
+
+function createLayerPropertiesJsx(
+  component: T.Component,
+  layer: T.Layer
+): ts.JsxAttribute[] {
+  const attributesMap = createGenericHtmlAttributeMap(layer);
+
+  for (let override of component.overrides.filter(
+    o => o.layerId === layer.id
+  )) {
+    const prop = component.props.find(p => p.id === override.propId);
+    if (prop == null) {
+      throw new Error(`Prop with id (${override.propId}) not found`);
+    }
+    attributesMap.set(
+      layerPropNameToJsxAttributeName(override.layerProp),
+      ts.createIdentifier(kebabToCamel(prop.name))
+    );
+  }
+
+  return Array.from(attributesMap.entries()).map(([attrName, node]) => {
+    return ts.createJsxAttribute(
+      ts.createIdentifier(attrName),
+      ts.createJsxExpression(undefined, node)
+    );
+  });
+}
+
+function createLayerChildrenJsx(
+  component: T.Component,
+  componentName: string,
+  layer: T.Layer
+): ts.JsxChild[] {
+  switch (layer.type) {
+    case "text":
+    case "link":
+      return [];
+    case "container":
+      return layer.children.map(child =>
+        createLayerJsx(component, componentName, child)
+      );
+  }
+  assertUnreachable(layer);
+}
+
+function createComponentPropsDestructuration(component: T.Component) {
+  if (component.props.length === 0) {
+    return [];
+  }
+
+  return [
+    ts.createParameter(
+      undefined,
+      undefined,
+      undefined,
+      ts.createObjectBindingPattern(
+        component.props.map(prop => {
+          return ts.createBindingElement(
+            undefined,
+            undefined,
+            ts.createIdentifier(kebabToCamel(prop.name)),
+            undefined
+          );
+        })
+      ),
+      undefined,
+      undefined,
+      undefined
     )
-  ]);
+  ];
 }
 
 function createComponentJsx(component: T.Component) {
@@ -59,13 +160,17 @@ function createComponentJsx(component: T.Component) {
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
     undefined,
-    kebabToCamel(component.name),
+    kebabToPascal(component.name),
     undefined,
-    [],
+    createComponentPropsDestructuration(component),
     undefined,
     ts.createBlock([
       ts.createReturn(
-        createLayerJsx(kebabToCamel(component.name), component.layout!)
+        createLayerJsx(
+          component,
+          kebabToPascal(component.name),
+          component.layout!
+        )
       )
     ])
   );

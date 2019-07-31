@@ -101,7 +101,7 @@
   "components": [
     {
       "id": "3c5c461e-c312-4ad9-8df6-fb52e209e67f",
-      "name": "HelloWorld",
+      "name": "hello-world",
       "layout": {
         "id": "a11f5a72-3fc7-4208-a02c-a4346e36dd4a",
         "type": "text",

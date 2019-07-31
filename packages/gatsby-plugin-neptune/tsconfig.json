@@ -3,6 +3,7 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "module": "commonjs",
+    "lib": ["esnext"],
     "esModuleInterop": true,
     "target": "es6",
     "noImplicitAny": true,
