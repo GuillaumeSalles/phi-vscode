@@ -90,9 +90,7 @@ function createLayerPropertiesJsx(
 ): ts.JsxAttribute[] {
   const attributesMap = createGenericHtmlAttributeMap(layer);
 
-  for (let override of component.overrides.filter(
-    o => o.layerId === layer.id
-  )) {
+  for (let override of layer.overrides) {
     const prop = component.props.find(p => p.id === override.propId);
     if (prop == null) {
       throw new Error(`Prop with id (${override.propId}) not found`);

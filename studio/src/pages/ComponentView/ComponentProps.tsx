@@ -180,10 +180,7 @@ export default function ComponentProps({
                 e.stopPropagation();
                 onComponentChange({
                   ...component,
-                  props: deleteProp(component, prop.id),
-                  overrides: component.overrides.filter(
-                    override => override.propId !== prop.id
-                  )
+                  props: deleteProp(component, prop.id)
                 });
               }}
             />

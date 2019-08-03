@@ -1,69 +1,57 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "../../types";
-import { column, row, sectionTitle } from "../../styles";
-import IconButton from "../../components/IconButton";
-import AddButton from "../../components/AddButton";
-import Button from "../../components/Button";
-import SecondaryButton from "../../components/SecondaryButton";
-import OkCancelModal from "../../components/OkCancelModal";
+import * as T from "../../../types";
+import { column, row, sectionTitle } from "../../../styles";
+import IconButton from "../../../components/IconButton";
+import AddButton from "../../../components/AddButton";
+import Button from "../../../components/Button";
+import SecondaryButton from "../../../components/SecondaryButton";
+import OkCancelModal from "../../../components/OkCancelModal";
 import {
   useDialogForm,
   useSelectFormEntry,
   FormSelect
-} from "../../components/Form";
-import { Delete, Edit, Link } from "../../icons";
+} from "../../../components/Form";
+import { Delete, Edit, Link } from "../../../icons";
 import React, { useState } from "react";
 import uuid from "uuid/v4";
-import { layerTreeToArray, findLayerById } from "../../layerUtils";
+import Section from "./Section";
 
 type Props = {
   component: T.Component;
+  layer: T.Layer;
   onOverridesChange: (props: T.Override[]) => void;
 };
 
 function makeOverride(
   id: string,
   propId: string,
-  layerId: string,
   layerProp: string
 ): T.Override {
   return {
     id,
     propId,
-    layerId,
     layerProp
   };
 }
 
-function add(
-  component: T.Component,
-  propId: string,
-  layerId: string,
-  layerProp: string
-): T.Override[] {
-  return [
-    ...component.overrides,
-    makeOverride(uuid(), propId, layerId, layerProp)
-  ];
+function add(layer: T.Layer, propId: string, layerProp: string): T.Override[] {
+  return [...layer.overrides, makeOverride(uuid(), propId, layerProp)];
 }
 
 function edit(
-  component: T.Component,
+  layer: T.Layer,
   id: string,
   propId: string,
-  layerId: string,
   layerProp: string
 ): T.Override[] {
-  return component.overrides.map(override =>
-    override.id === id
-      ? makeOverride(uuid(), propId, layerId, layerProp)
-      : override
+  return layer.overrides.map(override =>
+    override.id === id ? makeOverride(uuid(), propId, layerProp) : override
   );
 }
 
-function remove(component: T.Component, id: string): T.Override[] {
-  return component.overrides.filter(item => item.id !== id);
+function remove(layer: T.Layer, id: string): T.Override[] {
+  return layer.overrides.filter(item => item.id !== id);
 }
 
 function getComponentPropName(component: T.Component, id: string) {
@@ -108,27 +96,8 @@ function getPropertiesNames(layerType: T.LayerType) {
     .map(propDef => propDef.name);
 }
 
-function makeLayerPropsOptions(
-  component: T.Component,
-  layerId: string | undefined
-): [string, string][] {
-  if (layerId == null || component.layout == null) {
-    return [];
-  }
-
-  const layer = findLayerById(component.layout, layerId);
-
-  if (layer == null) {
-    return [];
-  }
-
+function makeLayerPropsOptions(layer: T.Layer): [string, string][] {
   return getPropertiesNames(layer.type).map(prop => [prop, prop]);
-}
-
-function validateLayer(layerId: string | undefined) {
-  if (layerId == null) {
-    return "Layer is required";
-  }
 }
 
 function validateLayerProp(layerProp: string | undefined) {
@@ -175,25 +144,17 @@ const labelsStyle = {
   marginTop: "8px"
 };
 
-export default function ComponentOverrides({
+export default function HtmlLayerOverrides({
+  layer,
   component,
   onOverridesChange
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const layerEntry = useSelectFormEntry(
-    component.layout ? component.layout.id : undefined,
-    str => validateLayer(str)
-  );
-  const layersOptions = layerTreeToArray(component.layout).map(layer => [
-    layer.id,
-    layer.name
-  ]) as [string, string][];
-
   const layerPropEntry = useSelectFormEntry("text", str =>
     validateLayerProp(str)
   );
-  const layersPropsOptions = makeLayerPropsOptions(component, layerEntry.value);
+  const layersPropsOptions = makeLayerPropsOptions(layer);
 
   const propIdEntry = useSelectFormEntry(undefined, propId =>
     validateComponentProp(component, layerPropEntry.value, propId)
@@ -204,39 +165,23 @@ export default function ComponentOverrides({
   ][];
 
   const createOrUpdateDialog = useDialogForm(
-    [layerEntry, layerPropEntry, propIdEntry],
+    [layerPropEntry, propIdEntry],
     () => {
       if (selectedId == null) {
         onOverridesChange(
-          add(
-            component,
-            propIdEntry.value!,
-            layerEntry.value!,
-            layerPropEntry.value!
-          )
+          add(layer, propIdEntry.value!, layerPropEntry.value!)
         );
       } else {
         onOverridesChange(
-          edit(
-            component,
-            selectedId,
-            propIdEntry.value!,
-            layerEntry.value!,
-            layerPropEntry.value!
-          )
+          edit(layer, selectedId, propIdEntry.value!, layerPropEntry.value!)
         );
       }
     }
   );
   return (
-    <div css={[column]}>
-      <div
-        css={[
-          row,
-          { justifyContent: "space-between", margin: "24px 24px 16px 24px" }
-        ]}
-      >
-        <h2 css={sectionTitle}>Overrides</h2>
+    <Section
+      title="Overrides"
+      topRightButton={
         <AddButton
           disabled={component.props.length === 0}
           onClick={() => {
@@ -245,69 +190,56 @@ export default function ComponentOverrides({
             propIdEntry.setValue(component.props[0].id);
           }}
         />
-        <OkCancelModal
-          title="Override a layer with a component property"
-          {...createOrUpdateDialog.dialogProps}
-          buttons={
-            <React.Fragment>
-              <SecondaryButton
-                text="Cancel"
-                {...createOrUpdateDialog.cancelButtonProps}
-              />
-              <Button text="Save" {...createOrUpdateDialog.okButtonProps} />
-            </React.Fragment>
-          }
-          form={
-            <>
-              <div>
-                <span css={labelsStyle}>Layer to override</span>
-                <div css={row}>
-                  <FormSelect
-                    placeholder="Layer"
-                    options={layersOptions}
-                    {...layerEntry.inputProps}
-                    onChange={e => {
-                      layerEntry.inputProps.onChange(e);
-                      const layer = findLayerById(
-                        component.layout!,
-                        e.target.value
-                      )!;
-                      layerPropEntry.setValue(
-                        getPropertiesNames(layer.type)[0]
-                      );
-                    }}
-                  />
-                  <FormSelect
-                    placeholder="Layer"
-                    options={layersPropsOptions}
-                    cssOverrides={{ marginLeft: "8px" }}
-                    {...layerPropEntry.inputProps}
-                  />
-                </div>
-                <span css={labelsStyle}>Component property</span>
-                <div css={row}>
-                  <FormSelect
-                    placeholder="Component property"
-                    options={propsOptions}
-                    {...propIdEntry.inputProps}
-                  />
-                </div>
+      }
+    >
+      <OkCancelModal
+        title="Override a layer property with a component property"
+        {...createOrUpdateDialog.dialogProps}
+        buttons={
+          <React.Fragment>
+            <SecondaryButton
+              text="Cancel"
+              {...createOrUpdateDialog.cancelButtonProps}
+            />
+            <Button text="Save" {...createOrUpdateDialog.okButtonProps} />
+          </React.Fragment>
+        }
+        form={
+          <>
+            <div>
+              <span css={labelsStyle}>Property to override</span>
+              <div css={row}>
+                <FormSelect
+                  placeholder="Layer"
+                  options={layersPropsOptions}
+                  {...layerPropEntry.inputProps}
+                />
               </div>
-            </>
-          }
-        />
-      </div>
-      {component.overrides.map(override => {
+              <span css={labelsStyle}>Component property</span>
+              <div css={row}>
+                <FormSelect
+                  placeholder="Component property"
+                  options={propsOptions}
+                  {...propIdEntry.inputProps}
+                />
+              </div>
+            </div>
+          </>
+        }
+      />
+      {layer.overrides.length === 0 && (
+        <span css={{ fontSize: "12px", color: "#999", padding: "8px" }}>
+          Bind component props to layer props
+        </span>
+      )}
+      {layer.overrides.map(override => {
         return (
           <div
             key={override.id}
             css={[
               row,
               {
-                paddingLeft: "22px",
-                paddingTop: "4px",
-                paddingBottom: "4px",
-                paddingRight: "8px",
+                padding: "4px 8px",
                 alignItems: "center",
                 fontSize: "14px",
                 ":hover button": {
@@ -321,16 +253,12 @@ export default function ComponentOverrides({
                 row,
                 {
                   flex: "1 1 auto",
-                  marginLeft: "4px",
                   height: "28px",
                   alignItems: "center"
                 }
               ]}
             >
-              <span>
-                {findLayerById(component.layout!, override.layerId)!.name}.
-                {override.layerProp}
-              </span>
+              <span>{override.layerProp}</span>
               <span css={{ margin: "6px 8px 0 8px" }}>
                 <Link height={20} width={20} />
               </span>
@@ -344,7 +272,6 @@ export default function ComponentOverrides({
                 setSelectedId(override.id);
                 createOrUpdateDialog.open();
                 propIdEntry.setValue(override.propId);
-                layerEntry.setValue(override.layerId);
               }}
             />
             <IconButton
@@ -352,12 +279,12 @@ export default function ComponentOverrides({
               icon={<Delete height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
-                onOverridesChange(remove(component, override.id));
+                onOverridesChange(remove(layer, override.id));
               }}
             />
           </div>
         );
       })}
-    </div>
+    </Section>
   );
 }

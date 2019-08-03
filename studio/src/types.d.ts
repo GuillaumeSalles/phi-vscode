@@ -4,14 +4,6 @@ export type Component = {
   name: string;
   layout?: Layer;
   props: ComponentProp[];
-  overrides: Override[];
-};
-
-export type Override = {
-  id: string;
-  propId: string;
-  layerId: string;
-  layerProp: string;
 };
 
 export type ComponentProp = {
@@ -27,7 +19,14 @@ export interface ILayer {
   name: string;
   style: LayerStyle;
   mediaQueries: Array<MediaQuery>;
+  overrides: Override[];
 }
+
+export type Override = {
+  id: string;
+  propId: string;
+  layerProp: string;
+};
 
 export type Layer = ContainerLayer | TextLayer | LinkLayer;
 

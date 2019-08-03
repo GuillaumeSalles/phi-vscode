@@ -7,75 +7,8 @@ import MarginEditor from "./MarginEditor";
 import DimensionsEditor from "./DimensionsEditor";
 import DisplayEditor from "./DisplayEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
-import { column } from "../../../styles";
-import Section from "./Section";
-import Field from "../../../components/Field";
-import Select from "../../../components/Select";
-import { listToEntries } from "../../../utils";
-import TextAreaInput from "../../../components/TextAreaInput";
-import TextInput from "../../../components/TextInput";
+import { column, row } from "../../../styles";
 import TypographyEditor from "./TypographyEditor";
-
-const tags: T.TextLayerTag[] = [
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "p",
-  "span"
-];
-const textTagsOptions = listToEntries(tags);
-
-function HtmlEditor(props: {
-  layer: T.Layer;
-  updateLayer: (layer: Partial<T.Layer>) => void;
-}) {
-  const { updateLayer } = props;
-  switch (props.layer.type) {
-    case "text":
-      return (
-        <Section title="HTML">
-          <Field label="Tag">
-            <Select
-              value={props.layer.tag}
-              onChange={tag => updateLayer({ tag })}
-              options={textTagsOptions}
-            />
-          </Field>
-          <div css={{ padding: "0 4px" }}>
-            <TextAreaInput
-              placeholder="Text"
-              value={props.layer.text}
-              onChange={text => updateLayer({ text })}
-            />
-          </div>
-        </Section>
-      );
-    case "container":
-      return null;
-    case "link":
-      return (
-        <Section title="HTML">
-          <Field label="text">
-            <TextInput
-              cssOverrides={{ width: "100%" }}
-              value={props.layer.text}
-              onChange={text => updateLayer({ text })}
-            />
-          </Field>
-          <Field label="href">
-            <TextInput
-              cssOverrides={{ width: "100%" }}
-              value={props.layer.href}
-              onChange={href => updateLayer({ href })}
-            />
-          </Field>
-        </Section>
-      );
-  }
-}
 
 type Props<TLayer> = {
   layer: TLayer;
@@ -133,7 +66,6 @@ export default function LayerEditor<TLayer extends T.Layer>({
 
   return (
     <div css={column}>
-      <HtmlEditor layer={layer} updateLayer={updateLayer} />
       <MediaQueriesEditor
         selectedId={mediaQuery}
         layer={layer}

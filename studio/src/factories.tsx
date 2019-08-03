@@ -68,6 +68,7 @@ export function makeLinkLayer(
     text: "link",
     href: "",
     mediaQueries: [],
+    overrides: [],
     style: {
       display: "inline",
       isStrikedThrough: false,
@@ -94,6 +95,7 @@ export function makeTextLayer(
     tag: "p",
     text: "",
     mediaQueries: [],
+    overrides: [],
     style: {
       display: "block",
       isStrikedThrough: false,
@@ -128,6 +130,7 @@ export function makeContainerLayer(
     tag: "div",
     mediaQueries: [],
     children: [],
+    overrides: [],
     style: {
       display: "flex",
       flexDirection: "column",
@@ -194,6 +197,7 @@ export function makeDefaultProject() {
     tag: "h1",
     text: "Hello world",
     mediaQueries: [],
+    overrides: [],
     style: {
       display: "block",
       isStrikedThrough: false,

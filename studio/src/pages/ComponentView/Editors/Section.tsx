@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { sectionTitle, column } from "../../../styles";
+import { sectionTitle, column, row } from "../../../styles";
 
 type Props = {
   title: string;
   children: React.ReactNode;
+  topRightButton?: React.ReactNode;
 };
 
-export default function Section({ title, children }: Props) {
+export default function Section({ title, children, topRightButton }: Props) {
   return (
     <div
       css={[
@@ -19,16 +20,18 @@ export default function Section({ title, children }: Props) {
         }
       ]}
     >
-      <h4
+      <div
         css={[
-          sectionTitle,
+          row,
           {
-            margin: "8px"
+            margin: "0 8px",
+            justifyContent: "space-between"
           }
         ]}
       >
-        {title}
-      </h4>
+        <h4 css={[sectionTitle]}>{title}</h4>
+        {topRightButton != null && topRightButton}
+      </div>
       {children}
     </div>
   );

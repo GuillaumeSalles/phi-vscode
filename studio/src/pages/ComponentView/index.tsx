@@ -1,19 +1,40 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 import React from "react";
-import { column, mainPadding, heading, row } from "../../styles";
+import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
 import Component from "./Component";
 import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
+import HtmlEditor from "./Editors/HtmlEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
-import ComponentOverrides from "./ComponentOverrides";
 import { findLayerById, updateLayer } from "../../layerUtils";
 import { useStateWithGetter } from "../../hooks";
+
+const tabStyle = css({
+  display: "flex",
+  flex: "1 1 auto",
+  fontSize: "14px",
+  background: "white",
+  justifyContent: "center",
+  alignItems: "center",
+  border: "none",
+  cursor: "pointer",
+  color: "rgb(136, 136, 136)",
+  ":focus": {
+    outline: "none",
+    background: "#F6F6F6"
+  }
+});
+
+const selectedTabStyle = css(tabStyle, {
+  borderBottom: `solid 2px ${colors.primary}`,
+  color: "black"
+});
 
 type Props = {
   menu: React.ReactNode;
@@ -35,6 +56,7 @@ function ComponentView({
     component.layout ? component.layout.id : undefined
   );
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingHTML, setIsEditingHTML] = useState(true);
   const selectedLayer =
     component.layout && layerId
       ? findLayerById(component.layout, layerId)
@@ -58,13 +80,6 @@ function ComponentView({
     onComponentChange(componentId, newComponent);
   }
 
-  function updateComponentOverrides(overrides: T.Override[]) {
-    onComponentChange(componentId, {
-      ...component,
-      overrides
-    });
-  }
-
   return (
     <Layout
       topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
@@ -83,10 +98,6 @@ function ComponentView({
               onComponentChange={newComponent =>
                 onComponentChange(componentId, newComponent)
               }
-            />
-            <ComponentOverrides
-              component={component}
-              onOverridesChange={updateComponentOverrides}
             />
           </>
         ) : (
@@ -122,7 +133,7 @@ function ComponentView({
         </div>
       }
       right={
-        isEditing ? (
+        isEditing && selectedLayer ? (
           <div
             css={[
               column,
@@ -130,13 +141,41 @@ function ComponentView({
                 flexShrink: 0,
                 width: "236px",
                 minWidth: "236px",
-                paddingTop: "8px",
                 background: "white",
                 height: "100%"
               }
             ]}
           >
-            {selectedLayer && (
+            <div
+              css={[
+                row,
+                {
+                  height: "40px",
+                  alignItems: "stretch",
+                  borderBottom: "solid 1px #DDD"
+                }
+              ]}
+            >
+              <button
+                css={isEditingHTML ? selectedTabStyle : tabStyle}
+                onClick={() => setIsEditingHTML(true)}
+              >
+                HTML
+              </button>
+              <button
+                css={isEditingHTML ? tabStyle : selectedTabStyle}
+                onClick={() => setIsEditingHTML(false)}
+              >
+                CSS
+              </button>
+            </div>
+            {isEditingHTML ? (
+              <HtmlEditor
+                component={component}
+                layer={selectedLayer}
+                onChange={updateComponentLayer}
+              />
+            ) : (
               <LayerEditor
                 layer={selectedLayer}
                 refs={refs}
