@@ -112,6 +112,7 @@ export default function LayerEditor<TLayer extends T.Layer>({
               refs={refs}
             />
             <StyleOverridesEditor
+              layer={layer}
               style={style}
               onChange={updateLayerStyle}
               refs={refs}

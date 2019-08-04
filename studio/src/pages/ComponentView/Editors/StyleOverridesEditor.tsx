@@ -18,8 +18,10 @@ import uuid from "uuid/v4";
 import Section from "./Section";
 import StyleOverrideEditor from "./StyleOverrideEditor";
 import Field from "../../../components/Field";
+import { layerTreeToArray } from "../../../layerUtils";
 
 type Props = {
+  layer: T.Layer;
   style: T.LayerStyle;
   onChange: (style: T.LayerStyle) => void;
   refs: T.Refs;
@@ -71,7 +73,20 @@ function remove(rootStyle: T.LayerStyle, id: string): T.StyleOverride[] {
   return rootStyle.overrides!.filter(item => item.id !== id);
 }
 
-export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
+// function makeLayerEntryOptions(layer: T.Layer): [string, string][] {
+//   return [["none", "none"]].concat(
+//     layerTreeToArray(layer)
+//       .slice(1) // Ignore current layer
+//       .map(layer => [layer.id, layer.name])
+//   ) as [string, string][];
+// }
+
+export default function StyleOverridesEditor({
+  layer,
+  style,
+  onChange,
+  refs
+}: Props) {
   function updateOverrides(overrides: T.StyleOverride[]) {
     onChange({ ...style, overrides });
   }
@@ -82,6 +97,9 @@ export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
     pseudoClass => undefined
   );
   const pseudoClassesOptions = [[":hover", ":hover"]] as [string, string][];
+
+  // const layerEntry = useSelectFormEntry("none", layerId => undefined);
+  // const layerIdOptions = makeLayerEntryOptions(layer);
 
   const createOrUpdateDialog = useDialogForm([pseudoClassEntry], () => {
     if (selectedId == null) {
@@ -119,11 +137,18 @@ export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
           </React.Fragment>
         }
         form={
-          <FormSelect
-            placeholder="Layer"
-            options={pseudoClassesOptions}
-            {...pseudoClassEntry.inputProps}
-          />
+          <>
+            <FormSelect
+              placeholder="Pseudo class"
+              options={pseudoClassesOptions}
+              {...pseudoClassEntry.inputProps}
+            />
+            {/* <FormSelect
+              placeholder="Layer"
+              options={layerIdOptions}
+              {...layerEntry.inputProps}
+            /> */}
+          </>
         }
       />
       {(style.overrides == null || style.overrides.length === 0) && (

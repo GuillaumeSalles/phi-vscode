@@ -63,7 +63,7 @@ export interface LinkLayer extends ILayer {
 type StyleOverride = {
   id: string;
   pseudoClass: string;
-  layerId?: string;
+  // layerId?: string;
   style: LayerStyle;
 };
 
