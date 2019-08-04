@@ -126,6 +126,17 @@ function textDecorationToCss(style: T.TextDecoration) {
   return properties.join(" ");
 }
 
+function makeStyleOverrides(style: T.LayerStyle, refs: T.Refs) {
+  if (style.overrides == null) {
+    return {};
+  }
+  const result = {} as any;
+  for (let override of style.overrides) {
+    result[override.pseudoClass] = makeTextLayerStyle(override.style, refs);
+  }
+  return result;
+}
+
 function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
     display: style.display,
@@ -140,7 +151,8 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
     lineHeight: style.lineHeight,
     letterSpacing: lengthToCss(style.letterSpacing, "0"),
     textAlign: style.textAlign,
-    textDecoration: textDecorationToCss(style)
+    textDecoration: textDecorationToCss(style),
+    ...makeStyleOverrides(style, refs)
   };
 }
 

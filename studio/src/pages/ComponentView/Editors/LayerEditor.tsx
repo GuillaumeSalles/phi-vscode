@@ -7,7 +7,8 @@ import MarginEditor from "./MarginEditor";
 import DimensionsEditor from "./DimensionsEditor";
 import DisplayEditor from "./DisplayEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
-import { column, row } from "../../../styles";
+import { column } from "../../../styles";
+import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
 
 type Props<TLayer> = {
@@ -91,6 +92,11 @@ export default function LayerEditor<TLayer extends T.Layer>({
             <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
             <MarginEditor margin={style} onChange={updateLayerStyle} />
             <PaddingEditor padding={style} onChange={updateLayerStyle} />
+            <StyleOverridesEditor
+              style={style}
+              onChange={updateLayerStyle}
+              refs={refs}
+            />
           </React.Fragment>
         )}
       </div>

@@ -41,7 +41,7 @@ export default function DisplayEditor({
       <div css={[row, { flexWrap: "wrap" }]}>
         <Field label="Display">
           <Select
-            value={style.display}
+            value={style.display || "inline"}
             onChange={display => updateStyle({ display })}
             options={listToEntries(allowedDisplays)}
           />

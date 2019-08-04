@@ -107,7 +107,7 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
           />
         </Field>
       </div>
-      <div css={[row, { padding: "0 8px" }]}>
+      <div css={[row]}>
         <TextAlignEditor
           value={style.textAlign != null ? style.textAlign : "left"}
           onChange={textAlign => updateLayerStyle({ textAlign })}

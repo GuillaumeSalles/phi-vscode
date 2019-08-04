@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { column, row, sectionTitle } from "../../../styles";
+import { row } from "../../../styles";
 import IconButton from "../../../components/IconButton";
 import AddButton from "../../../components/AddButton";
 import Button from "../../../components/Button";

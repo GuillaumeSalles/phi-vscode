@@ -5,7 +5,7 @@ import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
 import { layerTypeToName, layerTreeToArray } from "./layerUtils";
 import { assertUnreachable } from "./utils";
 
-function ref(id: string): T.Ref {
+export function makeRef(id: string): T.Ref {
   return { type: "ref", id };
 }
 
@@ -73,12 +73,13 @@ export function makeLinkLayer(
       display: "inline",
       isStrikedThrough: false,
       isUnderlined: true,
-      color: ref(firstKey(refs.colors)),
-      fontFamily: ref(firstKey(refs.fontFamilies)),
-      fontWeight: ref(firstKey(refs.fontWeights)),
-      fontSize: ref(firstKey(refs.fontSizes)),
+      color: makeRef(firstKey(refs.colors)),
+      fontFamily: makeRef(firstKey(refs.fontFamilies)),
+      fontWeight: makeRef(firstKey(refs.fontWeights)),
+      fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      overrides: []
     },
     ...props
   };
@@ -100,12 +101,13 @@ export function makeTextLayer(
       display: "block",
       isStrikedThrough: false,
       isUnderlined: false,
-      color: ref(firstKey(refs.colors)),
-      fontFamily: ref(firstKey(refs.fontFamilies)),
-      fontWeight: ref(firstKey(refs.fontWeights)),
-      fontSize: ref(firstKey(refs.fontSizes)),
+      color: makeRef(firstKey(refs.colors)),
+      fontFamily: makeRef(firstKey(refs.fontFamilies)),
+      fontWeight: makeRef(firstKey(refs.fontWeights)),
+      fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      overrides: []
     },
     ...props
   };
@@ -137,7 +139,8 @@ export function makeContainerLayer(
       flexWrap: "nowrap",
       justifyContent: "flex-start",
       alignItems: "stretch",
-      alignContent: "stretch"
+      alignContent: "stretch",
+      overrides: []
     },
     ...props
   };
@@ -203,11 +206,12 @@ export function makeDefaultProject() {
       isStrikedThrough: false,
       isUnderlined: false,
       textAlign: "left",
-      fontSize: ref(getKeyByIndex(fontSizes, 5)),
-      fontFamily: ref(firstKey(fontFamilies)),
-      fontWeight: ref(getKeyByIndex(fontWeights, 1)),
+      fontSize: makeRef(getKeyByIndex(fontSizes, 5)),
+      fontFamily: makeRef(firstKey(fontFamilies)),
+      fontWeight: makeRef(getKeyByIndex(fontWeights, 1)),
       lineHeight: 1.2,
-      color: ref(firstKey(colors))
+      color: makeRef(firstKey(colors)),
+      overrides: []
     }
   };
 

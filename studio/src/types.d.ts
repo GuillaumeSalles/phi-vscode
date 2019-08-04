@@ -51,16 +51,24 @@ export interface LinkLayer extends ILayer {
   href: string;
 }
 
+type StyleOverride = {
+  id: string;
+  pseudoClass: string;
+  style: LayerStyleWithoutOverrides;
+};
+
 type LayerStyle = Typography &
   Display &
   Background &
   Dimensions &
   Margin &
   Padding &
-  TextDecoration;
+  TextDecoration & {
+    overrides?: StyleOverride[];
+  };
 
 export type Display = {
-  display: DisplayProperty;
+  display?: DisplayProperty;
   flexDirection?: FlexDirection;
   flexWrap?: FlexWrap;
   justifyContent?: JustifyContent;

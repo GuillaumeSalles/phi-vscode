@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
-import { row } from "../styles";
+import { row, colors } from "../styles";
 
 type Props = {
   left: React.ReactNode;
@@ -20,7 +20,7 @@ export function Layout({ left, center, right, topBar }: Props) {
         css={{
           position: "relative",
           flex: "1 1 auto",
-          background: "#F7F7F7",
+          background: colors.canvasBackground,
           height: "100%",
           width: "100%",
           overflowX: "auto"

@@ -3,6 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
 import RadioIconGroup from "../../../components/RadioIconGroup";
+import Field from "../../../components/Field";
 
 type Props = {
   value: T.TextAlignProperty;
@@ -71,32 +72,38 @@ const Right = ({ fill }: { fill: string }) => (
 
 export default function TextAlignEditor({ value, onChange }: Props) {
   return (
-    <div css={[row]}>
-      <RadioIconGroup
-        name="text-align"
-        options={[
-          [
-            "left",
-            ({ isSelected }) => <Left fill={isSelected ? "white" : "black"} />
-          ],
-          [
-            "center",
-            ({ isSelected }) => <Center fill={isSelected ? "white" : "black"} />
-          ],
-          [
-            "right",
-            ({ isSelected }) => <Right fill={isSelected ? "white" : "black"} />
-          ],
-          [
-            "justify",
-            ({ isSelected }) => (
-              <Justify fill={isSelected ? "white" : "black"} />
-            )
-          ]
-        ]}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
+    <Field label="Allignment">
+      <div css={[row]}>
+        <RadioIconGroup
+          name="text-align"
+          options={[
+            [
+              "left",
+              ({ isSelected }) => <Left fill={isSelected ? "white" : "black"} />
+            ],
+            [
+              "center",
+              ({ isSelected }) => (
+                <Center fill={isSelected ? "white" : "black"} />
+              )
+            ],
+            [
+              "right",
+              ({ isSelected }) => (
+                <Right fill={isSelected ? "white" : "black"} />
+              )
+            ],
+            [
+              "justify",
+              ({ isSelected }) => (
+                <Justify fill={isSelected ? "white" : "black"} />
+              )
+            ]
+          ]}
+          value={value}
+          onChange={onChange}
+        />
+      </div>
+    </Field>
   );
 }

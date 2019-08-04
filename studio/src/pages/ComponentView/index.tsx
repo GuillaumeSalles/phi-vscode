@@ -139,9 +139,9 @@ function ComponentView({
               column,
               {
                 flexShrink: 0,
-                width: "236px",
-                minWidth: "236px",
-                background: "white",
+                width: "268px",
+                minWidth: "268px",
+                background: colors.sideBarBackground,
                 height: "100%"
               }
             ]}
