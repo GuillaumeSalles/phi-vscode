@@ -26,6 +26,7 @@ export default function AddLayerPopover({ disabled, onAdd }: Props) {
         anchor={ref}
         isOpen={popover.isActive}
         onDismiss={popover.deactivate}
+        position="bottom"
       >
         <div css={[card, { margin: "8px 0", width: "240px" }]}>
           {layerTypes.map(type => (

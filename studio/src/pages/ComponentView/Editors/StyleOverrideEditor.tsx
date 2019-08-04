@@ -152,8 +152,19 @@ export default function StyleOverrideEditor({
         anchor={popoverRef}
         isOpen={popover.isActive}
         onDismiss={popover.deactivate}
+        position="top"
       >
-        <div css={[card, { margin: "8px 0", width: "240px" }]}>
+        <div
+          css={[
+            card,
+            {
+              margin: "8px 0",
+              width: "234px",
+              height: "400px",
+              overflow: "auto"
+            }
+          ]}
+        >
           {propertiesToAdd.map(property => (
             <button
               key={property[0]}
