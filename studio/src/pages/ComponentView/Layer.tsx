@@ -247,10 +247,10 @@ function makeMarginStyle(layer: T.Margin) {
 
 function makePaddingStyle(layer: T.Padding) {
   return {
-    paddingTop: lengthToCss(layer.paddingTop, "0"),
-    paddingRight: lengthToCss(layer.paddingRight, "0"),
-    paddingBottom: lengthToCss(layer.paddingBottom, "0"),
-    paddingLeft: lengthToCss(layer.paddingLeft, "0")
+    paddingTop: layer.paddingTop,
+    paddingRight: layer.paddingRight,
+    paddingBottom: layer.paddingBottom,
+    paddingLeft: layer.paddingLeft
   };
 }
 

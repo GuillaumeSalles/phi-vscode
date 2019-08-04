@@ -155,10 +155,10 @@ export type Margin = {
 };
 
 export type Padding = {
-  paddingTop?: Length;
-  paddingRight?: Length;
-  paddingBottom?: Length;
-  paddingLeft?: Length;
+  paddingTop?: string;
+  paddingRight?: string;
+  paddingBottom?: string;
+  paddingLeft?: string;
 };
 
 export type Background = {

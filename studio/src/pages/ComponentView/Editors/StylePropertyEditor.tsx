@@ -14,6 +14,7 @@ import {
   alignItemsList,
   alignContentList
 } from "../../../constants";
+import TextInput from "../../../components/TextInput";
 
 const flexDirectionOptions = listToEntries(flexDirectionList);
 const flexWrapOptions = listToEntries(flexWrapList);
@@ -201,6 +202,25 @@ export function AlignContentEditor({ style, onChange }: Props) {
         value={style.alignContent || "stretch"}
         onChange={alignContent => onChange({ alignContent })}
         options={alignContentOptions}
+      />
+    </Field>
+  );
+}
+
+export function SimpleTextPropertyEditor({
+  style,
+  onChange,
+  property,
+  label
+}: Props & {
+  property: keyof T.LayerStyle;
+  label: string;
+}) {
+  return (
+    <Field label={label}>
+      <TextInput
+        value={style[property] != null ? (style[property] as string) : ""}
+        onChange={value => onChange({ [property]: value })}
       />
     </Field>
   );

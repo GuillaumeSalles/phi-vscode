@@ -19,7 +19,8 @@ import {
   FlexWrapEditor,
   JustifyContentEditor,
   AlignItemsEditor,
-  AlignContentEditor
+  AlignContentEditor,
+  SimpleTextPropertyEditor
 } from "./StylePropertyEditor";
 import TextDecorationEditor from "./TextDecorationEditor";
 import IconButton from "../../../components/IconButton";
@@ -27,22 +28,40 @@ import { Delete } from "../../../icons";
 import { assertUnreachable } from "../../../utils";
 import TextAlignEditor from "./TextAlignEditor";
 
-const styleProperties: Array<keyof T.LayerStyle> = [
-  "color",
-  "textDecoration",
-  "fontSize",
-  "fontFamily",
-  "letterSpacing",
-  "lineHeight",
-  "fontWeight",
-  "textAlign",
-  "display",
-  "flexDirection",
-  "flexWrap",
-  "alignContent",
-  "alignItems",
-  "justifyContent"
-];
+const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
+  ["color", "Color"],
+  ["textDecoration", "Text Decoration"],
+  ["fontSize", "Font Size"],
+  ["fontFamily", "Font Family"],
+  ["letterSpacing", "Letter Spacing"],
+  ["lineHeight", "Line Height"],
+  ["fontWeight", "Font Weight"],
+  ["textAlign", "Text Align"],
+  ["display", "Display"],
+  ["flexDirection", "Flex Direction"],
+  ["flexWrap", "Flex Wrap"],
+  ["alignContent", "Align Content"],
+  ["alignItems", "Align Items"],
+  ["justifyContent", "Justify Content"],
+  ["marginTop", "Margin Top"],
+  ["marginRight", "Margin Right"],
+  ["marginBottom", "Margin Bottom"],
+  ["marginLeft", "Margin Left"],
+  ["paddingTop", "Padding Top"],
+  ["paddingRight", "Padding Right"],
+  ["paddingBottom", "Padding Bottom"],
+  ["paddingLeft", "Padding Left"],
+  ["width", "Width"],
+  ["minWidth", "Min Width"],
+  ["maxWidth", "Max Width"],
+  ["height", "Height"],
+  ["minHeight", "Min Height"],
+  ["maxHeight", "Max Height"]
+]);
+
+const styleProperties = Array.from(stylePropertiesMap).sort((a, b) =>
+  a[1].localeCompare(b[1])
+);
 
 type Props = {
   rootStyle: T.LayerStyle;
@@ -60,7 +79,7 @@ export default function StyleOverrideEditor({
   const popover = useToggle(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const propertiesToAdd = styleProperties.filter(
-    prop => !style.hasOwnProperty(prop)
+    prop => !style.hasOwnProperty(prop[0])
   );
 
   function updateStyle(partialStyle: T.LayerStyle) {
@@ -137,11 +156,11 @@ export default function StyleOverrideEditor({
         <div css={[card, { margin: "8px 0", width: "240px" }]}>
           {propertiesToAdd.map(property => (
             <button
-              key={property}
+              key={property[0]}
               onClick={() => {
                 const newStyle = {
                   ...style,
-                  [property]: rootStyle[property]
+                  [property[0]]: rootStyle[property[0]]
                 };
                 console.log(newStyle);
                 onChange(newStyle);
@@ -160,7 +179,7 @@ export default function StyleOverrideEditor({
                 }
               ]}
             >
-              <span css={{ marginLeft: "8px" }}>{property}</span>
+              <span css={{ marginLeft: "8px" }}>{property[1]}</span>
             </button>
           ))}
         </div>
@@ -217,7 +236,6 @@ function PropertyEditor({
       return <AlignItemsEditor style={style} onChange={onChange} />;
     case "alignContent":
       return <AlignContentEditor style={style} onChange={onChange} />;
-    case "backgroundColor":
     case "height":
     case "minHeight":
     case "maxHeight":
@@ -232,6 +250,16 @@ function PropertyEditor({
     case "paddingRight":
     case "paddingBottom":
     case "paddingLeft":
+      return (
+        <SimpleTextPropertyEditor
+          label={stylePropertiesMap.get(property)!}
+          style={style}
+          onChange={onChange}
+          property={property}
+        />
+      );
+    case "backgroundColor":
+
     case "overrides":
       throw new Error("TODO");
   }

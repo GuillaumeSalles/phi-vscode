@@ -2,10 +2,8 @@
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
-import Field from "../../../components/Field";
-import LengthInput from "../../../components/LengthInput";
 import Section from "./Section";
-import TextInput from "../../../components/TextInput";
+import { SimpleTextPropertyEditor } from "./StylePropertyEditor";
 
 type Props = {
   margin: T.Margin;
@@ -20,46 +18,30 @@ export default function MarginEditor({ margin, onChange }: Props) {
   return (
     <Section title="Margin">
       <div css={row}>
-        <Field label="Top">
-          <TextInput
-            value={margin.marginTop}
-            onChange={marginTop =>
-              updateMargin({
-                marginTop
-              })
-            }
-          />
-        </Field>
-        <Field label="Right">
-          <TextInput
-            value={margin.marginRight}
-            onChange={marginRight =>
-              updateMargin({
-                marginRight
-              })
-            }
-          />
-        </Field>
-        <Field label="Bottom">
-          <TextInput
-            value={margin.marginBottom}
-            onChange={marginBottom =>
-              updateMargin({
-                marginBottom
-              })
-            }
-          />
-        </Field>
-        <Field label="Left">
-          <TextInput
-            value={margin.marginLeft}
-            onChange={marginLeft =>
-              updateMargin({
-                marginLeft
-              })
-            }
-          />
-        </Field>
+        <SimpleTextPropertyEditor
+          label="Top"
+          style={margin}
+          onChange={onChange}
+          property="marginTop"
+        />
+        <SimpleTextPropertyEditor
+          label="Right"
+          style={margin}
+          onChange={onChange}
+          property="marginRight"
+        />
+        <SimpleTextPropertyEditor
+          label="Bottom"
+          style={margin}
+          onChange={onChange}
+          property="marginBottom"
+        />
+        <SimpleTextPropertyEditor
+          label="Left"
+          style={margin}
+          onChange={onChange}
+          property="marginLeft"
+        />
       </div>
     </Section>
   );
