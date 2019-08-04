@@ -7,22 +7,32 @@ import { Underline, Strikethrough } from "../../../icons";
 import Field from "../../../components/Field";
 
 type Props = {
-  value: T.TextDecoration;
-  onChange: (value: T.TextDecoration) => void;
+  style: T.LayerStyle;
+  onChange: (value: Partial<T.LayerStyle>) => void;
 };
 
-export default function TextDecorationEditor({ value, onChange }: Props) {
-  function updateLayer(newProps: Partial<T.TextDecoration>) {
-    onChange({ ...value, ...newProps });
+export default function TextDecorationEditor({ style, onChange }: Props) {
+  function updateTextDecoration(textDecoration: Partial<T.TextDecoration>) {
+    onChange({
+      textDecoration: {
+        isUnderlined: false,
+        isStrikedThrough: false,
+        ...style.textDecoration,
+        ...textDecoration
+      }
+    });
   }
-
   return (
     <Field label="Decoration">
       <div css={row}>
         <ToggleButton
           name="underline"
-          isChecked={value.isUnderlined != null ? value.isUnderlined : false}
-          onChange={isUnderlined => updateLayer({ isUnderlined })}
+          isChecked={
+            style.textDecoration != null
+              ? style.textDecoration.isUnderlined
+              : false
+          }
+          onChange={isUnderlined => updateTextDecoration({ isUnderlined })}
           icon={({ isChecked }) => (
             <Underline
               height={16}
@@ -32,11 +42,15 @@ export default function TextDecorationEditor({ value, onChange }: Props) {
           )}
         />
         <ToggleButton
-          name="underline"
+          name="isStrikedThrough"
           isChecked={
-            value.isStrikedThrough != null ? value.isStrikedThrough : false
+            style.textDecoration != null
+              ? style.textDecoration.isStrikedThrough
+              : false
           }
-          onChange={isStrikedThrough => updateLayer({ isStrikedThrough })}
+          onChange={isStrikedThrough =>
+            updateTextDecoration({ isStrikedThrough })
+          }
           icon={({ isChecked }) => (
             <Strikethrough
               height={16}

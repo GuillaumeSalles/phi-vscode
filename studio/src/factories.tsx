@@ -71,8 +71,10 @@ export function makeLinkLayer(
     overrides: [],
     style: {
       display: "inline",
-      isStrikedThrough: false,
-      isUnderlined: true,
+      textDecoration: {
+        isStrikedThrough: false,
+        isUnderlined: true
+      },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
       fontWeight: makeRef(firstKey(refs.fontWeights)),
@@ -99,8 +101,10 @@ export function makeTextLayer(
     overrides: [],
     style: {
       display: "block",
-      isStrikedThrough: false,
-      isUnderlined: false,
+      textDecoration: {
+        isStrikedThrough: false,
+        isUnderlined: false
+      },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
       fontWeight: makeRef(firstKey(refs.fontWeights)),
@@ -203,8 +207,10 @@ export function makeDefaultProject() {
     overrides: [],
     style: {
       display: "block",
-      isStrikedThrough: false,
-      isUnderlined: false,
+      textDecoration: {
+        isStrikedThrough: false,
+        isUnderlined: false
+      },
       textAlign: "left",
       fontSize: makeRef(getKeyByIndex(fontSizes, 5)),
       fontFamily: makeRef(firstKey(fontFamilies)),

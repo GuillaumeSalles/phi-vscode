@@ -6,8 +6,8 @@ import RadioIconGroup from "../../../components/RadioIconGroup";
 import Field from "../../../components/Field";
 
 type Props = {
-  value: T.TextAlignProperty;
-  onChange: (value: T.TextAlignProperty) => void;
+  style: T.LayerStyle;
+  onChange: (value: Partial<T.LayerStyle>) => void;
 };
 
 const Center = ({ fill }: { fill: string }) => (
@@ -70,7 +70,7 @@ const Right = ({ fill }: { fill: string }) => (
   </svg>
 );
 
-export default function TextAlignEditor({ value, onChange }: Props) {
+export default function TextAlignEditor({ style, onChange }: Props) {
   return (
     <Field label="Allignment">
       <div css={[row]}>
@@ -100,8 +100,8 @@ export default function TextAlignEditor({ value, onChange }: Props) {
               )
             ]
           ]}
-          value={value}
-          onChange={onChange}
+          value={style.textAlign != null ? style.textAlign : "left"}
+          onChange={textAlign => onChange({ textAlign })}
         />
       </div>
     </Field>

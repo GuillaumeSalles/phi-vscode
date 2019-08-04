@@ -7,18 +7,24 @@ import { useToggle } from "../../../hooks";
 import { useRef } from "react";
 import Popover from "../../../components/Popover";
 import { card, row } from "../../../styles";
-import Field from "../../../components/Field";
-import ColorInput from "../../../components/ColorInput";
-import { firstKey } from "../../../helpers/immutable-map";
-import { makeRef } from "../../../factories";
+import { ColorEditor } from "./StylePropertyEditor";
+import TextDecorationEditor from "./TextDecorationEditor";
+
+const styleProperties: Array<keyof T.LayerStyle> = ["color", "textDecoration"];
 
 type Props = {
+  rootStyle: T.LayerStyle;
   refs: T.Refs;
   style: T.LayerStyle;
   onChange: (style: T.LayerStyle) => void;
 };
 
-export default function StyleOverrideEditor({ style, onChange, refs }: Props) {
+export default function StyleOverrideEditor({
+  rootStyle,
+  style,
+  onChange,
+  refs
+}: Props) {
   const popover = useToggle(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -52,11 +58,14 @@ export default function StyleOverrideEditor({ style, onChange, refs }: Props) {
         onDismiss={popover.deactivate}
       >
         <div css={[card, { margin: "8px 0", width: "240px" }]}>
-          {["color"].map(property => (
+          {styleProperties.map(property => (
             <button
               key={property}
               onClick={() => {
-                onChange({ ...style, color: makeRef(firstKey(refs.colors)) });
+                onChange({
+                  ...style,
+                  ...propToPartialStyle(property, rootStyle)
+                });
               }}
               css={[
                 row,
@@ -88,6 +97,15 @@ type PropertyEditorProps = {
   onChange: (style: T.LayerStyle) => void;
 };
 
+function propToPartialStyle(
+  property: string,
+  rootStyle: T.LayerStyle
+): T.LayerStyle {
+  return {
+    [property]: rootStyle.textDecoration
+  };
+}
+
 function PropertyEditor({
   refs,
   style,
@@ -96,16 +114,10 @@ function PropertyEditor({
 }: PropertyEditorProps) {
   switch (property) {
     case "color":
-      return (
-        <Field label="Color">
-          <ColorInput
-            colors={refs.colors}
-            value={style.color}
-            onChange={value => onChange({ color: value })}
-          />
-        </Field>
-      );
+      return <ColorEditor refs={refs} style={style} onChange={onChange} />;
+    case "textDecoration":
+      return <TextDecorationEditor style={style} onChange={onChange} />;
   }
 
-  throw new Error("Unknown property");
+  throw new Error(`Unknown property (${property})`);
 }

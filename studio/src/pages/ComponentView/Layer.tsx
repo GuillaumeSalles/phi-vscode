@@ -112,12 +112,15 @@ function merge<TItem>(array: TItem[]): TItem {
   });
 }
 
-function textDecorationToCss(style: T.TextDecoration) {
+function textDecorationToCss(style: T.LayerStyle) {
+  if (style.textDecoration == null) {
+    return undefined;
+  }
   const properties = [];
-  if (style.isUnderlined) {
+  if (style.textDecoration.isUnderlined) {
     properties.push("underline");
   }
-  if (style.isStrikedThrough) {
+  if (style.textDecoration.isStrikedThrough) {
     properties.push("line-through");
   }
   if (properties.length === 0) {

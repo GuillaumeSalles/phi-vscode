@@ -193,6 +193,7 @@ export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
               </div>
               <StyleOverrideEditor
                 refs={refs}
+                rootStyle={style}
                 style={override.style}
                 onChange={newStyle => {
                   updateOverrides(
