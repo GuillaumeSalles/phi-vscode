@@ -75,6 +75,10 @@ type LayerStyle = Typography &
     overrides?: StyleOverride[];
     opacity?: number;
     backgroundColor?: Color;
+    borderTopLeftRadius?: string;
+    borderTopRightRadius?: string;
+    borderBottomRightRadius?: string;
+    borderBottomLeftRadius?: string;
   };
 
 export type Display = {

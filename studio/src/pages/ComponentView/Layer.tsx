@@ -168,6 +168,10 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
       ? colorToString(style.backgroundColor, refs.colors)
       : undefined,
     opacity: style.opacity != null ? style.opacity : 1,
+    borderTopLeftRadius: style.borderTopLeftRadius,
+    borderTopRightRadius: style.borderTopRightRadius,
+    borderBottomRightRadius: style.borderBottomRightRadius,
+    borderBottomLeftRadius: style.borderBottomLeftRadius,
     fontSize: fontSizeToString(style.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(style.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),

@@ -8,6 +8,7 @@ import DimensionsEditor from "./DimensionsEditor";
 import LayerDisplayEditor from "./LayerDisplayEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import AppearanceEditor from "./AppearanceEditor";
+import BorderRadiusEditor from "./BorderRadiusEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
@@ -111,6 +112,7 @@ export default function LayerEditor<TLayer extends T.Layer>({
               onChange={updateLayerStyle}
               refs={refs}
             />
+            <BorderRadiusEditor style={style} onChange={updateLayerStyle} />
             <StyleOverridesEditor
               layer={layer}
               style={style}

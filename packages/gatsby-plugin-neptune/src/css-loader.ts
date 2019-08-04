@@ -149,6 +149,10 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
     ${cssProp("height", style.height)}
     ${cssProp("min-height", style.minHeight)}
     ${cssProp("max-height", style.maxHeight)}
+    ${cssProp("borderTopLeftRadius", style.borderTopLeftRadius)}
+    ${cssProp("borderTopRightRadius", style.borderTopRightRadius)}
+    ${cssProp("borderBottomRightRadius", style.borderBottomRightRadius)}
+    ${cssProp("borderBottomLeftRadius", style.borderBottomLeftRadius)}
     ${cssProp(
       "opacity",
       style.opacity != null ? style.opacity.toString() : undefined

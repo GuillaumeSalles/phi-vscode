@@ -59,7 +59,11 @@ const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
   ["minHeight", "Min Height"],
   ["maxHeight", "Max Height"],
   ["opacity", "Opacity"],
-  ["backgroundColor", "Background Color"]
+  ["backgroundColor", "Background Color"],
+  ["borderTopLeftRadius", "Border Top Left Radius"],
+  ["borderTopRightRadius", "Border Top Right Radius"],
+  ["borderBottomRightRadius", "Border Bottom Right Radius"],
+  ["borderBottomLeftRadius", "Border Bottom Left Radius"]
 ]);
 
 const styleProperties = Array.from(stylePropertiesMap).sort((a, b) =>
@@ -270,6 +274,10 @@ function PropertyEditor({
     case "paddingRight":
     case "paddingBottom":
     case "paddingLeft":
+    case "borderTopLeftRadius":
+    case "borderTopRightRadius":
+    case "borderBottomRightRadius":
+    case "borderBottomLeftRadius":
       return (
         <SimpleTextPropertyEditor
           label={stylePropertiesMap.get(property)!}
