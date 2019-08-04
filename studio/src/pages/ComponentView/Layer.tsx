@@ -140,9 +140,26 @@ function makeStyleOverrides(style: T.LayerStyle, refs: T.Refs) {
   return result;
 }
 
+function makeDisplayStyle(style: T.Display) {
+  if (style.display === "flex") {
+    return {
+      display: "flex",
+      flexDirection: style.flexDirection,
+      flexWrap: style.flexWrap,
+      justifyContent: style.justifyContent,
+      alignItems: style.alignItems,
+      alignContent: style.alignContent
+    };
+  }
+
+  return {
+    display: style.display
+  };
+}
+
 function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
-    display: style.display,
+    ...makeDisplayStyle(style),
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
     ...makePaddingStyle(style),

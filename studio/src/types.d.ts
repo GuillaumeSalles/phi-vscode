@@ -54,7 +54,7 @@ export interface LinkLayer extends ILayer {
 type StyleOverride = {
   id: string;
   pseudoClass: string;
-  style: LayerStyleWithoutOverrides;
+  style: LayerStyle;
 };
 
 type LayerStyle = Typography &

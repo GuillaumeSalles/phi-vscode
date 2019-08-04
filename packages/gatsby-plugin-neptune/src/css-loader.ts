@@ -18,34 +18,14 @@ function cssProp(name: string, value?: string) {
   return value != null ? `${name}: ${value};` : "";
 }
 
-function marginToCss(margin: T.Margin) {
-  return cssProp(
-    "margin",
-    `${lengthToCss(margin.marginTop)} ${lengthToCss(
-      margin.marginRight
-    )} ${lengthToCss(margin.marginBottom)} ${lengthToCss(margin.marginLeft)}`
-  );
-}
-
-function paddingToCss(padding: T.Padding) {
-  return cssProp(
-    "padding",
-    `${lengthToCss(padding.paddingTop)} ${lengthToCss(
-      padding.paddingRight
-    )} ${lengthToCss(padding.paddingBottom)} ${lengthToCss(
-      padding.paddingLeft
-    )}`
-  );
-}
-
 function dimensionToCss(layer: T.Dimensions) {
   return [
-    cssProp("width", layer.width || "auto"),
-    cssProp("min-width", layer.minWidth || "auto"),
-    cssProp("max-width", layer.maxWidth || "auto"),
-    cssProp("height", layer.height || "auto"),
-    cssProp("min-height", layer.minHeight || "auto"),
-    cssProp("max-height", layer.maxHeight || "auto")
+    cssProp("width", layer.width),
+    cssProp("min-width", layer.minWidth),
+    cssProp("max-width", layer.maxWidth),
+    cssProp("height", layer.height),
+    cssProp("min-height", layer.minHeight),
+    cssProp("max-height", layer.maxHeight)
   ].join("\n");
 }
 
@@ -103,17 +83,73 @@ function displayToCss(style: T.LayerStyle) {
   `;
 }
 
-function layerStyleToCss(
+function textDecorationToCss(style: T.LayerStyle) {
+  if (style.textDecoration == null) {
+    return undefined;
+  }
+  const properties = [];
+  if (style.textDecoration.isUnderlined) {
+    properties.push("underline");
+  }
+  if (style.textDecoration.isStrikedThrough) {
+    properties.push("line-through");
+  }
+  if (properties.length === 0) {
+    return "none";
+  }
+  return properties.join(" ");
+}
+
+function rootLayerStyleToCss(
   componentName: string,
   layerName: string,
   style: T.LayerStyle,
   refs: T.Refs
 ) {
   return `.${componentName}-${layerName} {
+    ${layerStyleToCss(style, refs)}
+} 
+
+${layerStyleOverridesToCss(componentName, layerName, style, refs)}`;
+}
+
+function layerStyleOverridesToCss(
+  componentName: string,
+  layerName: string,
+  style: T.LayerStyle,
+  refs: T.Refs
+) {
+  if (style.overrides == null) {
+    return "";
+  }
+
+  return style.overrides
+    .map(override => {
+      return `.${componentName}-${layerName}${override.pseudoClass} {
+      ${layerStyleToCss(override.style, refs)}
+    }`;
+    })
+    .join("\n\n");
+}
+
+function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
+  return `
     ${displayToCss(style)}
-    ${marginToCss(style)}
-    ${paddingToCss(style)}
-    ${dimensionToCss(style)}
+    ${cssProp("margin-top", style.marginTop)}
+    ${cssProp("margin-right", style.marginRight)}
+    ${cssProp("margin-bottom", style.marginBottom)}
+    ${cssProp("margin-left", style.marginLeft)}
+    ${cssProp("padding-top", style.paddingTop)}
+    ${cssProp("padding-right", style.paddingRight)}
+    ${cssProp("padding-bottom", style.paddingBottom)}
+    ${cssProp("padding-left", style.paddingLeft)}
+    ${cssProp("width", style.width)}
+    ${cssProp("min-width", style.minWidth)}
+    ${cssProp("max-width", style.maxWidth)}
+    ${cssProp("height", style.height)}
+    ${cssProp("min-height", style.minHeight)}
+    ${cssProp("max-height", style.maxHeight)}
+    ${cssProp("text-decoration", textDecorationToCss(style))}
     ${cssProp("letter-spacing", lengthToCss(style.letterSpacing, "1.2"))}
     ${cssProp(
       "line-height",
@@ -130,11 +166,11 @@ function layerStyleToCss(
       "font-weight",
       fontWeightToCss(style.fontWeight, refs.fontWeights)
     )}
-}`;
+  `;
 }
 
 function layerToCss(componentName: string, layer: T.Layer, refs: T.Refs) {
-  const defaultStyle = layerStyleToCss(
+  const defaultStyle = rootLayerStyleToCss(
     componentName,
     layer.name,
     layer.style,
@@ -146,7 +182,7 @@ function layerToCss(componentName: string, layer: T.Layer, refs: T.Refs) {
       throw new Error("Breakpoint not found");
     }
     return `@media (min-width: ${bp.value.value}px) {
-      ${layerStyleToCss(componentName, layer.name, mq.style, refs)}
+      ${rootLayerStyleToCss(componentName, layer.name, mq.style, refs)}
     }`;
   });
 

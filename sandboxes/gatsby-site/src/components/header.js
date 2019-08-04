@@ -1,8 +1,6 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
-import { HelloWorld } from "../NewProject.neptune"
-import { HnItem } from "../HackerNews.neptune"
 
 const Header = ({ siteTitle }) => (
   <header
@@ -26,10 +24,9 @@ const Header = ({ siteTitle }) => (
             textDecoration: `none`,
           }}
         >
-          <HelloWorld />
+          {/* <HelloWorld /> */}
         </Link>
       </h1>
-      <HnItem title="Hey" />
     </div>
   </header>
 )
