@@ -37,7 +37,7 @@ function colorToString(color: T.Color, colors: T.ColorsMap) {
     case "hex":
       return color.value;
     default:
-      throw new Error("Invalid color type");
+      throw new Error(`Invalid color ${JSON.stringify(color)}`);
   }
 }
 

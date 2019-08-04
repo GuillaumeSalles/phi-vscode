@@ -5,7 +5,7 @@ import * as T from "../../../types";
 import PaddingEditor from "./PaddingEditor";
 import MarginEditor from "./MarginEditor";
 import DimensionsEditor from "./DimensionsEditor";
-import DisplayEditor from "./DisplayEditor";
+import LayerDisplayEditor from "./LayerDisplayEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
@@ -75,7 +75,7 @@ export default function LayerEditor<TLayer extends T.Layer>({
         refs={refs}
       />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
-        <DisplayEditor
+        <LayerDisplayEditor
           allowedDisplays={["flex", "block", "inline", "none"]}
           style={style}
           onChange={updateLayerStyle}

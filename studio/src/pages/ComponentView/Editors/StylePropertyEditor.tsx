@@ -6,6 +6,20 @@ import ColorInput from "../../../components/ColorInput";
 import Select from "../../../components/Select";
 import { firstKey } from "../../../helpers/immutable-map";
 import NumberInput from "../../../components/NumberInput";
+import { listToEntries } from "../../../utils";
+import {
+  flexDirectionList,
+  flexWrapList,
+  justifyContentList,
+  alignItemsList,
+  alignContentList
+} from "../../../constants";
+
+const flexDirectionOptions = listToEntries(flexDirectionList);
+const flexWrapOptions = listToEntries(flexWrapList);
+const justifyContentOptions = listToEntries(justifyContentList);
+const alignItemsOptions = listToEntries(alignItemsList);
+const alignContentOptions = listToEntries(alignContentList);
 
 type Props = {
   style: T.LayerStyle;
@@ -109,6 +123,84 @@ export function LetterSpacingEditor({ style, onChange }: Props) {
             letterSpacing: value !== null ? { type: "px", value } : undefined
           })
         }
+      />
+    </Field>
+  );
+}
+
+export function DisplayEditor({
+  style,
+  onChange,
+  allowedDisplays
+}: Props & {
+  allowedDisplays: T.DisplayProperty[];
+}) {
+  return (
+    <Field label="Display">
+      <Select
+        value={style.display || "inline"}
+        onChange={display => onChange({ display })}
+        options={listToEntries(allowedDisplays)}
+      />
+    </Field>
+  );
+}
+
+export function FlexDirectionEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Direction">
+      <Select
+        value={style.flexDirection || "row"}
+        onChange={flexDirection => onChange({ flexDirection })}
+        options={flexDirectionOptions}
+      />
+    </Field>
+  );
+}
+
+export function FlexWrapEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Wrap">
+      <Select
+        value={style.flexWrap || "nowrap"}
+        onChange={flexWrap => onChange({ flexWrap })}
+        options={flexWrapOptions}
+      />
+    </Field>
+  );
+}
+
+export function JustifyContentEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Justify Content">
+      <Select
+        value={style.justifyContent || "flex-start"}
+        onChange={justifyContent => onChange({ justifyContent })}
+        options={justifyContentOptions}
+      />
+    </Field>
+  );
+}
+
+export function AlignItemsEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Align Items">
+      <Select
+        value={style.alignItems || "stretch"}
+        onChange={alignItems => onChange({ alignItems })}
+        options={alignItemsOptions}
+      />
+    </Field>
+  );
+}
+
+export function AlignContentEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Align Content">
+      <Select
+        value={style.alignContent || "stretch"}
+        onChange={alignContent => onChange({ alignContent })}
+        options={alignContentOptions}
       />
     </Field>
   );
