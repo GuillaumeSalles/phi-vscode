@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { column, sectionTitle, row } from "../../../styles";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
 import OkCancelModal from "../../../components/OkCancelModal";

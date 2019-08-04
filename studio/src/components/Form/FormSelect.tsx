@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, Interpolation, css } from "@emotion/core";
 import { ChangeEvent, KeyboardEvent, forwardRef } from "react";
-import { colors } from "../../styles";
 
 type Props<TValue> = {
   width?: string;

@@ -11,10 +11,6 @@ type Props = {
 };
 
 export default function MarginEditor({ margin, onChange }: Props) {
-  function updateMargin(newProps: Partial<T.Margin>) {
-    onChange({ ...margin, ...newProps });
-  }
-
   return (
     <Section title="Margin">
       <div css={row}>

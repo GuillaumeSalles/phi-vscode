@@ -159,36 +159,6 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   };
 }
 
-function makeDisplayStyle(style: T.Display) {
-  if (style.display === "flex") {
-    return {
-      display: "flex",
-      flexDirection: style.flexDirection,
-      flexWrap: style.flexWrap,
-      justifyContent: style.justifyContent,
-      alignItems: style.alignItems,
-      alignContent: style.alignContent
-    };
-  }
-
-  return {
-    display: style.display
-  };
-}
-
-function makeContainerLayerStyle(
-  style: T.LayerStyle,
-  refs: T.Refs
-): InterpolationWithTheme<any> {
-  return {
-    ...makeDisplayStyle(style),
-    ...makeDimensionsStyle(style),
-    ...makeMarginStyle(style),
-    ...makePaddingStyle(style),
-    ...makeBackgroundStyle(style, refs.colors)
-  };
-}
-
 function makeLayerStyle(
   layer: T.Layer,
   refs: T.Refs,
@@ -199,16 +169,7 @@ function makeLayerStyle(
     layer.mediaQueries,
     refs,
     width
-  ).map(style => {
-    switch (layer.type) {
-      case "text":
-      case "link":
-        return makeTextLayerStyle(style, refs);
-      case "container":
-        return makeContainerLayerStyle(style, refs);
-    }
-    assertUnreachable(layer);
-  });
+  ).map(style => makeTextLayerStyle(style, refs));
   return merge(styles);
 }
 

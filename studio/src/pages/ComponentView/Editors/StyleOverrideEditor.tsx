@@ -1,12 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import Section from "./Section";
 import AddButton from "../../../components/AddButton";
 import { useToggle } from "../../../hooks";
 import { useRef } from "react";
 import Popover from "../../../components/Popover";
-import { card, row, column, sectionTitle, colors } from "../../../styles";
+import { card, row, column, sectionTitle } from "../../../styles";
 import {
   ColorEditor,
   FontSizeEditor,
@@ -137,7 +136,7 @@ export default function StyleOverrideEditor({
             <IconButton
               cssOverrides={{ display: "none", flex: "0 0 auto" }}
               icon={<Delete height={20} width={20} />}
-              onClick={e => {
+              onClick={() => {
                 const {
                   [entry[0] as keyof T.LayerStyle]: value,
                   ...withoutProp
@@ -270,7 +269,6 @@ function PropertyEditor({
         />
       );
     case "backgroundColor":
-
     case "overrides":
       throw new Error("TODO");
   }
