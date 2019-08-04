@@ -5,7 +5,8 @@ export const colors = {
   front: "white",
   sideBarBackground: "#FAFAFA",
   canvasBackground: "#F0F0F0",
-  primary: "#0076FF"
+  primary: "#0076FF",
+  border: "#DDDDDD"
 };
 
 export const column = css({

@@ -148,10 +148,10 @@ export type Dimensions = {
 };
 
 export type Margin = {
-  marginTop?: Length;
-  marginRight?: Length;
-  marginBottom?: Length;
-  marginLeft?: Length;
+  marginTop?: string;
+  marginRight?: string;
+  marginBottom?: string;
+  marginLeft?: string;
 };
 
 export type Padding = {

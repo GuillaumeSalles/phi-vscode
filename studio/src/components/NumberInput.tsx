@@ -25,6 +25,7 @@ function NumberInput({ value, onChange, min, max, step }: Props) {
         boxSizing: "border-box",
         outline: "none",
         width: "36px",
+        background: "transparent",
         transition:
           "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
         ":focus": {

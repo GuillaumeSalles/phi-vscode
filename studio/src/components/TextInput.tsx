@@ -22,6 +22,7 @@ function TextInput({ value, onChange, cssOverrides }: Props) {
       boxSizing: "border-box",
       outline: "none",
       width: "36px",
+      background: "none",
       transition:
         "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
       ":focus": {

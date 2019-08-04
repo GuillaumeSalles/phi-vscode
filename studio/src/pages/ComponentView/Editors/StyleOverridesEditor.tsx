@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row, column } from "../../../styles";
+import { row, column, colors } from "../../../styles";
 import IconButton from "../../../components/IconButton";
 import AddButton from "../../../components/AddButton";
 import Button from "../../../components/Button";
@@ -140,7 +140,8 @@ export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
                 column,
                 {
                   margin: "4px 8px",
-                  background: "white"
+                  background: "white",
+                  border: `solid 1px ${colors.border}`
                 }
               ]}
             >
@@ -149,7 +150,8 @@ export default function StyleOverridesEditor({ style, onChange, refs }: Props) {
                 css={[
                   row,
                   {
-                    padding: "4px 8px",
+                    padding: "8px",
+                    borderBottom: `solid 1px ${colors.border}`,
                     alignItems: "center",
                     fontSize: "14px",
                     ":hover button": {

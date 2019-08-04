@@ -5,6 +5,7 @@ import { row } from "../../../styles";
 import Field from "../../../components/Field";
 import LengthInput from "../../../components/LengthInput";
 import Section from "./Section";
+import TextInput from "../../../components/TextInput";
 
 type Props = {
   margin: T.Margin;
@@ -20,31 +21,43 @@ export default function MarginEditor({ margin, onChange }: Props) {
     <Section title="Margin">
       <div css={row}>
         <Field label="Top">
-          <LengthInput
-            length={margin.marginTop}
-            defaultValue={0}
-            onChange={marginTop => updateMargin({ marginTop })}
+          <TextInput
+            value={margin.marginTop}
+            onChange={marginTop =>
+              updateMargin({
+                marginTop
+              })
+            }
           />
         </Field>
         <Field label="Right">
-          <LengthInput
-            length={margin.marginRight}
-            defaultValue={0}
-            onChange={marginRight => updateMargin({ marginRight })}
+          <TextInput
+            value={margin.marginRight}
+            onChange={marginRight =>
+              updateMargin({
+                marginRight
+              })
+            }
           />
         </Field>
         <Field label="Bottom">
-          <LengthInput
-            length={margin.marginBottom}
-            defaultValue={0}
-            onChange={marginBottom => updateMargin({ marginBottom })}
+          <TextInput
+            value={margin.marginBottom}
+            onChange={marginBottom =>
+              updateMargin({
+                marginBottom
+              })
+            }
           />
         </Field>
         <Field label="Left">
-          <LengthInput
-            length={margin.marginLeft}
-            defaultValue={0}
-            onChange={marginLeft => updateMargin({ marginLeft })}
+          <TextInput
+            value={margin.marginLeft}
+            onChange={marginLeft =>
+              updateMargin({
+                marginLeft
+              })
+            }
           />
         </Field>
       </div>

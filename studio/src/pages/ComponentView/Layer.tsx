@@ -238,10 +238,10 @@ function makeDimensionsStyle(layer: T.Dimensions) {
 
 function makeMarginStyle(layer: T.Margin) {
   return {
-    marginTop: lengthToCss(layer.marginTop, "0"),
-    marginRight: lengthToCss(layer.marginRight, "0"),
-    marginBottom: lengthToCss(layer.marginBottom, "0"),
-    marginLeft: lengthToCss(layer.marginLeft, "0")
+    marginTop: layer.marginTop,
+    marginRight: layer.marginRight,
+    marginBottom: layer.marginBottom,
+    marginLeft: layer.marginLeft
   };
 }
 

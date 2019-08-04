@@ -15,6 +15,7 @@ import uuid from "uuid/v4";
 import React from "react";
 import SecondaryButton from "../../../components/SecondaryButton";
 import Button from "../../../components/Button";
+import Section from "./Section";
 
 type Props = {
   layer: T.Layer;
@@ -70,27 +71,15 @@ export default function MediaQueriesEditor({
   });
 
   return (
-    <div
-      css={[
-        column,
-        { flex: "0 0 auto", padding: "8px", borderBottom: "solid 1px #DDD" }
-      ]}
-    >
-      <div
-        css={[
-          row,
-          {
-            margin: "0 8px",
-            justifyContent: "space-between"
-          }
-        ]}
-      >
-        <h4 css={[sectionTitle]}>Media Queries</h4>
+    <Section
+      title="Media Queries"
+      topRightButton={
         <AddButton
           disabled={!canAddMediaQueries}
           onClick={addMediaQueryDialog.open}
         />
-      </div>
+      }
+    >
       <Field label="Breakpoint">
         <Select
           width="100%"
@@ -131,6 +120,6 @@ export default function MediaQueriesEditor({
           }
         />
       )}
-    </div>
+    </Section>
   );
 }

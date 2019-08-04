@@ -14,8 +14,7 @@ export default function Section({ title, children, topRightButton }: Props) {
       css={[
         column,
         {
-          padding: "4px 8px",
-          margin: "4px 0",
+          padding: "8px",
           borderBottom: "solid 1px #DDD"
         }
       ]}
@@ -24,7 +23,7 @@ export default function Section({ title, children, topRightButton }: Props) {
         css={[
           row,
           {
-            margin: "0 8px",
+            margin: "4px 8px",
             justifyContent: "space-between"
           }
         ]}

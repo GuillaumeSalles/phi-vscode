@@ -6,7 +6,7 @@ import AddButton from "../../../components/AddButton";
 import { useToggle } from "../../../hooks";
 import { useRef } from "react";
 import Popover from "../../../components/Popover";
-import { card, row } from "../../../styles";
+import { card, row, column, sectionTitle, colors } from "../../../styles";
 import {
   ColorEditor,
   FontSizeEditor,
@@ -72,17 +72,25 @@ export default function StyleOverrideEditor({
 
   return (
     <div ref={popoverRef}>
-      <Section
-        title="Custom Style"
-        topRightButton={
+      <div css={[column, { padding: "8px" }]}>
+        <div
+          css={[
+            row,
+            {
+              margin: "0 8px",
+              justifyContent: "space-between"
+            }
+          ]}
+        >
+          <h4 css={[sectionTitle]}>CSS</h4>
           <AddButton
             disabled={propertiesToAdd.length === 0}
             onClick={() => {
               popover.activate();
             }}
           />
-        }
-      >
+        </div>
+
         {Array.from(Object.entries(style)).map(entry => (
           <div
             key={entry[0]}
@@ -120,7 +128,7 @@ export default function StyleOverrideEditor({
             />
           </div>
         ))}
-      </Section>
+      </div>
       <Popover
         anchor={popoverRef}
         isOpen={popover.isActive}

@@ -36,13 +36,13 @@ function Select<TValue extends string>({
         lineHeight: 0,
         width,
         minWidth: width,
-        background: "rgb(255, 255, 255)",
         outline: "none",
         borderWidth: "0 0 1px 0",
         borderStyle: "solid",
         borderColor: "transparent",
         borderImage: "initial",
         overflow: "hidden",
+        background: "none",
         transition:
           "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
         ":focus-within": {
