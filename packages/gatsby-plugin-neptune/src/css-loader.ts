@@ -149,6 +149,14 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
     ${cssProp("height", style.height)}
     ${cssProp("min-height", style.minHeight)}
     ${cssProp("max-height", style.maxHeight)}
+    ${cssProp(
+      "opacity",
+      style.opacity != null ? style.opacity.toString() : undefined
+    )}
+    ${cssProp(
+      "backgroundColor",
+      colorToCss(style.backgroundColor, refs.colors)
+    )}
     ${cssProp("text-decoration", textDecorationToCss(style))}
     ${cssProp("letter-spacing", lengthToCss(style.letterSpacing, "1.2"))}
     ${cssProp(
