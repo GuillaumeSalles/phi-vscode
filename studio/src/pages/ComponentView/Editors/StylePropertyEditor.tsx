@@ -43,6 +43,38 @@ export function ColorEditor({ style, onChange, refs }: PropsWithRefs) {
   );
 }
 
+export function BackgroundColorEditor({
+  style,
+  onChange,
+  refs
+}: PropsWithRefs) {
+  return (
+    <Field label="Background Color">
+      <ColorInput
+        colors={refs.colors}
+        value={style.backgroundColor}
+        onChange={value => onChange({ backgroundColor: value })}
+      />
+    </Field>
+  );
+}
+
+export function OpacityEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Opacity">
+      <NumberInput
+        min={0}
+        max={1}
+        step={0.01}
+        value={style.opacity != null ? style.opacity : 1}
+        onChange={opacity =>
+          onChange({ opacity: opacity != null ? opacity : 1 })
+        }
+      />
+    </Field>
+  );
+}
+
 export function FontSizeEditor({ style, onChange, refs }: PropsWithRefs) {
   return (
     <Field label="Font size">

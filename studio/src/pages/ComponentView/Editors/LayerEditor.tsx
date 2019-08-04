@@ -7,6 +7,7 @@ import MarginEditor from "./MarginEditor";
 import DimensionsEditor from "./DimensionsEditor";
 import LayerDisplayEditor from "./LayerDisplayEditor";
 import MediaQueriesEditor from "./MediaQueriesEditor";
+import AppearanceEditor from "./AppearanceEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
@@ -105,6 +106,11 @@ export default function LayerEditor<TLayer extends T.Layer>({
             <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
             <MarginEditor margin={style} onChange={updateLayerStyle} />
             <PaddingEditor padding={style} onChange={updateLayerStyle} />
+            <AppearanceEditor
+              style={style}
+              onChange={updateLayerStyle}
+              refs={refs}
+            />
             <StyleOverridesEditor
               style={style}
               onChange={updateLayerStyle}

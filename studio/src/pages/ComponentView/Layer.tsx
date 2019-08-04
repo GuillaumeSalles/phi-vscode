@@ -163,8 +163,11 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
     ...makePaddingStyle(style),
-    ...makeBackgroundStyle(style, refs.colors),
     color: style.color ? colorToString(style.color, refs.colors) : undefined,
+    backgroundColor: style.backgroundColor
+      ? colorToString(style.backgroundColor, refs.colors)
+      : undefined,
+    opacity: style.opacity != null ? style.opacity : 1,
     fontSize: fontSizeToString(style.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(style.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),
@@ -231,14 +234,6 @@ function makePaddingStyle(layer: T.Padding) {
     paddingRight: layer.paddingRight,
     paddingBottom: layer.paddingBottom,
     paddingLeft: layer.paddingLeft
-  };
-}
-
-function makeBackgroundStyle(layer: T.Background, colors: T.ColorsMap) {
-  return {
-    backgroundColor: layer.backgroundColor
-      ? colorToString(layer.backgroundColor, colors)
-      : undefined
   };
 }
 

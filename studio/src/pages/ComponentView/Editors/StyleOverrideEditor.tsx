@@ -19,7 +19,9 @@ import {
   JustifyContentEditor,
   AlignItemsEditor,
   AlignContentEditor,
-  SimpleTextPropertyEditor
+  SimpleTextPropertyEditor,
+  BackgroundColorEditor,
+  OpacityEditor
 } from "./StylePropertyEditor";
 import TextDecorationEditor from "./TextDecorationEditor";
 import IconButton from "../../../components/IconButton";
@@ -55,7 +57,9 @@ const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
   ["maxWidth", "Max Width"],
   ["height", "Height"],
   ["minHeight", "Min Height"],
-  ["maxHeight", "Max Height"]
+  ["maxHeight", "Max Height"],
+  ["opacity", "Opacity"],
+  ["backgroundColor", "Background Color"]
 ]);
 
 const styleProperties = Array.from(stylePropertiesMap).sort((a, b) =>
@@ -246,6 +250,12 @@ function PropertyEditor({
       return <AlignItemsEditor style={style} onChange={onChange} />;
     case "alignContent":
       return <AlignContentEditor style={style} onChange={onChange} />;
+    case "backgroundColor":
+      return (
+        <BackgroundColorEditor style={style} onChange={onChange} refs={refs} />
+      );
+    case "opacity":
+      return <OpacityEditor style={style} onChange={onChange} />;
     case "height":
     case "minHeight":
     case "maxHeight":
@@ -268,7 +278,6 @@ function PropertyEditor({
           property={property}
         />
       );
-    case "backgroundColor":
     case "overrides":
       throw new Error("TODO");
   }

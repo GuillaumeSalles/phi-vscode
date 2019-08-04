@@ -63,16 +63,18 @@ export interface LinkLayer extends ILayer {
 type StyleOverride = {
   id: string;
   pseudoClass: string;
+  layerId?: string;
   style: LayerStyle;
 };
 
 type LayerStyle = Typography &
   Display &
-  Background &
   Dimensions &
   Margin &
   Padding & {
     overrides?: StyleOverride[];
+    opacity?: number;
+    backgroundColor?: Color;
   };
 
 export type Display = {
@@ -168,10 +170,6 @@ export type Padding = {
   paddingRight?: string;
   paddingBottom?: string;
   paddingLeft?: string;
-};
-
-export type Background = {
-  backgroundColor?: Color;
 };
 
 export type Length = {

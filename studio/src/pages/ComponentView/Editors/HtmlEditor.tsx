@@ -4,7 +4,7 @@ import React from "react";
 import * as T from "../../../types";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
-import { listToEntries, assertUnreachable } from "../../../utils";
+import { listToEntries } from "../../../utils";
 import TextAreaInput from "../../../components/TextAreaInput";
 import TextInput from "../../../components/TextInput";
 import Section from "./Section";
