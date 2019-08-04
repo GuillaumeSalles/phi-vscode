@@ -9,6 +9,8 @@ export function layerTypeToName(type: T.LayerType): string {
       return "link";
     case "container":
       return "container";
+    case "image":
+      return "image";
   }
   assertUnreachable(type);
 }

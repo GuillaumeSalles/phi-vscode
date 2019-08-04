@@ -10,12 +10,25 @@ import MediaQueriesEditor from "./MediaQueriesEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
+import { assertUnreachable } from "../../../utils";
 
 type Props<TLayer> = {
   layer: TLayer;
   onChange: (layer: TLayer) => void;
   refs: T.Refs;
 };
+
+function layerTypeToSupportedDisplay(type: T.LayerType): T.DisplayProperty[] {
+  switch (type) {
+    case "container":
+    case "link":
+      return ["flex", "block", "inline", "none"];
+    case "text":
+    case "image":
+      return ["block", "inline", "none"];
+  }
+  assertUnreachable(type);
+}
 
 export default function LayerEditor<TLayer extends T.Layer>({
   layer,
@@ -76,7 +89,7 @@ export default function LayerEditor<TLayer extends T.Layer>({
       />
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
         <LayerDisplayEditor
-          allowedDisplays={["flex", "block", "inline", "none"]}
+          allowedDisplays={layerTypeToSupportedDisplay(layer.type)}
           style={style}
           onChange={updateLayerStyle}
         />

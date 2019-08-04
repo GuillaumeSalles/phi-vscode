@@ -192,6 +192,8 @@ function makeLayerStyle(
 
 function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
   switch (layer.type) {
+    case "image":
+      return null;
     case "text":
     case "link":
       return layer.text;
@@ -242,6 +244,14 @@ function makeBackgroundStyle(layer: T.Background, colors: T.ColorsMap) {
 
 function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
   switch (layer.type) {
+    case "image":
+      return {
+        css: makeLayerStyle(layer, refs, width),
+        src: layer.src,
+        alt: layer.alt,
+        height: layer.height,
+        width: layer.width
+      };
     case "text":
     case "container":
       return {

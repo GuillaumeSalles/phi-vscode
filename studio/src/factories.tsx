@@ -52,8 +52,28 @@ export function makeLayer(
       return makeLinkLayer(refs, { name });
     case "container":
       return makeContainerLayer(refs, { name });
+    case "image":
+      return makeImageLayer(refs, { name });
   }
   assertUnreachable(type);
+}
+
+export function makeImageLayer(
+  refs: T.Refs,
+  props: Partial<T.ImageLayer> = {}
+): T.ImageLayer {
+  return {
+    type: "image",
+    id: uuid(),
+    name: "Text",
+    tag: "img",
+    src: "",
+    alt: "",
+    mediaQueries: [],
+    overrides: [],
+    style: {},
+    ...props
+  };
 }
 
 export function makeLinkLayer(

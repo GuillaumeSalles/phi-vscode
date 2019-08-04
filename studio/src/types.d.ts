@@ -28,14 +28,23 @@ export type Override = {
   layerProp: string;
 };
 
-export type Layer = ContainerLayer | TextLayer | LinkLayer;
+export type Layer = ContainerLayer | TextLayer | LinkLayer | ImageLayer;
 
-export type LayerType = "container" | "text" | "link";
+export type LayerType = "container" | "text" | "link" | "image";
 
 export interface ContainerLayer extends ILayer {
   type: "container";
   tag: "div";
   children: Layer[];
+}
+
+export interface ImageLayer extends ILayer {
+  type: "image";
+  tag: "img";
+  src: string;
+  alt: string;
+  height?: string;
+  width?: string;
 }
 
 export interface TextLayer extends ILayer {

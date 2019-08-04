@@ -4,7 +4,7 @@ import React from "react";
 import * as T from "../../../types";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
-import { listToEntries } from "../../../utils";
+import { listToEntries, assertUnreachable } from "../../../utils";
 import TextAreaInput from "../../../components/TextAreaInput";
 import TextInput from "../../../components/TextInput";
 import Section from "./Section";
@@ -78,6 +78,46 @@ export default function HtmlEditor(props: {
                 cssOverrides={{ width: "100%" }}
                 value={props.layer.href}
                 onChange={href => updateLayer({ href })}
+              />
+            </Field>
+          </Section>
+          <HtmlLayerOverrides
+            component={component}
+            layer={layer}
+            onOverridesChange={overrides => updateLayer({ overrides })}
+          />
+        </React.Fragment>
+      );
+    case "image":
+      return (
+        <React.Fragment>
+          <Section title="Default Props">
+            <Field label="src">
+              <TextInput
+                cssOverrides={{ width: "100%" }}
+                value={props.layer.src}
+                onChange={src => updateLayer({ src })}
+              />
+            </Field>
+            <Field label="height">
+              <TextInput
+                cssOverrides={{ width: "100%" }}
+                value={props.layer.height}
+                onChange={height => updateLayer({ height })}
+              />
+            </Field>
+            <Field label="width">
+              <TextInput
+                cssOverrides={{ width: "100%" }}
+                value={props.layer.width}
+                onChange={width => updateLayer({ width })}
+              />
+            </Field>
+            <Field label="alt">
+              <TextInput
+                cssOverrides={{ width: "100%" }}
+                value={props.layer.alt}
+                onChange={alt => updateLayer({ alt })}
               />
             </Field>
           </Section>
