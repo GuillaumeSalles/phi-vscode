@@ -14,7 +14,7 @@ export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
     return [];
   }
   const result = [root];
-  if (root.type === "container") {
+  if (root.type === "container" || root.type === "link") {
     return result.concat(root.children.map(layerTreeToArray).flat());
   }
   return result;

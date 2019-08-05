@@ -28,7 +28,8 @@ function Component({ component, refs }: Props) {
             css={[
               {
                 border: "none",
-                background: "white",
+                // background: "white",
+                background: "rgb(21, 32, 43)",
                 width: entry[1].value.value + "px"
               }
             ]}

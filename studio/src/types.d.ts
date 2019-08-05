@@ -56,7 +56,8 @@ export interface TextLayer extends ILayer {
 export interface LinkLayer extends ILayer {
   type: "link";
   tag: "a";
-  text: string;
+  content: string;
+  children: Layer[];
   href: string;
 }
 

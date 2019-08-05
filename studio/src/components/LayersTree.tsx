@@ -6,7 +6,7 @@ import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo, useCallback } from "react";
 import LayersTreeItemComponent from "./LayersTreeItem";
 import { makeLayer } from "../factories";
-import { findLayerById, updateLayer } from "../layerUtils";
+import { findLayerById, updateLayer, canHaveChildren } from "../layerUtils";
 import OkCancelModal from "./OkCancelModal";
 import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateLayerName } from "../validators";
@@ -14,7 +14,7 @@ import React from "react";
 import Button from "./Button";
 import SecondaryButton from "./SecondaryButton";
 import { assertUnreachable } from "../utils";
-import { Link, Image } from "../icons";
+import { Link, Image, Text, Container } from "../icons";
 
 type Props = {
   root?: T.Layer;
@@ -61,7 +61,7 @@ export function flattenLayer(
   }
   const item = { parent, layer, depth };
   const results: LayersTreeItem[] = [item];
-  if (layer.type === "container") {
+  if (canHaveChildren(layer)) {
     for (let child of flatten(
       layer.children.map(child => flattenLayer(child, item, depth + 1))
     )) {
@@ -79,31 +79,11 @@ type DepthsBoundaries = {
 export function layerTypeToIcon(type: T.LayerType) {
   switch (type) {
     case "text":
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M9.17 15.5h5.64l1.14 3h2.09l-5.11-13h-1.86l-5.11 13h2.09l1.12-3zM12 7.98l2.07 5.52H9.93L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z" />
-        </svg>
-      );
+      return <Text height={24} width={24} />;
     case "link":
       return <Link height={24} width={24} />;
     case "container":
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path fill="none" d="M0 0h24v24H0V0z" />
-          <path d="M21 18H2v2h19v-2zm-2-8v4H4v-4h15m1-2H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm1-4H2v2h19V4z" />
-        </svg>
-      );
+      return <Container height={24} width={24} />;
     case "image":
       return <Image height={24} width={24} />;
   }
@@ -128,10 +108,9 @@ export function getDepthsBoundaries(
 
   return {
     min: nextItem ? nextItem.depth : 1,
-    max:
-      beforeItem.layer.type === "container"
-        ? beforeItem.depth + 1
-        : beforeItem.depth
+    max: canHaveChildren(beforeItem.layer)
+      ? beforeItem.depth + 1
+      : beforeItem.depth
   };
 }
 
@@ -206,7 +185,7 @@ function deleteLayer(root: T.Layer, toDelete: T.Layer): T.Layer | undefined {
     return undefined;
   }
 
-  if (root.type !== "container") {
+  if (!canHaveChildren(root)) {
     return root;
   }
 
@@ -265,7 +244,7 @@ function addLayer(
     throw new Error(`Layer with id ${selectedLayerId} not found in root`);
   }
 
-  if (selectedLayer.type === "container") {
+  if (canHaveChildren(selectedLayer)) {
     return updateLayer(root, {
       ...selectedLayer,
       children: [...selectedLayer.children].concat(newLayer)
@@ -278,7 +257,7 @@ function insertLayer(
   toInsert: T.Layer,
   insertPosition: InsertPosition
 ): T.Layer {
-  if (root.type === "container") {
+  if (canHaveChildren(root)) {
     if (root.id === insertPosition.parentId) {
       return {
         ...root,

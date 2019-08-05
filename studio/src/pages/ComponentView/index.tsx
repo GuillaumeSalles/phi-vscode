@@ -150,6 +150,7 @@ function ComponentView({
               css={[
                 row,
                 {
+                  flex: "0 0 auto",
                   height: "40px",
                   alignItems: "stretch",
                   borderBottom: "solid 1px #DDD"

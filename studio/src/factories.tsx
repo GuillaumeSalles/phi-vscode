@@ -85,8 +85,9 @@ export function makeLinkLayer(
     id: uuid(),
     name: "Text",
     tag: "a",
-    text: "link",
+    content: "link",
     href: "",
+    children: [],
     mediaQueries: [],
     overrides: [],
     style: {

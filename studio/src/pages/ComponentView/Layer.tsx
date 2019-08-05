@@ -202,8 +202,13 @@ function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
     case "image":
       return null;
     case "text":
-    case "link":
       return layer.text;
+    case "link":
+      return layer.children.length > 0
+        ? layer.children.map(c => (
+            <Layer key={c.id} layer={c} refs={refs} width={width} />
+          ))
+        : layer.content;
     case "container":
       return layer.children.map(c => (
         <Layer key={c.id} layer={c} refs={refs} width={width} />

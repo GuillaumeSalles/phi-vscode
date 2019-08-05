@@ -81,14 +81,17 @@ export default function LayerEditor<TLayer extends T.Layer>({
   }
 
   return (
-    <div css={column}>
-      <MediaQueriesEditor
-        selectedId={mediaQuery}
-        layer={layer}
-        onAdd={addMediaQuery}
-        onChange={setMediaQuery}
-        refs={refs}
-      />
+    <div css={[column, { overflowY: "hidden" }]}>
+      <div css={{ flex: "0 0 auto" }}>
+        <MediaQueriesEditor
+          selectedId={mediaQuery}
+          layer={layer}
+          onAdd={addMediaQuery}
+          onChange={setMediaQuery}
+          refs={refs}
+        />
+      </div>
+
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
         <LayerDisplayEditor
           allowedDisplays={layerTypeToSupportedDisplay(layer.type)}

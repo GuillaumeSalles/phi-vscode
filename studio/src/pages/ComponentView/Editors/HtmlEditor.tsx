@@ -66,11 +66,11 @@ export default function HtmlEditor(props: {
       return (
         <React.Fragment>
           <Section title="Default Props">
-            <Field label="text">
+            <Field label="content">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.text}
-                onChange={text => updateLayer({ text })}
+                value={props.layer.content}
+                onChange={content => updateLayer({ content })}
               />
             </Field>
             <Field label="href">

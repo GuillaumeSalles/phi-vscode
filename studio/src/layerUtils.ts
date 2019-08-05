@@ -1,6 +1,12 @@
 import * as T from "./types";
 import { assertUnreachable } from "./utils";
 
+export function canHaveChildren(
+  layer: T.Layer
+): layer is T.ContainerLayer | T.LinkLayer {
+  return layer.type === "container" || layer.type === "link";
+}
+
 export function layerTypeToName(type: T.LayerType): string {
   switch (type) {
     case "text":
@@ -20,7 +26,7 @@ export function findLayerById(root: T.Layer, id: string): T.Layer | undefined {
     return root;
   }
 
-  if (root.type === "container") {
+  if (canHaveChildren(root)) {
     for (const child of root.children) {
       const layer = findLayerById(child, id);
       if (layer) {
@@ -44,7 +50,7 @@ export function updateLayer(
     return newLayer;
   }
 
-  if (rootLayer.type === "container") {
+  if (canHaveChildren(rootLayer)) {
     return {
       ...rootLayer,
       children: rootLayer.children.map(child => updateLayer(child, newLayer))
