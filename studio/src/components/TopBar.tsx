@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { row } from "../styles";
+import { row, colors } from "../styles";
 import { path } from "../node";
 
 type Props = {
@@ -44,7 +44,7 @@ export default function TopBar({ fileName, isSaved }: Props) {
           css={{
             padding: "4px 6px",
             borderRadius: "12px",
-            background: "#DDDDDD",
+            background: colors.front,
             fontSize: "12px"
           }}
         >

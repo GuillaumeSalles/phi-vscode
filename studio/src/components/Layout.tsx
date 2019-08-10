@@ -13,7 +13,13 @@ type Props = {
 export function Layout({ left, center, right, topBar }: Props) {
   return (
     <div css={[row, { width: "100%", height: "100%" }]}>
-      <div css={{ flex: "0 0 auto", background: "white", height: "100%" }}>
+      <div
+        css={{
+          flex: "0 0 auto",
+          background: colors.sideBarBackground,
+          height: "100%"
+        }}
+      >
         {left}
       </div>
       <div
@@ -32,8 +38,7 @@ export function Layout({ left, center, right, topBar }: Props) {
             top: 0,
             left: 0,
             right: 0,
-            height: "32px",
-            background: "#F7F7F7CC"
+            height: "32px"
           }}
         >
           {topBar}
@@ -47,7 +52,13 @@ export function Layout({ left, center, right, topBar }: Props) {
           {center}
         </div>
       </div>
-      <div css={{ flex: "0 0 auto", background: "white", height: "100%" }}>
+      <div
+        css={{
+          flex: "0 0 auto",
+          background: colors.sideBarBackground,
+          height: "100%"
+        }}
+      >
         {right}
       </div>
     </div>

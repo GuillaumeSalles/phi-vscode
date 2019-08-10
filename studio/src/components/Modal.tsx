@@ -32,7 +32,7 @@ export default function Modal(props: Props) {
           bottom: "0px",
           height: "100%",
           left: "0px",
-          opacity: 0.25,
+          opacity: 0,
           pointerEvents: "all",
           position: "fixed",
           top: "0px",

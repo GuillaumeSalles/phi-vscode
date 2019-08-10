@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
-import { row, column } from "../styles";
+import { row, column, colors } from "../styles";
 import Modal from "./Modal";
 import { useToggle } from "../hooks";
 
@@ -39,7 +39,7 @@ export default function OkCancelModal({
           column,
           {
             boxShadow: "rgba(0, 0, 0, 0.12) 0px 20px 30px 0px;",
-            background: "#F9F9F9",
+            background: colors.sideBarBackground,
             borderRadius: "0 0 4px 4px",
             overflow: "hidden",
             padding: "24px",
