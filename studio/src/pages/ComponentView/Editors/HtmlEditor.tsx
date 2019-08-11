@@ -9,6 +9,7 @@ import TextAreaInput from "../../../components/TextAreaInput";
 import TextInput from "../../../components/TextInput";
 import Section from "./Section";
 import HtmlLayerOverrides from "./HtmlLayerOverrides";
+import { getComponentOrThrow } from "../../../layerUtils";
 
 const tags: T.TextLayerTag[] = [
   "h1",
@@ -22,12 +23,15 @@ const tags: T.TextLayerTag[] = [
 ];
 const textTagsOptions = listToEntries(tags);
 
-export default function HtmlEditor(props: {
+type Props = {
   component: T.Component;
   layer: T.Layer;
   onChange: (layer: T.Layer) => void;
-}) {
-  const { layer, onChange, component } = props;
+  refs: T.Refs;
+};
+
+export default function HtmlEditor(props: Props) {
+  const { layer, onChange, component, refs } = props;
 
   function updateLayer<TLayer>(newProps: Partial<TLayer>) {
     onChange({ ...layer, ...newProps });
@@ -62,6 +66,30 @@ export default function HtmlEditor(props: {
       );
     case "container":
       return null;
+    case "component":
+      const refComponent = getComponentOrThrow(props.layer, refs);
+      const layerProps = props.layer.props;
+      return (
+        <React.Fragment>
+          <Section title="Default Props">
+            {refComponent.props.map(prop => {
+              return (
+                <Field label={prop.name}>
+                  <TextInput
+                    cssOverrides={{ width: "100%" }}
+                    value={layerProps[prop.id]}
+                    onChange={value =>
+                      updateLayer({
+                        props: { ...layerProps, [prop.id]: value }
+                      })
+                    }
+                  />
+                </Field>
+              );
+            })}
+          </Section>
+        </React.Fragment>
+      );
     case "link":
       return (
         <React.Fragment>

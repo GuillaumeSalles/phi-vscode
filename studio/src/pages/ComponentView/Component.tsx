@@ -39,6 +39,7 @@ function Component({ component, refs }: Props) {
                 layer={component.layout}
                 refs={refs}
                 width={entry[1].value.value}
+                props={{}}
               />
             )}
           </div>

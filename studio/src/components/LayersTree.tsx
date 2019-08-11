@@ -5,7 +5,6 @@ import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo, useCallback } from "react";
 import LayersTreeItemComponent from "./LayersTreeItem";
-import { makeLayer } from "../factories";
 import { findLayerById, updateLayer, canHaveChildren } from "../layerUtils";
 import OkCancelModal from "./OkCancelModal";
 import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
@@ -14,7 +13,7 @@ import React from "react";
 import Button from "./Button";
 import SecondaryButton from "./SecondaryButton";
 import { assertUnreachable } from "../utils";
-import { Link, Image, Text, Container } from "../icons";
+import { Link, Image, Text, Container, Component } from "../icons";
 
 type Props = {
   root?: T.Layer;
@@ -86,6 +85,8 @@ export function layerTypeToIcon(type: T.LayerType) {
       return <Container height={24} width={24} />;
     case "image":
       return <Image height={24} width={24} />;
+    case "component":
+      return <Component height={24} width={24} />;
   }
   assertUnreachable(type);
 }
@@ -328,8 +329,7 @@ function LayersTree({
     onSelectLayer(selectedLayer!.id);
   });
   const addLayerCallback = useCallback(
-    (type: T.LayerType) => {
-      const newLayer = makeLayer(type, root, refs);
+    (newLayer: T.Layer) => {
       onLayerChange(addLayer(root, selectedLayerId, newLayer));
       onSelectLayer(newLayer.id);
     },
@@ -375,8 +375,12 @@ function LayersTree({
         <h2 css={sectionTitle}>Layers</h2>
         <AddLayerPopover
           onAdd={addLayerCallback}
+          refs={refs}
+          root={root}
           disabled={
-            selectedLayer !== undefined && selectedLayer.type === "text"
+            selectedLayer === undefined ||
+            (selectedLayer.type !== "container" &&
+              selectedLayer.type !== "link")
           }
         />
         <OkCancelModal

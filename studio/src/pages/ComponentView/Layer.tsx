@@ -3,11 +3,13 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
 import { firstEntry } from "../../helpers/immutable-map";
+import { getComponentOrThrow } from "../../layerUtils";
 
 type Props = {
   layer: T.Layer;
   refs: T.Refs;
   width: number;
+  props: T.ComponentPropertiesValues;
 };
 
 function lengthToCss(
@@ -197,22 +199,42 @@ function makeLayerStyle(
   return merge(styles);
 }
 
-function makeChildren(layer: T.Layer, refs: T.Refs, width: number) {
+function makeChildren(
+  layer: T.Layer,
+  refs: T.Refs,
+  width: number,
+  props: T.ComponentPropertiesValues
+) {
   switch (layer.type) {
     case "image":
       return null;
     case "text":
-      return layer.text;
+      const textOverride = layer.overrides.find(
+        override => override.layerProp === "text"
+      );
+      return textOverride != null && props[textOverride.propId] != null
+        ? props[textOverride.propId]
+        : layer.text;
     case "link":
       return layer.children.length > 0
         ? layer.children.map(c => (
-            <Layer key={c.id} layer={c} refs={refs} width={width} />
+            <Layer
+              key={c.id}
+              layer={c}
+              refs={refs}
+              width={width}
+              props={props}
+            />
           ))
         : layer.content;
     case "container":
       return layer.children.map(c => (
-        <Layer key={c.id} layer={c} refs={refs} width={width} />
+        <Layer key={c.id} layer={c} refs={refs} width={width} props={props} />
       ));
+    case "component":
+      return new Error(
+        "Can't create children proprerty for a component layer. This is a bug"
+      );
   }
   assertUnreachable(layer);
 }
@@ -246,11 +268,26 @@ function makePaddingStyle(layer: T.Padding) {
   };
 }
 
+function applyOverrides(
+  props: any,
+  layer: T.Layer,
+  componentProps: T.ComponentPropertiesValues
+) {
+  for (let override of layer.overrides) {
+    const value = componentProps[override.propId];
+    if (value != null) {
+      props[override.layerProp] = value;
+    }
+  }
+  return props;
+}
+
 function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
+  const css = makeLayerStyle(layer, refs, width);
   switch (layer.type) {
     case "image":
       return {
-        css: makeLayerStyle(layer, refs, width),
+        css,
         src: layer.src,
         alt: layer.alt,
         height: layer.height,
@@ -258,23 +295,38 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
       };
     case "text":
     case "container":
-      return {
-        css: makeLayerStyle(layer, refs, width)
-      };
+      return { css };
     case "link":
       return {
-        css: makeLayerStyle(layer, refs, width),
+        css,
         href: layer.href
       };
+    case "component":
+      return new Error("TODO. This is a bug");
   }
   assertUnreachable(layer);
 }
 
-function Layer({ layer, refs, width }: Props) {
+function Layer({ layer, refs, width, props }: Props) {
+  if (layer.type === "component") {
+    const component = getComponentOrThrow(layer, refs);
+    if (component.layout == null) {
+      return null;
+    }
+
+    return (
+      <Layer
+        layer={component.layout}
+        refs={refs}
+        width={width}
+        props={layer.props}
+      />
+    );
+  }
   return jsx(
     layer.tag,
-    makeLayerProps(layer, refs, width),
-    makeChildren(layer, refs, width)
+    applyOverrides(makeLayerProps(layer, refs, width), layer, props),
+    makeChildren(layer, refs, width, props)
   );
 }
 

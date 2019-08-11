@@ -42,7 +42,8 @@ export function generateUniqueLayerName(
 export function makeLayer(
   type: T.LayerType,
   root: T.Layer | undefined,
-  refs: T.Refs
+  refs: T.Refs,
+  componentId?: string
 ): T.Layer {
   const name = generateUniqueLayerName(type, root);
   switch (type) {
@@ -54,8 +55,30 @@ export function makeLayer(
       return makeContainerLayer(refs, { name });
     case "image":
       return makeImageLayer(refs, { name });
+    case "component":
+      if (componentId == null) {
+        throw new Error("ComponentId is required to create a component layer");
+      }
+      return makeComponentLayer(refs, name, componentId);
   }
   assertUnreachable(type);
+}
+
+export function makeComponentLayer(
+  refs: T.Refs,
+  name: string,
+  componentId: string
+): T.ComponentLayer {
+  return {
+    type: "component",
+    id: uuid(),
+    name: name,
+    componentId,
+    mediaQueries: [],
+    overrides: [],
+    style: {},
+    props: {}
+  };
 }
 
 export function makeImageLayer(
@@ -65,7 +88,7 @@ export function makeImageLayer(
   return {
     type: "image",
     id: uuid(),
-    name: "Text",
+    name: "Image",
     tag: "img",
     src: "",
     alt: "",

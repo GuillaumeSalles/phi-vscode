@@ -17,6 +17,8 @@ export function layerTypeToName(type: T.LayerType): string {
       return "container";
     case "image":
       return "image";
+    case "component":
+      return "component";
   }
   assertUnreachable(type);
 }
@@ -79,4 +81,15 @@ export function isLayerUsingRef(
   return [layer.style, ...layer.mediaQueries.map(mq => mq.style)].some(style =>
     isUsingRef(style, refId)
   );
+}
+
+export function getComponentOrThrow(
+  layer: T.ComponentLayer,
+  refs: T.Refs
+): T.Component {
+  const component = refs.components.get(layer.componentId);
+  if (component == null) {
+    throw new Error(`Component with id: "${layer.componentId}" not found`);
+  }
+  return component;
 }

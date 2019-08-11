@@ -28,6 +28,8 @@ function layerTypeToSupportedDisplay(type: T.LayerType): T.DisplayProperty[] {
     case "text":
     case "image":
       return ["block", "inline", "none"];
+    case "component":
+      return [];
   }
   assertUnreachable(type);
 }
@@ -78,6 +80,11 @@ export default function LayerEditor<TLayer extends T.Layer>({
 
   function updateLayerStyle(newProps: Partial<T.LayerStyle>) {
     updateLayer(updateStyle(newProps));
+  }
+
+  // TODO: Component styling
+  if (layer.type === "component") {
+    return null;
   }
 
   return (

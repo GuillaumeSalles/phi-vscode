@@ -1,6 +1,12 @@
 import * as T from "./types";
 
-export const layerTypes: T.LayerType[] = ["container", "text", "link", "image"];
+export const layerTypes: T.LayerType[] = [
+  "container",
+  "text",
+  "link",
+  "image",
+  "component"
+];
 
 export const flexDirectionList: T.FlexDirection[] = [
   "column",

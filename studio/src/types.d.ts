@@ -28,9 +28,22 @@ export type Override = {
   layerProp: string;
 };
 
-export type Layer = ContainerLayer | TextLayer | LinkLayer | ImageLayer;
+export type Layer =
+  | ContainerLayer
+  | TextLayer
+  | LinkLayer
+  | ImageLayer
+  | ComponentLayer;
 
-export type LayerType = "container" | "text" | "link" | "image";
+export type LayerType = "container" | "text" | "link" | "image" | "component";
+
+export type ComponentPropertiesValues = { [name: string]: any };
+
+export interface ComponentLayer extends ILayer {
+  type: "component";
+  componentId: string;
+  props: ComponentPropertiesValues;
+}
 
 export interface ContainerLayer extends ILayer {
   type: "container";

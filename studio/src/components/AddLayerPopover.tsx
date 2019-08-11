@@ -5,17 +5,23 @@ import { useRef } from "react";
 import Popover from "./Popover";
 import { card, row } from "../styles";
 import { layerTypeToIcon } from "./LayersTree";
-import { layerTypes } from "../constants";
 import AddButton from "./AddButton";
 import { useToggle } from "../hooks";
-import { layerTypeToName } from "../layerUtils";
+import { makeLayer } from "../factories";
 
 type Props = {
-  onAdd: (type: T.LayerType) => void;
+  onAdd: (layer: T.Layer) => void;
   disabled: boolean;
+  refs: T.Refs;
+  root: T.Layer | undefined;
 };
 
-export default function AddLayerPopover({ disabled, onAdd }: Props) {
+export default function AddLayerPopover({
+  disabled,
+  onAdd,
+  refs,
+  root
+}: Props) {
   const popover = useToggle(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -29,30 +35,73 @@ export default function AddLayerPopover({ disabled, onAdd }: Props) {
         position="bottom"
       >
         <div css={[card, { margin: "8px 0", width: "240px" }]}>
-          {layerTypes.map(type => (
-            <button
-              key={type}
-              onClick={() => onAdd(type)}
-              css={[
-                row,
-                {
-                  alignItems: "center",
-                  padding: "8px 16px",
-                  border: "none",
-                  width: "100%",
-                  fontSize: "14px",
-                  ":hover": {
-                    backgroundColor: "#EAEAEA"
-                  }
+          <Item
+            name="Container"
+            onClick={() => onAdd(makeLayer("container", root, refs))}
+            icon={layerTypeToIcon("container")}
+          />
+          <Item
+            name="Text"
+            onClick={() => onAdd(makeLayer("text", root, refs))}
+            icon={layerTypeToIcon("text")}
+          />
+          <Item
+            name="Image"
+            onClick={() => onAdd(makeLayer("image", root, refs))}
+            icon={layerTypeToIcon("image")}
+          />
+          <Item
+            name="Link"
+            onClick={() => onAdd(makeLayer("link", root, refs))}
+            icon={layerTypeToIcon("link")}
+          />
+          {Array.from(refs.components).map(entry => {
+            return (
+              <Item
+                key={entry[0]}
+                name={entry[1].name}
+                onClick={() =>
+                  onAdd(makeLayer("component", root, refs, entry[0]))
                 }
-              ]}
-            >
-              {layerTypeToIcon(type)}
-              <span css={{ marginLeft: "8px" }}>{layerTypeToName(type)}</span>
-            </button>
-          ))}
+                icon={layerTypeToIcon("component")}
+              />
+            );
+          })}
         </div>
       </Popover>
     </div>
+  );
+}
+
+function Item({
+  onClick,
+  name,
+  icon
+}: {
+  onClick: () => void;
+  name: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <button
+      key={name}
+      onClick={onClick}
+      css={[
+        row,
+        {
+          alignItems: "center",
+          padding: "8px 16px",
+          border: "none",
+          width: "100%",
+          fontSize: "14px",
+          ":hover": {
+            backgroundColor: "#EAEAEA"
+          }
+        }
+      ]}
+    >
+      {icon}
+      <span css={{ marginLeft: "8px" }}>{name}</span>
+    </button>
   );
 }

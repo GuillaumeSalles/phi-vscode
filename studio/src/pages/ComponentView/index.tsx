@@ -175,6 +175,7 @@ function ComponentView({
                 component={component}
                 layer={selectedLayer}
                 onChange={updateComponentLayer}
+                refs={refs}
               />
             ) : (
               <LayerEditor
