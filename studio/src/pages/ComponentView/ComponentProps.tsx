@@ -10,15 +10,12 @@ import OkCancelModal from "../../components/OkCancelModal";
 import {
   useDialogForm,
   useStringFormEntry,
-  useSelectFormEntry,
-  FormInput,
-  FormSelect
+  FormInput
 } from "../../components/Form";
 import { Delete, Edit } from "../../icons";
 import React, { useState } from "react";
 import uuid from "uuid/v4";
 import { validateRefName } from "../../validators";
-import { propertyTypes } from "../../constants";
 
 type Props = {
   component: T.Component;
@@ -77,14 +74,12 @@ export default function ComponentProps({
       "Property"
     )
   );
-  const typeEntry = useSelectFormEntry("text", str => undefined);
-  const options = propertyTypes.map(type => [type, type]) as [string, string][];
   const createOrUpdateDialog = useDialogForm([nameEntry], () => {
     if (selectedPropId == null) {
-      onPropsChange(addProp(component, nameEntry.value, typeEntry.value!));
+      onPropsChange(addProp(component, nameEntry.value, "text"));
     } else {
       onPropsChange(
-        editProp(component, selectedPropId, nameEntry.value, typeEntry.value!)
+        editProp(component, selectedPropId, nameEntry.value, "text")
       );
     }
   });
@@ -122,13 +117,6 @@ export default function ComponentProps({
                 placeholder="Name your component property"
                 {...nameEntry.inputProps}
               />
-              <FormSelect
-                placeholder="Select the type of your property"
-                width="100%"
-                options={options}
-                {...typeEntry.inputProps}
-                value={typeEntry.value}
-              />
             </>
           }
         />
@@ -160,7 +148,7 @@ export default function ComponentProps({
                 lineHeight: "28px"
               }}
             >
-              {prop.name} - {prop.type}
+              {prop.name}
             </div>
             <IconButton
               cssOverrides={{ display: "none", flex: "0 0 auto" }}
@@ -170,7 +158,6 @@ export default function ComponentProps({
                 setSelectedPropId(prop.id);
                 createOrUpdateDialog.open();
                 nameEntry.setValue(prop.name);
-                typeEntry.setValue(prop.type);
               }}
             />
             <IconButton
