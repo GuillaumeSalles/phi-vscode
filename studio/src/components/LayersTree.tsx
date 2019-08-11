@@ -426,7 +426,7 @@ function LayersTree({
             });
           }
           e.preventDefault();
-          e.dataTransfer.dropEffect = "move";
+          e.dataTransfer.dropEffect = index < 0 ? "none" : "move";
         }}
         onDrop={e => {
           e.preventDefault();
