@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc",
-    "test": "jest"
+    "start": "tsc --watch",
+    "test": "jest --watch"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +16,9 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.14",
+    "@types/prettier": "^1.18.1",
     "jest": "^24.8.0",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.2"
   }
 }

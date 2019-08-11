@@ -31,8 +31,15 @@ function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
 function createLayerJsx(
   component: T.Component,
   componentName: string,
-  layer: T.Layer
+  layer: T.Layer,
+  components: T.ComponentMap
 ) {
+  if (layer.type === "component") {
+    return createSimpleJsxElement(
+      kebabToPascal(components.get(layer.componentId)!.name),
+      [...createLayerPropertiesJsx(component, layer, components)]
+    );
+  }
   return createSimpleJsxElement(
     layer.tag,
     [
@@ -46,9 +53,9 @@ function createLayerJsx(
           )
         )
       ),
-      ...createLayerPropertiesJsx(component, layer)
+      ...createLayerPropertiesJsx(component, layer, components)
     ],
-    createLayerChildrenJsx(component, componentName, layer)
+    createLayerChildrenJsx(component, componentName, layer, components)
   );
 }
 
@@ -62,42 +69,78 @@ function createStringAttributeJsx(
   );
 }
 
-function createGenericHtmlAttributeMap(
-  layer: T.Layer
-): Map<string, ts.Expression> {
-  switch (layer.type) {
-    case "text":
-      return new Map([["children", ts.createStringLiteral(layer.text)]]);
-    case "link":
-      return new Map([
-        ["children", ts.createStringLiteral(layer.text)],
-        ["href", ts.createStringLiteral(layer.href)]
-      ]);
-    case "container":
-      return new Map();
+function layerPropNameToJsxAttributeName(prop: string) {
+  if (prop === "content") {
+    return "children";
   }
-  assertUnreachable(layer);
+  return prop;
 }
 
-function layerPropNameToJsxAttributeName(layerPropName: string): string {
-  const map = new Map([["text", "children"], ["href", "href"]]);
-  return map.get(layerPropName)!;
+function componentLayerAttributeMap(
+  layer: T.ComponentLayer,
+  components: T.ComponentMap
+) {
+  const component = components.get(layer.componentId);
+  if (component == null) {
+    throw new Error(`Component with id ("${layer.componentId}") not found`);
+  }
+  const map = new Map();
+  for (let prop in layer.props) {
+    const componentProp = component.props.find(
+      componentProp => componentProp.id === prop
+    );
+    if (componentProp == null) {
+      throw new Error(`Component prop with id ("${prop}") not found`);
+    }
+    map.set(
+      layerPropNameToJsxAttributeName(componentProp.name),
+      ts.createStringLiteral(layer.props[prop])
+    );
+  }
+  return map;
+}
+
+function createSimpleAttributeMap(
+  layer: T.Layer,
+  components: T.ComponentMap
+): Map<string, ts.Expression> {
+  switch (layer.type) {
+    case "container":
+      return new Map();
+    case "component":
+      return componentLayerAttributeMap(layer, components);
+    case "text":
+    case "link":
+    case "image":
+      return new Map(
+        Object.entries(layer.props)
+          .filter(([propName, value]) => value != null)
+          .map(([propName, value]) => {
+            return [
+              layerPropNameToJsxAttributeName(propName),
+              ts.createStringLiteral(value!)
+            ];
+          })
+      );
+  }
 }
 
 function createLayerPropertiesJsx(
   component: T.Component,
-  layer: T.Layer
+  layer: T.Layer,
+  components: T.ComponentMap
 ): ts.JsxAttribute[] {
-  const attributesMap = createGenericHtmlAttributeMap(layer);
+  const attributesMap = createSimpleAttributeMap(layer, components);
 
-  for (let override of layer.overrides) {
-    const prop = component.props.find(p => p.id === override.propId);
-    if (prop == null) {
-      throw new Error(`Prop with id (${override.propId}) not found`);
+  for (let prop in layer.bindings) {
+    const propId = layer.bindings[prop].propId;
+    const componentProp = component.props.find(p => p.id === propId);
+    if (componentProp == null) {
+      throw new Error(`Prop with id (${propId}) not found`);
     }
     attributesMap.set(
-      layerPropNameToJsxAttributeName(override.layerProp),
-      ts.createIdentifier(kebabToCamel(prop.name))
+      layerPropNameToJsxAttributeName(prop),
+      ts.createIdentifier(kebabToCamel(componentProp.name))
     );
   }
 
@@ -112,15 +155,18 @@ function createLayerPropertiesJsx(
 function createLayerChildrenJsx(
   component: T.Component,
   componentName: string,
-  layer: T.Layer
+  layer: T.Layer,
+  components: T.ComponentMap
 ): ts.JsxChild[] {
   switch (layer.type) {
     case "text":
-    case "link":
+    case "component":
+    case "image":
       return [];
+    case "link":
     case "container":
       return layer.children.map(child =>
-        createLayerJsx(component, componentName, child)
+        createLayerJsx(component, componentName, child, components)
       );
   }
   assertUnreachable(layer);
@@ -153,7 +199,10 @@ function createComponentPropsDestructuration(component: T.Component) {
   ];
 }
 
-function createComponentJsx(component: T.Component) {
+function createComponentJsx(
+  component: T.Component,
+  components: T.ComponentMap
+) {
   return ts.createFunctionDeclaration(
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
@@ -167,7 +216,8 @@ function createComponentJsx(component: T.Component) {
         createLayerJsx(
           component,
           kebabToPascal(component.name),
-          component.layout!
+          component.layout!,
+          components
         )
       )
     ])
@@ -206,7 +256,7 @@ export function neptuneToJs(data: any) {
   return tsNodesToString(
     Array.from(components.values())
       .filter(c => c.layout != null)
-      .map(createComponentJsx)
+      .map(c => createComponentJsx(c, components))
   );
 }
 
@@ -219,9 +269,7 @@ export default function gatsbyJsLoader(source: string) {
 
   return `
 import React from "react"
-import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-neptune/dist/css-loader?modules!${
-    this.resourcePath
-  }"
+import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-neptune/dist/css-loader?modules!${this.resourcePath}"
 
 ${result}
 `;

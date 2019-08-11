@@ -1,13 +1,8 @@
 import { neptuneToJs } from "./js-loader";
-import hn from "./fixtures/Hn.json";
+import twitter from "./fixtures/Twitter.json";
 import basic from "./fixtures/Basic.json";
+import prettier from "prettier";
 
 test("basic", () => {
-  expect(neptuneToJs(basic))
-    .toBe(`className={styles["HelloWorld-root"]} children={"Hello world"}
-`);
-});
-
-test("basic", () => {
-  expect(neptuneToJs(hn)).toBe(``);
+  expect(prettier.format(neptuneToJs(twitter))).toBe(``);
 });
