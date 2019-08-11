@@ -14,6 +14,7 @@ import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
 import { findLayerById, updateLayer } from "../../layerUtils";
 import { useStateWithGetter } from "../../hooks";
+import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 
 const tabStyle = css({
   display: "flex",
@@ -171,12 +172,22 @@ function ComponentView({
               </button>
             </div>
             {isEditingHTML ? (
-              <HtmlEditor
-                component={component}
-                layer={selectedLayer}
-                onChange={updateComponentLayer}
-                refs={refs}
-              />
+              <>
+                <HtmlEditor
+                  component={component}
+                  layer={selectedLayer}
+                  onChange={updateComponentLayer}
+                  refs={refs}
+                />
+                <HtmlLayerBindings
+                  component={component}
+                  layerType={selectedLayer.type}
+                  bindings={selectedLayer.bindings}
+                  onChange={bindings =>
+                    updateComponentLayer({ ...selectedLayer, bindings })
+                  }
+                />
+              </>
             ) : (
               <LayerEditor
                 layer={selectedLayer}

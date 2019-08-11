@@ -75,7 +75,7 @@ export function makeComponentLayer(
     name: name,
     componentId,
     mediaQueries: [],
-    overrides: [],
+    bindings: {},
     style: {},
     props: {}
   };
@@ -95,8 +95,8 @@ export function makeImageLayer(
       alt: ""
     },
     mediaQueries: [],
-    overrides: [],
     style: {},
+    bindings: {},
     ...props
   };
 }
@@ -112,7 +112,7 @@ export function makeLinkLayer(
     tag: "a",
     children: [],
     mediaQueries: [],
-    overrides: [],
+    bindings: {},
     props: {
       content: "link",
       href: ""
@@ -145,7 +145,7 @@ export function makeTextLayer(
     name: "Text",
     tag: "p",
     mediaQueries: [],
-    overrides: [],
+    bindings: {},
     props: {
       content: ""
     },
@@ -186,7 +186,7 @@ export function makeContainerLayer(
     tag: "div",
     mediaQueries: [],
     children: [],
-    overrides: [],
+    bindings: {},
     style: {
       display: "flex",
       flexDirection: "column",
@@ -253,7 +253,7 @@ export function makeDefaultProject() {
     name: "root",
     tag: "h1",
     mediaQueries: [],
-    overrides: [],
+    bindings: {},
     props: {
       content: "Hello World"
     },

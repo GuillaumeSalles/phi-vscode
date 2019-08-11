@@ -209,11 +209,9 @@ function makeChildren(
     case "image":
       return null;
     case "text":
-      const textOverride = layer.overrides.find(
-        override => override.layerProp === "text"
-      );
-      return textOverride != null && props[textOverride.propId] != null
-        ? props[textOverride.propId]
+      return layer.bindings.content != null &&
+        props[layer.bindings.content.propId] != null
+        ? props[layer.bindings.content.propId]
         : layer.props.content;
     case "link":
       return layer.children.length > 0
@@ -268,15 +266,15 @@ function makePaddingStyle(layer: T.Padding) {
   };
 }
 
-function applyOverrides(
+function applyBindings(
   props: any,
   layer: T.Layer,
   componentProps: T.ComponentPropertiesValues
 ) {
-  for (let override of layer.overrides) {
-    const value = componentProps[override.propId];
+  for (let prop in layer.bindings) {
+    const value = componentProps[layer.bindings[prop].propId];
     if (value != null) {
-      props[override.layerProp] = value;
+      props[prop] = value;
     }
   }
   return props;
@@ -322,7 +320,7 @@ function Layer({ layer, refs, width, props }: Props) {
   }
   return jsx(
     layer.tag,
-    applyOverrides(makeLayerProps(layer, refs, width), layer, props),
+    applyBindings(makeLayerProps(layer, refs, width), layer, props),
     makeChildren(layer, refs, width, props)
   );
 }

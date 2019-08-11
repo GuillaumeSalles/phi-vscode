@@ -378,7 +378,7 @@ function LayersTree({
           refs={refs}
           root={root}
           disabled={
-            selectedLayer === undefined ||
+            selectedLayer !== undefined &&
             (selectedLayer.type !== "container" &&
               selectedLayer.type !== "link")
           }

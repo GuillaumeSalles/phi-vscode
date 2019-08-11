@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
 import * as T from "../../../types";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
@@ -8,7 +7,6 @@ import { listToEntries } from "../../../utils";
 import TextAreaInput from "../../../components/TextAreaInput";
 import TextInput from "../../../components/TextInput";
 import Section from "./Section";
-import HtmlLayerOverrides from "./HtmlLayerOverrides";
 import { getComponentOrThrow } from "../../../layerUtils";
 
 const tags: T.TextLayerTag[] = [
@@ -31,7 +29,7 @@ type Props = {
 };
 
 export default function HtmlEditor(props: Props) {
-  const { layer, onChange, component, refs } = props;
+  const { layer, onChange, refs } = props;
 
   function updateLayer<TLayer>(newProps: Partial<TLayer>) {
     onChange({ ...layer, ...newProps });
@@ -44,29 +42,22 @@ export default function HtmlEditor(props: Props) {
         updateLayer({ props: { ...textProps, ...newProps } });
       };
       return (
-        <React.Fragment>
-          <Section title="Default Props">
-            <Field label="Tag">
-              <Select
-                value={props.layer.tag}
-                onChange={tag => updateLayer({ tag })}
-                options={textTagsOptions}
-              />
-            </Field>
-            <Field label="Content">
-              <TextAreaInput
-                placeholder="content"
-                value={textProps.content}
-                onChange={content => updateProps({ content })}
-              />
-            </Field>
-          </Section>
-          <HtmlLayerOverrides
-            component={component}
-            layer={layer}
-            onOverridesChange={overrides => updateLayer({ overrides })}
-          />
-        </React.Fragment>
+        <Section title="Default Props">
+          <Field label="Tag">
+            <Select
+              value={props.layer.tag}
+              onChange={tag => updateLayer({ tag })}
+              options={textTagsOptions}
+            />
+          </Field>
+          <Field label="Content">
+            <TextAreaInput
+              placeholder="content"
+              value={textProps.content}
+              onChange={content => updateProps({ content })}
+            />
+          </Field>
+        </Section>
       );
     case "container":
       return null;
@@ -74,25 +65,23 @@ export default function HtmlEditor(props: Props) {
       const refComponent = getComponentOrThrow(props.layer, refs);
       const layerProps = props.layer.props;
       return (
-        <React.Fragment>
-          <Section title="Default Props">
-            {refComponent.props.map(prop => {
-              return (
-                <Field label={prop.name}>
-                  <TextInput
-                    cssOverrides={{ width: "100%" }}
-                    value={layerProps[prop.id]}
-                    onChange={value =>
-                      updateLayer({
-                        props: { ...layerProps, [prop.id]: value }
-                      })
-                    }
-                  />
-                </Field>
-              );
-            })}
-          </Section>
-        </React.Fragment>
+        <Section title="Default Props">
+          {refComponent.props.map(prop => {
+            return (
+              <Field label={prop.name}>
+                <TextInput
+                  cssOverrides={{ width: "100%" }}
+                  value={layerProps[prop.id]}
+                  onChange={value =>
+                    updateLayer({
+                      props: { ...layerProps, [prop.id]: value }
+                    })
+                  }
+                />
+              </Field>
+            );
+          })}
+        </Section>
       );
     case "link":
       const linkProps = props.layer.props;
@@ -100,29 +89,22 @@ export default function HtmlEditor(props: Props) {
         updateLayer({ props: { ...linkProps, ...newProps } });
       };
       return (
-        <React.Fragment>
-          <Section title="Default Props">
-            <Field label="content">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={linkProps.content}
-                onChange={content => updateLinkProps({ content })}
-              />
-            </Field>
-            <Field label="href">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={linkProps.href}
-                onChange={href => updateLinkProps({ href })}
-              />
-            </Field>
-          </Section>
-          <HtmlLayerOverrides
-            component={component}
-            layer={layer}
-            onOverridesChange={overrides => updateLayer({ overrides })}
-          />
-        </React.Fragment>
+        <Section title="Default Props">
+          <Field label="content">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={linkProps.content}
+              onChange={content => updateLinkProps({ content })}
+            />
+          </Field>
+          <Field label="href">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={linkProps.href}
+              onChange={href => updateLinkProps({ href })}
+            />
+          </Field>
+        </Section>
       );
     case "image": {
       const imageProps = props.layer.props;
@@ -130,43 +112,36 @@ export default function HtmlEditor(props: Props) {
         updateLayer({ props: { ...imageProps, ...newProps } });
       };
       return (
-        <React.Fragment>
-          <Section title="Default Props">
-            <Field label="src">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={imageProps.src}
-                onChange={src => updateProps({ src })}
-              />
-            </Field>
-            <Field label="height">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={imageProps.height}
-                onChange={height => updateProps({ height })}
-              />
-            </Field>
-            <Field label="width">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={imageProps.width}
-                onChange={width => updateProps({ width })}
-              />
-            </Field>
-            <Field label="alt">
-              <TextInput
-                cssOverrides={{ width: "100%" }}
-                value={imageProps.alt}
-                onChange={alt => updateProps({ alt })}
-              />
-            </Field>
-          </Section>
-          <HtmlLayerOverrides
-            component={component}
-            layer={layer}
-            onOverridesChange={overrides => updateLayer({ overrides })}
-          />
-        </React.Fragment>
+        <Section title="Default Props">
+          <Field label="src">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={imageProps.src}
+              onChange={src => updateProps({ src })}
+            />
+          </Field>
+          <Field label="height">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={imageProps.height}
+              onChange={height => updateProps({ height })}
+            />
+          </Field>
+          <Field label="width">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={imageProps.width}
+              onChange={width => updateProps({ width })}
+            />
+          </Field>
+          <Field label="alt">
+            <TextInput
+              cssOverrides={{ width: "100%" }}
+              value={imageProps.alt}
+              onChange={alt => updateProps({ alt })}
+            />
+          </Field>
+        </Section>
       );
     }
   }

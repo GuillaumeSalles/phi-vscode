@@ -43,4 +43,4 @@ export const alignContentList: T.AlignContent[] = [
   "stretch"
 ];
 
-export const propertyTypes: T.ComponentPropType[] = ["text", "layer"];
+export const propertyTypes: T.ComponentPropType[] = ["text"];

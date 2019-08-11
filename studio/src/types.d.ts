@@ -12,20 +12,22 @@ export type ComponentProp = {
   type: ComponentPropType;
 };
 
-export type ComponentPropType = "text" | "layer";
+export type ComponentPropType = "text";
 
 export interface ILayer {
   id: string;
   name: string;
   style: LayerStyle;
   mediaQueries: Array<MediaQuery>;
-  overrides: Override[];
+  bindings: Bindings;
 }
 
-export type Override = {
-  id: string;
+export type Bindings = {
+  [prop: string]: Binding;
+};
+
+export type Binding = {
   propId: string;
-  layerProp: string;
 };
 
 export type Layer =
