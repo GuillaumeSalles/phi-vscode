@@ -90,8 +90,10 @@ export function makeImageLayer(
     id: uuid(),
     name: "Image",
     tag: "img",
-    src: "",
-    alt: "",
+    props: {
+      src: "",
+      alt: ""
+    },
     mediaQueries: [],
     overrides: [],
     style: {},
@@ -108,11 +110,13 @@ export function makeLinkLayer(
     id: uuid(),
     name: "Text",
     tag: "a",
-    content: "link",
-    href: "",
     children: [],
     mediaQueries: [],
     overrides: [],
+    props: {
+      content: "link",
+      href: ""
+    },
     style: {
       display: "inline",
       textDecoration: {
@@ -140,9 +144,11 @@ export function makeTextLayer(
     id: uuid(),
     name: "Text",
     tag: "p",
-    text: "",
     mediaQueries: [],
     overrides: [],
+    props: {
+      content: ""
+    },
     style: {
       display: "block",
       textDecoration: {
@@ -246,9 +252,11 @@ export function makeDefaultProject() {
     type: "text",
     name: "root",
     tag: "h1",
-    text: "Hello world",
     mediaQueries: [],
     overrides: [],
+    props: {
+      content: "Hello World"
+    },
     style: {
       display: "block",
       textDecoration: {

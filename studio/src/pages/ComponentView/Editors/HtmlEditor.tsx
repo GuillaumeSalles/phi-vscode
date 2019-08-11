@@ -39,6 +39,10 @@ export default function HtmlEditor(props: Props) {
 
   switch (props.layer.type) {
     case "text":
+      const textProps = props.layer.props;
+      const updateProps = (newProps: Partial<T.TextLayerProps>) => {
+        updateLayer({ props: { ...textProps, ...newProps } });
+      };
       return (
         <React.Fragment>
           <Section title="Default Props">
@@ -51,9 +55,9 @@ export default function HtmlEditor(props: Props) {
             </Field>
             <Field label="Content">
               <TextAreaInput
-                placeholder="Text"
-                value={props.layer.text}
-                onChange={text => updateLayer({ text })}
+                placeholder="content"
+                value={textProps.content}
+                onChange={content => updateProps({ content })}
               />
             </Field>
           </Section>
@@ -91,21 +95,25 @@ export default function HtmlEditor(props: Props) {
         </React.Fragment>
       );
     case "link":
+      const linkProps = props.layer.props;
+      const updateLinkProps = (newProps: Partial<T.LinkLayerProps>) => {
+        updateLayer({ props: { ...linkProps, ...newProps } });
+      };
       return (
         <React.Fragment>
           <Section title="Default Props">
             <Field label="content">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.content}
-                onChange={content => updateLayer({ content })}
+                value={linkProps.content}
+                onChange={content => updateLinkProps({ content })}
               />
             </Field>
             <Field label="href">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.href}
-                onChange={href => updateLayer({ href })}
+                value={linkProps.href}
+                onChange={href => updateLinkProps({ href })}
               />
             </Field>
           </Section>
@@ -116,36 +124,40 @@ export default function HtmlEditor(props: Props) {
           />
         </React.Fragment>
       );
-    case "image":
+    case "image": {
+      const imageProps = props.layer.props;
+      const updateProps = (newProps: Partial<T.ImageProps>) => {
+        updateLayer({ props: { ...imageProps, ...newProps } });
+      };
       return (
         <React.Fragment>
           <Section title="Default Props">
             <Field label="src">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.src}
-                onChange={src => updateLayer({ src })}
+                value={imageProps.src}
+                onChange={src => updateProps({ src })}
               />
             </Field>
             <Field label="height">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.height}
-                onChange={height => updateLayer({ height })}
+                value={imageProps.height}
+                onChange={height => updateProps({ height })}
               />
             </Field>
             <Field label="width">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.width}
-                onChange={width => updateLayer({ width })}
+                value={imageProps.width}
+                onChange={width => updateProps({ width })}
               />
             </Field>
             <Field label="alt">
               <TextInput
                 cssOverrides={{ width: "100%" }}
-                value={props.layer.alt}
-                onChange={alt => updateLayer({ alt })}
+                value={imageProps.alt}
+                onChange={alt => updateProps({ alt })}
               />
             </Field>
           </Section>
@@ -156,5 +168,6 @@ export default function HtmlEditor(props: Props) {
           />
         </React.Fragment>
       );
+    }
   }
 }

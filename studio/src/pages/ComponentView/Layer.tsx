@@ -214,7 +214,7 @@ function makeChildren(
       );
       return textOverride != null && props[textOverride.propId] != null
         ? props[textOverride.propId]
-        : layer.text;
+        : layer.props.content;
     case "link":
       return layer.children.length > 0
         ? layer.children.map(c => (
@@ -226,7 +226,7 @@ function makeChildren(
               props={props}
             />
           ))
-        : layer.content;
+        : layer.props.content;
     case "container":
       return layer.children.map(c => (
         <Layer key={c.id} layer={c} refs={refs} width={width} props={props} />
@@ -288,10 +288,7 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
     case "image":
       return {
         css,
-        src: layer.src,
-        alt: layer.alt,
-        height: layer.height,
-        width: layer.width
+        ...layer.props
       };
     case "text":
     case "container":
@@ -299,7 +296,7 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
     case "link":
       return {
         css,
-        href: layer.href
+        href: layer.props.href
       };
     case "component":
       return new Error("TODO. This is a bug");

@@ -54,25 +54,37 @@ export interface ContainerLayer extends ILayer {
 export interface ImageLayer extends ILayer {
   type: "image";
   tag: "img";
+  props: ImageProps;
+}
+
+export type ImageProps = {
   src: string;
   alt: string;
   height?: string;
   width?: string;
-}
+};
 
 export interface TextLayer extends ILayer {
   type: "text";
   tag: TextLayerTag;
-  text: string;
+  props: TextLayerProps;
 }
+
+type TextLayerProps = {
+  content: string;
+};
 
 export interface LinkLayer extends ILayer {
   type: "link";
   tag: "a";
-  content: string;
   children: Layer[];
-  href: string;
+  props: LinkLayerProps;
 }
+
+export type LinkLayerProps = {
+  content: string;
+  href: string;
+};
 
 type StyleOverride = {
   id: string;
