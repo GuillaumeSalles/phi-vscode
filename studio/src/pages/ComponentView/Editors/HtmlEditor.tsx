@@ -68,7 +68,7 @@ export default function HtmlEditor(props: Props) {
         <Section title="Default Props">
           {refComponent.props.map(prop => {
             return (
-              <Field label={prop.name}>
+              <Field key={prop.id} label={prop.name}>
                 <TextInput
                   cssOverrides={{ width: "100%" }}
                   value={layerProps[prop.id]}
