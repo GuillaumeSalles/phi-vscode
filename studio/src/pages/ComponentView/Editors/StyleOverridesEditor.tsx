@@ -18,7 +18,6 @@ import uuid from "uuid/v4";
 import Section from "./Section";
 import StyleOverrideEditor from "./StyleOverrideEditor";
 import Field from "../../../components/Field";
-import { layerTreeToArray } from "../../../layerUtils";
 
 type Props = {
   layer: T.Layer;

@@ -21,7 +21,10 @@ import {
   AlignContentEditor,
   SimpleTextPropertyEditor,
   BackgroundColorEditor,
-  OpacityEditor
+  OpacityEditor,
+  BorderWidthEditor,
+  BorderColorEditor,
+  BorderStyleEditor
 } from "./StylePropertyEditor";
 import TextDecorationEditor from "./TextDecorationEditor";
 import IconButton from "../../../components/IconButton";
@@ -63,7 +66,11 @@ const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
   ["borderTopLeftRadius", "Border Top Left Radius"],
   ["borderTopRightRadius", "Border Top Right Radius"],
   ["borderBottomRightRadius", "Border Bottom Right Radius"],
-  ["borderBottomLeftRadius", "Border Bottom Left Radius"]
+  ["borderBottomLeftRadius", "Border Bottom Left Radius"],
+  // TODO: Handle border position
+  ["borderTopWidth", "Border Width"],
+  ["borderTopColor", "Border Color"],
+  ["borderTopStyle", "Border Style"]
 ]);
 
 const styleProperties = Array.from(stylePropertiesMap).sort((a, b) =>
@@ -260,6 +267,31 @@ function PropertyEditor({
       );
     case "opacity":
       return <OpacityEditor style={style} onChange={onChange} />;
+    case "borderTopWidth":
+      return (
+        <BorderWidthEditor
+          style={style}
+          onChange={onChange}
+          label="Border Width"
+        />
+      );
+    case "borderTopColor":
+      return (
+        <BorderColorEditor
+          style={style}
+          onChange={onChange}
+          refs={refs}
+          label="Border Color"
+        />
+      );
+    case "borderTopStyle":
+      return (
+        <BorderStyleEditor
+          style={style}
+          onChange={onChange}
+          label="Border Style"
+        />
+      );
     case "height":
     case "minHeight":
     case "maxHeight":
@@ -287,6 +319,15 @@ function PropertyEditor({
         />
       );
     case "overrides":
+    case "borderRightWidth":
+    case "borderBottomWidth":
+    case "borderLeftWidth":
+    case "borderRightColor":
+    case "borderBottomColor":
+    case "borderLeftColor":
+    case "borderRightStyle":
+    case "borderBottomStyle":
+    case "borderLeftStyle":
       throw new Error("TODO");
   }
 

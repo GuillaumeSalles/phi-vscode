@@ -45,7 +45,7 @@ export default function HtmlLayerBindings({
       </span>
       {getPropertiesNames(layerType).map(prop => {
         return (
-          <Field label={prop}>
+          <Field key={prop} label={prop}>
             <Select
               value={bindings[prop] == null ? "none" : bindings[prop].propId}
               onChange={propId => {

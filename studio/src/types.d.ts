@@ -107,6 +107,19 @@ type LayerStyle = Typography &
     borderTopRightRadius?: string;
     borderBottomRightRadius?: string;
     borderBottomLeftRadius?: string;
+
+    borderTopWidth?: string;
+    borderRightWidth?: string;
+    borderBottomWidth?: string;
+    borderLeftWidth?: string;
+    borderTopStyle?: string;
+    borderRightStyle?: string;
+    borderBottomStyle?: string;
+    borderLeftStyle?: string;
+    borderTopColor?: Color;
+    borderRightColor?: Color;
+    borderBottomColor?: Color;
+    borderLeftColor?: Color;
   };
 
 export type Display = {
@@ -168,6 +181,18 @@ export type AlignContent =
   | "space-between"
   | "space-around"
   | "stretch";
+
+export type BorderStyle =
+  | "none"
+  | "hidden"
+  | "dotted"
+  | "dashed"
+  | "solid"
+  | "double"
+  | "groove"
+  | "ridge"
+  | "inset"
+  | "outset";
 
 export type TextLayerTag =
   | "h1"

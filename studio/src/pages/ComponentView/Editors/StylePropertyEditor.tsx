@@ -12,7 +12,8 @@ import {
   flexWrapList,
   justifyContentList,
   alignItemsList,
-  alignContentList
+  alignContentList,
+  borderStyleList
 } from "../../../constants";
 import TextInput from "../../../components/TextInput";
 
@@ -21,6 +22,7 @@ const flexWrapOptions = listToEntries(flexWrapList);
 const justifyContentOptions = listToEntries(justifyContentList);
 const alignItemsOptions = listToEntries(alignItemsList);
 const alignContentOptions = listToEntries(alignContentList);
+const borderStyleOptions = listToEntries(borderStyleList);
 
 type Props = {
   style: T.LayerStyle;
@@ -29,6 +31,10 @@ type Props = {
 
 type PropsWithRefs = Props & {
   refs: T.Refs;
+};
+
+type Label = {
+  label: string;
 };
 
 export function ColorEditor({ style, onChange, refs }: PropsWithRefs) {
@@ -234,6 +240,67 @@ export function AlignContentEditor({ style, onChange }: Props) {
         value={style.alignContent || "stretch"}
         onChange={alignContent => onChange({ alignContent })}
         options={alignContentOptions}
+      />
+    </Field>
+  );
+}
+
+export function BorderWidthEditor({ style, onChange, label }: Props & Label) {
+  return (
+    <Field label={label}>
+      <TextInput
+        value={style.borderTopWidth}
+        onChange={borderWidth =>
+          onChange({
+            borderTopWidth: borderWidth,
+            borderRightWidth: borderWidth,
+            borderBottomWidth: borderWidth,
+            borderLeftWidth: borderWidth
+          })
+        }
+      />
+    </Field>
+  );
+}
+
+export function BorderColorEditor({
+  style,
+  onChange,
+  refs,
+  label
+}: PropsWithRefs & Label) {
+  return (
+    <Field label={label}>
+      <ColorInput
+        colors={refs.colors}
+        value={style.borderTopColor}
+        onChange={color =>
+          onChange({
+            borderTopColor: color,
+            borderRightColor: color,
+            borderBottomColor: color,
+            borderLeftColor: color
+          })
+        }
+      />
+    </Field>
+  );
+}
+
+export function BorderStyleEditor({ style, onChange, label }: Props & Label) {
+  return (
+    <Field label={label}>
+      <Select
+        value={style.borderTopStyle || "none"}
+        options={borderStyleOptions}
+        onChange={style =>
+          onChange({
+            borderTopStyle: style,
+            borderRightStyle: style,
+            borderBottomStyle: style,
+            borderLeftStyle: style
+          })
+        }
       />
     </Field>
   );

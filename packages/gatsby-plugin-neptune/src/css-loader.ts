@@ -134,6 +134,7 @@ function layerStyleOverridesToCss(
 
 function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
   return `
+    position: relative;
     ${displayToCss(style)}
     ${cssProp("margin-top", style.marginTop)}
     ${cssProp("margin-right", style.marginRight)}
@@ -149,10 +150,36 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
     ${cssProp("height", style.height)}
     ${cssProp("min-height", style.minHeight)}
     ${cssProp("max-height", style.maxHeight)}
-    ${cssProp("borderTopLeftRadius", style.borderTopLeftRadius)}
-    ${cssProp("borderTopRightRadius", style.borderTopRightRadius)}
-    ${cssProp("borderBottomRightRadius", style.borderBottomRightRadius)}
-    ${cssProp("borderBottomLeftRadius", style.borderBottomLeftRadius)}
+    ${cssProp("border-top-left-radius", style.borderTopLeftRadius)}
+    ${cssProp("border-top-right-radius", style.borderTopRightRadius)}
+    ${cssProp("border-bottom-right-radius", style.borderBottomRightRadius)}
+    ${cssProp("border-bottom-left-radius", style.borderBottomLeftRadius)}
+    ${cssProp("border-top-width", style.borderTopWidth)}
+    ${cssProp("border-right-width", style.borderRightWidth)}
+    ${cssProp("border-bottom-width", style.borderBottomWidth)}
+    ${cssProp("border-left-width", style.borderLeftWidth)}
+
+    ${cssProp("border-top-style", style.borderTopStyle)}
+    ${cssProp("border-right-style", style.borderRightStyle)}
+    ${cssProp("border-bottom-style", style.borderBottomStyle)}
+    ${cssProp("border-left-style", style.borderLeftStyle)}
+    ${cssProp(
+      "border-top-color",
+      colorToCss(style.borderTopColor, refs.colors)
+    )}
+    ${cssProp(
+      "border-right-color",
+      colorToCss(style.borderRightColor, refs.colors)
+    )}
+    ${cssProp(
+      "border-bottom-color",
+      colorToCss(style.borderBottomColor, refs.colors)
+    )}
+    ${cssProp(
+      "border-left-color",
+      colorToCss(style.borderLeftColor, refs.colors)
+    )}
+    
     ${cssProp(
       "opacity",
       style.opacity != null ? style.opacity.toString() : undefined

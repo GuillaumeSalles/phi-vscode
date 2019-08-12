@@ -60,9 +60,9 @@ function fontSizeToString(
 function fontFamilyToString(
   fontFamily: T.Ref | undefined,
   fontFamilies: T.FontFamiliesMap
-): string {
+) {
   if (fontFamily == null) {
-    return firstEntry(fontFamilies)[1].value;
+    return undefined;
   }
   const ref = fontFamilies.get(fontFamily.id);
   if (ref == null) {
@@ -76,7 +76,7 @@ function fontWeightToNumber(
   fontWeights: T.FontWeightsMap
 ) {
   if (fontWeight == null) {
-    return firstEntry(fontWeights)[1].value;
+    return undefined;
   }
   const ref = fontWeights.get(fontWeight.id);
   if (ref == null) {
@@ -159,21 +159,35 @@ function makeDisplayStyle(style: T.Display) {
   };
 }
 
+function colorToCss(color: T.Color | undefined, refs: T.Refs) {
+  return color ? colorToString(color, refs.colors) : undefined;
+}
+
 function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
     ...makeDisplayStyle(style),
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
     ...makePaddingStyle(style),
-    color: style.color ? colorToString(style.color, refs.colors) : undefined,
-    backgroundColor: style.backgroundColor
-      ? colorToString(style.backgroundColor, refs.colors)
-      : undefined,
+    color: colorToCss(style.color, refs),
+    backgroundColor: colorToCss(style.backgroundColor, refs),
     opacity: style.opacity != null ? style.opacity : 1,
     borderTopLeftRadius: style.borderTopLeftRadius,
     borderTopRightRadius: style.borderTopRightRadius,
     borderBottomRightRadius: style.borderBottomRightRadius,
     borderBottomLeftRadius: style.borderBottomLeftRadius,
+    borderTopWidth: style.borderTopWidth,
+    borderRightWidth: style.borderRightWidth,
+    borderBottomWidth: style.borderBottomWidth,
+    borderLeftWidth: style.borderLeftWidth,
+    borderTopStyle: style.borderTopStyle,
+    borderRightStyle: style.borderRightStyle,
+    borderBottomStyle: style.borderBottomStyle,
+    borderLeftStyle: style.borderLeftStyle,
+    borderTopColor: colorToCss(style.borderTopColor, refs),
+    borderRightColor: colorToCss(style.borderRightColor, refs),
+    borderBottomColor: colorToCss(style.borderBottomColor, refs),
+    borderLeftColor: colorToCss(style.borderLeftColor, refs),
     fontSize: fontSizeToString(style.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(style.fontFamily, refs.fontFamilies),
     fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),

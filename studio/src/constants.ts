@@ -43,4 +43,17 @@ export const alignContentList: T.AlignContent[] = [
   "stretch"
 ];
 
+export const borderStyleList: T.BorderStyle[] = [
+  "none",
+  "hidden",
+  "dotted",
+  "dashed",
+  "solid",
+  "double",
+  "groove",
+  "ridge",
+  "inset",
+  "outset"
+];
+
 export const propertyTypes: T.ComponentPropType[] = ["text"];
