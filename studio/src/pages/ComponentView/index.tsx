@@ -181,7 +181,8 @@ function ComponentView({
                 />
                 <HtmlLayerBindings
                   component={component}
-                  layerType={selectedLayer.type}
+                  layer={selectedLayer}
+                  refs={refs}
                   bindings={selectedLayer.bindings}
                   onChange={bindings =>
                     updateComponentLayer({ ...selectedLayer, bindings })

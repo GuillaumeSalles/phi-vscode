@@ -5,31 +5,43 @@ import Section from "./Section";
 import { assertUnreachable } from "../../../utils";
 import Field from "../../../components/Field";
 import Select from "../../../components/Select";
+import { getComponentOrThrow } from "../../../layerUtils";
 
 type Props = {
   component: T.Component;
   bindings: T.Bindings;
   onChange: (bindings: T.Bindings) => void;
-  layerType: T.LayerType;
+  layer: T.Layer;
+  refs: T.Refs;
 };
 
-function getPropertiesNames(type: T.LayerType) {
-  switch (type) {
+function propNamesToHtmlProps(names: string[]) {
+  return names.map(prop => ({ name: prop, id: prop }));
+}
+
+function getPropertiesNames(
+  layer: T.Layer,
+  refs: T.Refs
+): Array<{ id: string; name: string }> {
+  switch (layer.type) {
     case "text":
-      return ["content"];
+      return propNamesToHtmlProps(["content"]);
     case "image":
-      return ["src", "alt", "height", "width"];
+      return propNamesToHtmlProps(["src", "alt", "height", "width"]);
     case "link":
-      return ["content", "href"];
+      return propNamesToHtmlProps(["content", "href"]);
     case "container":
-    case "component":
       return [];
+    case "component":
+      const component = getComponentOrThrow(layer, refs);
+      return component.props.map(prop => ({ id: prop.id, name: prop.name }));
   }
-  assertUnreachable(type);
+  assertUnreachable(layer);
 }
 
 export default function HtmlLayerBindings({
-  layerType,
+  layer,
+  refs,
   bindings,
   onChange,
   component
@@ -43,17 +55,19 @@ export default function HtmlLayerBindings({
       <span css={{ fontSize: "12px", color: "#999", padding: "8px" }}>
         Override layers props with component props
       </span>
-      {getPropertiesNames(layerType).map(prop => {
+      {getPropertiesNames(layer, refs).map(prop => {
         return (
-          <Field key={prop} label={prop}>
+          <Field key={prop.id} label={prop.name}>
             <Select
-              value={bindings[prop] == null ? "none" : bindings[prop].propId}
+              value={
+                bindings[prop.id] == null ? "none" : bindings[prop.id].propId
+              }
               onChange={propId => {
                 if (propId === "none") {
-                  const { [prop]: unusedValue, ...newBinding } = bindings;
+                  const { [prop.id]: unusedValue, ...newBinding } = bindings;
                   onChange(newBinding);
                 } else {
-                  onChange({ ...bindings, [prop]: { propId } });
+                  onChange({ ...bindings, [prop.id]: { propId } });
                 }
               }}
               options={options}
