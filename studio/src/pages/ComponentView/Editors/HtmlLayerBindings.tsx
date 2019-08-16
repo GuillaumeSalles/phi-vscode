@@ -15,26 +15,19 @@ type Props = {
   refs: T.Refs;
 };
 
-function propNamesToHtmlProps(names: string[]) {
-  return names.map(prop => ({ name: prop, id: prop }));
-}
-
-function getPropertiesNames(
-  layer: T.Layer,
-  refs: T.Refs
-): Array<{ id: string; name: string }> {
+function getPropertiesNames(layer: T.Layer, refs: T.Refs): Array<string> {
   switch (layer.type) {
     case "text":
-      return propNamesToHtmlProps(["content"]);
+      return ["content"];
     case "image":
-      return propNamesToHtmlProps(["src", "alt", "height", "width"]);
+      return ["src", "alt", "height", "width"];
     case "link":
-      return propNamesToHtmlProps(["content", "href"]);
+      return ["content", "href"];
     case "container":
       return [];
     case "component":
       const component = getComponentOrThrow(layer, refs);
-      return component.props.map(prop => ({ id: prop.id, name: prop.name }));
+      return component.props.map(prop => prop.name);
   }
   assertUnreachable(layer);
 }
@@ -47,7 +40,7 @@ export default function HtmlLayerBindings({
   component
 }: Props) {
   const options = component.props
-    .map(prop => [prop.id, prop.name])
+    .map(prop => [prop.name, prop.name])
     .concat([["none", "none"]]) as [string, string][];
 
   return (
@@ -57,17 +50,15 @@ export default function HtmlLayerBindings({
       </span>
       {getPropertiesNames(layer, refs).map(prop => {
         return (
-          <Field key={prop.id} label={prop.name}>
+          <Field key={prop} label={prop}>
             <Select
-              value={
-                bindings[prop.id] == null ? "none" : bindings[prop.id].propId
-              }
-              onChange={propId => {
-                if (propId === "none") {
-                  const { [prop.id]: unusedValue, ...newBinding } = bindings;
+              value={bindings[prop] == null ? "none" : bindings[prop].propName}
+              onChange={propName => {
+                if (propName === "none") {
+                  const { [prop]: unusedValue, ...newBinding } = bindings;
                   onChange(newBinding);
                 } else {
-                  onChange({ ...bindings, [prop.id]: { propId } });
+                  onChange({ ...bindings, [prop]: { propName } });
                 }
               }}
               options={options}

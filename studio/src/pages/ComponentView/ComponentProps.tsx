@@ -14,7 +14,6 @@ import {
 } from "../../components/Form";
 import { Delete, Edit } from "../../icons";
 import React, { useState } from "react";
-import uuid from "uuid/v4";
 import { validateRefName } from "../../validators";
 
 type Props = {
@@ -22,13 +21,8 @@ type Props = {
   onComponentChange: (newComponent: T.Component) => void;
 };
 
-function makeComponentProp(
-  id: string,
-  name: string,
-  type: string
-): T.ComponentProp {
+function makeComponentProp(name: string, type: string): T.ComponentProp {
   return {
-    id,
     name,
     type: type as T.ComponentPropType
   };
@@ -39,22 +33,22 @@ function addProp(
   name: string,
   type: string
 ): T.ComponentProp[] {
-  return [...component.props, makeComponentProp(uuid(), name, type)];
+  return [...component.props, makeComponentProp(name, type)];
 }
 
 function editProp(
   component: T.Component,
-  id: string,
-  name: string,
+  previousName: string,
+  newName: string,
   type: string
 ): T.ComponentProp[] {
   return component.props.map(prop =>
-    prop.id === id ? makeComponentProp(id, name, type) : prop
+    prop.name === previousName ? makeComponentProp(newName, type) : prop
   );
 }
 
-function deleteProp(component: T.Component, id: string): T.ComponentProp[] {
-  return component.props.filter(prop => prop.id !== id);
+function deleteProp(component: T.Component, name: string): T.ComponentProp[] {
+  return component.props.filter(prop => prop.name !== name);
 }
 
 export default function ComponentProps({
@@ -65,21 +59,21 @@ export default function ComponentProps({
     onComponentChange({ ...component, props });
   }
 
-  const [selectedPropId, setSelectedPropId] = useState<string | null>(null);
+  const [selectedPropName, setSelectedPropName] = useState<string | null>(null);
   const nameEntry = useStringFormEntry("", str =>
     validateRefName(
       str,
-      selectedPropId,
-      new Map(component.props.map(prop => [prop.id, prop])),
+      selectedPropName,
+      new Map(component.props.map(prop => [prop.name, prop])),
       "Property"
     )
   );
   const createOrUpdateDialog = useDialogForm([nameEntry], () => {
-    if (selectedPropId == null) {
+    if (selectedPropName == null) {
       onPropsChange(addProp(component, nameEntry.value, "text"));
     } else {
       onPropsChange(
-        editProp(component, selectedPropId, nameEntry.value, "text")
+        editProp(component, selectedPropName, nameEntry.value, "text")
       );
     }
   });
@@ -95,7 +89,7 @@ export default function ComponentProps({
         <AddButton
           disabled={false}
           onClick={() => {
-            setSelectedPropId(null);
+            setSelectedPropName(null);
             createOrUpdateDialog.open();
           }}
         />
@@ -124,7 +118,7 @@ export default function ComponentProps({
       {component.props.map(prop => {
         return (
           <div
-            key={prop.id}
+            key={prop.name}
             css={[
               row,
               {
@@ -155,7 +149,7 @@ export default function ComponentProps({
               icon={<Edit height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
-                setSelectedPropId(prop.id);
+                setSelectedPropName(prop.name);
                 createOrUpdateDialog.open();
                 nameEntry.setValue(prop.name);
               }}
@@ -167,7 +161,7 @@ export default function ComponentProps({
                 e.stopPropagation();
                 onComponentChange({
                   ...component,
-                  props: deleteProp(component, prop.id)
+                  props: deleteProp(component, prop.name)
                 });
               }}
             />

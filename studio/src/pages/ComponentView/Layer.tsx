@@ -224,8 +224,8 @@ function makeChildren(
       return null;
     case "text":
       return layer.bindings.content != null &&
-        props[layer.bindings.content.propId] != null
-        ? props[layer.bindings.content.propId]
+        props[layer.bindings.content.propName] != null
+        ? props[layer.bindings.content.propName]
         : layer.props.content;
     case "link":
       return layer.children.length > 0
@@ -286,7 +286,7 @@ function applyBindings(
   componentProps: T.ComponentPropertiesValues
 ) {
   for (let prop in layer.bindings) {
-    const value = componentProps[layer.bindings[prop].propId];
+    const value = componentProps[layer.bindings[prop].propName];
     if (value != null) {
       props[prop] = value;
     }

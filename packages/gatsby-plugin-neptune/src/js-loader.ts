@@ -87,7 +87,7 @@ function componentLayerAttributeMap(
   const map = new Map();
   for (let prop in layer.props) {
     const componentProp = component.props.find(
-      componentProp => componentProp.id === prop
+      componentProp => componentProp.name === prop
     );
     if (componentProp == null) {
       throw new Error(`Component prop with id ("${prop}") not found`);
@@ -133,10 +133,10 @@ function createLayerPropertiesJsx(
   const attributesMap = createSimpleAttributeMap(layer, components);
 
   for (let prop in layer.bindings) {
-    const propId = layer.bindings[prop].propId;
-    const componentProp = component.props.find(p => p.id === propId);
+    const propName = layer.bindings[prop].propName;
+    const componentProp = component.props.find(p => p.name === propName);
     if (componentProp == null) {
-      throw new Error(`Prop with id (${propId}) not found`);
+      throw new Error(`Prop (${propName}) not found`);
     }
     attributesMap.set(
       layerPropNameToJsxAttributeName(prop),

@@ -7,7 +7,6 @@ export type Component = {
 };
 
 export type ComponentProp = {
-  id: string;
   name: string;
   type: ComponentPropType;
 };
@@ -27,7 +26,7 @@ export type Bindings = {
 };
 
 export type Binding = {
-  propId: string;
+  propName: string;
 };
 
 export type Layer =
