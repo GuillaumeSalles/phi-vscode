@@ -283,3 +283,24 @@ export type Refs = {
   breakpoints: BreakpointsMap;
   components: ComponentMap;
 };
+
+type AddComponentProp = {
+  type: "addComponentProp";
+  componentId: string;
+  prop: string;
+};
+
+type DeleteComponentProp = {
+  type: "deleteComponentProp";
+  componentId: string;
+  prop: string;
+};
+
+type EditComponentProp = {
+  type: "editComponentProp";
+  componentId: string;
+  oldProp: string;
+  newProp: string;
+};
+
+type Action = AddComponentProp | EditComponentProp | DeleteComponentProp;

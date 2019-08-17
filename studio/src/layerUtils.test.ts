@@ -1,5 +1,5 @@
 import React from "react";
-import * as T from "../types";
+import * as T from "./types";
 import ReactDOM from "react-dom";
 import { findLayerById } from "./layerUtils";
 import {

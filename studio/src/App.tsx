@@ -14,9 +14,14 @@ import { set, del, firstKey } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
-import { save, open } from "./actions";
+import { save, open } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
+import {
+  addComponentProp,
+  deleteComponentProp,
+  editComponentProp
+} from "./actions";
 
 function App() {
   const router = useRouter();
@@ -49,7 +54,7 @@ function App() {
   });
 
   useEffect(() => {
-    async function listener(event: string, message: string) {
+    async function listener(event: any, message: string) {
       if (message === "save") {
         const fileName = await save(fresh.current);
         if (fileName) {
@@ -93,6 +98,22 @@ function App() {
     },
     []
   );
+
+  function applyAction(action: T.Action) {
+    switch (action.type) {
+      case "addComponentProp":
+        setComponents(addComponentProp(action, refs));
+        break;
+      case "editComponentProp":
+        setComponents(editComponentProp(action, refs));
+        break;
+      case "deleteComponentProp":
+        setComponents(deleteComponentProp(action, refs));
+        break;
+    }
+
+    setIsSaved(false);
+  }
 
   function createProject() {
     const project = makeDefaultProject();
@@ -186,6 +207,7 @@ function App() {
                 setComponents(newComponents);
               }}
               refs={refs}
+              applyAction={applyAction}
             />
           );
         }}

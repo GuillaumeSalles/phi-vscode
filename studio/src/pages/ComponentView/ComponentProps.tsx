@@ -17,48 +17,16 @@ import React, { useState } from "react";
 import { validateRefName } from "../../validators";
 
 type Props = {
+  componentId: string;
   component: T.Component;
-  onComponentChange: (newComponent: T.Component) => void;
+  applyAction: (action: T.Action) => void;
 };
 
-function makeComponentProp(name: string, type: string): T.ComponentProp {
-  return {
-    name,
-    type: type as T.ComponentPropType
-  };
-}
-
-function addProp(
-  component: T.Component,
-  name: string,
-  type: string
-): T.ComponentProp[] {
-  return [...component.props, makeComponentProp(name, type)];
-}
-
-function editProp(
-  component: T.Component,
-  previousName: string,
-  newName: string,
-  type: string
-): T.ComponentProp[] {
-  return component.props.map(prop =>
-    prop.name === previousName ? makeComponentProp(newName, type) : prop
-  );
-}
-
-function deleteProp(component: T.Component, name: string): T.ComponentProp[] {
-  return component.props.filter(prop => prop.name !== name);
-}
-
 export default function ComponentProps({
+  componentId,
   component,
-  onComponentChange
+  applyAction
 }: Props) {
-  function onPropsChange(props: T.ComponentProp[]) {
-    onComponentChange({ ...component, props });
-  }
-
   const [selectedPropName, setSelectedPropName] = useState<string | null>(null);
   const nameEntry = useStringFormEntry("", str =>
     validateRefName(
@@ -70,11 +38,18 @@ export default function ComponentProps({
   );
   const createOrUpdateDialog = useDialogForm([nameEntry], () => {
     if (selectedPropName == null) {
-      onPropsChange(addProp(component, nameEntry.value, "text"));
+      applyAction({
+        type: "addComponentProp",
+        componentId,
+        prop: nameEntry.value
+      });
     } else {
-      onPropsChange(
-        editProp(component, selectedPropName, nameEntry.value, "text")
-      );
+      applyAction({
+        type: "editComponentProp",
+        componentId: componentId,
+        oldProp: selectedPropName,
+        newProp: nameEntry.value
+      });
     }
   });
   return (
@@ -159,9 +134,10 @@ export default function ComponentProps({
               icon={<Delete height={20} width={20} />}
               onClick={e => {
                 e.stopPropagation();
-                onComponentChange({
-                  ...component,
-                  props: deleteProp(component, prop.name)
+                applyAction({
+                  type: "deleteComponentProp",
+                  componentId: componentId,
+                  prop: prop.name
                 });
               }}
             />

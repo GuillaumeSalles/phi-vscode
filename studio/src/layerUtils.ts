@@ -93,3 +93,7 @@ export function getComponentOrThrow(
   }
   return component;
 }
+
+export function isComponentLayer(layer: T.Layer): layer is T.ComponentLayer {
+  return layer.type === "component";
+}

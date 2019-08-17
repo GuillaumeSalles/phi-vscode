@@ -49,10 +49,11 @@ export default function HtmlLayerBindings({
         Override layers props with component props
       </span>
       {getPropertiesNames(layer, refs).map(prop => {
+        const value = bindings[prop] == null ? "none" : bindings[prop].propName;
         return (
           <Field key={prop} label={prop}>
             <Select
-              value={bindings[prop] == null ? "none" : bindings[prop].propName}
+              value={value}
               onChange={propName => {
                 if (propName === "none") {
                   const { [prop]: unusedValue, ...newBinding } = bindings;

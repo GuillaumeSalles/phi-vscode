@@ -1,80 +1,237 @@
 import * as T from "./types";
-import { electron, writeFile, readFile } from "./node";
+import { set } from "./helpers/immutable-map";
+import { isComponentLayer } from "./layerUtils";
 
-export async function save(current: T.Refs): Promise<string | undefined> {
-  const path =
-    current.fileName === undefined
-      ? electron.remote.dialog.showSaveDialog({
-          title: "Save project",
-          defaultPath: "NewProject.neptune"
-        })
-      : current.fileName;
-
-  if (!path) {
-    return;
+function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
+  const component = refs.components.get(componentId);
+  if (component == null) {
+    throw new Error(`Component with id (${componentId}) not found`);
   }
-  try {
-    await writeFile(
-      path,
-      JSON.stringify({
-        colors: mapToArray(current.colors),
-        fontSizes: mapToArray(current.fontSizes),
-        fontWeights: mapToArray(current.fontWeights),
-        fontFamilies: mapToArray(current.fontFamilies),
-        lineHeights: mapToArray(current.lineHeights),
-        breakpoints: mapToArray(current.breakpoints),
-        components: mapToArray(current.components)
-      })
-    );
-  } catch (er) {
-    console.log(er);
-  }
-
-  return path;
+  return component;
 }
 
-function mapToArray(map: Map<string, any>) {
-  return Array.from(map.entries()).map(entry => ({
-    id: entry[0],
-    ...entry[1]
-  }));
+function visitLayer(root: T.Layer, visitor: LayerVisitor): T.Layer {
+  switch (root.type) {
+    case "container":
+    case "link":
+      return {
+        ...visitor(root),
+        children: root.children.map(child => visitLayer(child, visitor))
+      };
+    default:
+      return visitor(root);
+  }
 }
 
-function arrayToMap(array: any[]) {
+export function addComponentProp(
+  action: T.AddComponentProp,
+  refs: T.Refs
+): T.ComponentMap {
+  const component = getComponentOrThrow(action.componentId, refs);
+  return set(refs.components, action.componentId, {
+    ...component,
+    props: [...component.props, { name: action.prop, type: "text" }]
+  });
+}
+
+export function editComponentProp(
+  action: T.EditComponentProp,
+  refs: T.Refs
+): T.ComponentMap {
   return new Map(
-    array.map((item: any) => {
-      const { id, ...rest } = item;
-      return [id, rest];
+    Array.from(refs.components.entries()).map(([componentId, component]) => {
+      if (componentId === action.componentId) {
+        return [
+          componentId,
+          renamePropertyFromComponent(component, action.oldProp, action.newProp)
+        ];
+      }
+
+      return [
+        componentId,
+        renamePropertyFromComponentLayer(
+          component,
+          action.componentId,
+          action.oldProp,
+          action.newProp
+        )
+      ];
     })
   );
 }
 
-function jsonToRefs(fileName: string, data: any): T.Refs {
+function renamePropertyFromComponent(
+  component: T.Component,
+  oldProp: string,
+  newProp: string
+): T.Component {
+  const newComponent = {
+    ...component,
+    props: component.props.map(prop =>
+      prop.name === oldProp ? { name: newProp, type: prop.type } : prop
+    )
+  };
+  if (component.layout) {
+    newComponent.layout = visitLayer(component.layout, layer =>
+      renameAllBindingsThatUseProp(layer, oldProp, newProp)
+    );
+  }
+  console.log(newComponent);
+  return newComponent;
+}
+
+function renameAllBindingsThatUseProp<T extends T.Layer>(
+  layer: T,
+  oldProp: string,
+  newProp: string
+): T {
+  if (
+    Object.values(layer.bindings).some(binding => binding.propName === oldProp)
+  ) {
+    return {
+      ...layer,
+      bindings: Object.entries(layer.bindings).reduce(
+        (newBindings, [prop, binding]) => {
+          if (binding.propName === oldProp) {
+            newBindings[newProp] = binding;
+          } else {
+            newBindings[prop] = binding;
+          }
+          return newBindings;
+        },
+        {} as T.Bindings
+      )
+    };
+  }
+  return layer;
+}
+
+function renamePropertyFromComponentLayer(
+  component: T.Component,
+  childComponentId: string,
+  oldProp: string,
+  newProp: string
+): T.Component {
+  if (component.layout == null) {
+    return component;
+  }
+
   return {
-    isSaved: true,
-    fileName,
-    components: arrayToMap(data.components),
-    fontSizes: arrayToMap(data.fontSizes),
-    fontWeights: arrayToMap(data.fontWeights),
-    fontFamilies: arrayToMap(data.fontFamilies),
-    breakpoints: arrayToMap(data.breakpoints),
-    lineHeights: arrayToMap(data.lineHeights),
-    colors: arrayToMap(data.colors)
+    ...component,
+    layout: visitLayer(component.layout, layer => {
+      if (isComponentLayer(layer) && layer.componentId === childComponentId) {
+        const props = {
+          ...layer.props
+        };
+        const propValue = props[oldProp];
+        delete props[oldProp];
+        props[newProp] = propValue;
+
+        const bindings = {
+          ...layer.bindings
+        };
+        const bindingValue = bindings[oldProp];
+        delete bindings[oldProp];
+        bindings[newProp] = bindingValue;
+        return {
+          ...layer,
+          props,
+          bindings
+        };
+      }
+      return layer;
+    })
   };
 }
 
-export async function open(): Promise<T.Refs | undefined> {
-  const path = electron.remote.dialog.showOpenDialog({});
-  if (!path) {
-    return;
+export function deleteComponentProp(
+  action: T.DeleteComponentProp,
+  refs: T.Refs
+): T.ComponentMap {
+  return new Map(
+    Array.from(refs.components.entries()).map(([componentId, component]) => {
+      if (componentId === action.componentId) {
+        return [
+          componentId,
+          deletePropertyFromComponent(component, action.prop)
+        ];
+      }
+
+      return [
+        componentId,
+        deletePropertyFromComponentLayer(
+          component,
+          action.componentId,
+          action.prop
+        )
+      ];
+    })
+  );
+}
+
+function deletePropertyFromComponent(
+  component: T.Component,
+  propName: string
+): T.Component {
+  const newComponent = {
+    ...component,
+    props: component.props.filter(prop => prop.name !== propName)
+  };
+  if (component.layout) {
+    newComponent.layout = visitLayer(component.layout, layer =>
+      deleteAllBindingsThatUseProp(layer, propName)
+    );
+  }
+  return newComponent;
+}
+
+function deletePropertyFromComponentLayer(
+  component: T.Component,
+  childComponentId: string,
+  propName: string
+): T.Component {
+  if (component.layout == null) {
+    return component;
   }
 
-  try {
-    const str = await readFile(path[0], "utf-8");
-    const data = JSON.parse(str);
-    return jsonToRefs(path[0], data);
-  } catch (er) {
-    console.log(er);
-    return;
-  }
+  return {
+    ...component,
+    layout: visitLayer(component.layout, layer => {
+      if (isComponentLayer(layer) && layer.componentId === childComponentId) {
+        const { [propName]: unusedProp, ...props } = layer.props;
+        const { [propName]: unusedBinding, ...bindings } = layer.bindings;
+        return {
+          ...layer,
+          props,
+          bindings
+        };
+      }
+      return layer;
+    })
+  };
 }
+
+function deleteAllBindingsThatUseProp<T extends T.Layer>(
+  layer: T,
+  propName: string
+): T {
+  if (
+    Object.values(layer.bindings).some(binding => binding.propName === propName)
+  ) {
+    return {
+      ...layer,
+      bindings: Object.entries(layer.bindings).reduce(
+        (newBindings, [prop, binding]) => {
+          if (binding.propName !== propName) {
+            newBindings[prop] = binding;
+          }
+          return newBindings;
+        },
+        {} as T.Bindings
+      )
+    };
+  }
+  return layer;
+}
+
+type LayerVisitor = <T extends T.Layer>(layer: T) => T;

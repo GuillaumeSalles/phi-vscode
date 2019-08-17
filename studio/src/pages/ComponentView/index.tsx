@@ -43,6 +43,7 @@ type Props = {
   onComponentChange: (id: string, component: T.Component) => void;
   onDelete: (id: string) => void;
   refs: T.Refs;
+  applyAction: (action: T.Action) => void;
 };
 
 function ComponentView({
@@ -50,7 +51,8 @@ function ComponentView({
   componentId,
   onComponentChange,
   refs,
-  onDelete
+  onDelete,
+  applyAction
 }: Props) {
   const component = refs.components.get(componentId)!;
   const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
@@ -96,9 +98,8 @@ function ComponentView({
             />
             <ComponentProps
               component={component}
-              onComponentChange={newComponent =>
-                onComponentChange(componentId, newComponent)
-              }
+              componentId={componentId}
+              applyAction={applyAction}
             />
           </>
         ) : (
