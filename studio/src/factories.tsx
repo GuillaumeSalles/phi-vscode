@@ -125,7 +125,6 @@ export function makeLinkLayer(
       },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
-      fontWeight: makeRef(firstKey(refs.fontWeights)),
       fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2,
@@ -157,7 +156,6 @@ export function makeTextLayer(
       },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
-      fontWeight: makeRef(firstKey(refs.fontWeights)),
       fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2,
@@ -165,14 +163,6 @@ export function makeTextLayer(
     },
     ...props
   };
-}
-
-export function makeDefaultLineHeights(): T.LineHeightMap {
-  return new Map(
-    [{ name: "condensed", value: 1.25 }, { name: "normal", value: 1.5 }].map(
-      x => [x.name, x]
-    )
-  );
 }
 
 export function makeContainerLayer(
@@ -224,13 +214,6 @@ export function makeDefaultBreakpoints(): T.BreakpointsMap {
   ]);
 }
 
-export function makeDefaultFontWeights(): T.FontWeightsMap {
-  const light = entry({ name: "light", value: 300 });
-  const normal = entry({ name: "normal", value: 400 });
-  const bold = entry({ name: "bold", value: 700 });
-  return new Map([light, normal, bold]);
-}
-
 export function makeDefaultFontSizes(): T.FontSizesMap {
   const fontSizes = new Map(
     [14, 16, 18, 24, 26, 32].map((x, index) =>
@@ -244,7 +227,6 @@ export function makeDefaultProject() {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
   const breakpoints = makeDefaultBreakpoints();
-  const fontWeights = makeDefaultFontWeights();
   const fontSizes = makeDefaultFontSizes();
 
   const helloWorldTextLayer: T.TextLayer = {
@@ -266,7 +248,6 @@ export function makeDefaultProject() {
       textAlign: "left",
       fontSize: makeRef(getKeyByIndex(fontSizes, 5)),
       fontFamily: makeRef(firstKey(fontFamilies)),
-      fontWeight: makeRef(getKeyByIndex(fontWeights, 1)),
       lineHeight: 1.2,
       color: makeRef(firstKey(colors)),
       overrides: []
@@ -286,7 +267,6 @@ export function makeDefaultProject() {
     colors,
     fontFamilies,
     fontSizes: new Map(fontSizes),
-    fontWeights,
     breakpoints,
     components
   };

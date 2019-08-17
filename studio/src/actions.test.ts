@@ -4,10 +4,8 @@ import {
   makeContainerLayer,
   makeDefaultColors,
   makeDefaultFontSizes,
-  makeDefaultFontWeights,
   makeDefaultFontFamilies,
   makeDefaultBreakpoints,
-  makeDefaultLineHeights,
   makeTextLayer,
   makeComponentLayer
 } from "./factories";
@@ -18,9 +16,7 @@ function makeRefsFixture(): T.Refs {
     fileName: "",
     colors: makeDefaultColors(),
     fontSizes: makeDefaultFontSizes(),
-    fontWeights: makeDefaultFontWeights(),
     fontFamilies: makeDefaultFontFamilies(),
-    lineHeights: makeDefaultLineHeights(),
     breakpoints: makeDefaultBreakpoints(),
     components: new Map()
   };

@@ -144,7 +144,7 @@ export type Typography = {
   color?: Color;
   fontSize?: Ref;
   fontFamily?: Ref;
-  fontWeight?: Ref;
+  fontWeight?: string;
   textAlign?: TextAlignProperty;
   textDecoration?: TextDecoration;
 };
@@ -257,18 +257,6 @@ export type FontSizeDefinition = { name: string; value: string };
 export type FontFamiliesMap = Map<string, FontFamilyDefinition>;
 export type FontFamilyDefinition = { name: string; value: string };
 
-export type FontWeightsMap = Map<string, FontWeightDefinition>;
-export type FontWeightDefinition = {
-  name: string;
-  value: number;
-};
-
-export type LineHeightMap = Map<string, LineHeightDefinition>;
-export type LineHeightDefinition = {
-  name: string;
-  value: number;
-};
-
 export type BreakpointsMap = Map<string, BreakpointDefinition>;
 export type BreakpointDefinition = { name: string; value: Length };
 
@@ -278,8 +266,6 @@ export type Refs = {
   colors: ColorsMap;
   fontSizes: FontSizesMap;
   fontFamilies: FontFamiliesMap;
-  fontWeights: FontWeightsMap;
-  lineHeights: LineHeightMap;
   breakpoints: BreakpointsMap;
   components: ComponentMap;
 };

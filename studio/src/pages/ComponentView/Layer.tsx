@@ -2,7 +2,6 @@
 import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
-import { firstEntry } from "../../helpers/immutable-map";
 import { getComponentOrThrow } from "../../layerUtils";
 
 type Props = {
@@ -67,20 +66,6 @@ function fontFamilyToString(
   const ref = fontFamilies.get(fontFamily.id);
   if (ref == null) {
     throw new Error("Invalid fontsize ref");
-  }
-  return ref.value;
-}
-
-function fontWeightToNumber(
-  fontWeight: T.Ref | undefined,
-  fontWeights: T.FontWeightsMap
-) {
-  if (fontWeight == null) {
-    return undefined;
-  }
-  const ref = fontWeights.get(fontWeight.id);
-  if (ref == null) {
-    throw new Error("Invalid font weight ref");
   }
   return ref.value;
 }
@@ -190,7 +175,7 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
     borderLeftColor: colorToCss(style.borderLeftColor, refs),
     fontSize: fontSizeToString(style.fontSize, refs.fontSizes),
     fontFamily: fontFamilyToString(style.fontFamily, refs.fontFamilies),
-    fontWeight: fontWeightToNumber(style.fontWeight, refs.fontWeights),
+    fontWeight: style.fontWeight,
     lineHeight: style.lineHeight,
     letterSpacing: lengthToCss(style.letterSpacing, "0"),
     textAlign: style.textAlign,

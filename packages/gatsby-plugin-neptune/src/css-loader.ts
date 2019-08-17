@@ -65,13 +65,6 @@ function fontFamilyToCss(item: T.Ref | undefined, map: T.FontFamiliesMap) {
   return getRefValue(item, map).value;
 }
 
-function fontWeightToCss(item: T.Ref | undefined, map: T.FontWeightsMap) {
-  if (!item) {
-    return undefined;
-  }
-  return getRefValue(item, map).value.toString();
-}
-
 function displayToCss(style: T.LayerStyle) {
   return `
     ${cssProp("display", style.display)}
@@ -201,10 +194,8 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
       fontFamilyToCss(style.fontFamily, refs.fontFamilies)
     )}
     ${cssProp("font-size", fontSizeToCss(style.fontSize, refs.fontSizes))}
-    ${cssProp(
-      "font-weight",
-      fontWeightToCss(style.fontWeight, refs.fontWeights)
-    )}
+    ${cssProp("font-weight", style.fontWeight)}
+
   `;
 }
 
@@ -240,9 +231,7 @@ export function neptuneToCss(data: any) {
     breakpoints: arrayToMap(data.breakpoints),
     colors: arrayToMap(data.colors),
     fontSizes: arrayToMap(data.fontSizes),
-    fontWeights: arrayToMap(data.fontWeights),
     fontFamilies: arrayToMap(data.fontFamilies),
-    lineHeights: arrayToMap(data.lineHeights),
     components,
     // TODO: Refactor project state to not file name and isSaved in refs
     isSaved: true,

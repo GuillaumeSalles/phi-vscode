@@ -5,7 +5,6 @@ import * as T from "./types";
 import { useState } from "react";
 import { Route } from "react-router";
 import { electron } from "./node";
-import { lineHeights } from "./state";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
@@ -31,7 +30,6 @@ function App() {
   const [isSaved, setIsSaved] = useState<boolean>(true);
   const [components, setComponents] = useState<T.ComponentMap>(new Map());
   const [colors, setColors] = useState<T.ColorsMap>(new Map());
-  const [fontWeights, setFontWeights] = useState<T.FontWeightsMap>(new Map());
   const [fontFamilies, setFontFamilies] = useState<T.FontFamiliesMap>(
     new Map()
   );
@@ -43,8 +41,6 @@ function App() {
     colors,
     fontFamilies,
     fontSizes,
-    fontWeights,
-    lineHeights,
     breakpoints,
     components
   };
@@ -68,7 +64,6 @@ function App() {
           setFileName(refs.fileName);
           setColors(refs.colors);
           setFontSizes(refs.fontSizes);
-          setFontWeights(refs.fontWeights);
           setFontFamilies(refs.fontFamilies);
           setBreakpoints(refs.breakpoints);
           setComponents(refs.components);
@@ -122,7 +117,6 @@ function App() {
     const project = makeDefaultProject();
     setColors(project.colors);
     setFontSizes(project.fontSizes);
-    setFontWeights(project.fontWeights);
     setFontFamilies(project.fontFamilies);
     setBreakpoints(project.breakpoints);
     setComponents(project.components);

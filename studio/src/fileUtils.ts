@@ -19,9 +19,7 @@ export async function save(current: T.Refs): Promise<string | undefined> {
       JSON.stringify({
         colors: mapToArray(current.colors),
         fontSizes: mapToArray(current.fontSizes),
-        fontWeights: mapToArray(current.fontWeights),
         fontFamilies: mapToArray(current.fontFamilies),
-        lineHeights: mapToArray(current.lineHeights),
         breakpoints: mapToArray(current.breakpoints),
         components: mapToArray(current.components)
       })
@@ -55,10 +53,8 @@ function jsonToRefs(fileName: string, data: any): T.Refs {
     fileName,
     components: arrayToMap(data.components),
     fontSizes: arrayToMap(data.fontSizes),
-    fontWeights: arrayToMap(data.fontWeights),
     fontFamilies: arrayToMap(data.fontFamilies),
     breakpoints: arrayToMap(data.breakpoints),
-    lineHeights: arrayToMap(data.lineHeights),
     colors: arrayToMap(data.colors)
   };
 }

@@ -37,11 +37,7 @@ export default function TypographyEditor({ style, onChange, refs }: Props) {
           style={style}
           onChange={updateLayerStyle}
         />
-        <FontWeightEditor
-          refs={refs}
-          style={style}
-          onChange={updateLayerStyle}
-        />
+        <FontWeightEditor style={style} onChange={updateLayerStyle} />
       </div>
       <div css={row}>
         <LineHeightEditor style={style} onChange={updateLayerStyle} />

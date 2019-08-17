@@ -117,22 +117,14 @@ export function FontFamilyEditor({ style, onChange, refs }: PropsWithRefs) {
   );
 }
 
-export function FontWeightEditor({ style, onChange, refs }: PropsWithRefs) {
+export function FontWeightEditor({ style, onChange }: Props) {
   return (
-    <Field label="Font weight">
-      <Select
-        value={
-          style.fontWeight != null
-            ? style.fontWeight.id
-            : firstKey(refs.fontWeights)
-        }
-        onChange={value => onChange({ fontWeight: { type: "ref", id: value } })}
-        options={Array.from(refs.fontWeights.entries()).map(entry => [
-          entry[0],
-          entry[1].name
-        ])}
-      />
-    </Field>
+    <SimpleTextPropertyEditor
+      label="Font weight"
+      style={style}
+      onChange={onChange}
+      property="fontWeight"
+    />
   );
 }
 

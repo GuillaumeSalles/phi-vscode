@@ -33,33 +33,12 @@
       "value": "19px"
     }
   ],
-  "fontWeights": [
-    {
-      "id": "e85368b2-7c98-44e3-ab75-2a48ffb47e42",
-      "name": "light",
-      "value": 300
-    },
-    {
-      "id": "cfee6890-8aec-4705-9660-cc273970b8e4",
-      "name": "normal",
-      "value": 400
-    },
-    {
-      "id": "b5183893-0c5d-4ddf-972b-419b8124f4dc",
-      "name": "bold",
-      "value": 700
-    }
-  ],
   "fontFamilies": [
     {
       "id": "57a52b5a-b47c-4a9e-96d5-58ceaf3c28a1",
       "name": "default",
       "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", sans-serif"
     }
-  ],
-  "lineHeights": [
-    { "id": "condensed", "name": "condensed", "value": 1.25 },
-    { "id": "normal", "name": "normal", "value": 1.5 }
   ],
   "breakpoints": [
     {

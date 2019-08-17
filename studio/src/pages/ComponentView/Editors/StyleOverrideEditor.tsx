@@ -242,7 +242,7 @@ function PropertyEditor({
     case "textAlign":
       return <TextAlignEditor style={style} onChange={onChange} />;
     case "fontWeight":
-      return <FontWeightEditor style={style} onChange={onChange} refs={refs} />;
+      return <FontWeightEditor style={style} onChange={onChange} />;
     case "display":
       return (
         <DisplayEditor

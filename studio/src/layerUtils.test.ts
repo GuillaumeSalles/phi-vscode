@@ -1,16 +1,11 @@
-import React from "react";
 import * as T from "./types";
-import ReactDOM from "react-dom";
 import { findLayerById } from "./layerUtils";
 import {
   makeContainerLayer,
   makeDefaultColors,
   makeDefaultFontSizes,
-  makeDefaultFontWeights,
   makeDefaultFontFamilies,
-  makeDefaultBreakpoints,
-  makeDefaultLineHeights,
-  makeTextLayer
+  makeDefaultBreakpoints
 } from "./factories";
 
 function makeRefsFixture(): T.Refs {
@@ -19,9 +14,7 @@ function makeRefsFixture(): T.Refs {
     fileName: "",
     colors: makeDefaultColors(),
     fontSizes: makeDefaultFontSizes(),
-    fontWeights: makeDefaultFontWeights(),
     fontFamilies: makeDefaultFontFamilies(),
-    lineHeights: makeDefaultLineHeights(),
     breakpoints: makeDefaultBreakpoints(),
     components: new Map()
   };

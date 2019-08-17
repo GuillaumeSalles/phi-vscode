@@ -25,7 +25,7 @@ import {
   useDialogForm,
   FormInput
 } from "../../components/Form";
-import { validateComponentName, validateRefName } from "../../validators";
+import { validateRefName } from "../../validators";
 
 const tabStyle = css({
   display: "flex",
