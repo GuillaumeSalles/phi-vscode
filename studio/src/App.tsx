@@ -20,7 +20,8 @@ import uuid from "uuid/v4";
 import {
   addComponentProp,
   deleteComponentProp,
-  editComponentProp
+  editComponentProp,
+  renameComponent
 } from "./actions";
 
 function App() {
@@ -110,6 +111,8 @@ function App() {
       case "deleteComponentProp":
         setComponents(deleteComponentProp(action, refs));
         break;
+      case "renameComponent":
+        setComponents(renameComponent(action, refs));
     }
 
     setIsSaved(false);

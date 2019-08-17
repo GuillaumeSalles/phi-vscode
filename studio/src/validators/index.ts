@@ -51,9 +51,10 @@ export function validateColorValue(value: string): string | undefined {
 
 export function validateComponentName(
   value: string,
+  existingName: string | null,
   components: T.ComponentMap
 ): string | undefined {
-  return validateRefName(value, null, components, "Component");
+  return validateRefName(value, existingName, components, "Component");
 }
 
 export function validateLayerName(

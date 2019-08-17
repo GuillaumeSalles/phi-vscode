@@ -47,7 +47,7 @@ function MenuItem({ href, text }: { href: string; text: string }) {
 
 function Menu({ components, onAddComponent }: Props) {
   const nameEntry = useStringFormEntry("", value =>
-    validateComponentName(value, components)
+    validateComponentName(value, null, components)
   );
   const createComponentDialog = useDialogForm([nameEntry], () => {
     onAddComponent(nameEntry.value);

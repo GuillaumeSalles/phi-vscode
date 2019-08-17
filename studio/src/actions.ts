@@ -2,8 +2,6 @@ import * as T from "./types";
 import { set } from "./helpers/immutable-map";
 import { isComponentLayer } from "./layerUtils";
 
-type LayerVisitor = <T extends T.Layer>(layer: T) => T;
-
 function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
   const component = refs.components.get(componentId);
   if (component == null) {
@@ -235,3 +233,13 @@ function deleteAllBindingsThatUseProp<T extends T.Layer>(
   }
   return layer;
 }
+
+export function renameComponent(action: T.RenameComponent, refs: T.Refs) {
+  const component = getComponentOrThrow(action.componentId, refs);
+  return set(refs.components, action.componentId, {
+    ...component,
+    name: action.name
+  });
+}
+
+type LayerVisitor = <T extends T.Layer>(layer: T) => T;

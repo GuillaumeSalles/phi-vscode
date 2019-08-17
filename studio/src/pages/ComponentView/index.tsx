@@ -18,6 +18,14 @@ import { useStateWithGetter, useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import OkCancelModal from "../../components/OkCancelModal";
 import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
+import { Delete, Edit } from "../../icons";
+import {
+  useStringFormEntry,
+  useDialogForm,
+  FormInput
+} from "../../components/Form";
+import { validateComponentName, validateRefName } from "../../validators";
 
 const tabStyle = css({
   display: "flex",
@@ -58,6 +66,17 @@ function ComponentView({
   applyAction
 }: Props) {
   const component = refs.components.get(componentId)!;
+
+  const nameEntry = useStringFormEntry("", value =>
+    validateRefName(value, componentId, refs.components, "Components")
+  );
+  const renameComponentDialog = useDialogForm([nameEntry], () => {
+    applyAction({
+      type: "renameComponent",
+      componentId,
+      name: nameEntry.value
+    });
+  });
 
   const componentsThatUseCurrentComponent = filterComponentsWhenLayer(
     refs,
@@ -128,19 +147,26 @@ function ComponentView({
             <h1 css={heading}>{component.name}</h1>
             <div css={[row, { marginLeft: "28px" }]}>
               {isEditing ? (
-                <SecondaryButton
-                  text="Done"
-                  onClick={() => setIsEditing(false)}
-                />
+                <React.Fragment>
+                  <Button
+                    margin="0 12px 0 0"
+                    text="Rename"
+                    onClick={() => {
+                      renameComponentDialog.open();
+                      nameEntry.setValue(component.name);
+                    }}
+                  />
+                  <Button text="Done" onClick={() => setIsEditing(false)} />
+                </React.Fragment>
               ) : (
                 <React.Fragment>
-                  <SecondaryButton
-                    text="Edit"
+                  <IconButton
+                    cssOverrides={{ marginRight: "12px" }}
+                    icon={<Edit height={20} width={20} />}
                     onClick={() => setIsEditing(true)}
-                    margin="0 10px 0 0"
                   />
-                  <SecondaryButton
-                    text="Delete"
+                  <IconButton
+                    icon={<Delete height={20} width={20} />}
                     onClick={() => {
                       if (componentsThatUseCurrentComponent.length === 0) {
                         onDelete(componentId);
@@ -157,6 +183,27 @@ function ComponentView({
           <OkCancelModal
             {...deleteRefDialog.dialogProps}
             buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
+          />
+          <OkCancelModal
+            title="Rename component"
+            {...renameComponentDialog.dialogProps}
+            buttons={
+              <React.Fragment>
+                <SecondaryButton
+                  text="Cancel"
+                  {...renameComponentDialog.cancelButtonProps}
+                />
+                <Button text="Add" {...renameComponentDialog.okButtonProps} />
+              </React.Fragment>
+            }
+            form={
+              <React.Fragment>
+                <FormInput
+                  placeholder="Name your component"
+                  {...nameEntry.inputProps}
+                />
+              </React.Fragment>
+            }
           />
         </div>
       }

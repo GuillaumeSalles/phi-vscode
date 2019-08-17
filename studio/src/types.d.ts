@@ -303,4 +303,14 @@ type EditComponentProp = {
   newProp: string;
 };
 
-type Action = AddComponentProp | EditComponentProp | DeleteComponentProp;
+type RenameComponent = {
+  type: "renameComponent";
+  componentId: string;
+  name: string;
+};
+
+type Action =
+  | AddComponentProp
+  | EditComponentProp
+  | DeleteComponentProp
+  | RenameComponent;
