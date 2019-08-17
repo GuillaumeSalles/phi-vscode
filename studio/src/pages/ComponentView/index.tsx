@@ -3,6 +3,7 @@ import { jsx, css } from "@emotion/core";
 import React from "react";
 import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
+import { filterComponentsWhenLayer } from "../../refsUtil";
 import Component from "./Component";
 import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
@@ -13,8 +14,10 @@ import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
 import { findLayerById, updateLayer } from "../../layerUtils";
-import { useStateWithGetter } from "../../hooks";
+import { useStateWithGetter, useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
+import OkCancelModal from "../../components/OkCancelModal";
+import Button from "../../components/Button";
 
 const tabStyle = css({
   display: "flex",
@@ -55,9 +58,22 @@ function ComponentView({
   applyAction
 }: Props) {
   const component = refs.components.get(componentId)!;
+
+  const componentsThatUseCurrentComponent = filterComponentsWhenLayer(
+    refs,
+    l => l.type === "component" && l.componentId === componentId
+  );
+  const deleteRefDialog = useWarningDialog(
+    `Can't delete component ${component.name}`,
+    `${component.name} is used by ${componentsThatUseCurrentComponent
+      .map(c => `"${c.name}"`)
+      .join(", ")}.`
+  );
+
   const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
     component.layout ? component.layout.id : undefined
   );
+
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingHTML, setIsEditingHTML] = useState(true);
   const selectedLayer =
@@ -125,13 +141,23 @@ function ComponentView({
                   />
                   <SecondaryButton
                     text="Delete"
-                    onClick={() => onDelete(componentId)}
+                    onClick={() => {
+                      if (componentsThatUseCurrentComponent.length === 0) {
+                        onDelete(componentId);
+                      } else {
+                        deleteRefDialog.open();
+                      }
+                    }}
                   />
                 </React.Fragment>
               )}
             </div>
           </div>
           <Component component={component} refs={refs} />
+          <OkCancelModal
+            {...deleteRefDialog.dialogProps}
+            buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
+          />
         </div>
       }
       right={

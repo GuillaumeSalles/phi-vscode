@@ -39,26 +39,9 @@ function getComponentsThatUseRef(
   );
 }
 
-export function useDeleteRefDialog<TRef extends { name: string }>(
-  refTypeName: string,
-  refs: Map<string, TRef>,
-  selectedRefId: string | null,
-  isLayerUsingRef: (layer: T.Layer, refId: string) => boolean,
-  components: T.ComponentMap
-) {
+export function useWarningDialog(title: string, description: string) {
   const [isOpen, setIsOpen] = useState(false);
   const okButtonRef = useRef<HTMLButtonElement>(null);
-  const deleteWarningDescription = isOpen
-    ? `${refTypeName} "${
-        refs.get(selectedRefId!)!.name
-      }" is used by the following components ${getComponentsThatUseRef(
-        selectedRefId!,
-        components,
-        isLayerUsingRef
-      )
-        .map(c => `"${c.name}"`)
-        .join(", ")}.`
-    : null;
   useEffect(() => {
     if (isOpen) {
       okButtonRef.current!.focus();
@@ -67,9 +50,9 @@ export function useDeleteRefDialog<TRef extends { name: string }>(
   return {
     open: () => setIsOpen(true),
     dialogProps: {
-      isOpen: isOpen,
-      title: `Can't delete ${refTypeName.toLowerCase()}`,
-      description: deleteWarningDescription,
+      isOpen,
+      title,
+      description,
       form: null,
       onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => {
         if (e.key === "Enter") {
@@ -93,6 +76,31 @@ export function useDeleteRefDialog<TRef extends { name: string }>(
       ref: okButtonRef
     }
   };
+}
+
+export function useDeleteRefDialog<TRef extends { name: string }>(
+  refTypeName: string,
+  refs: Map<string, TRef>,
+  selectedRefId: string | null,
+  isLayerUsingRef: (layer: T.Layer, refId: string) => boolean,
+  components: T.ComponentMap
+) {
+  const ref = selectedRefId ? refs.get(selectedRefId) : null;
+  const description = ref
+    ? `${refTypeName} "${
+        ref.name
+      }" is used by the following components ${getComponentsThatUseRef(
+        selectedRefId!,
+        components,
+        isLayerUsingRef
+      )
+        .map(c => `"${c.name}"`)
+        .join(", ")}.`
+    : "";
+  return useWarningDialog(
+    `Can't delete ${refTypeName.toLowerCase()}`,
+    description
+  );
 }
 
 export function useRefManagement<TRef extends { name: string }>(
