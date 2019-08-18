@@ -35,9 +35,11 @@ function App() {
   );
   const [fontSizes, setFontSizes] = useState<T.FontSizesMap>(new Map());
   const [breakpoints, setBreakpoints] = useState<T.BreakpointsMap>(new Map());
+  const [artboards, setArtboards] = useState<T.ArtboardsMap>(new Map());
   const refs: T.Refs = {
     isSaved,
     fileName,
+    artboards,
     colors,
     fontFamilies,
     fontSizes,
@@ -67,6 +69,7 @@ function App() {
           setFontFamilies(refs.fontFamilies);
           setBreakpoints(refs.breakpoints);
           setComponents(refs.components);
+          setArtboards(refs.artboards);
           router.history.push(
             `/components/${Array.from(refs.components.keys())[0]}`
           );

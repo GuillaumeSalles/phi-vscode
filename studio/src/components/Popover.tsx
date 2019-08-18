@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 
 const popoverRoot = document.getElementById("popover-root")!;
 
-type Position = "bottom" | "top";
+type Position = "bottom" | "top" | "bottom-right";
 
 type Props = {
   anchor: React.RefObject<HTMLElement>;
@@ -22,6 +22,10 @@ function positionToCss(position: Position, boundingRect: ClientRect | DOMRect) {
   switch (position) {
     case "bottom":
       style.left = boundingRect.left;
+      style.top = boundingRect.top + boundingRect.height;
+      break;
+    case "bottom-right":
+      style.right = window.innerWidth - boundingRect.right;
       style.top = boundingRect.top + boundingRect.height;
       break;
     case "top":

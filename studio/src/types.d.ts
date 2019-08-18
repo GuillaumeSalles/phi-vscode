@@ -260,9 +260,18 @@ export type FontFamilyDefinition = { name: string; value: string };
 export type BreakpointsMap = Map<string, BreakpointDefinition>;
 export type BreakpointDefinition = { name: string; value: Length };
 
+export type ArtboardsMap = Map<string, ArtboardDefinition>;
+export type ArtboardDefinition = {
+  name: string;
+  width: string;
+  height: string;
+  backgroundColor: string;
+};
+
 export type Refs = {
   isSaved: boolean;
   fileName: string | undefined;
+  artboards: ArtboardsMap;
   colors: ColorsMap;
   fontSizes: FontSizesMap;
   fontFamilies: FontFamiliesMap;
@@ -295,8 +304,14 @@ type RenameComponent = {
   name: string;
 };
 
+type EditArtboardBackground = {
+  type: "editArtboardBackground";
+  backgroundColor: string;
+};
+
 type Action =
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp
-  | RenameComponent;
+  | RenameComponent
+  | EditArtboardBackground;

@@ -5,6 +5,7 @@ import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
 import { filterComponentsWhenLayer } from "../../refsUtil";
 import Component from "./Component";
+// import SettingsEditor from "./SettingsEditor";
 import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../components/LayersTree";
@@ -120,7 +121,12 @@ function ComponentView({
 
   return (
     <Layout
-      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
+      topBar={
+        <div css={[row]}>
+          <TopBar fileName={refs.fileName} isSaved={refs.isSaved} />
+          {/* <SettingsEditor refs={refs} applyAction={applyAction} /> */}
+        </div>
+      }
       left={
         isEditing ? (
           <>

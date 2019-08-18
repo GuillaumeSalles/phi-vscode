@@ -12,7 +12,7 @@ type Props = {
 function Component({ component, refs }: Props) {
   return (
     <div css={column}>
-      {Array.from(refs.breakpoints.entries()).map(entry => (
+      {Array.from(refs.artboards.entries()).map(entry => (
         <div key={entry[0]} css={[column, { margin: "12px 0" }]}>
           <h3
             css={{
@@ -22,15 +22,15 @@ function Component({ component, refs }: Props) {
               fontWeight: 400
             }}
           >
-            {entry[1].name} - {entry[1].value.value}px
+            {entry[1].name} - {entry[1].width}
           </h3>
           <div
             css={[
               {
                 border: "none",
-                background: "white",
-                ///background: "rgb(21, 32, 43)",
-                width: entry[1].value.value + "px"
+                background: entry[1].backgroundColor,
+                width: entry[1].width,
+                height: entry[1].height
               }
             ]}
           >
@@ -38,7 +38,7 @@ function Component({ component, refs }: Props) {
               <Layer
                 layer={component.layout}
                 refs={refs}
-                width={entry[1].value.value}
+                width={parseInt(entry[1].width.slice(-2))}
                 props={{}}
               />
             )}

@@ -1,5 +1,6 @@
 import * as T from "./types";
 import { electron, writeFile, readFile } from "./node";
+import { makeDefaultArtboards } from "./factories";
 
 export async function save(current: T.Refs): Promise<string | undefined> {
   const path =
@@ -51,6 +52,7 @@ function jsonToRefs(fileName: string, data: any): T.Refs {
   return {
     isSaved: true,
     fileName,
+    artboards: makeDefaultArtboards(),
     components: arrayToMap(data.components),
     fontSizes: arrayToMap(data.fontSizes),
     fontFamilies: arrayToMap(data.fontFamilies),

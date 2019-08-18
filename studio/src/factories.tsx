@@ -223,11 +223,39 @@ export function makeDefaultFontSizes(): T.FontSizesMap {
   return fontSizes;
 }
 
+export function makeDefaultArtboards(): T.ArtboardsMap {
+  return new Map([
+    [
+      uuid(),
+      {
+        name: "iPhone X",
+        width: "375px",
+        height: "auto",
+        backgroundColor: "white"
+      }
+    ],
+    [
+      uuid(),
+      { name: "iPad", width: "768px", height: "auto", backgroundColor: "white" }
+    ],
+    [
+      uuid(),
+      {
+        name: "iPad Pro",
+        width: "1024px",
+        height: "auto",
+        backgroundColor: "white"
+      }
+    ]
+  ]);
+}
+
 export function makeDefaultProject() {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
   const breakpoints = makeDefaultBreakpoints();
   const fontSizes = makeDefaultFontSizes();
+  const artboards = makeDefaultArtboards();
 
   const helloWorldTextLayer: T.TextLayer = {
     id: uuid(),
@@ -248,7 +276,6 @@ export function makeDefaultProject() {
       textAlign: "left",
       fontSize: makeRef(getKeyByIndex(fontSizes, 5)),
       fontFamily: makeRef(firstKey(fontFamilies)),
-      lineHeight: 1.2,
       color: makeRef(firstKey(colors)),
       overrides: []
     }
@@ -264,6 +291,7 @@ export function makeDefaultProject() {
   const components: T.ComponentMap = new Map([helloWorld]);
 
   return {
+    artboards,
     colors,
     fontFamilies,
     fontSizes: new Map(fontSizes),
