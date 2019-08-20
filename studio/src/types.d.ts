@@ -4,6 +4,13 @@ export type Component = {
   name: string;
   layout?: Layer;
   props: ComponentProp[];
+  examples: ComponentExample[];
+};
+
+export type ComponentExample = {
+  id: string;
+  name: string;
+  props: ComponentPropertiesValues;
 };
 
 export type ComponentProp = {
@@ -304,9 +311,24 @@ type RenameComponent = {
   name: string;
 };
 
-type EditArtboardBackground = {
-  type: "editArtboardBackground";
-  backgroundColor: string;
+type AddComponentExample = {
+  type: "addComponentExample";
+  name: string;
+  componentId: string;
+};
+
+type DeleteComponentExample = {
+  type: "deleteComponentExample";
+  id: string;
+  componentId: string;
+};
+
+type UpdateComponentExampleProp = {
+  type: "updateComponentExampleProp";
+  prop: string;
+  value: string;
+  exampleId: string;
+  componentId: string;
 };
 
 type Action =
@@ -314,4 +336,6 @@ type Action =
   | EditComponentProp
   | DeleteComponentProp
   | RenameComponent
-  | EditArtboardBackground;
+  | AddComponentExample
+  | DeleteComponentExample
+  | UpdateComponentExampleProp;

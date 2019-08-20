@@ -20,7 +20,10 @@ import {
   addComponentProp,
   deleteComponentProp,
   editComponentProp,
-  renameComponent
+  renameComponent,
+  addComponentExample,
+  deleteComponentExample,
+  updateComponentExampleProp
 } from "./actions";
 
 function App() {
@@ -111,6 +114,16 @@ function App() {
         break;
       case "renameComponent":
         setComponents(renameComponent(action, refs));
+        break;
+      case "addComponentExample":
+        setComponents(addComponentExample(action, refs));
+        break;
+      case "deleteComponentExample":
+        setComponents(deleteComponentExample(action, refs));
+        break;
+      case "updateComponentExampleProp":
+        setComponents(updateComponentExampleProp(action, refs));
+        break;
     }
 
     setIsSaved(false);
@@ -132,7 +145,7 @@ function App() {
         components={components}
         onAddComponent={name => {
           const id = uuid();
-          setComponents(set(components, id, { name, props: [] }));
+          setComponents(set(components, id, { name, props: [], examples: [] }));
           router.history.push(`/components/${id}`);
         }}
       />

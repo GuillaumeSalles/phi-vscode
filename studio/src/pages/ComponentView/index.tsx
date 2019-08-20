@@ -27,6 +27,7 @@ import {
   FormInput
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
+import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
 
 const tabStyle = css({
   display: "flex",
@@ -277,7 +278,26 @@ function ComponentView({
               />
             )}
           </div>
-        ) : null
+        ) : (
+          <div
+            css={[
+              column,
+              {
+                flexShrink: 0,
+                width: "268px",
+                minWidth: "268px",
+                background: colors.sideBarBackground,
+                height: "100%"
+              }
+            ]}
+          >
+            <ComponentExamplesEditor
+              component={component}
+              componentId={componentId}
+              applyAction={applyAction}
+            />
+          </div>
+        )
       }
     />
   );

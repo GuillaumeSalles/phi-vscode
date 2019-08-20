@@ -270,13 +270,16 @@ function applyBindings(
   layer: T.Layer,
   componentProps: T.ComponentPropertiesValues
 ) {
+  const newProps = {
+    ...props
+  };
   for (let prop in layer.bindings) {
     const value = componentProps[layer.bindings[prop].propName];
     if (value != null) {
-      props[prop] = value;
+      newProps[prop] = value;
     }
   }
-  return props;
+  return newProps;
 }
 
 function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
@@ -296,7 +299,7 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
         href: layer.props.href
       };
     case "component":
-      return new Error("TODO. This is a bug");
+      return layer.props;
   }
   assertUnreachable(layer);
 }
@@ -313,7 +316,7 @@ function Layer({ layer, refs, width, props }: Props) {
         layer={component.layout}
         refs={refs}
         width={width}
-        props={layer.props}
+        props={applyBindings(makeLayerProps(layer, refs, width), layer, props)}
       />
     );
   }

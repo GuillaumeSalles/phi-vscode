@@ -49,6 +49,9 @@ function arrayToMap(array: any[]) {
 }
 
 function jsonToRefs(fileName: string, data: any): T.Refs {
+  // for (let c of data.components) {
+  //   c.examples = [];
+  // }
   return {
     isSaved: true,
     fileName,

@@ -17,6 +17,10 @@ const IndexPage = () => (
       backgroundImage="https://pbs.twimg.com/profile_banners/1566463268/1470764371/1500x500"
       profileImage="https://pbs.twimg.com/profile_images/446356636710363136/OYIaJ1KK_400x400.png"
     />
+    <Profile
+      backgroundImage="https://pbs.twimg.com/profile_banners/1566463268/1470764371/1500x500"
+      profileImage="https://pbs.twimg.com/profile_images/1096807971374448640/rVCDhxkG_400x400.png"
+    />
   </Layout>
 )
 

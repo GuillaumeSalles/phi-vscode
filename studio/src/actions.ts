@@ -1,6 +1,7 @@
 import * as T from "./types";
 import { set } from "./helpers/immutable-map";
 import { isComponentLayer } from "./layerUtils";
+import uuid from "uuid/v4";
 
 function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
   const component = refs.components.get(componentId);
@@ -8,6 +9,18 @@ function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
     throw new Error(`Component with id (${componentId}) not found`);
   }
   return component;
+}
+
+function replaceComponent(
+  refs: T.Refs,
+  componentId: string,
+  update: (component: T.Component) => Partial<T.Component>
+): T.ComponentMap {
+  const component = getComponentOrThrow(componentId, refs);
+  return set(refs.components, componentId, {
+    ...component,
+    ...update(component)
+  });
 }
 
 function visitLayer(root: T.Layer, visitor: LayerVisitor): T.Layer {
@@ -27,11 +40,9 @@ export function addComponentProp(
   action: T.AddComponentProp,
   refs: T.Refs
 ): T.ComponentMap {
-  const component = getComponentOrThrow(action.componentId, refs);
-  return set(refs.components, action.componentId, {
-    ...component,
-    props: [...component.props, { name: action.prop, type: "text" }]
-  });
+  return replaceComponent(refs, action.componentId, c => ({
+    props: [...c.props, { name: action.prop, type: "text" }]
+  }));
 }
 
 export function editComponentProp(
@@ -76,7 +87,6 @@ function renamePropertyFromComponent(
       renameAllBindingsThatUseProp(layer, oldProp, newProp)
     );
   }
-  console.log(newComponent);
   return newComponent;
 }
 
@@ -240,6 +250,43 @@ export function renameComponent(action: T.RenameComponent, refs: T.Refs) {
     ...component,
     name: action.name
   });
+}
+
+export function addComponentExample(
+  action: T.AddComponentExample,
+  refs: T.Refs
+) {
+  return replaceComponent(refs, action.componentId, c => ({
+    examples: c.examples.concat([{ props: {}, name: action.name, id: uuid() }])
+  }));
+}
+
+export function deleteComponentExample(
+  action: T.DeleteComponentExample,
+  refs: T.Refs
+) {
+  return replaceComponent(refs, action.componentId, c => ({
+    examples: c.examples.filter(e => e.id !== action.id)
+  }));
+}
+
+export function updateComponentExampleProp(
+  action: T.UpdateComponentExampleProp,
+  refs: T.Refs
+) {
+  return replaceComponent(refs, action.componentId, c => ({
+    examples: c.examples.map(example =>
+      example.id === action.exampleId
+        ? {
+            ...example,
+            props: {
+              ...example.props,
+              [action.prop]: action.value
+            }
+          }
+        : example
+    )
+  }));
 }
 
 type LayerVisitor = <T extends T.Layer>(layer: T) => T;
