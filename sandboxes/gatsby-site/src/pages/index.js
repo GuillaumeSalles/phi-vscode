@@ -10,16 +10,18 @@ const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
     <Profile
+      name="Gatsby"
+      handle="@gatsbyjs"
+      description="Build blazing fast, modern apps and websites with React"
       backgroundImage="https://pbs.twimg.com/profile_banners/3227338044/1559684430/1500x500"
       profileImage="https://pbs.twimg.com/profile_images/1135999619781939201/HZ-pCQcP_400x400.png"
     />
     <Profile
+      name="React"
+      handle="@reactjs"
+      description="React is a declarative, efficient, and flexible JavaScript library for building user interfaces."
       backgroundImage="https://pbs.twimg.com/profile_banners/1566463268/1470764371/1500x500"
       profileImage="https://pbs.twimg.com/profile_images/446356636710363136/OYIaJ1KK_400x400.png"
-    />
-    <Profile
-      backgroundImage="https://pbs.twimg.com/profile_banners/1566463268/1470764371/1500x500"
-      profileImage="https://pbs.twimg.com/profile_images/1096807971374448640/rVCDhxkG_400x400.png"
     />
   </Layout>
 )
