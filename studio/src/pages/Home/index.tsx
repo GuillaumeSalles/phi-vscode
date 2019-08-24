@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { Layout } from "../../components/Layout";
 import Section from "../ComponentView/Editors/Section";
 import { column } from "../../styles";
+import { Logo } from "../../icons";
 
 type Props = {
   onNewProjectClick: () => void;

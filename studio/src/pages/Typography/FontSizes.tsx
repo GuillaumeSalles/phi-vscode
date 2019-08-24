@@ -72,7 +72,8 @@ export default function FontSizes({ items, onItemsChange, refs }: Props) {
             onClick={() => selectRef(entry[0])}
           >
             <div css={{ fontSize: entry[1].value, margin: "12px" }}>
-              Saturn studio - closing the gap between developers and designers
+              Neptune Studio - Create components visually and generate code you
+              can trust.
             </div>
           </SelectableCard>
         </div>

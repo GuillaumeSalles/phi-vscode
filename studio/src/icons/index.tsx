@@ -7,6 +7,26 @@ type Props = {
   width?: number;
 };
 
+export function Logo({ height, width }: Props) {
+  return (
+    <svg
+      height={height}
+      width={width}
+      viewBox="0 0 50 50"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <defs>
+        <radialGradient id="myGradient" cx="0.4" cy="0.6">
+          <stop offset="10%" stopColor="rgb(101,129,223)" />
+          <stop offset="95%" stopColor="rgb(61,77,128)" />
+        </radialGradient>
+      </defs>
+      <circle cx="25" cy="25" r="25" fill="url('#myGradient')" />
+    </svg>
+  );
+}
+
 export function Add({ color = "black", height = 14, width = 14 }: Props) {
   return (
     <svg
