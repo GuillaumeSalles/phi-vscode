@@ -28,6 +28,13 @@ function makeMenu(options) {
       label: "File",
       submenu: [
         {
+          label: "New",
+          accelerator: "CmdOrCtrl+N",
+          click: () => {
+            options.onNew();
+          }
+        },
+        {
           label: "Open",
           accelerator: "CmdOrCtrl+O",
           click: () => {

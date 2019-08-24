@@ -17,14 +17,19 @@ function createWindow() {
     }
   });
 
-  function onSave() {
-    mainWindow.webContents.send("actions", "save");
-  }
-  function onOpen() {
-    mainWindow.webContents.send("actions", "open");
+  function onNew() {
+    mainWindow.webContents.send("actions", "new-project");
   }
 
-  electron.Menu.setApplicationMenu(makeMenu({ onSave, onOpen }));
+  function onOpen() {
+    mainWindow.webContents.send("actions", "open-project");
+  }
+
+  function onSave() {
+    mainWindow.webContents.send("actions", "save-project");
+  }
+
+  electron.Menu.setApplicationMenu(makeMenu({ onNew, onOpen, onSave }));
 
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||

@@ -250,7 +250,7 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
   ]);
 }
 
-export function makeDefaultProject() {
+export function makeDefaultProject(): T.Refs {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
   const breakpoints = makeDefaultBreakpoints();
@@ -292,6 +292,8 @@ export function makeDefaultProject() {
   const components: T.ComponentMap = new Map([helloWorld]);
 
   return {
+    fileName: undefined,
+    isSaved: false,
     artboards,
     colors,
     fontFamilies,

@@ -29,26 +29,47 @@ import {
 function App() {
   const router = useRouter();
 
-  const [fileName, setFileName] = useState<string | undefined>(undefined);
-  const [isSaved, setIsSaved] = useState<boolean>(true);
-  const [components, setComponents] = useState<T.ComponentMap>(new Map());
-  const [colors, setColors] = useState<T.ColorsMap>(new Map());
-  const [fontFamilies, setFontFamilies] = useState<T.FontFamiliesMap>(
-    new Map()
-  );
-  const [fontSizes, setFontSizes] = useState<T.FontSizesMap>(new Map());
-  const [breakpoints, setBreakpoints] = useState<T.BreakpointsMap>(new Map());
-  const [artboards, setArtboards] = useState<T.ArtboardsMap>(new Map());
-  const refs: T.Refs = {
-    isSaved,
-    fileName,
-    artboards,
-    colors,
-    fontFamilies,
-    fontSizes,
-    breakpoints,
-    components
-  };
+  const [refs, setRefs] = useState<T.Refs>({
+    isSaved: true,
+    fileName: undefined,
+    components: new Map(),
+    artboards: new Map(),
+    colors: new Map(),
+    fontFamilies: new Map(),
+    fontSizes: new Map(),
+    breakpoints: new Map()
+  });
+
+  function setParialRefs(partialRefs: Partial<T.Refs>) {
+    setRefs({
+      ...refs,
+      ...partialRefs
+    });
+  }
+
+  function setComponents(components: T.ComponentMap) {
+    setParialRefs({
+      components,
+      isSaved: false
+    });
+  }
+
+  function initProject(refs: T.Refs) {
+    router.history.push("/");
+    setRefs(refs);
+    navigateToFirstComponentOrDefault(refs.components);
+  }
+
+  function createProject() {
+    initProject(makeDefaultProject());
+  }
+
+  async function openProject() {
+    const refs = await open();
+    if (refs) {
+      initProject(refs);
+    }
+  }
 
   const fresh = useRef<T.Refs>(refs);
   useEffect(() => {
@@ -57,26 +78,22 @@ function App() {
 
   useEffect(() => {
     async function listener(event: any, message: string) {
-      if (message === "save") {
-        const fileName = await save(fresh.current);
-        if (fileName) {
-          setFileName(fileName);
-          setIsSaved(true);
-        }
-      } else if (message === "open") {
-        const refs = await open();
-        if (refs) {
-          setFileName(refs.fileName);
-          setColors(refs.colors);
-          setFontSizes(refs.fontSizes);
-          setFontFamilies(refs.fontFamilies);
-          setBreakpoints(refs.breakpoints);
-          setComponents(refs.components);
-          setArtboards(refs.artboards);
-          router.history.push(
-            `/components/${Array.from(refs.components.keys())[0]}`
-          );
-        }
+      switch (message) {
+        case "new-project":
+          createProject();
+          break;
+        case "open-project":
+          await openProject();
+          break;
+        case "save-project":
+          const fileName = await save(fresh.current);
+          if (fileName) {
+            setParialRefs({
+              fileName,
+              isSaved: true
+            });
+          }
+          break;
       }
     }
     electron.ipcRenderer.on("actions", listener);
@@ -95,8 +112,7 @@ function App() {
 
   const onComponentChange = useCallback(
     (id: string, newComponent: T.Component) => {
-      setComponents(components => set(components, id, newComponent));
-      setIsSaved(false);
+      setComponents(set(refs.components, id, newComponent));
     },
     []
   );
@@ -125,27 +141,17 @@ function App() {
         setComponents(updateComponentExampleProp(action, refs));
         break;
     }
-
-    setIsSaved(false);
-  }
-
-  function createProject() {
-    const project = makeDefaultProject();
-    setColors(project.colors);
-    setFontSizes(project.fontSizes);
-    setFontFamilies(project.fontFamilies);
-    setBreakpoints(project.breakpoints);
-    setComponents(project.components);
-    navigateToFirstComponentOrDefault(project.components);
   }
 
   function menu() {
     return (
       <Menu
-        components={components}
+        components={refs.components}
         onAddComponent={name => {
           const id = uuid();
-          setComponents(set(components, id, { name, props: [], examples: [] }));
+          setComponents(
+            set(refs.components, id, { name, props: [], examples: [] })
+          );
           router.history.push(`/components/${id}`);
         }}
       />
@@ -157,7 +163,9 @@ function App() {
       <Route
         path="/"
         exact
-        render={() => <Home onNewProjectClick={createProject} />}
+        render={() => (
+          <Home onNewProjectClick={createProject} openProject={openProject} />
+        )}
       />
       <Route
         path="/typography"
@@ -165,15 +173,19 @@ function App() {
           <Typography
             menu={menu()}
             refs={refs}
-            fontFamilies={fontFamilies}
+            fontFamilies={refs.fontFamilies}
             onFontFamiliesChange={fontFamilies => {
-              setFontFamilies(fontFamilies);
-              setIsSaved(false);
+              setParialRefs({
+                fontFamilies,
+                isSaved: false
+              });
             }}
-            fontSizes={fontSizes}
+            fontSizes={refs.fontSizes}
             onFontSizesChange={fontSizes => {
-              setFontSizes(fontSizes);
-              setIsSaved(false);
+              setParialRefs({
+                fontSizes,
+                isSaved: false
+              });
             }}
           />
         )}
@@ -184,10 +196,12 @@ function App() {
           <Colors
             menu={menu()}
             refs={refs}
-            colors={colors}
+            colors={refs.colors}
             onColorsChange={colors => {
-              setColors(colors);
-              setIsSaved(false);
+              setParialRefs({
+                colors,
+                isSaved: false
+              });
             }}
           />
         )}
@@ -198,10 +212,12 @@ function App() {
           <Breakpoints
             refs={refs}
             menu={menu()}
-            breakpoints={breakpoints}
+            breakpoints={refs.breakpoints}
             onBreakpointsChange={breakpoints => {
-              setBreakpoints(breakpoints);
-              setIsSaved(false);
+              setParialRefs({
+                breakpoints,
+                isSaved: false
+              });
             }}
           />
         )}
@@ -215,7 +231,7 @@ function App() {
               componentId={props.match.params.id}
               onComponentChange={onComponentChange}
               onDelete={id => {
-                const newComponents = del(components, id);
+                const newComponents = del(refs.components, id);
                 navigateToFirstComponentOrDefault(newComponents);
                 setComponents(newComponents);
               }}
