@@ -32,11 +32,11 @@ export function generateUniqueLayerName(
   }
 
   let i = 1;
-  while (existingNames.has(`${prefix} ${i}`)) {
+  while (existingNames.has(`${prefix}${i}`)) {
     i++;
   }
 
-  return `${prefix} ${i}`;
+  return `${prefix}${i}`;
 }
 
 export function makeLayer(

@@ -10,6 +10,7 @@ type Props = {
 };
 
 function Component({ component, refs }: Props) {
+  console.log(refs);
   return (
     <div css={column}>
       {Array.from(refs.artboards.entries()).map(entry => (
@@ -18,7 +19,6 @@ function Component({ component, refs }: Props) {
             {[{ id: "default", name: "Default", props: {} }]
               .concat(component.examples)
               .map(example => {
-                console.log(example);
                 return (
                   <div key={example.id} css={[column, { marginRight: "48px" }]}>
                     <h3

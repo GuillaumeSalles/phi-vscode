@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import React, { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
-import { Route } from "react-router";
+import { Route, RouteComponentProps, StaticContext } from "react-router";
 import { electron } from "./node";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -25,6 +25,38 @@ import {
   deleteComponentExample,
   updateComponentExampleProp
 } from "./actions";
+
+type Router = RouteComponentProps<{}, StaticContext, any>;
+
+function navigateToFirstComponentOrDefault(
+  router: Router,
+  components: T.ComponentMap
+) {
+  router.history.push(
+    components.size > 0 ? `/components/${firstKey(components)}` : `/typography`
+  );
+}
+
+function initProject(
+  router: Router,
+  refs: T.Refs,
+  setRefs: (refs: T.Refs) => void
+) {
+  router.history.push("/");
+  setRefs(refs);
+  navigateToFirstComponentOrDefault(router, refs.components);
+}
+
+function createProject(router: Router, setRefs: (refs: T.Refs) => void) {
+  initProject(router, makeDefaultProject(), setRefs);
+}
+
+async function openProject(router: Router, setRefs: (refs: T.Refs) => void) {
+  const refs = await open();
+  if (refs) {
+    initProject(router, refs, setRefs);
+  }
+}
 
 function App() {
   const router = useRouter();
@@ -54,23 +86,6 @@ function App() {
     });
   }
 
-  function initProject(refs: T.Refs) {
-    router.history.push("/");
-    setRefs(refs);
-    navigateToFirstComponentOrDefault(refs.components);
-  }
-
-  function createProject() {
-    initProject(makeDefaultProject());
-  }
-
-  async function openProject() {
-    const refs = await open();
-    if (refs) {
-      initProject(refs);
-    }
-  }
-
   const fresh = useRef<T.Refs>(refs);
   useEffect(() => {
     fresh.current = refs;
@@ -80,10 +95,10 @@ function App() {
     async function listener(event: any, message: string) {
       switch (message) {
         case "new-project":
-          createProject();
+          createProject(router, setRefs);
           break;
         case "open-project":
-          await openProject();
+          await openProject(router, setRefs);
           break;
         case "save-project":
           const fileName = await save(fresh.current);
@@ -100,22 +115,11 @@ function App() {
     return () => {
       electron.ipcRenderer.removeListener("actions", listener);
     };
-  }, [router]);
+  }, [router, setRefs, setParialRefs]);
 
-  function navigateToFirstComponentOrDefault(components: T.ComponentMap) {
-    router.history.push(
-      components.size > 0
-        ? `/components/${firstKey(components)}`
-        : `/typography`
-    );
+  function onComponentChange(id: string, newComponent: T.Component) {
+    setComponents(set(refs.components, id, newComponent));
   }
-
-  const onComponentChange = useCallback(
-    (id: string, newComponent: T.Component) => {
-      setComponents(set(refs.components, id, newComponent));
-    },
-    []
-  );
 
   function applyAction(action: T.Action) {
     switch (action.type) {
@@ -164,7 +168,10 @@ function App() {
         path="/"
         exact
         render={() => (
-          <Home onNewProjectClick={createProject} openProject={openProject} />
+          <Home
+            onNewProjectClick={() => createProject(router, setRefs)}
+            openProject={() => openProject(router, setRefs)}
+          />
         )}
       />
       <Route
@@ -232,7 +239,7 @@ function App() {
               onComponentChange={onComponentChange}
               onDelete={id => {
                 const newComponents = del(refs.components, id);
-                navigateToFirstComponentOrDefault(newComponents);
+                navigateToFirstComponentOrDefault(router, newComponents);
                 setComponents(newComponents);
               }}
               refs={refs}
