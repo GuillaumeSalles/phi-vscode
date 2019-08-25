@@ -21,6 +21,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-router": "^5.0.1",
     "@types/react-router-dom": "^4.3.3",
+    "@types/react-syntax-highlighter": "^10.2.1",
     "@types/uuid": "^3.4.4",
     "electron": "^5.0.2",
     "install": "^0.12.2",
@@ -31,6 +32,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-syntax-highlighter": "^11.0.2",
     "typescript": "^3.5.1",
     "uuid": "^3.3.2"
   },

@@ -6,6 +6,7 @@ import * as T from "../../types";
 import { filterComponentsWhenLayer } from "../../refsUtil";
 import Component from "./Component";
 // import SettingsEditor from "./SettingsEditor";
+import CodeExamples from "./CodeExamples";
 import SecondaryButton from "../../components/SecondaryButton";
 import { useState } from "react";
 import LayersTree from "../../components/LayersTree";
@@ -149,69 +150,74 @@ function ComponentView({
         )
       }
       center={
-        <div css={[column, mainPadding, { flex: "1 1 auto" }]}>
-          <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
-            <h1 css={heading}>{component.name}</h1>
-            <div css={[row, { marginLeft: "28px" }]}>
-              {isEditing ? (
-                <React.Fragment>
-                  <Button
-                    margin="0 12px 0 0"
-                    text="Rename"
-                    onClick={() => {
-                      renameComponentDialog.open();
-                      nameEntry.setValue(component.name);
-                    }}
-                  />
-                  <Button text="Done" onClick={() => setIsEditing(false)} />
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <IconButton
-                    cssOverrides={{ marginRight: "12px" }}
-                    icon={<Edit height={20} width={20} />}
-                    onClick={() => setIsEditing(true)}
-                  />
-                  <IconButton
-                    icon={<Delete height={20} width={20} />}
-                    onClick={() => {
-                      if (componentsThatUseCurrentComponent.length === 0) {
-                        onDelete(componentId);
-                      } else {
-                        deleteRefDialog.open();
-                      }
-                    }}
-                  />
-                </React.Fragment>
-              )}
+        <div css={[column, { height: "100%", overflowX: "hidden" }]}>
+          <div
+            css={[column, mainPadding, { flex: "1 1 auto", overflowX: "auto" }]}
+          >
+            <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
+              <h1 css={heading}>{component.name}</h1>
+              <div css={[row, { marginLeft: "28px" }]}>
+                {isEditing ? (
+                  <React.Fragment>
+                    <Button
+                      margin="0 12px 0 0"
+                      text="Rename"
+                      onClick={() => {
+                        renameComponentDialog.open();
+                        nameEntry.setValue(component.name);
+                      }}
+                    />
+                    <Button text="Done" onClick={() => setIsEditing(false)} />
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <IconButton
+                      cssOverrides={{ marginRight: "12px" }}
+                      icon={<Edit height={20} width={20} />}
+                      onClick={() => setIsEditing(true)}
+                    />
+                    <IconButton
+                      icon={<Delete height={20} width={20} />}
+                      onClick={() => {
+                        if (componentsThatUseCurrentComponent.length === 0) {
+                          onDelete(componentId);
+                        } else {
+                          deleteRefDialog.open();
+                        }
+                      }}
+                    />
+                  </React.Fragment>
+                )}
+              </div>
             </div>
+            <Component component={component} refs={refs} />
+            <OkCancelModal
+              {...deleteRefDialog.dialogProps}
+              buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
+            />
+            <OkCancelModal
+              title="Rename component"
+              {...renameComponentDialog.dialogProps}
+              buttons={
+                <React.Fragment>
+                  <SecondaryButton
+                    text="Cancel"
+                    {...renameComponentDialog.cancelButtonProps}
+                  />
+                  <Button text="Add" {...renameComponentDialog.okButtonProps} />
+                </React.Fragment>
+              }
+              form={
+                <React.Fragment>
+                  <FormInput
+                    placeholder="Name your component"
+                    {...nameEntry.inputProps}
+                  />
+                </React.Fragment>
+              }
+            />
           </div>
-          <Component component={component} refs={refs} />
-          <OkCancelModal
-            {...deleteRefDialog.dialogProps}
-            buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
-          />
-          <OkCancelModal
-            title="Rename component"
-            {...renameComponentDialog.dialogProps}
-            buttons={
-              <React.Fragment>
-                <SecondaryButton
-                  text="Cancel"
-                  {...renameComponentDialog.cancelButtonProps}
-                />
-                <Button text="Add" {...renameComponentDialog.okButtonProps} />
-              </React.Fragment>
-            }
-            form={
-              <React.Fragment>
-                <FormInput
-                  placeholder="Name your component"
-                  {...nameEntry.inputProps}
-                />
-              </React.Fragment>
-            }
-          />
+          {isEditing == false && <CodeExamples component={component} />}
         </div>
       }
       right={
