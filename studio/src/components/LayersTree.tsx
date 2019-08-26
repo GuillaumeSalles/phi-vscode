@@ -455,7 +455,7 @@ function LayersTree({
             layer={item.layer}
             depth={item.depth}
             index={index}
-            draggable={root != null && item.layer.id !== root.id}
+            draggable={index !== 0}
             onDragStart={setDraggedIndex}
             onDragEnd={setDragIndicatorPosition}
             onClick={onSelectLayer}

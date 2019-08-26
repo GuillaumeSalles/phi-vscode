@@ -10,7 +10,6 @@ type Props = {
 };
 
 function Component({ component, refs }: Props) {
-  console.log(refs);
   return (
     <div css={column}>
       {Array.from(refs.artboards.entries()).map(entry => (

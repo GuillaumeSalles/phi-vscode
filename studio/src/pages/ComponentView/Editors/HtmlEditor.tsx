@@ -71,7 +71,9 @@ export default function HtmlEditor(props: Props) {
               <Field key={prop.name} label={prop.name}>
                 <TextInput
                   cssOverrides={{ width: "100%" }}
-                  value={layerProps[prop.name]}
+                  value={
+                    layerProps[prop.name] == null ? "" : layerProps[prop.name]
+                  }
                   onChange={value =>
                     updateLayer({
                       props: { ...layerProps, [prop.name]: value }

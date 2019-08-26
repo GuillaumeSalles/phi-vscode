@@ -55,8 +55,20 @@ export default function LayersTreeItemComponent({
         }
       ]}
     >
-      <div css={{ flex: "0" }}>{layerTypeToIcon(layer.type)}</div>
-      <span css={{ flex: "1 1 auto", marginLeft: "4px" }}>{layer.name}</span>
+      <div css={{ flex: "0", height: "24px" }}>
+        {layerTypeToIcon(layer.type)}
+      </div>
+      <span
+        css={{
+          flex: "1 1 auto",
+          marginLeft: "4px",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap"
+        }}
+      >
+        {layer.name}
+      </span>
       <IconButton
         cssOverrides={{ display: "none", flex: "0 0 auto" }}
         icon={<Edit height={20} width={20} />}

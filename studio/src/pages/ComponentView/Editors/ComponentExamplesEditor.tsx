@@ -68,7 +68,11 @@ export default function ComponentExamplesEditor({
                 <Field key={prop.name} label={prop.name}>
                   <TextInput
                     cssOverrides={{ width: "100%" }}
-                    value={example.props[prop.name]}
+                    value={
+                      example.props[prop.name] != null
+                        ? example.props[prop.name]
+                        : ""
+                    }
                     onChange={value => {
                       applyAction({
                         type: "updateComponentExampleProp",
