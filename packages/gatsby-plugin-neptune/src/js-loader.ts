@@ -93,7 +93,7 @@ function componentLayerAttributeMap(
       throw new Error(`Component prop with id ("${prop}") not found`);
     }
     map.set(
-      layerPropNameToJsxAttributeName(componentProp.name),
+      layerPropNameToJsxAttributeName(kebabToCamel(componentProp.name)),
       ts.createStringLiteral(layer.props[prop])
     );
   }
@@ -134,12 +134,13 @@ function createLayerPropertiesJsx(
 
   for (let prop in layer.bindings) {
     const propName = layer.bindings[prop].propName;
+
     const componentProp = component.props.find(p => p.name === propName);
     if (componentProp == null) {
       throw new Error(`Prop (${propName}) not found`);
     }
     attributesMap.set(
-      layerPropNameToJsxAttributeName(prop),
+      layerPropNameToJsxAttributeName(kebabToCamel(prop)),
       ts.createIdentifier(kebabToCamel(componentProp.name))
     );
   }

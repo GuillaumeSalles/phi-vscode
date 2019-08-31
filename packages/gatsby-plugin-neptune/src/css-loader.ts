@@ -235,7 +235,8 @@ export function neptuneToCss(data: any) {
     components,
     // TODO: Refactor project state to not file name and isSaved in refs
     isSaved: true,
-    fileName: ""
+    fileName: "",
+    artboards: new Map()
   };
 
   return Array.from(components.values())
