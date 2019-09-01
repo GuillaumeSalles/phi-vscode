@@ -10,6 +10,7 @@ import MediaQueriesEditor from "./MediaQueriesEditor";
 import AppearanceEditor from "./AppearanceEditor";
 import BorderEditor from "./BorderEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
+import PositionEditor from "./PositionEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
@@ -101,6 +102,7 @@ export default function LayerEditor<TLayer extends T.Layer>({
       </div>
 
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
+        <PositionEditor style={style} onChange={updateLayerStyle} />
         <LayerDisplayEditor
           allowedDisplays={layerTypeToSupportedDisplay(layer.type)}
           style={style}

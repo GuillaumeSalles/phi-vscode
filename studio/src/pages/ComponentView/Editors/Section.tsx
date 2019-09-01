@@ -14,6 +14,7 @@ export default function Section({ title, children, topRightButton }: Props) {
       css={[
         column,
         {
+          flexShrink: 0,
           padding: "8px",
           borderBottom: "solid 1px #DDD"
         }

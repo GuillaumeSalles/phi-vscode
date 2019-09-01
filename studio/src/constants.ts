@@ -8,6 +8,8 @@ export const layerTypes: T.LayerType[] = [
   "component"
 ];
 
+export const positionList: T.PositionProperty[] = ["relative", "absolute"];
+
 export const flexDirectionList: T.FlexDirection[] = [
   "column",
   "row",

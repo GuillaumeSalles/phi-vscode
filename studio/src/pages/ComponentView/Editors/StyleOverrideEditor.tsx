@@ -24,7 +24,8 @@ import {
   OpacityEditor,
   BorderWidthEditor,
   BorderColorEditor,
-  BorderStyleEditor
+  BorderStyleEditor,
+  PositionPropertyEditor
 } from "./StylePropertyEditor";
 import TextDecorationEditor from "./TextDecorationEditor";
 import IconButton from "../../../components/IconButton";
@@ -67,6 +68,11 @@ const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
   ["borderTopRightRadius", "Border Top Right Radius"],
   ["borderBottomRightRadius", "Border Bottom Right Radius"],
   ["borderBottomLeftRadius", "Border Bottom Left Radius"],
+  ["position", "Position"],
+  ["top", "Top"],
+  ["right", "Right"],
+  ["bottom", "Bottom"],
+  ["left", "Left"],
   // TODO: Handle border position
   ["borderTopWidth", "Border Width"],
   ["borderTopColor", "Border Color"],
@@ -227,6 +233,8 @@ function PropertyEditor({
   onChange
 }: PropertyEditorProps) {
   switch (property) {
+    case "position":
+      return <PositionPropertyEditor style={style} onChange={onChange} />;
     case "color":
       return <ColorEditor refs={refs} style={style} onChange={onChange} />;
     case "textDecoration":
@@ -310,6 +318,10 @@ function PropertyEditor({
     case "borderTopRightRadius":
     case "borderBottomRightRadius":
     case "borderBottomLeftRadius":
+    case "top":
+    case "right":
+    case "bottom":
+    case "left":
       return (
         <SimpleTextPropertyEditor
           label={stylePropertiesMap.get(property)!}

@@ -126,7 +126,15 @@ type LayerStyle = Typography &
     borderRightColor?: Color;
     borderBottomColor?: Color;
     borderLeftColor?: Color;
+
+    position?: PositionProperty;
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
   };
+
+export type PositionProperty = "absolute" | "relative";
 
 export type Display = {
   display?: DisplayProperty;

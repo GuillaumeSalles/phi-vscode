@@ -13,7 +13,8 @@ import {
   justifyContentList,
   alignItemsList,
   alignContentList,
-  borderStyleList
+  borderStyleList,
+  positionList
 } from "../../../constants";
 import TextInput from "../../../components/TextInput";
 
@@ -23,6 +24,7 @@ const justifyContentOptions = listToEntries(justifyContentList);
 const alignItemsOptions = listToEntries(alignItemsList);
 const alignContentOptions = listToEntries(alignContentList);
 const borderStyleOptions = listToEntries(borderStyleList);
+const positionOptions = listToEntries<T.PositionProperty>(positionList);
 
 type Props = {
   style: T.LayerStyle;
@@ -93,6 +95,18 @@ export function FontSizeEditor({ style, onChange, refs }: PropsWithRefs) {
           entry[0],
           entry[1].name
         ])}
+      />
+    </Field>
+  );
+}
+
+export function PositionPropertyEditor({ style, onChange }: Props) {
+  return (
+    <Field label="Position">
+      <Select
+        value={style.position || "relative"}
+        onChange={position => onChange({ position })}
+        options={positionOptions}
       />
     </Field>
   );

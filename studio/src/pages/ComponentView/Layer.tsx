@@ -150,7 +150,11 @@ function colorToCss(color: T.Color | undefined, refs: T.Refs) {
 
 function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
-    position: "relative",
+    position: style.position || "relative",
+    top: style.top,
+    right: style.right,
+    bottom: style.bottom,
+    left: style.left,
     ...makeDisplayStyle(style),
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),

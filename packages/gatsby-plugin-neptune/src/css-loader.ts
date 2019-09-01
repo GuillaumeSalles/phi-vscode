@@ -127,7 +127,11 @@ function layerStyleOverridesToCss(
 
 function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
   return `
-    position: relative;
+    ${cssProp("position", style.position || "relative")}
+    ${cssProp("top", style.position || "top")}
+    ${cssProp("right", style.position || "right")}
+    ${cssProp("bottom", style.position || "bottom")}
+    ${cssProp("left", style.position || "left")}
     ${displayToCss(style)}
     ${cssProp("margin-top", style.marginTop)}
     ${cssProp("margin-right", style.marginRight)}
