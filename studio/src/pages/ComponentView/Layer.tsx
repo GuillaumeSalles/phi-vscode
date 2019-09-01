@@ -150,6 +150,7 @@ function colorToCss(color: T.Color | undefined, refs: T.Refs) {
 
 function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
   return {
+    position: "relative",
     ...makeDisplayStyle(style),
     ...makeDimensionsStyle(style),
     ...makeMarginStyle(style),
@@ -198,6 +199,16 @@ function makeLayerStyle(
   return merge(styles);
 }
 
+function contentOrBindingContent(
+  layer: T.TextLayer | T.LinkLayer,
+  props: T.ComponentPropertiesValues
+) {
+  return layer.bindings.content != null &&
+    props[layer.bindings.content.propName] != null
+    ? props[layer.bindings.content.propName]
+    : layer.props.content;
+}
+
 function makeChildren(
   layer: T.Layer,
   refs: T.Refs,
@@ -208,10 +219,7 @@ function makeChildren(
     case "image":
       return null;
     case "text":
-      return layer.bindings.content != null &&
-        props[layer.bindings.content.propName] != null
-        ? props[layer.bindings.content.propName]
-        : layer.props.content;
+      return contentOrBindingContent(layer, props);
     case "link":
       return layer.children.length > 0
         ? layer.children.map(c => (
@@ -223,7 +231,7 @@ function makeChildren(
               props={props}
             />
           ))
-        : layer.props.content;
+        : contentOrBindingContent(layer, props);
     case "container":
       return layer.children.map(c => (
         <Layer key={c.id} layer={c} refs={refs} width={width} props={props} />
