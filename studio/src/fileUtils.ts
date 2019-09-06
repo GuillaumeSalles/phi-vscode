@@ -48,12 +48,13 @@ function arrayToMap(array: any[]) {
   );
 }
 
-function jsonToRefs(fileName: string, data: any): T.Refs {
-  // for (let c of data.components) {
-  //   c.examples = [];
-  // }
+export function jsonToRefs(
+  fileName: string | undefined,
+  isSaved: boolean,
+  data: any
+): T.Refs {
   return {
-    isSaved: true,
+    isSaved,
     fileName,
     artboards: makeDefaultArtboards(),
     components: arrayToMap(data.components),
@@ -73,7 +74,7 @@ export async function open(): Promise<T.Refs | undefined> {
   try {
     const str = await readFile(path[0], "utf-8");
     const data = JSON.parse(str);
-    return jsonToRefs(path[0], data);
+    return jsonToRefs(path[0], true, data);
   } catch (er) {
     console.log(er);
     return;

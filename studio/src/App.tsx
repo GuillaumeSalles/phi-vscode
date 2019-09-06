@@ -171,6 +171,7 @@ function App() {
           <Home
             onNewProjectClick={() => createProject(router, setRefs)}
             openProject={() => openProject(router, setRefs)}
+            openExampleProject={refs => initProject(router, refs, setRefs)}
           />
         )}
       />

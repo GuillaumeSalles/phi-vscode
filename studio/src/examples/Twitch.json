@@ -1,0 +1,567 @@
+{
+  "colors": [
+    {
+      "id": "04546ccd-f8ed-4bfe-88b2-10478296ad3d",
+      "name": "black",
+      "value": "#000000"
+    },
+    {
+      "id": "40cffed6-1865-46b5-be38-439eaf573a91",
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "id": "e18b9fde-828f-4751-8685-bcc40035a47b",
+      "name": "primary-fg",
+      "value": "#19171c"
+    },
+    {
+      "id": "ea510c22-68fd-4a12-bb50-eec93d56a7a3",
+      "name": "brand",
+      "value": "#6441a4"
+    },
+    {
+      "id": "e0c8a4c2-245b-4a91-aaf6-cd6dbe7f0bc6",
+      "name": "secondary-fg",
+      "value": "#322f37"
+    },
+    {
+      "id": "512301f1-07cf-40e6-a176-cb1b8449f916",
+      "name": "image-bg",
+      "value": "#efeef1"
+    },
+    {
+      "id": "d4796c7c-5276-4f44-8f1d-92cadd47ec12",
+      "name": "red",
+      "value": "#e21212"
+    }
+  ],
+  "fontSizes": [
+    {
+      "id": "4424572e-40d3-4e7e-9cd9-ca98a643fb30",
+      "name": "medium",
+      "value": "14px"
+    },
+    {
+      "id": "3840214b-00cb-4406-9feb-1361de6ee776",
+      "name": "small",
+      "value": "12px"
+    },
+    {
+      "id": "14ee77f7-2872-4a1b-b678-c13d2da0927b",
+      "name": "x-small",
+      "value": "11px"
+    }
+  ],
+  "fontFamilies": [
+    {
+      "id": "ad35fcab-eb70-430f-a623-52119faed0c0",
+      "name": "default",
+      "value": "Helvetica Neue,Helvetica,Arial,sans-serif"
+    }
+  ],
+  "breakpoints": [
+    {
+      "id": "ac2a306b-9335-425f-bd03-d13b56caab17",
+      "name": "small",
+      "value": { "type": "px", "value": 544 }
+    },
+    {
+      "id": "7e41be15-365c-4e9c-a9ac-ffca72d9226b",
+      "name": "medium",
+      "value": { "type": "px", "value": 768 }
+    },
+    {
+      "id": "a01243ec-f930-407f-8e65-90c72683ae0a",
+      "name": "large",
+      "value": { "type": "px", "value": 1012 }
+    },
+    {
+      "id": "1f83cf4c-2319-4856-b230-6cb73e58869d",
+      "name": "xlarge",
+      "value": { "type": "px", "value": 1280 }
+    }
+  ],
+  "components": [
+    {
+      "id": "ae402d4c-e395-4f78-9c61-4d81f5b09825",
+      "name": "channel-title",
+      "props": [
+        { "name": "label", "type": "text" },
+        { "name": "href", "type": "text" }
+      ],
+      "examples": [
+        {
+          "props": { "label": "playing on my main account | !discord" },
+          "name": "Long text",
+          "id": "693b6d13-6572-4835-babc-b971d6e28468"
+        }
+      ],
+      "layout": {
+        "type": "link",
+        "id": "9aab36bf-54b4-47d0-bc1c-5ee82fb05c2a",
+        "name": "link",
+        "tag": "a",
+        "children": [],
+        "mediaQueries": [],
+        "bindings": {
+          "href": { "propName": "href" },
+          "content": { "propName": "label" }
+        },
+        "props": { "content": "Channel Title", "href": "" },
+        "style": {
+          "display": "inline",
+          "textDecoration": {
+            "isUnderlined": false,
+            "isStrikedThrough": false
+          },
+          "color": {
+            "type": "ref",
+            "id": "e18b9fde-828f-4751-8685-bcc40035a47b"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "ad35fcab-eb70-430f-a623-52119faed0c0"
+          },
+          "fontSize": {
+            "type": "ref",
+            "id": "4424572e-40d3-4e7e-9cd9-ca98a643fb30"
+          },
+          "textAlign": "left",
+          "lineHeight": 1.2,
+          "overrides": [
+            {
+              "id": "106b8a23-ace7-4db7-a38e-aee78069f6b1",
+              "pseudoClass": ":hover",
+              "style": {
+                "color": {
+                  "type": "ref",
+                  "id": "ea510c22-68fd-4a12-bb50-eec93d56a7a3"
+                },
+                "textDecoration": {
+                  "isUnderlined": true,
+                  "isStrikedThrough": false
+                }
+              }
+            }
+          ],
+          "fontWeight": "600"
+        }
+      }
+    },
+    {
+      "id": "cd09c586-dafb-4592-87f8-dff9c9436a80",
+      "name": "channel-subtitle",
+      "props": [
+        { "name": "label", "type": "text" },
+        { "name": "href", "type": "text" }
+      ],
+      "examples": [],
+      "layout": {
+        "type": "link",
+        "id": "8ec88e72-52d6-4293-ae35-be0af2107670",
+        "name": "link",
+        "tag": "a",
+        "children": [],
+        "mediaQueries": [],
+        "bindings": {
+          "content": { "propName": "label" },
+          "href": { "propName": "href" }
+        },
+        "props": { "content": "Subtitle", "href": "" },
+        "style": {
+          "display": "block",
+          "textDecoration": {
+            "isUnderlined": false,
+            "isStrikedThrough": false
+          },
+          "color": {
+            "type": "ref",
+            "id": "e0c8a4c2-245b-4a91-aaf6-cd6dbe7f0bc6"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "ad35fcab-eb70-430f-a623-52119faed0c0"
+          },
+          "fontSize": {
+            "type": "ref",
+            "id": "3840214b-00cb-4406-9feb-1361de6ee776"
+          },
+          "textAlign": "left",
+          "lineHeight": 1.5,
+          "overrides": [
+            {
+              "id": "77f8e079-321d-48eb-959b-7b25ee1a08d1",
+              "pseudoClass": ":hover",
+              "style": {
+                "textDecoration": {
+                  "isUnderlined": true,
+                  "isStrikedThrough": false
+                },
+                "color": {
+                  "type": "ref",
+                  "id": "ea510c22-68fd-4a12-bb50-eec93d56a7a3"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "43b1334f-d5d4-4613-b8d4-e4d3cc515c2a",
+      "name": "channel-card",
+      "props": [
+        { "name": "title", "type": "text" },
+        { "name": "streamer", "type": "text" },
+        { "name": "category", "type": "text" },
+        { "name": "streamer-picture", "type": "text" },
+        { "name": "live-picture", "type": "text" }
+      ],
+      "examples": [
+        {
+          "props": {
+            "title": "playing on my main account | !discord",
+            "streamer": "Dark Hydra",
+            "category": "Teamfight Tactics",
+            "streamer-picture": "https://static-cdn.jtvnw.net/jtv_user_pictures/b817f697-e942-43c8-ba36-8923a5438f30-profile_image-50x50.png",
+            "live-picture": "https://static-cdn.jtvnw.net/previews-ttv/live_user_darkhydra-400x225.jpg"
+          },
+          "name": "Dark Hydra",
+          "id": "49363eb6-b3e2-4d32-b7c9-455d58a9ccd3"
+        }
+      ],
+      "layout": {
+        "type": "container",
+        "id": "ca124ab7-6c29-40a3-8215-9a31b9fec679",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [
+          {
+            "type": "container",
+            "id": "593f98d4-1897-4896-9310-5c5f5b963536",
+            "name": "image-container",
+            "tag": "div",
+            "mediaQueries": [],
+            "children": [
+              {
+                "type": "container",
+                "id": "d8a86c8e-4d0a-4830-8adc-13c6aee9b618",
+                "name": "aspect-ratio",
+                "tag": "div",
+                "mediaQueries": [],
+                "children": [],
+                "bindings": {},
+                "style": {
+                  "display": "flex",
+                  "flexDirection": "column",
+                  "flexWrap": "nowrap",
+                  "justifyContent": "flex-start",
+                  "alignItems": "stretch",
+                  "alignContent": "stretch",
+                  "overrides": [],
+                  "paddingBottom": "56.25%"
+                }
+              },
+              {
+                "type": "image",
+                "id": "253b8ec6-f716-4eb6-a5ca-203bd2a276cf",
+                "name": "live-picture",
+                "tag": "img",
+                "props": { "src": "", "alt": "", "width": "" },
+                "mediaQueries": [],
+                "style": {
+                  "display": "block",
+                  "width": "100%",
+                  "position": "absolute",
+                  "top": ""
+                },
+                "bindings": { "src": { "propName": "live-picture" } }
+              },
+              {
+                "type": "container",
+                "id": "9c50d4ae-bb08-4006-ba29-1516b1942748",
+                "name": "live-badge-container",
+                "tag": "div",
+                "mediaQueries": [],
+                "children": [
+                  {
+                    "type": "component",
+                    "id": "fdf1da82-d8e9-488f-b9a0-aceb68349b3f",
+                    "name": "live-badge",
+                    "componentId": "d4f643b7-187e-43b3-b954-a4d4cd429d95",
+                    "mediaQueries": [],
+                    "bindings": {},
+                    "style": {},
+                    "props": {}
+                  }
+                ],
+                "bindings": {},
+                "style": {
+                  "display": "flex",
+                  "flexDirection": "column",
+                  "flexWrap": "nowrap",
+                  "justifyContent": "flex-start",
+                  "alignItems": "stretch",
+                  "alignContent": "stretch",
+                  "overrides": [],
+                  "position": "absolute",
+                  "top": "0",
+                  "left": "0",
+                  "marginTop": "10px",
+                  "marginRight": "10px",
+                  "marginBottom": "10px",
+                  "marginLeft": "10px"
+                }
+              }
+            ],
+            "bindings": {},
+            "style": {
+              "display": "flex",
+              "flexDirection": "column",
+              "flexWrap": "nowrap",
+              "justifyContent": "flex-start",
+              "alignItems": "stretch",
+              "alignContent": "stretch",
+              "overrides": [],
+              "width": "100%",
+              "backgroundColor": {
+                "type": "ref",
+                "id": "512301f1-07cf-40e6-a176-cb1b8449f916"
+              },
+              "height": "",
+              "borderTopLeftRadius": "4px",
+              "borderTopRightRadius": "4px",
+              "borderBottomRightRadius": "4px",
+              "borderBottomLeftRadius": "4px"
+            }
+          },
+          {
+            "type": "container",
+            "id": "3094d3af-c4b1-4cd2-8d13-4d6f5466f1cf",
+            "name": "channel-description",
+            "tag": "div",
+            "mediaQueries": [],
+            "children": [
+              {
+                "type": "component",
+                "id": "49113885-ef26-415d-b1a2-c672fd32efaf",
+                "name": "streamer-picture",
+                "componentId": "812a8b43-6df8-43f5-b9d2-18a1c8807fb9",
+                "mediaQueries": [],
+                "bindings": { "src": { "propName": "streamer-picture" } },
+                "style": {},
+                "props": { "src": "" }
+              },
+              {
+                "type": "container",
+                "id": "dc3e5ecf-3d52-4be3-8c11-4a590030a315",
+                "name": "channel-info-container",
+                "tag": "div",
+                "mediaQueries": [],
+                "children": [
+                  {
+                    "type": "component",
+                    "id": "ebe31e5a-d180-4e7d-8340-496e9562c892",
+                    "name": "title",
+                    "componentId": "ae402d4c-e395-4f78-9c61-4d81f5b09825",
+                    "mediaQueries": [],
+                    "bindings": { "label": { "propName": "title" } },
+                    "style": {},
+                    "props": { "label": "Channel title" }
+                  },
+                  {
+                    "type": "container",
+                    "id": "e822f022-b6ea-44cb-b5ea-0defe3a15119",
+                    "name": "subtitles",
+                    "tag": "div",
+                    "mediaQueries": [],
+                    "children": [
+                      {
+                        "type": "component",
+                        "id": "b61ae6ff-aab4-4d28-9104-a4a8e3c310f2",
+                        "name": "streamer",
+                        "componentId": "cd09c586-dafb-4592-87f8-dff9c9436a80",
+                        "mediaQueries": [],
+                        "bindings": { "label": { "propName": "streamer" } },
+                        "style": {},
+                        "props": { "label": "Streamer" }
+                      },
+                      {
+                        "type": "component",
+                        "id": "48809635-5433-40bf-aeec-76c9f2184a49",
+                        "name": "category",
+                        "componentId": "cd09c586-dafb-4592-87f8-dff9c9436a80",
+                        "mediaQueries": [],
+                        "bindings": { "label": { "propName": "category" } },
+                        "style": {},
+                        "props": { "label": "Category" }
+                      }
+                    ],
+                    "bindings": {},
+                    "style": {
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "flexWrap": "nowrap",
+                      "justifyContent": "flex-start",
+                      "alignItems": "stretch",
+                      "alignContent": "stretch",
+                      "overrides": [],
+                      "marginTop": ".3rem"
+                    }
+                  }
+                ],
+                "bindings": {},
+                "style": {
+                  "display": "flex",
+                  "flexDirection": "column",
+                  "flexWrap": "nowrap",
+                  "justifyContent": "flex-start",
+                  "alignItems": "stretch",
+                  "alignContent": "stretch",
+                  "overrides": [],
+                  "marginTop": "",
+                  "marginLeft": "10px"
+                }
+              }
+            ],
+            "bindings": {},
+            "style": {
+              "display": "flex",
+              "flexDirection": "row",
+              "flexWrap": "nowrap",
+              "justifyContent": "flex-start",
+              "alignItems": "stretch",
+              "alignContent": "stretch",
+              "overrides": [],
+              "marginTop": "1rem"
+            }
+          }
+        ],
+        "bindings": {},
+        "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "flexWrap": "nowrap",
+          "justifyContent": "flex-start",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "paddingTop": "",
+          "paddingRight": "1rem",
+          "paddingLeft": "1rem",
+          "paddingBottom": "1rem"
+        }
+      }
+    },
+    {
+      "id": "812a8b43-6df8-43f5-b9d2-18a1c8807fb9",
+      "name": "channel-card-streamer-picture",
+      "props": [{ "name": "src", "type": "text" }],
+      "examples": [],
+      "layout": {
+        "type": "container",
+        "id": "99664261-e469-482c-ae6a-49b25fd42757",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [
+          {
+            "type": "image",
+            "id": "3d65fda2-e562-4263-9f40-ed6ae99951d8",
+            "name": "image",
+            "tag": "img",
+            "props": { "src": "", "alt": "", "height": "40", "width": "40" },
+            "mediaQueries": [],
+            "style": {
+              "borderTopLeftRadius": "50%",
+              "borderTopRightRadius": "50%",
+              "borderBottomRightRadius": "50%",
+              "borderBottomLeftRadius": "50%",
+              "width": "40px",
+              "maxWidth": "",
+              "height": "40px"
+            },
+            "bindings": { "src": { "propName": "src" } }
+          }
+        ],
+        "bindings": {},
+        "style": {
+          "display": "block",
+          "flexDirection": "column",
+          "flexWrap": "nowrap",
+          "justifyContent": "flex-start",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "borderTopLeftRadius": "50%",
+          "borderTopRightRadius": "50%",
+          "borderBottomRightRadius": "50%",
+          "borderBottomLeftRadius": "50%",
+          "width": "40px",
+          "height": "40px",
+          "backgroundColor": {
+            "type": "ref",
+            "id": "512301f1-07cf-40e6-a176-cb1b8449f916"
+          }
+        }
+      }
+    },
+    {
+      "id": "d4f643b7-187e-43b3-b954-a4d4cd429d95",
+      "name": "live-badge",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "text",
+        "id": "65334d24-99f5-4083-814e-a7f252473735",
+        "name": "text",
+        "tag": "span",
+        "mediaQueries": [],
+        "bindings": {},
+        "props": { "content": "LIVE" },
+        "style": {
+          "display": "inline",
+          "textDecoration": {
+            "isStrikedThrough": false,
+            "isUnderlined": false
+          },
+          "color": {
+            "type": "ref",
+            "id": "40cffed6-1865-46b5-be38-439eaf573a91"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "ad35fcab-eb70-430f-a623-52119faed0c0"
+          },
+          "fontSize": {
+            "type": "ref",
+            "id": "3840214b-00cb-4406-9feb-1361de6ee776"
+          },
+          "textAlign": "left",
+          "lineHeight": 1.5,
+          "overrides": [],
+          "backgroundColor": {
+            "type": "ref",
+            "id": "d4796c7c-5276-4f44-8f1d-92cadd47ec12"
+          },
+          "paddingRight": "4px",
+          "paddingLeft": "4px",
+          "paddingBottom": "0",
+          "borderTopLeftRadius": "2px",
+          "borderTopRightRadius": "2px",
+          "borderBottomRightRadius": "2px",
+          "borderBottomLeftRadius": "2px",
+          "height": "",
+          "paddingTop": "0",
+          "marginTop": "",
+          "marginRight": "",
+          "marginBottom": "",
+          "marginLeft": "",
+          "fontWeight": "400"
+        }
+      }
+    }
+  ]
+}
