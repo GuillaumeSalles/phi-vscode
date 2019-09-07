@@ -36,7 +36,7 @@ function createWindow() {
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
       url.format({
-        pathname: path.join(__dirname, "/../public/index.html"),
+        pathname: path.join(__dirname, "/index.html"),
         protocol: "file:",
         slashes: true
       })
@@ -45,8 +45,6 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-
-  console.log("yooooo");
 }
 
 app.on("ready", createWindow);
