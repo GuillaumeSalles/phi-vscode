@@ -7,7 +7,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 const editorCustomStyle = {
   backgroundColor: colors.canvasBackground,
-  fontSize: "13px"
+  fontSize: "13px",
+  boxShadow: "inset rgba(0, 0, 0, 0.12) 0px 2px 5px 0px"
 };
 
 type Props = {
