@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-import { Profile } from "../Twitter.neptune"
+import { Profile } from "../Twitter.phi"
 
 const IndexPage = () => (
   <Layout>

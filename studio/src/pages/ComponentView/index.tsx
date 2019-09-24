@@ -154,7 +154,16 @@ function ComponentView({
           <div
             css={[column, mainPadding, { flex: "1 1 auto", overflowX: "auto" }]}
           >
-            <div css={[row, { marginBottom: "20px", alignItems: "flex-end" }]}>
+            <div
+              css={[
+                row,
+                {
+                  marginBottom: "20px",
+                  alignItems: "flex-end",
+                  minHeight: "32px"
+                }
+              ]}
+            >
               <h1 css={heading}>{component.name}</h1>
               <div css={[row, { marginLeft: "28px" }]}>
                 {isEditing ? (

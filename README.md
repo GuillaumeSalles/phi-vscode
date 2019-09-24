@@ -1,33 +1,33 @@
-# Neptune Studio
+# Phi Studio
 
 Design components for the web, generate code you can trust.
 
-## What is Neptune Studio?
+## What is Phi Studio?
 
-Neptune Studio lets you define the specs of your components and then generate code you can use in your web apps. By limiting the scope to the web platform, Neptune Studio can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
+Phi Studio lets you define the specs of your components and then generate code you can use in your web apps. By limiting the scope to the web platform, Phi Studio can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
-Neptune Studio is not a creativity tool.
+Phi Studio is not a creativity tool.
 
-Neptune is still at a really early stage so you will probably encounters some bugs.
+Phi is still at a really early stage so you will probably encounters some bugs.
 
 ## Code generation
 
 ### Gatsby
 
-Install `gatsby-plugin-neptune` in your gatsby app
+Install `gatsby-plugin-phi` in your gatsby app
 
 ```shell
-npm install --save-dev gatsby-plugin-neptune
+npm install --save-dev gatsby-plugin-phi
 ```
 
-Add `gatsby-plugin-neptune` in your `gatsby-config.js` file
+Add `gatsby-plugin-phi` in your `gatsby-config.js` file
 
 ```javascript
 module.exports = {
   //...
   plugins: [
     //...
-    `gatsby-plugin-neptune`
+    `gatsby-plugin-phi`
   ]
 };
 ```
@@ -35,17 +35,17 @@ module.exports = {
 Import your component directly from your react code.
 
 ```javascript
-import { Hello } from "./YourNeptuneFile.neptune";
+import { Hello } from "./YourPhiFile.phi";
 
 const IndexPage = () => <Hello name="world" />;
 ```
 
 #### Conventions
 
-Components are defined in `kebab-case` in Neptune Studio but are imported in `PascalCase`.
+Components are defined in `kebab-case` in Phi Studio but are imported in `PascalCase`.
 Example `hello-world` becomes `HelloWorld`.
 
-Properties are defined in `kebab-case` in Neptune Studio but are imported in `camelCase`.
+Properties are defined in `kebab-case` in Phi Studio but are imported in `camelCase`.
 Example `my-prop` become `myProp`;
 
 ### Next.js _Coming soon_

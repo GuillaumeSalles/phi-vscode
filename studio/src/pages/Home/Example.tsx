@@ -11,7 +11,7 @@ type Props = {
 
 export default function Example({ name, image, onClick }: Props) {
   return (
-    <div css={[column, { margin: "0 0 16px 16px" }]}>
+    <div css={[column, { margin: "0 16px 16px 0" }]}>
       <SelectableCard
         isSelected={false}
         onClick={onClick}

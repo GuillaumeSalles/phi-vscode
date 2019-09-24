@@ -6,12 +6,12 @@
   "author": "Guillaume Salles",
   "main": "server/electron.js",
   "build": {
-    "appId": "com.electron.neptune-studio",
+    "appId": "com.electron.phi-studio",
     "files": [
       "build/**/*",
       "node_modules/**/*"
     ],
-    "productName": "Neptune Studio",
+    "productName": "Phi Studio",
     "mac": {
       "category": "public.app-category.graphics-design"
     },

@@ -229,7 +229,7 @@ function componentToCss(component: T.Component, refs: T.Refs) {
     .join("\n\n");
 }
 
-export function neptuneToCss(data: any) {
+export function phiToCss(data: any) {
   const components: T.ComponentMap = arrayToMap(data.components);
   const refs: T.Refs = {
     breakpoints: arrayToMap(data.breakpoints),
@@ -249,8 +249,5 @@ export function neptuneToCss(data: any) {
 }
 
 export default function cssLoader(source: string) {
-  console.log("Inside neptune-css-loader");
-  console.log(source);
-
-  return neptuneToCss(JSON.parse(source));
+  return phiToCss(JSON.parse(source));
 }

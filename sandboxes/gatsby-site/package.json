@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "gatsby-plugin-phi-sandbox",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Sandbox to test gatsby-plugin-phi",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Guillaume Salles",
   "dependencies": {
     "gatsby": "^2.9.4",
     "gatsby-image": "^2.1.4",
@@ -13,7 +13,7 @@
     "gatsby-plugin-sharp": "^2.1.5",
     "gatsby-source-filesystem": "^2.0.39",
     "gatsby-transformer-sharp": "^2.1.21",
-    "gatsby-plugin-neptune": "file:../../packages/gatsby-plugin-neptune",
+    "gatsby-plugin-phi": "file:../../packages/gatsby-plugin-phi",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

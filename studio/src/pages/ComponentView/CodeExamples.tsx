@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
-import { column, heading, colors } from "../../styles";
+import { column, heading, colors, shadow1 } from "../../styles";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
@@ -41,7 +41,7 @@ function capitalizeFirstLetter(string: string) {
 }
 
 function componentImport(name: string) {
-  return `import { ${name} } from './path/to/file.neptune';`;
+  return `import { ${name} } from './path/to/file.phi';`;
 }
 
 function componentWithoutProps(name: string) {
@@ -90,7 +90,9 @@ export default function CodeExamples({ component }: Props) {
     <div
       css={[
         column,
+        shadow1,
         {
+          zIndex: 2,
           flex: 0,
           padding: "20px 40px",
           height: "300px",

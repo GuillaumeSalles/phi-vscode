@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React from "react";
-import { row, colors } from "../styles";
+import { row, colors, shadow1 } from "../styles";
 
 type Props = {
   left: React.ReactNode;
@@ -14,11 +14,15 @@ export function Layout({ left, center, right, topBar }: Props) {
   return (
     <div css={[row, { width: "100%", height: "100%" }]}>
       <div
-        css={{
-          flex: "0 0 auto",
-          background: colors.sideBarBackground,
-          height: "100%"
-        }}
+        css={[
+          {
+            flex: "0 0 auto",
+            background: colors.sideBarBackground,
+            height: "100%",
+            zIndex: 1
+          },
+          shadow1
+        ]}
       >
         {left}
       </div>
@@ -53,11 +57,15 @@ export function Layout({ left, center, right, topBar }: Props) {
         </div>
       </div>
       <div
-        css={{
-          flex: "0 0 auto",
-          background: colors.sideBarBackground,
-          height: "100%"
-        }}
+        css={[
+          {
+            flex: "0 0 auto",
+            background: colors.sideBarBackground,
+            height: "100%",
+            zIndex: 1
+          },
+          shadow1
+        ]}
       >
         {right}
       </div>

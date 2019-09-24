@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import logo from "../logo.png";
 
 type Props = {
   color?: string;
@@ -16,13 +17,15 @@ export function Logo({ height, width }: Props) {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
-      <defs>
-        <radialGradient id="myGradient" cx="0.4" cy="0.6">
-          <stop offset="10%" stopColor="rgb(101,129,223)" />
-          <stop offset="95%" stopColor="rgb(61,77,128)" />
-        </radialGradient>
-      </defs>
-      <circle cx="25" cy="25" r="25" fill="url('#myGradient')" />
+      <circle
+        cx="25"
+        cy="25"
+        r="18"
+        stroke="black"
+        strokeWidth="2"
+        fill="#00000000"
+      ></circle>
+      <line x1="25" y1="0" x2="25" y2="50" stroke="black" strokeWidth="2" />
     </svg>
   );
 }

@@ -1,4 +1,4 @@
-import { neptuneToJs } from "./js-loader";
+import { phiToJs } from "./js-loader";
 import basic from "./fixtures/Basic.json";
 
 test("true", () => {

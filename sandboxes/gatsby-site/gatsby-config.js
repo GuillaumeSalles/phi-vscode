@@ -15,7 +15,7 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    `gatsby-plugin-neptune`,
+    `gatsby-plugin-phi`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

@@ -7,7 +7,7 @@ export async function save(current: T.Refs): Promise<string | undefined> {
     current.fileName === undefined
       ? electron.remote.dialog.showSaveDialog({
           title: "Save project",
-          defaultPath: "NewProject.neptune"
+          defaultPath: "NewProject.phi"
         })
       : current.fileName;
 

@@ -96,18 +96,24 @@ export const input = css({
   outline: "0px"
 });
 
-export const selectableCard = css({
-  boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
-  cursor: "pointer",
-  background: "white",
-  borderRadius: "2px",
-  transition: "all 0.2s ease 0s",
-  borderWidth: "2px",
-  borderStyle: "solid",
-  ":hover": {
-    boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
-  }
-});
+export const shadow1 = {
+  boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px"
+};
+
+export const selectableCard = css(
+  {
+    cursor: "pointer",
+    background: "white",
+    borderRadius: "2px",
+    transition: "all 0.2s ease 0s",
+    borderWidth: "2px",
+    borderStyle: "solid",
+    ":hover": {
+      boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
+    }
+  },
+  shadow1
+);
 
 export const card = css({
   boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",

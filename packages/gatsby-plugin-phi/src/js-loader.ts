@@ -251,7 +251,7 @@ function createJsxClosingFragment() {
   return node as ts.JsxClosingFragment;
 }
 
-export function neptuneToJs(data: any) {
+export function phiToJs(data: any) {
   const components: T.ComponentMap = arrayToMap(data.components);
 
   return tsNodesToString(
@@ -262,15 +262,13 @@ export function neptuneToJs(data: any) {
 }
 
 export default function gatsbyJsLoader(source: string) {
-  console.log("Inside gatsby-js-loader");
-
   const data = JSON.parse(source);
 
-  const result = neptuneToJs(data);
+  const result = phiToJs(data);
 
   return `
 import React from "react"
-import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-neptune/dist/css-loader?modules!${this.resourcePath}"
+import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-phi/dist/css-loader?modules!${this.resourcePath}"
 
 ${result}
 `;
