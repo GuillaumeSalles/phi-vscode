@@ -22,7 +22,8 @@ function makeRefsFixture(): T.Refs {
     fontSizes: makeDefaultFontSizes(),
     fontFamilies: makeDefaultFontFamilies(),
     breakpoints: makeDefaultBreakpoints(),
-    components: new Map()
+    components: new Map(),
+    artboards: new Map()
   };
 }
 
@@ -92,25 +93,4 @@ describe("isValidDropIndex", () => {
   test("should return false if droping inside himself", () => {
     expect(isValidDropIndex(items, 3, 4)).toBe(false);
   });
-});
-
-it("getDepthsBoundaries", () => {
-  const refs = makeRefsFixture();
-  const root = makeContainerLayer(refs, {
-    children: [
-      makeTextLayer(refs),
-      makeTextLayer(refs),
-      makeTextLayer(refs),
-      makeContainerLayer(refs, { children: [makeTextLayer(refs)] }),
-      makeTextLayer(refs)
-    ]
-  });
-  const items = flattenLayer(root);
-  expect(getDepthsBoundaries(items, 0)).toEqual({ min: 1, max: 1 });
-  expect(getDepthsBoundaries(items, 1)).toEqual({ min: 1, max: 1 });
-  expect(getDepthsBoundaries(items, 2)).toEqual({ min: 1, max: 1 });
-  expect(getDepthsBoundaries(items, 3)).toEqual({ min: 1, max: 1 });
-  expect(getDepthsBoundaries(items, 4)).toEqual({ min: 2, max: 2 });
-  expect(getDepthsBoundaries(items, 5)).toEqual({ min: 1, max: 2 });
-  expect(getDepthsBoundaries(items, 6)).toEqual({ min: 1, max: 1 });
 });

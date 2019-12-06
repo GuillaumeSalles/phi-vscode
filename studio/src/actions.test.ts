@@ -18,7 +18,8 @@ function makeRefsFixture(): T.Refs {
     fontSizes: makeDefaultFontSizes(),
     fontFamilies: makeDefaultFontFamilies(),
     breakpoints: makeDefaultBreakpoints(),
-    components: new Map()
+    components: new Map(),
+    artboards: new Map()
   };
 }
 
@@ -30,7 +31,10 @@ describe("deleteComponentProp", () => {
     refs.components.set(componentId, {
       name: "name",
       props: [{ name: "my-prop", type: "text" }],
-      layout: makeTextLayer(refs, { bindings: { content: { propName: prop } } })
+      layout: makeTextLayer(refs, {
+        bindings: { content: { propName: prop } }
+      }),
+      examples: []
     });
     const newComponents = deleteComponentProp(
       {
@@ -59,7 +63,8 @@ describe("deleteComponentProp", () => {
             ]
           })
         ]
-      })
+      }),
+      examples: []
     });
     const newComponents = deleteComponentProp(
       {
@@ -83,7 +88,8 @@ describe("deleteComponentProp", () => {
     const prop = "my-prop";
     refs.components.set(componentId, {
       name: "name",
-      props: [{ name: "my-prop", type: "text" }]
+      props: [{ name: "my-prop", type: "text" }],
+      examples: []
     });
 
     const parentComponent: T.Component = {
@@ -104,7 +110,8 @@ describe("deleteComponentProp", () => {
             propName: "dummyProp"
           }
         }
-      }
+      },
+      examples: []
     };
     refs.components.set(parentComponentId, parentComponent);
     const newComponents = deleteComponentProp(
@@ -130,7 +137,8 @@ describe("editComponentProp", () => {
     const newProp = "new";
     refs.components.set(componentId, {
       name: "name",
-      props: [{ name: oldProp, type: "text" }]
+      props: [{ name: oldProp, type: "text" }],
+      examples: []
     });
     const newComponents = editComponentProp(
       {
@@ -143,5 +151,60 @@ describe("editComponentProp", () => {
     );
     const component = newComponents.get(componentId)!;
     expect(component.props).toEqual([{ name: newProp, type: "text" }]);
+  });
+
+  test("should rename example prop", () => {
+    const refs = makeRefsFixture();
+    const componentId = "componentId";
+    const oldProp = "old";
+    const newProp = "new";
+    refs.components.set(componentId, {
+      name: "name",
+      props: [{ name: oldProp, type: "text" }],
+      examples: [
+        { id: "exampleId", name: "exampleName", props: { [oldProp]: "text" } }
+      ]
+    });
+    const newComponents = editComponentProp(
+      {
+        type: "editComponentProp",
+        componentId,
+        oldProp: oldProp,
+        newProp: newProp
+      },
+      refs
+    );
+    const component = newComponents.get(componentId)!;
+    expect(component.examples[0].props).toEqual({ [newProp]: "text" });
+  });
+
+  test("should rename bindings", () => {
+    const refs = makeRefsFixture();
+    const componentId = "componentId";
+    const oldProp = "old";
+    const newProp = "new";
+    refs.components.set(componentId, {
+      name: "name",
+      props: [{ name: oldProp, type: "text" }],
+      examples: [],
+      layout: makeTextLayer(refs, {
+        bindings: {
+          content: { propName: oldProp }
+        }
+      })
+    });
+    const newComponents = editComponentProp(
+      {
+        type: "editComponentProp",
+        componentId,
+        oldProp: oldProp,
+        newProp: newProp
+      },
+      refs
+    );
+    const component = newComponents.get(componentId)!;
+    expect(component.layout!.bindings).toEqual({
+      content: { propName: newProp }
+    });
   });
 });

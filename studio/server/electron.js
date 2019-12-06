@@ -1,4 +1,14 @@
 const electron = require("electron");
+
+console.log(process.env);
+
+// const server = "https://hazel.guillaumesalles.now.sh";
+// const feed = `${server}/update/${
+//   process.platform
+// }/${electron.app.getVersion()}`;
+
+// electron.autoUpdater.setFeedURL(feed);
+
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 

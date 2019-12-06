@@ -18,6 +18,7 @@ function Component({ component, refs }: Props) {
             {[{ id: "default", name: "Default", props: {} }]
               .concat(component.examples)
               .map(example => {
+                console.log(example, component.layout);
                 return (
                   <div key={example.id} css={[column, { marginRight: "48px" }]}>
                     <h3

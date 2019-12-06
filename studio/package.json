@@ -13,7 +13,8 @@
     ],
     "productName": "Phi Studio",
     "mac": {
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "icon": "build/icons/mac/icon.icns"
     },
     "directories": {
       "buildResources": "public"
@@ -43,7 +44,7 @@
   },
   "scripts": {
     "start": "nf start -p 3000",
-    "build": "react-scripts build && cp -a ./server/. ./build/ && npm run electron-dist",
+    "build": "react-scripts build && cp -a ./server/. ./build/ && npm run make-icons && npm run electron-dist",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
@@ -53,7 +54,8 @@
     "dist": "npm run build && build",
     "postinstall": "electron-builder install-app-deps",
     "electron-pack": "electron-builder --dir",
-    "electron-dist": "electron-builder"
+    "electron-dist": "electron-builder",
+    "make-icons": "electron-icon-maker -i ./src/icons/logo.png -o ./build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -74,6 +76,7 @@
     "@types/node": "^12.0.8",
     "electron": "^5.0.2",
     "electron-builder": "^21.2.0",
+    "electron-icon-maker": "0.0.4",
     "foreman": "^3.0.1"
   }
 }

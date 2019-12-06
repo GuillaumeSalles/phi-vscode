@@ -3,6 +3,22 @@ import { set } from "./helpers/immutable-map";
 import { isComponentLayer } from "./layerUtils";
 import uuid from "uuid/v4";
 
+function renameKey(
+  obj: { [key: string]: any },
+  oldKey: string,
+  newKey: string
+) {
+  const newObject: any = {};
+  for (let key in obj) {
+    if (key === oldKey) {
+      newObject[newKey] = obj[key];
+    } else {
+      newObject[key] = obj[key];
+    }
+  }
+  return newObject;
+}
+
 function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
   const component = refs.components.get(componentId);
   if (component == null) {
@@ -55,7 +71,7 @@ export function editComponentProp(
         return [
           componentId,
           renamePropertyFromComponent(component, action.oldProp, action.newProp)
-        ];
+        ] as [string, T.Component];
       }
 
       return [
@@ -66,7 +82,7 @@ export function editComponentProp(
           action.oldProp,
           action.newProp
         )
-      ];
+      ] as [string, T.Component];
     })
   );
 }
@@ -76,10 +92,13 @@ function renamePropertyFromComponent(
   oldProp: string,
   newProp: string
 ): T.Component {
-  const newComponent = {
+  const newComponent: T.Component = {
     ...component,
     props: component.props.map(prop =>
       prop.name === oldProp ? { name: newProp, type: prop.type } : prop
+    ),
+    examples: component.examples.map(example =>
+      renameExampleProp(example, oldProp, newProp)
     )
   };
   if (component.layout) {
@@ -88,6 +107,17 @@ function renamePropertyFromComponent(
     );
   }
   return newComponent;
+}
+
+function renameExampleProp(
+  example: T.ComponentExample,
+  oldProp: string,
+  newProp: string
+) {
+  return {
+    ...example,
+    props: renameKey(example.props, oldProp, newProp)
+  };
 }
 
 function renameAllBindingsThatUseProp<T extends T.Layer>(
@@ -130,23 +160,9 @@ function renamePropertyFromComponentLayer(
     ...component,
     layout: visitLayer(component.layout, layer => {
       if (isComponentLayer(layer) && layer.componentId === childComponentId) {
-        const props = {
-          ...layer.props
-        };
-        const propValue = props[oldProp];
-        delete props[oldProp];
-        props[newProp] = propValue;
-
-        const bindings = {
-          ...layer.bindings
-        };
-        const bindingValue = bindings[oldProp];
-        delete bindings[oldProp];
-        bindings[newProp] = bindingValue;
         return {
           ...layer,
-          props,
-          bindings
+          props: renameKey(layer.props, oldProp, newProp)
         };
       }
       return layer;
@@ -164,7 +180,7 @@ export function deleteComponentProp(
         return [
           componentId,
           deletePropertyFromComponent(component, action.prop)
-        ];
+        ] as [string, T.Component];
       }
 
       return [
@@ -174,7 +190,7 @@ export function deleteComponentProp(
           action.componentId,
           action.prop
         )
-      ];
+      ] as [string, T.Component];
     })
   );
 }
