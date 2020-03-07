@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { row, colors } from "../styles";
-import { path } from "../node";
 import { Logo } from "../icons";
 
 type Props = {
@@ -24,7 +23,7 @@ export default function TopBar({ fileName, isSaved }: Props) {
     >
       <Logo height={18} width={18} />
       <div css={{ margin: "0 4px" }}>
-        {fileName ? path.parse(fileName).name : "Untitled"}
+        {fileName ? fileName : "Untitled"}
       </div>
       {!isSaved && (
         <div

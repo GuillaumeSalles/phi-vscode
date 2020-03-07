@@ -3,8 +3,8 @@ import { jsx } from "@emotion/core";
 import React, { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
-import { Route, RouteComponentProps, StaticContext } from "react-router";
-import { electron } from "./node";
+import { Route, RouteComponentProps, StaticContext, useHistory } from "react-router";
+import { electron, save } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
@@ -13,7 +13,7 @@ import { set, del, firstKey } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
-import { save, open } from "./fileUtils";
+import { open } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
 import {
@@ -25,6 +25,7 @@ import {
   deleteComponentExample,
   updateComponentExampleProp
 } from "./actions";
+import VsCodeComponent from "./pages/ComponentView/VsCodeComponent";
 
 type Router = RouteComponentProps<{}, StaticContext, any>;
 
@@ -59,7 +60,10 @@ async function openProject(router: Router, setRefs: (refs: T.Refs) => void) {
 }
 
 function App() {
+  const mode = (window as any).__MODE__;
+
   const router = useRouter();
+  const history = useHistory();
 
   const [refs, setRefs] = useState<T.Refs>({
     isSaved: true,
@@ -71,6 +75,15 @@ function App() {
     fontSizes: new Map(),
     breakpoints: new Map()
   });
+
+  useEffect(() => {
+    console.log("EFFECT")
+    if(mode === "VSCODE") {
+      const refs = makeDefaultProject();
+      setRefs(refs)
+      history.push('/vscode/component')
+    }
+  }, [mode]);
 
   function setParialRefs(partialRefs: Partial<T.Refs>) {
     setRefs({
@@ -116,6 +129,19 @@ function App() {
       electron.ipcRenderer.removeListener("actions", listener);
     };
   }, [router, setRefs, setParialRefs]);
+
+  useEffect(() => {
+    function listener(e: MessageEvent) {
+      console.log("MESSAGE")
+      console.log(JSON.stringify(e));
+    }
+
+    window.addEventListener("message", listener);
+
+    return () => {
+      window.removeEventListener("message", listener);
+    }
+  }, [router, setRefs])
 
   function onComponentChange(id: string, newComponent: T.Component) {
     setComponents(set(refs.components, id, newComponent));
@@ -249,6 +275,19 @@ function App() {
           );
         }}
       />
+      <Route
+        path="/vscode/component"
+        render={props => {
+          return (
+            <VsCodeComponent
+              componentId={firstKey(refs.components)}
+              onComponentChange={onComponentChange}
+              refs={refs}
+              applyAction={applyAction}
+            />
+          );
+        }}
+        />
     </React.Fragment>
   );
 }

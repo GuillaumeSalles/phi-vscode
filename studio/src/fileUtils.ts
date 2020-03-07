@@ -1,43 +1,7 @@
 import * as T from "./types";
-import { electron, writeFile, readFile } from "./node";
+import { electron, readFile } from "./bridge";
 import { makeDefaultArtboards } from "./factories";
 
-export async function save(current: T.Refs): Promise<string | undefined> {
-  const path =
-    current.fileName === undefined
-      ? electron.remote.dialog.showSaveDialog({
-          title: "Save project",
-          defaultPath: "NewProject.phi"
-        })
-      : current.fileName;
-
-  if (!path) {
-    return;
-  }
-  try {
-    await writeFile(
-      path,
-      JSON.stringify({
-        colors: mapToArray(current.colors),
-        fontSizes: mapToArray(current.fontSizes),
-        fontFamilies: mapToArray(current.fontFamilies),
-        breakpoints: mapToArray(current.breakpoints),
-        components: mapToArray(current.components)
-      })
-    );
-  } catch (er) {
-    console.log(er);
-  }
-
-  return path;
-}
-
-function mapToArray(map: Map<string, any>) {
-  return Array.from(map.entries()).map(entry => ({
-    id: entry[0],
-    ...entry[1]
-  }));
-}
 
 function arrayToMap(array: any[]) {
   return new Map(
