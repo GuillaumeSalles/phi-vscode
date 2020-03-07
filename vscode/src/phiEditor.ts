@@ -10,16 +10,16 @@ interface Edit {
   readonly action: any;
 }
 
-export class PaletteEditorProvider implements vscode.CustomEditorProvider {
-  public static readonly viewType = "testWebviewEditor.catDraw";
+export class PhiEditorProvider implements vscode.CustomEditorProvider {
+  public static readonly viewType = "testWebviewEditor.phi";
 
-  private readonly editors = new Map<string, Set<PaletteEditor>>();
+  private readonly editors = new Map<string, Set<PhiEditor>>();
 
   public constructor(private readonly extensionPath: string) {}
 
   public register(): vscode.Disposable {
     return vscode.window.registerCustomEditorProvider(
-      PaletteEditorProvider.viewType,
+      PhiEditorProvider.viewType,
       this
     );
   }
@@ -27,7 +27,7 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
   async resolveCustomDocument(
     document: vscode.CustomDocument
   ): Promise<vscode.CustomEditorCapabilities> {
-    const model = await CatDrawModel.create(document.uri);
+    const model = await PhiModel.create(document.uri);
     document.userData = model;
     document.onDidDispose(() => {
       console.log("Dispose document");
@@ -49,7 +49,7 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
     document: DocumentType,
     panel: vscode.WebviewPanel
   ) {
-    const editor = new PaletteEditor(this.extensionPath, document, panel);
+    const editor = new PhiEditor(this.extensionPath, document, panel);
 
     let editorSet = this.editors.get(document.uri.toString());
     if (!editorSet) {
@@ -60,7 +60,7 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
     editor.onDispose(() => editorSet?.delete(editor));
   }
 
-  private update(resource: vscode.Uri, trigger?: PaletteEditor) {
+  private update(resource: vscode.Uri, trigger?: PhiEditor) {
     const editors = this.editors.get(resource.toString());
     if (!editors) {
       throw new Error(`No editors found for ${resource.toString()}`);
@@ -72,7 +72,7 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
     }
   }
 
-  private undo(resource: vscode.Uri, trigger?: PaletteEditor) {
+  private undo(resource: vscode.Uri, trigger?: PhiEditor) {
     const editors = this.editors.get(resource.toString());
     if (!editors) {
       throw new Error(`No editors found for ${resource.toString()}`);
@@ -87,7 +87,7 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
   private applyEdits(
     resource: vscode.Uri,
     edits: readonly Edit[],
-    trigger?: PaletteEditor
+    trigger?: PhiEditor
   ) {
     const editors = this.editors.get(resource.toString());
     if (!editors) {
@@ -101,16 +101,16 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
   }
 }
 
-class CatDrawModel extends Disposable
+class PhiModel extends Disposable
   implements
     vscode.CustomEditorCapabilities,
     vscode.CustomEditorEditingCapability<Edit> {
   private _lastContent: any;
   private readonly _edits: Edit[] = [];
 
-  public static async create(resource: vscode.Uri): Promise<CatDrawModel> {
+  public static async create(resource: vscode.Uri): Promise<PhiModel> {
     const buffer = await vscode.workspace.fs.readFile(resource);
-    return new CatDrawModel(resource, buffer);
+    return new PhiModel(resource, buffer);
   }
 
   public readonly editing = this;
@@ -186,10 +186,10 @@ class CatDrawModel extends Disposable
   }
 }
 
-type DocumentType = vscode.CustomDocument<CatDrawModel>;
+type DocumentType = vscode.CustomDocument<PhiModel>;
 
-export class PaletteEditor extends Disposable {
-  public static readonly viewType = "testWebviewEditor.catDraw";
+export class PhiEditor extends Disposable {
+  public static readonly viewType = "testWebviewEditor.phi";
 
   private readonly _onEdit = new vscode.EventEmitter<Edit>();
   public readonly onEdit = this._onEdit.event;
