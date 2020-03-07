@@ -1,7 +1,13 @@
 import * as T from "./types";
 import { set } from "./helpers/immutable-map";
-import { isComponentLayer } from "./layerUtils";
+import {
+  isComponentLayer,
+  findLayerById,
+  canHaveChildren,
+  updateLayer
+} from "./layerUtils";
 import uuid from "uuid/v4";
+import { makeLayer } from "./factories";
 
 function getComponentOrThrow(componentId: string, refs: T.Refs): T.Component {
   const component = refs.components.get(componentId);
@@ -287,6 +293,77 @@ export function updateComponentExampleProp(
         : example
     )
   }));
+}
+
+function addLayer(
+  root: T.Layer | undefined,
+  selectedLayerId: string | undefined,
+  newLayer: T.Layer
+): T.Layer | undefined {
+  if (!root) {
+    return newLayer;
+  }
+
+  if (!selectedLayerId) {
+    return;
+  }
+
+  const selectedLayer = findLayerById(root, selectedLayerId);
+
+  if (!selectedLayer) {
+    throw new Error(`Layer with id ${selectedLayerId} not found in root`);
+  }
+
+  if (canHaveChildren(selectedLayer)) {
+    return updateLayer(root, {
+      ...selectedLayer,
+      children: [...selectedLayer.children].concat(newLayer)
+    });
+  }
+}
+
+export function addLayerAction(action: T.AddLayer, refs: T.Refs) {
+  return replaceComponent(refs, action.componentId, component => {
+    const newLayer = makeLayer(
+      action.layerId,
+      action.layerType,
+      component.layout,
+      refs,
+      action.layerComponentId
+    );
+    return {
+      ...component,
+      layout: addLayer(component.layout, action.parentLayerId, newLayer)
+    };
+  });
+}
+
+export default function applyAction(action: T.Action, refs: T.Refs) {
+  switch (action.type) {
+    case "addComponentProp":
+      return addComponentProp(action, refs);
+      break;
+    case "editComponentProp":
+      return editComponentProp(action, refs);
+      break;
+    case "deleteComponentProp":
+      return deleteComponentProp(action, refs);
+      break;
+    case "renameComponent":
+      return renameComponent(action, refs);
+      break;
+    case "addComponentExample":
+      return addComponentExample(action, refs);
+      break;
+    case "deleteComponentExample":
+      return deleteComponentExample(action, refs);
+      break;
+    case "updateComponentExampleProp":
+      return updateComponentExampleProp(action, refs);
+      break;
+    case "addLayer":
+      return addLayerAction(action, refs);
+  }
 }
 
 type LayerVisitor = <T extends T.Layer>(layer: T) => T;

@@ -133,11 +133,13 @@ function ComponentView({
         isEditing ? (
           <>
             <LayersTree
+              componentId={componentId}
               root={component.layout}
               onSelectLayer={setLayerId}
               selectedLayerId={layerId}
               onLayerChange={updateComponentRootLayer}
               refs={refs}
+              applyAction={applyAction}
             />
             <ComponentProps
               component={component}

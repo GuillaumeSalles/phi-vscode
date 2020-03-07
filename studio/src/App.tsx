@@ -3,7 +3,12 @@ import { jsx } from "@emotion/core";
 import React, { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
-import { Route, RouteComponentProps, StaticContext, useHistory } from "react-router";
+import {
+  Route,
+  RouteComponentProps,
+  StaticContext,
+  useHistory
+} from "react-router";
 import { electron, save } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -16,15 +21,7 @@ import { makeDefaultProject } from "./factories";
 import { open } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
-import {
-  addComponentProp,
-  deleteComponentProp,
-  editComponentProp,
-  renameComponent,
-  addComponentExample,
-  deleteComponentExample,
-  updateComponentExampleProp
-} from "./actions";
+import _applyAction from "./actions";
 import VsCodeComponent from "./pages/ComponentView/VsCodeComponent";
 
 type Router = RouteComponentProps<{}, StaticContext, any>;
@@ -77,11 +74,11 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("EFFECT")
-    if(mode === "VSCODE") {
+    console.log("EFFECT");
+    if (mode === "VSCODE") {
       const refs = makeDefaultProject();
-      setRefs(refs)
-      history.push('/vscode/component')
+      setRefs(refs);
+      history.push("/vscode/component");
     }
   }, [mode]);
 
@@ -132,7 +129,7 @@ function App() {
 
   useEffect(() => {
     function listener(e: MessageEvent) {
-      console.log("MESSAGE")
+      console.log("MESSAGE");
       console.log(JSON.stringify(e));
     }
 
@@ -140,37 +137,15 @@ function App() {
 
     return () => {
       window.removeEventListener("message", listener);
-    }
-  }, [router, setRefs])
+    };
+  }, [router, setRefs]);
 
   function onComponentChange(id: string, newComponent: T.Component) {
     setComponents(set(refs.components, id, newComponent));
   }
 
   function applyAction(action: T.Action) {
-    switch (action.type) {
-      case "addComponentProp":
-        setComponents(addComponentProp(action, refs));
-        break;
-      case "editComponentProp":
-        setComponents(editComponentProp(action, refs));
-        break;
-      case "deleteComponentProp":
-        setComponents(deleteComponentProp(action, refs));
-        break;
-      case "renameComponent":
-        setComponents(renameComponent(action, refs));
-        break;
-      case "addComponentExample":
-        setComponents(addComponentExample(action, refs));
-        break;
-      case "deleteComponentExample":
-        setComponents(deleteComponentExample(action, refs));
-        break;
-      case "updateComponentExampleProp":
-        setComponents(updateComponentExampleProp(action, refs));
-        break;
-    }
+    setComponents(_applyAction(action, refs));
   }
 
   function menu() {
@@ -287,7 +262,7 @@ function App() {
             />
           );
         }}
-        />
+      />
     </React.Fragment>
   );
 }

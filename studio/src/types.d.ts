@@ -339,7 +339,17 @@ type UpdateComponentExampleProp = {
   componentId: string;
 };
 
+type AddLayer = {
+  type: "addLayer";
+  componentId: string;
+  parentLayerId?: string;
+  layerType: LayerType;
+  layerId: string;
+  layerComponentId?: string;
+};
+
 type Action =
+  | AddLayer
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp

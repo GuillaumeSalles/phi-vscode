@@ -7,21 +7,14 @@ import { card, row } from "../styles";
 import { layerTypeToIcon } from "./LayersTree";
 import AddButton from "./AddButton";
 import { useToggle } from "../hooks";
-import { makeLayer } from "../factories";
 
 type Props = {
-  onAdd: (layer: T.Layer) => void;
+  onAdd: (layerType: T.LayerType, componentId?: string) => void;
   disabled: boolean;
   refs: T.Refs;
-  root: T.Layer | undefined;
 };
 
-export default function AddLayerPopover({
-  disabled,
-  onAdd,
-  refs,
-  root
-}: Props) {
+export default function AddLayerPopover({ disabled, onAdd, refs }: Props) {
   const popover = useToggle(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -37,22 +30,22 @@ export default function AddLayerPopover({
         <div css={[card, { margin: "8px 0", width: "240px" }]}>
           <Item
             name="Container"
-            onClick={() => onAdd(makeLayer("container", root, refs))}
+            onClick={() => onAdd("container")}
             icon={layerTypeToIcon("container")}
           />
           <Item
             name="Text"
-            onClick={() => onAdd(makeLayer("text", root, refs))}
+            onClick={() => onAdd("text")}
             icon={layerTypeToIcon("text")}
           />
           <Item
             name="Image"
-            onClick={() => onAdd(makeLayer("image", root, refs))}
+            onClick={() => onAdd("image")}
             icon={layerTypeToIcon("image")}
           />
           <Item
             name="Link"
-            onClick={() => onAdd(makeLayer("link", root, refs))}
+            onClick={() => onAdd("link")}
             icon={layerTypeToIcon("link")}
           />
           {Array.from(refs.components).map(entry => {
@@ -60,9 +53,7 @@ export default function AddLayerPopover({
               <Item
                 key={entry[0]}
                 name={entry[1].name}
-                onClick={() =>
-                  onAdd(makeLayer("component", root, refs, entry[0]))
-                }
+                onClick={() => onAdd("component", entry[0])}
                 icon={layerTypeToIcon("component")}
               />
             );

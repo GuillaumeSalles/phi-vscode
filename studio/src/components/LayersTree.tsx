@@ -14,13 +14,16 @@ import Button from "./Button";
 import SecondaryButton from "./SecondaryButton";
 import { assertUnreachable } from "../utils";
 import { Link, Image, Text, Container, Component } from "../icons";
+import uuid from "uuid";
 
 type Props = {
+  componentId: string;
   root?: T.Layer;
   onSelectLayer: (layerId: string | undefined) => void;
   selectedLayerId?: string;
   onLayerChange: (layer: T.Layer | undefined) => void;
   refs: T.Refs;
+  applyAction: (action: T.Action) => void;
 };
 
 export type LayersTreeItem = {
@@ -226,33 +229,6 @@ export function findInsertionPosition(
   };
 }
 
-function addLayer(
-  root: T.Layer | undefined,
-  selectedLayerId: string | undefined,
-  newLayer: T.Layer
-): T.Layer | undefined {
-  if (!root) {
-    return newLayer;
-  }
-
-  if (!selectedLayerId) {
-    return;
-  }
-
-  const selectedLayer = findLayerById(root, selectedLayerId);
-
-  if (!selectedLayer) {
-    throw new Error(`Layer with id ${selectedLayerId} not found in root`);
-  }
-
-  if (canHaveChildren(selectedLayer)) {
-    return updateLayer(root, {
-      ...selectedLayer,
-      children: [...selectedLayer.children].concat(newLayer)
-    });
-  }
-}
-
 function insertLayer(
   root: T.Layer,
   toInsert: T.Layer,
@@ -304,11 +280,13 @@ function moveLayer(
 }
 
 function LayersTree({
+  componentId,
   root,
   onSelectLayer,
   selectedLayerId,
   onLayerChange,
-  refs
+  refs,
+  applyAction
 }: Props) {
   const [draggedIndex, setDraggedIndex] = useState<number | undefined>();
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
@@ -329,11 +307,19 @@ function LayersTree({
     onSelectLayer(selectedLayer!.id);
   });
   const addLayerCallback = useCallback(
-    (newLayer: T.Layer) => {
-      onLayerChange(addLayer(root, selectedLayerId, newLayer));
-      onSelectLayer(newLayer.id);
+    (layerType: T.LayerType, layerComponentId?: string) => {
+      const layerId = uuid();
+      applyAction({
+        type: "addLayer",
+        componentId,
+        parentLayerId: selectedLayerId!,
+        layerComponentId,
+        layerType,
+        layerId
+      });
+      onSelectLayer(layerId);
     },
-    [root, selectedLayerId, onLayerChange, onSelectLayer, refs]
+    [applyAction]
   );
 
   const onRename = useCallback(
@@ -376,11 +362,10 @@ function LayersTree({
         <AddLayerPopover
           onAdd={addLayerCallback}
           refs={refs}
-          root={root}
           disabled={
             selectedLayer !== undefined &&
-            (selectedLayer.type !== "container" &&
-              selectedLayer.type !== "link")
+            selectedLayer.type !== "container" &&
+            selectedLayer.type !== "link"
           }
         />
         <OkCancelModal
