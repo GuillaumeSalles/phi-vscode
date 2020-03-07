@@ -13,6 +13,7 @@ import { findLayerById, updateLayer } from "../../layerUtils";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
 import React from "react";
+import { selectLayer } from "../../actions/factories";
 
 const tabStyle = css({
   display: "flex",
@@ -56,16 +57,12 @@ export default function VsCodeComponent({
       ? findLayerById(component.layout, refs.selectedLayerId)
       : undefined;
 
-  function selectLayer(layerId?: string) {
-    applyAction({ type: "selectLayer", layerId: layerId });
-  }
-
   function updateComponentLayer(newLayer: T.Layer) {
     const newComponent = {
       ...component,
       layout: updateLayer(component.layout, newLayer)
     };
-    selectLayer(newLayer.id);
+    applyAction(selectLayer(newLayer.id));
     onComponentChange(componentId, newComponent);
   }
 
@@ -74,7 +71,7 @@ export default function VsCodeComponent({
       ...component,
       layout: newLayer
     };
-    selectLayer(newLayer ? newLayer.id : undefined);
+    applyAction(selectLayer(newLayer ? newLayer.id : undefined));
     onComponentChange(componentId, newComponent);
   }
 

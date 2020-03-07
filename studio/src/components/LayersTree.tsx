@@ -15,6 +15,7 @@ import SecondaryButton from "./SecondaryButton";
 import { assertUnreachable } from "../utils";
 import { Link, Image, Text, Container, Component } from "../icons";
 import uuid from "uuid";
+import { selectLayer } from "../actions/factories";
 
 type Props = {
   componentId: string;
@@ -325,7 +326,7 @@ function LayersTree({
     (layer: T.Layer) => {
       renameDialog.open();
       layerNameEntry.setValue(layer.name);
-      onSelectLayer(layer.id);
+      applyAction(selectLayer(layer.id));
     },
     [renameDialog, layerNameEntry, onSelectLayer]
   );
