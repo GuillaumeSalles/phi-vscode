@@ -133,9 +133,6 @@ function ComponentView({
             <LayersTree
               componentId={componentId}
               root={component.layout}
-              onSelectLayer={selectLayer}
-              selectedLayerId={refs.selectedLayerId}
-              onLayerChange={updateComponentRootLayer}
               refs={refs}
               applyAction={applyAction}
             />

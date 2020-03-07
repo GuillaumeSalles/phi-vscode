@@ -360,9 +360,26 @@ type SelectLayer = {
   layerId?: string;
 };
 
+type RenameLayer = {
+  type: "renameLayer";
+  componentId: string;
+  layerId: string;
+  name: string;
+};
+
+type MoveLayer = {
+  type: "moveLayer";
+  componentId: string;
+  layerId: string;
+  parentId: string;
+  position: number;
+};
+
 type Action =
   | AddLayer
   | DeleteLayer
+  | RenameLayer
+  | MoveLayer
   | SelectLayer
   | AddComponentProp
   | EditComponentProp

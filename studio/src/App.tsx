@@ -130,7 +130,6 @@ function App() {
 
   useEffect(() => {
     function listener(e: MessageEvent) {
-      debugger;
       if (e.data.type === "undo") {
         console.log("undo", JSON.stringify(actionsStack), "\n");
         setRefs(undo(actionsStack));

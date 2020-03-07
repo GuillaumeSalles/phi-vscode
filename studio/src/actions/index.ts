@@ -385,6 +385,95 @@ function selectLayer(action: T.SelectLayer, refs: T.Refs) {
   };
 }
 
+function renameLayer(action: T.RenameLayer, refs: T.Refs) {
+  const result = replaceComponent(refs, action.componentId, component => {
+    const layer = findLayerById(component.layout!, action.layerId);
+
+    if (!layer) {
+      throw new Error(`Layer with id ${action.layerId} not found in root`);
+    }
+
+    return {
+      ...component,
+      layout: updateLayer(component.layout, {
+        ...layer,
+        name: action.name
+      })
+    };
+  });
+  return {
+    ...result,
+    selectedLayerId: action.layerId
+  };
+}
+
+function moveLayer(
+  root: T.Layer,
+  layerId: string,
+  parentId: string,
+  position: number
+) {
+  const layerToMove = findLayerById(root, layerId);
+  if (layerToMove == null) {
+    throw new Error(
+      `Tried to move layer with id ${layerId} but it was not found in the tree`
+    );
+  }
+  const tmp = deleteLayer(root, layerToMove.id);
+  if (!tmp) {
+    throw new Error(
+      "Temporary layer after delete should exist. If not, the root has been deleted"
+    );
+  }
+  return insertLayer(tmp, layerToMove, parentId, position);
+}
+
+function insertLayer(
+  root: T.Layer,
+  toInsert: T.Layer,
+  parentId: string,
+  position: number
+): T.Layer {
+  if (canHaveChildren(root)) {
+    if (root.id === parentId) {
+      return {
+        ...root,
+        children: root.children
+          .slice(0, position)
+          .concat([toInsert])
+          .concat(root.children.slice(position))
+      };
+    }
+
+    return {
+      ...root,
+      children: root.children.map(child =>
+        insertLayer(child, toInsert, parentId, position)
+      )
+    };
+  }
+
+  if (root.id === parentId) {
+    throw new Error("A layer can only be inserted inside a container");
+  }
+
+  return root;
+}
+
+function moveLayerAction(action: T.MoveLayer, refs: T.Refs) {
+  return replaceComponent(refs, action.componentId, component => {
+    return {
+      ...component,
+      layout: moveLayer(
+        component.layout!,
+        action.layerId,
+        action.parentId,
+        action.position
+      )
+    };
+  });
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -412,6 +501,10 @@ export default function applyAction(
       return deleteLayerAction(action, refs);
     case "selectLayer":
       return selectLayer(action, refs);
+    case "renameLayer":
+      return renameLayer(action, refs);
+    case "moveLayer":
+      return moveLayerAction(action, refs);
   }
 }
 

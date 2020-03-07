@@ -5,7 +5,7 @@ import { column, row, colors, sectionTitle } from "../styles";
 import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo, useCallback } from "react";
 import LayersTreeItemComponent from "./LayersTreeItem";
-import { findLayerById, updateLayer, canHaveChildren } from "../layerUtils";
+import { findLayerById, canHaveChildren } from "../layerUtils";
 import OkCancelModal from "./OkCancelModal";
 import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateLayerName } from "../validators";
@@ -20,9 +20,6 @@ import { selectLayer } from "../actions/factories";
 type Props = {
   componentId: string;
   root?: T.Layer;
-  onSelectLayer: (layerId: string | undefined) => void;
-  selectedLayerId?: string;
-  onLayerChange: (layer: T.Layer | undefined) => void;
   refs: T.Refs;
   applyAction: (action: T.Action) => void;
 };
@@ -185,23 +182,6 @@ function getDragIndicatorStyle(
   };
 }
 
-function deleteLayer(root: T.Layer, toDelete: T.Layer): T.Layer | undefined {
-  if (root === toDelete) {
-    return undefined;
-  }
-
-  if (!canHaveChildren(root)) {
-    return root;
-  }
-
-  return {
-    ...root,
-    children: root.children
-      .map(child => deleteLayer(child, toDelete))
-      .filter(x => x !== undefined) as T.Layer[]
-  };
-}
-
 export function findInsertionPosition(
   items: LayersTreeItem[],
   dropPosition: DropPosition
@@ -230,65 +210,7 @@ export function findInsertionPosition(
   };
 }
 
-function insertLayer(
-  root: T.Layer,
-  toInsert: T.Layer,
-  insertPosition: InsertPosition
-): T.Layer {
-  if (canHaveChildren(root)) {
-    if (root.id === insertPosition.parentId) {
-      return {
-        ...root,
-        children: root.children
-          .slice(0, insertPosition.position)
-          .concat([toInsert])
-          .concat(root.children.slice(insertPosition.position))
-      };
-    }
-
-    return {
-      ...root,
-      children: root.children.map(child =>
-        insertLayer(child, toInsert, insertPosition)
-      )
-    };
-  }
-
-  if (root.id === insertPosition.parentId) {
-    throw new Error("A layer can only be inserted inside a container");
-  }
-
-  return root;
-}
-
-function moveLayer(
-  root: T.Layer,
-  itemToMove: LayersTreeItem,
-  items: LayersTreeItem[],
-  dropPosition: DropPosition
-) {
-  const tmp = deleteLayer(root, itemToMove.layer);
-  if (!tmp) {
-    throw new Error(
-      "Temporary layer after delete should exist. If not, the root has been deleted"
-    );
-  }
-  return insertLayer(
-    tmp,
-    itemToMove.layer,
-    findInsertionPosition(items, dropPosition)
-  );
-}
-
-function LayersTree({
-  componentId,
-  root,
-  onSelectLayer,
-  selectedLayerId,
-  onLayerChange,
-  refs,
-  applyAction
-}: Props) {
+function LayersTree({ componentId, root, refs, applyAction }: Props) {
   const [draggedIndex, setDraggedIndex] = useState<number | undefined>();
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
     DropPosition | undefined
@@ -297,29 +219,32 @@ function LayersTree({
     validateLayerName(value, root)
   );
   const selectedLayer =
-    root && selectedLayerId ? findLayerById(root, selectedLayerId) : undefined;
+    root && refs.selectedLayerId
+      ? findLayerById(root, refs.selectedLayerId)
+      : undefined;
+
   const renameDialog = useDialogForm([layerNameEntry], () => {
-    onLayerChange(
-      updateLayer(root, {
-        ...selectedLayer!,
-        name: layerNameEntry.value
-      })
-    );
-    onSelectLayer(selectedLayer!.id);
+    applyAction({
+      type: "renameLayer",
+      layerId: refs.selectedLayerId!,
+      componentId,
+      name: layerNameEntry.value
+    });
   });
+
   const addLayerCallback = useCallback(
     (layerType: T.LayerType, layerComponentId?: string) => {
       const layerId = uuid();
       applyAction({
         type: "addLayer",
         componentId,
-        parentLayerId: selectedLayerId,
+        parentLayerId: refs.selectedLayerId,
         layerComponentId,
         layerType,
         layerId
       });
     },
-    [applyAction, selectedLayerId, componentId]
+    [applyAction, refs.selectedLayerId, componentId]
   );
 
   const onRename = useCallback(
@@ -328,14 +253,21 @@ function LayersTree({
       layerNameEntry.setValue(layer.name);
       applyAction(selectLayer(layer.id));
     },
-    [renameDialog, layerNameEntry, onSelectLayer]
+    [renameDialog, layerNameEntry, applyAction]
   );
 
   const onDelete = useCallback(
     (layer: T.Layer) => {
       applyAction({ type: "deleteLayer", componentId, layerId: layer.id });
     },
-    [onLayerChange, onSelectLayer, root]
+    [applyAction]
+  );
+
+  const onLayerClick = useCallback(
+    (id: string) => {
+      applyAction(selectLayer(id));
+    },
+    [applyAction]
   );
 
   const treeViewRef = useRef<HTMLDivElement>(null);
@@ -413,16 +345,21 @@ function LayersTree({
         }}
         onDrop={e => {
           e.preventDefault();
-          onLayerChange(
-            moveLayer(root!, flattenLayers[draggedIndex!], flattenLayers, {
-              index: dragIndicatorPosition!.index,
-              depth: getDragIndicatorLeft(
-                flattenLayers,
-                draggedIndex!,
-                dragIndicatorPosition!
-              )
-            })
-          );
+          const { parentId, position } = findInsertionPosition(flattenLayers, {
+            index: dragIndicatorPosition!.index,
+            depth: getDragIndicatorLeft(
+              flattenLayers,
+              draggedIndex!,
+              dragIndicatorPosition!
+            )
+          });
+          applyAction({
+            type: "moveLayer",
+            componentId,
+            layerId: flattenLayers[draggedIndex!].layer.id,
+            parentId,
+            position
+          });
         }}
       >
         <div
@@ -441,10 +378,10 @@ function LayersTree({
             draggable={index !== 0}
             onDragStart={setDraggedIndex}
             onDragEnd={setDragIndicatorPosition}
-            onClick={onSelectLayer}
+            onClick={onLayerClick}
             onRename={onRename}
             onDelete={onDelete}
-            isSelected={item.layer.id === selectedLayerId}
+            isSelected={item.layer.id === refs.selectedLayerId}
           />
         ))}
       </div>
