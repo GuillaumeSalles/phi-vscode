@@ -1,8 +1,10 @@
 import * as T from "../types";
-import {
+import applyAction, {
   deleteComponentProp,
   editComponentProp,
-  default as applyActions
+  applyActions,
+  addLayerAction,
+  undo
 } from "../actions";
 import {
   makeContainerLayer,
@@ -11,7 +13,9 @@ import {
   makeDefaultFontFamilies,
   makeDefaultBreakpoints,
   makeTextLayer,
-  makeComponentLayer
+  makeComponentLayer,
+  defaultComponentId,
+  makeDefaultProject
 } from "../factories";
 import { getComponentOrThrow } from "../layerUtils";
 
@@ -174,7 +178,7 @@ describe("addLayer", () => {
     const refs = makeRefsFixture();
     const layerId = "newLayerId";
     refs.components.set("componentId", makeComponent());
-    const newRefs = applyActions(
+    const newRefs = addLayerAction(
       {
         type: "addLayer",
         componentId: "componentId",
@@ -188,5 +192,63 @@ describe("addLayer", () => {
       layerId
     );
     expect(newRefs.selectedLayerId).toBe(layerId);
+  });
+});
+
+describe("undo", () => {
+  test("should undo last action", () => {
+    const layerId = "layerId";
+    const actions: T.Action[] = [
+      {
+        type: "addLayer",
+        componentId: defaultComponentId,
+        layerType: "text",
+        layerId
+      }
+    ];
+    const refs = undo(actions);
+    expect(refs.components.get(defaultComponentId)?.layout).toBe(undefined);
+  });
+});
+
+describe("undo & redo", () => {
+  test("basic test", () => {
+    const layerId = "layerId";
+    const childLayerId = "childLayerId";
+    const firstAction: T.Action = {
+      type: "addLayer",
+      componentId: defaultComponentId,
+      layerType: "container",
+      layerId
+    };
+    const secondAction: T.Action = {
+      type: "addLayer",
+      componentId: defaultComponentId,
+      layerType: "text",
+      layerId: childLayerId,
+      parentLayerId: layerId
+    };
+    const actionsStack: T.Action[] = [];
+
+    const refs1 = applyAction(actionsStack, firstAction, makeDefaultProject());
+    expect(refs1.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
+
+    const refs2 = applyAction(actionsStack, secondAction, refs1);
+    expect(refs2.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
+    expect(
+      (refs2.components.get(defaultComponentId)?.layout as T.ContainerLayer)
+        .children[0].id
+    ).toBe(childLayerId);
+
+    const refsAfterUndo = undo(actionsStack);
+
+    const refsAfterRedo = applyActions(
+      actionsStack,
+      [secondAction],
+      refsAfterUndo
+    );
+    expect(refsAfterRedo.components.get(defaultComponentId)?.layout?.id).toBe(
+      layerId
+    );
   });
 });

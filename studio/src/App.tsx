@@ -9,7 +9,7 @@ import {
   StaticContext,
   useHistory
 } from "react-router";
-import { electron, save } from "./bridge";
+import { electron, save, onAction } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
@@ -21,7 +21,7 @@ import { makeDefaultProject } from "./factories";
 import { open } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
-import _applyAction from "./actions/index";
+import _applyAction, { applyActions, undo } from "./actions/index";
 import VsCodeComponent from "./pages/ComponentView/VsCodeComponent";
 
 type Router = RouteComponentProps<{}, StaticContext, any>;
@@ -56,6 +56,8 @@ async function openProject(router: Router, setRefs: (refs: T.Refs) => void) {
   }
 }
 
+const actionsStack: T.Action[] = [];
+
 function App() {
   const mode = (window as any).__MODE__;
 
@@ -74,7 +76,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("EFFECT");
     if (mode === "VSCODE") {
       const refs = makeDefaultProject();
       setRefs(refs);
@@ -129,8 +130,20 @@ function App() {
 
   useEffect(() => {
     function listener(e: MessageEvent) {
-      console.log("MESSAGE");
-      console.log(JSON.stringify(e));
+      debugger;
+      if (e.data.type === "undo") {
+        console.log("undo", JSON.stringify(actionsStack), "\n");
+        setRefs(undo(actionsStack));
+      } else if (e.data.type === "applyActions") {
+        console.log(
+          "applyActions",
+          JSON.stringify(actionsStack),
+          "\n",
+          JSON.stringify(e.data.actions)
+        );
+        const actions = e.data.actions as T.Action[];
+        setRefs(applyActions(actionsStack, actions, refs));
+      }
     }
 
     window.addEventListener("message", listener);
@@ -138,14 +151,21 @@ function App() {
     return () => {
       window.removeEventListener("message", listener);
     };
-  }, [router, setRefs]);
+  }, [router, refs]);
 
   function onComponentChange(id: string, newComponent: T.Component) {
     setComponents(set(refs.components, id, newComponent));
   }
 
   function applyAction(action: T.Action) {
-    setRefs(_applyAction(action, refs));
+    console.log(
+      "on action",
+      JSON.stringify(actionsStack),
+      "\n",
+      JSON.stringify(action)
+    );
+    onAction(action);
+    setRefs(_applyAction(actionsStack, action, refs));
   }
 
   function menu() {

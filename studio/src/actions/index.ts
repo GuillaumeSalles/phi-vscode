@@ -8,7 +8,7 @@ import {
   getComponentOrThrow
 } from "../layerUtils";
 import uuid from "uuid/v4";
-import { makeLayer } from "../factories";
+import { makeLayer, makeDefaultProject } from "../factories";
 
 function replaceComponent(
   refs: T.Refs,
@@ -299,6 +299,7 @@ function addLayer(
   newLayer: T.Layer
 ): T.Layer | undefined {
   if (!root) {
+    console.log("root is undefined");
     return newLayer;
   }
 
@@ -313,6 +314,7 @@ function addLayer(
   }
 
   if (canHaveChildren(selectedLayer)) {
+    console.log("Insert child");
     return updateLayer(root, {
       ...selectedLayer,
       children: [...selectedLayer.children].concat(newLayer)
@@ -383,7 +385,12 @@ function selectLayer(action: T.SelectLayer, refs: T.Refs) {
   };
 }
 
-export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
+export default function applyAction(
+  actionsStack: T.Action[],
+  action: T.Action,
+  refs: T.Refs
+): T.Refs {
+  actionsStack.push(action);
   switch (action.type) {
     case "addComponentProp":
       return addComponentProp(action, refs);
@@ -406,6 +413,24 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
     case "selectLayer":
       return selectLayer(action, refs);
   }
+}
+
+export function undo(actionsStack: T.Action[]) {
+  const newStack: T.Action[] = [];
+  actionsStack.pop();
+  return actionsStack.reduce((newRefs, action) => {
+    return applyAction(newStack, action, newRefs);
+  }, makeDefaultProject());
+}
+
+export function applyActions(
+  actionsStack: T.Action[],
+  actions: T.Action[],
+  currentRefs: T.Refs
+) {
+  return actions.reduce((newRefs, action) => {
+    return applyAction(actionsStack, action, newRefs);
+  }, currentRefs);
 }
 
 type LayerVisitor = <T extends T.Layer>(layer: T) => T;

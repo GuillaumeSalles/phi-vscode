@@ -1,3 +1,5 @@
+import * as T from "./types";
+
 export default function() {
   return {
     electron: {
@@ -24,6 +26,12 @@ export default function() {
     },
     save: async () => {
       throw new Error("Not implemented");
+    },
+    onAction: (action: T.Action) => {
+      if ((window as any).__vscode__) {
+        const vscode = (window as any).__vscode__;
+        vscode.postMessage({ type: "action", action });
+      }
     }
   };
 }

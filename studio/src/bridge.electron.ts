@@ -4,12 +4,12 @@ export default function() {
   const r = (window as any).require;
   const fs = r("fs") as typeof import("fs");
   const util = r("util") as typeof import("util");
-  
+
   const writeFile = util.promisify(fs.writeFile);
   const readFile = util.promisify(fs.readFile);
-  
+
   const electron = r("electron");
-  
+
   async function save(current: T.Refs) {
     const path =
       current.fileName === undefined
@@ -18,7 +18,7 @@ export default function() {
             defaultPath: "NewProject.phi"
           })
         : current.fileName;
-  
+
     if (!path) {
       return;
     }
@@ -36,10 +36,10 @@ export default function() {
     } catch (er) {
       console.log(er);
     }
-  
+
     return path;
   }
-  
+
   function mapToArray(map: Map<string, any>) {
     return Array.from(map.entries()).map(entry => ({
       id: entry[0],
@@ -51,6 +51,7 @@ export default function() {
     save,
     writeFile,
     readFile,
-    electron
-  }
+    electron,
+    onAction: () => {}
+  };
 }

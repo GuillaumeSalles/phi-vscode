@@ -1,9 +1,8 @@
 import * as T from "./types";
-import electronBridge from './bridge.electron';
-import electronVscode from './bridge.vscode';
+import electronBridge from "./bridge.electron";
+import electronVscode from "./bridge.vscode";
 
 const r = (window as any).require;
-
 
 type API = {
   electron: {
@@ -33,6 +32,7 @@ type API = {
   writeFile: (path: string, content: string) => Promise<void>;
   readFile: (path: string, encoding: string) => Promise<string>;
   save: (refs: T.Refs) => Promise<string | undefined>;
+  onAction: (action: T.Action) => void;
   //path: typeof import("path")
 };
 
@@ -42,3 +42,4 @@ export const electron = api.electron;
 export const readFile = api.readFile;
 export const writeFile = api.writeFile;
 export const save = api.save;
+export const onAction = api.onAction;

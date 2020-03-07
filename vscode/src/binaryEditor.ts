@@ -1,15 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
-import * as util from 'util';
+import * as util from "util";
 import { Disposable } from "./dispose";
-
 
 const readdir = util.promisify(fs.readdir);
 
 interface Edit {
-  readonly points: [number, number][];
-  readonly data: Uint8Array;
+  readonly action: any;
 }
 
 export class PaletteEditorProvider implements vscode.CustomEditorProvider {
@@ -37,6 +35,12 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
     });
     model.onDidChange(() => {
       this.update(document.uri);
+    });
+    model.onUndo(() => {
+      this.undo(document.uri)
+    })
+    model.onApplyEdits((edits) => {
+      this.applyEdits(document.uri, edits);
     });
     return model;
   }
@@ -67,6 +71,30 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
       }
     }
   }
+
+  private undo(resource: vscode.Uri, trigger?: PaletteEditor) {
+    const editors = this.editors.get(resource.toString());
+    if (!editors) {
+      throw new Error(`No editors found for ${resource.toString()}`);
+    }
+    for (const editor of editors) {
+      if (editor !== trigger) {
+        editor.undo();
+      }
+    }
+  }
+
+  private applyEdits(resource: vscode.Uri, edits: readonly Edit[], trigger?: PaletteEditor) {
+    const editors = this.editors.get(resource.toString());
+    if (!editors) {
+      throw new Error(`No editors found for ${resource.toString()}`);
+    }
+    for (const editor of editors) {
+      if (editor !== trigger) {
+        editor.applyEdits(edits);
+      }
+    }
+  }
 }
 
 class CatDrawModel extends Disposable
@@ -92,24 +120,33 @@ class CatDrawModel extends Disposable
   private readonly _onDidChange = this._register(
     new vscode.EventEmitter<void>()
   );
+
+  private readonly _onUndo = this._register(
+    new vscode.EventEmitter<void>()
+  );
+
+  private readonly _onApplyEdits = this._register(
+    new vscode.EventEmitter<readonly Edit[]>()
+  );
+
   public readonly onDidChange = this._onDidChange.event;
 
   private readonly _onDidEdit = this._register(new vscode.EventEmitter<Edit>());
   public readonly onDidEdit = this._onDidEdit.event;
+  public readonly onUndo = this._onUndo.event;
+  public readonly onApplyEdits = this._onApplyEdits.event;
 
   public getContent() {
-    return this._edits.length
-      ? this._edits[this._edits.length - 1].data
-      : this.initialValue;
+    // TODO
+    return "";
+    // return this._edits.length
+    //   ? this._edits[this._edits.length - 1].data
+    //   : this.initialValue;
   }
 
   public onEdit(edit: Edit) {
     this._edits.push(edit);
     this._onDidEdit.fire(edit);
-  }
-
-  public getStrokes() {
-    return this._edits.map(x => x.points);
   }
 
   public async save(): Promise<void> {
@@ -128,14 +165,14 @@ class CatDrawModel extends Disposable
 
   async applyEdits(edits: readonly Edit[]): Promise<void> {
     this._edits.push(...edits);
-    this.update();
+    this._onApplyEdits.fire(edits);
   }
 
   async undoEdits(edits: readonly Edit[]): Promise<void> {
     for (let i = 0; i < edits.length; ++i) {
       this._edits.pop();
     }
-    this.update();
+    this._onUndo.fire();
   }
 
   private update() {
@@ -174,10 +211,9 @@ export class PaletteEditor extends Disposable {
 
     panel.webview.onDidReceiveMessage(message => {
       switch (message.type) {
-        case "stroke":
+        case "action":
           const edit: Edit = {
-            points: message.value.points,
-            data: new Uint8Array(message.value.data.data)
+            action: message.action,
           };
           this.document.userData?.onEdit(edit);
           break;
@@ -205,7 +241,6 @@ export class PaletteEditor extends Disposable {
     super.dispose();
   }
 
-
   async html(panel: vscode.WebviewPanel) {
     const contentRoot = path.join(this._extensionPath, "content");
     const jsFolder = path.join(contentRoot, "static", "js");
@@ -214,21 +249,27 @@ export class PaletteEditor extends Disposable {
     const jsFiles = await readdir(jsFolder);
     const jsTags = jsFiles
       .map(file => path.parse(file))
-      .filter(parseResult => parseResult.ext === '.js' && !parseResult.base.includes("runtime"))
+      .filter(
+        parseResult =>
+          parseResult.ext === ".js" && !parseResult.base.includes("runtime")
+      )
       .map(parseResult => {
-        const uri = this.panel.webview.asWebviewUri(vscode.Uri.file(path.join(jsFolder, parseResult.base)));
-        return `<script src="${uri}"></script>`
+        const uri = this.panel.webview.asWebviewUri(
+          vscode.Uri.file(path.join(jsFolder, parseResult.base))
+        );
+        return `<script src="${uri}"></script>`;
       })
       .join("");
 
-
-    const cssFiles = await readdir(cssFolder)
+    const cssFiles = await readdir(cssFolder);
     const cssTags = cssFiles
       .map(file => path.parse(file))
-      .filter(parseResult => parseResult.ext === '.css')
+      .filter(parseResult => parseResult.ext === ".css")
       .map(parseResult => {
-        const uri = this.panel.webview.asWebviewUri(vscode.Uri.file(path.join(cssFolder, parseResult.base)));
-        return `<link href="${uri}" rel="stylesheet" />`
+        const uri = this.panel.webview.asWebviewUri(
+          vscode.Uri.file(path.join(cssFolder, parseResult.base))
+        );
+        return `<link href="${uri}" rel="stylesheet" />`;
       })
       .join("");
 
@@ -254,71 +295,76 @@ export class PaletteEditor extends Disposable {
     ></div>
     <script>
       window.__MODE__ = "VSCODE";
+      window.__vscode__ = acquireVsCodeApi();
 
-      !(function(l) {
-        function e(e) {
+      !(function(e) {
+        function t(t) {
           for (
-            var r, t, n = e[0], o = e[1], u = e[2], f = 0, i = [];
-            f < n.length;
-            f++
+            var n, i, l = t[0], f = t[1], a = t[2], c = 0, s = [];
+            c < l.length;
+            c++
           )
-            (t = n[f]), p[t] && i.push(p[t][0]), (p[t] = 0);
-          for (r in o)
-            Object.prototype.hasOwnProperty.call(o, r) && (l[r] = o[r]);
-          for (s && s(e); i.length; ) i.shift()();
-          return c.push.apply(c, u || []), a();
+            (i = l[c]),
+              Object.prototype.hasOwnProperty.call(o, i) &&
+                o[i] &&
+                s.push(o[i][0]),
+              (o[i] = 0);
+          for (n in f)
+            Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]);
+          for (p && p(t); s.length; ) s.shift()();
+          return u.push.apply(u, a || []), r();
         }
-        function a() {
-          for (var e, r = 0; r < c.length; r++) {
-            for (var t = c[r], n = !0, o = 1; o < t.length; o++) {
-              var u = t[o];
-              0 !== p[u] && (n = !1);
+        function r() {
+          for (var e, t = 0; t < u.length; t++) {
+            for (var r = u[t], n = !0, l = 1; l < r.length; l++) {
+              var f = r[l];
+              0 !== o[f] && (n = !1);
             }
-            n && (c.splice(r--, 1), (e = f((f.s = t[0]))));
+            n && (u.splice(t--, 1), (e = i((i.s = r[0]))));
           }
           return e;
         }
-        var t = {},
-          p = { 1: 0 },
-          c = [];
-        function f(e) {
-          if (t[e]) return t[e].exports;
-          var r = (t[e] = { i: e, l: !1, exports: {} });
-          return l[e].call(r.exports, r, r.exports, f), (r.l = !0), r.exports;
+        var n = {},
+          o = { 1: 0 },
+          u = [];
+        function i(t) {
+          if (n[t]) return n[t].exports;
+          var r = (n[t] = { i: t, l: !1, exports: {} });
+          return e[t].call(r.exports, r, r.exports, i), (r.l = !0), r.exports;
         }
-        (f.m = l),
-          (f.c = t),
-          (f.d = function(e, r, t) {
-            f.o(e, r) ||
-              Object.defineProperty(e, r, { enumerable: !0, get: t });
+        (i.m = e),
+          (i.c = n),
+          (i.d = function(e, t, r) {
+            i.o(e, t) ||
+              Object.defineProperty(e, t, { enumerable: !0, get: r });
           }),
-          (f.r = function(e) {
+          (i.r = function(e) {
             "undefined" != typeof Symbol &&
               Symbol.toStringTag &&
               Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
               Object.defineProperty(e, "__esModule", { value: !0 });
           }),
-          (f.t = function(r, e) {
-            if ((1 & e && (r = f(r)), 8 & e)) return r;
-            if (4 & e && "object" == typeof r && r && r.__esModule) return r;
-            var t = Object.create(null);
+          (i.t = function(e, t) {
+            if ((1 & t && (e = i(e)), 8 & t)) return e;
+            if (4 & t && "object" == typeof e && e && e.__esModule) return e;
+            var r = Object.create(null);
             if (
-              (f.r(t),
-              Object.defineProperty(t, "default", { enumerable: !0, value: r }),
-              2 & e && "string" != typeof r)
+              (i.r(r),
+              Object.defineProperty(r, "default", { enumerable: !0, value: e }),
+              2 & t && "string" != typeof e)
             )
-              for (var n in r)
-                f.d(
-                  t,
+              for (var n in e)
+                i.d(
+                  r,
                   n,
-                  function(e) {
-                    return r[e];
+                  function(t) {
+                    return e[t];
                   }.bind(null, n)
                 );
-            return t;
+            return r;
           }),
-          (f.n = function(e) {
-            var r =
+          (i.n = function(e) {
+            var t =
               e && e.__esModule
                 ? function() {
                     return e.default;
@@ -326,28 +372,45 @@ export class PaletteEditor extends Disposable {
                 : function() {
                     return e;
                   };
-            return f.d(r, "a", r), r;
+            return i.d(t, "a", t), t;
           }),
-          (f.o = function(e, r) {
-            return Object.prototype.hasOwnProperty.call(e, r);
+          (i.o = function(e, t) {
+            return Object.prototype.hasOwnProperty.call(e, t);
           }),
-          (f.p = "./");
-        var r = (window.webpackJsonp = window.webpackJsonp || []),
-          n = r.push.bind(r);
-        (r.push = e), (r = r.slice());
-        for (var o = 0; o < r.length; o++) e(r[o]);
-        var s = n;
-        a();
+          (i.p = "./");
+        var l = (this.webpackJsonpstudio = this.webpackJsonpstudio || []),
+          f = l.push.bind(l);
+        (l.push = t), (l = l.slice());
+        for (var a = 0; a < l.length; a++) t(l[a]);
+        var p = f;
+        r();
       })([]);
     </script>
     ${jsTags}
-    <script>
-      const vscode = acquireVsCodeApi();
-      console.log(vscode.getState());
-    </script>
   </body>
 </html>
 `;
+  }
+
+  public async undo() {
+    if (this.isDisposed) {
+      return;
+    }
+
+    this.panel.webview.postMessage({
+      type: "undo"
+    })
+  }
+
+  public async applyEdits(edits: readonly Edit[]) {
+    if (this.isDisposed) {
+      return;
+    }
+
+    this.panel.webview.postMessage({
+      type: "applyActions",
+      actions: edits.map(edit => edit.action)
+    })
   }
 
   public async update() {
@@ -355,9 +418,10 @@ export class PaletteEditor extends Disposable {
       return;
     }
 
-    this.panel.webview.postMessage({
-      type: "setValue",
-      value: this.document.userData!.getStrokes()
-    });
+    // TODO;
+    // this.panel.webview.postMessage({
+    //   type: "setValue",
+    //   value: this.document.userData!.getStrokes()
+    // });
   }
 }

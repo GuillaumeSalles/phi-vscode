@@ -253,46 +253,26 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
   ]);
 }
 
-export function makeDefaultProject(): T.Refs {
+export const defaultComponentId = "d275edc5-1d90-4081-b36a-61bb41009436";
+
+export function makeDefaultProject(componentId = defaultComponentId): T.Refs {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
   const breakpoints = makeDefaultBreakpoints();
   const fontSizes = makeDefaultFontSizes();
   const artboards = makeDefaultArtboards();
 
-  const helloWorldTextLayer: T.TextLayer = {
-    id: uuid(),
-    type: "text",
-    name: "root",
-    tag: "h1",
-    mediaQueries: [],
-    bindings: {},
-    props: {
-      content: "Hello World"
-    },
-    style: {
-      display: "block",
-      textDecoration: {
-        isStrikedThrough: false,
-        isUnderlined: false
-      },
-      textAlign: "left",
-      fontSize: makeRef(getKeyByIndex(fontSizes, 5)),
-      fontFamily: makeRef(firstKey(fontFamilies)),
-      color: makeRef(firstKey(colors)),
-      overrides: []
-    }
-  };
-
-  const helloWorld = entry({
-    name: "hello-world",
-    layout: helloWorldTextLayer,
-    props: [],
-    overrides: [],
-    examples: []
-  });
-
-  const components: T.ComponentMap = new Map([helloWorld]);
+  const components: T.ComponentMap = new Map([
+    [
+      componentId,
+      {
+        name: "hello-world",
+        props: [],
+        overrides: [],
+        examples: []
+      }
+    ]
+  ]);
 
   return {
     fileName: undefined,

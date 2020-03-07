@@ -25,3 +25,13 @@ export function listToEntries<TKey extends string>(
 export function assertUnreachable(x: never): never {
   throw new Error("Didn't expect to get here");
 }
+
+export function flat<T>(arrOfArr: T[][]): T[] {
+  const result = [];
+  for (let arr of arrOfArr) {
+    for (let item of arr) {
+      result.push(item);
+    }
+  }
+  return result;
+}

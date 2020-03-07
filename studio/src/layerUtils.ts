@@ -1,5 +1,5 @@
 import * as T from "./types";
-import { assertUnreachable } from "./utils";
+import { assertUnreachable, flat } from "./utils";
 
 export function canHaveChildren(
   layer: T.Layer
@@ -68,7 +68,7 @@ export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
   }
   const result = [root];
   if (root.type === "container") {
-    return result.concat(root.children.map(layerTreeToArray).flat());
+    return result.concat(flat(root.children.map(layerTreeToArray)));
   }
   return result;
 }
