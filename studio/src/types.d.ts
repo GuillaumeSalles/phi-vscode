@@ -285,6 +285,7 @@ export type ArtboardDefinition = {
 
 export type Refs = {
   isSaved: boolean;
+  selectedLayerId?: string;
   fileName: string | undefined;
   artboards: ArtboardsMap;
   colors: ColorsMap;
@@ -348,8 +349,21 @@ type AddLayer = {
   layerComponentId?: string;
 };
 
+type DeleteLayer = {
+  type: "deleteLayer";
+  componentId: string;
+  layerId: string;
+};
+
+type SelectLayer = {
+  type: "selectLayer";
+  layerId?: string;
+};
+
 type Action =
   | AddLayer
+  | DeleteLayer
+  | SelectLayer
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp

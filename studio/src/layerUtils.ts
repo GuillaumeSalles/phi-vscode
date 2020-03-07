@@ -84,12 +84,12 @@ export function isLayerUsingRef(
 }
 
 export function getComponentOrThrow(
-  layer: T.ComponentLayer,
+  componentId: string,
   refs: T.Refs
 ): T.Component {
-  const component = refs.components.get(layer.componentId);
+  const component = refs.components.get(componentId);
   if (component == null) {
-    throw new Error(`Component with id: "${layer.componentId}" not found`);
+    throw new Error(`Component with id: "${componentId}" not found`);
   }
   return component;
 }

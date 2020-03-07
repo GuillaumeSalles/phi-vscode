@@ -92,23 +92,24 @@ function ComponentView({
       .join(", ")}.`
   );
 
-  const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
-    component.layout ? component.layout.id : undefined
-  );
-
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingHTML, setIsEditingHTML] = useState(true);
+
   const selectedLayer =
-    component.layout && layerId
-      ? findLayerById(component.layout, layerId)
+    component.layout && refs.selectedLayerId
+      ? findLayerById(component.layout, refs.selectedLayerId)
       : undefined;
+
+  function selectLayer(layerId?: string) {
+    applyAction({ type: "selectLayer", layerId: layerId });
+  }
 
   function updateComponentLayer(newLayer: T.Layer) {
     const newComponent = {
       ...component,
       layout: updateLayer(component.layout, newLayer)
     };
-    setLayerId(newLayer.id);
+    selectLayer(newLayer.id);
     onComponentChange(componentId, newComponent);
   }
 
@@ -117,7 +118,7 @@ function ComponentView({
       ...component,
       layout: newLayer
     };
-    setLayerId(newLayer ? newLayer.id : undefined);
+    selectLayer(newLayer ? newLayer.id : undefined);
     onComponentChange(componentId, newComponent);
   }
 
@@ -135,8 +136,8 @@ function ComponentView({
             <LayersTree
               componentId={componentId}
               root={component.layout}
-              onSelectLayer={setLayerId}
-              selectedLayerId={layerId}
+              onSelectLayer={selectLayer}
+              selectedLayerId={refs.selectedLayerId}
               onLayerChange={updateComponentRootLayer}
               refs={refs}
               applyAction={applyAction}

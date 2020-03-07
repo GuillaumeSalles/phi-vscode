@@ -312,14 +312,13 @@ function LayersTree({
       applyAction({
         type: "addLayer",
         componentId,
-        parentLayerId: selectedLayerId!,
+        parentLayerId: selectedLayerId,
         layerComponentId,
         layerType,
         layerId
       });
-      onSelectLayer(layerId);
     },
-    [applyAction]
+    [applyAction, selectedLayerId, componentId]
   );
 
   const onRename = useCallback(
@@ -333,9 +332,7 @@ function LayersTree({
 
   const onDelete = useCallback(
     (layer: T.Layer) => {
-      const newRoot = deleteLayer(root!, layer);
-      onLayerChange(newRoot);
-      onSelectLayer(newRoot ? newRoot.id : undefined);
+      applyAction({ type: "deleteLayer", componentId, layerId: layer.id });
     },
     [onLayerChange, onSelectLayer, root]
   );

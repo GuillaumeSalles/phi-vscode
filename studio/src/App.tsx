@@ -145,7 +145,7 @@ function App() {
   }
 
   function applyAction(action: T.Action) {
-    setComponents(_applyAction(action, refs));
+    setRefs(_applyAction(action, refs));
   }
 
   function menu() {

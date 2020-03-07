@@ -10,7 +10,6 @@ import HtmlEditor from "./Editors/HtmlEditor";
 import { Layout } from "../../components/Layout";
 import ComponentProps from "./ComponentProps";
 import { findLayerById, updateLayer } from "../../layerUtils";
-import { useStateWithGetter } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
 import React from "react";
@@ -51,22 +50,22 @@ export default function VsCodeComponent({
 }: Props) {
   const component = refs.components.get(componentId)!;
 
-  const [layerId, setLayerId] = useStateWithGetter<string | undefined>(() =>
-    component.layout ? component.layout.id : undefined
-  );
-
   const [isEditingHTML, setIsEditingHTML] = useState(true);
   const selectedLayer =
-    component.layout && layerId
-      ? findLayerById(component.layout, layerId)
+    component.layout && refs.selectedLayerId
+      ? findLayerById(component.layout, refs.selectedLayerId)
       : undefined;
+
+  function selectLayer(layerId?: string) {
+    applyAction({ type: "selectLayer", layerId: layerId });
+  }
 
   function updateComponentLayer(newLayer: T.Layer) {
     const newComponent = {
       ...component,
       layout: updateLayer(component.layout, newLayer)
     };
-    setLayerId(newLayer.id);
+    selectLayer(newLayer.id);
     onComponentChange(componentId, newComponent);
   }
 
@@ -75,7 +74,7 @@ export default function VsCodeComponent({
       ...component,
       layout: newLayer
     };
-    setLayerId(newLayer ? newLayer.id : undefined);
+    selectLayer(newLayer ? newLayer.id : undefined);
     onComponentChange(componentId, newComponent);
   }
 
@@ -87,8 +86,8 @@ export default function VsCodeComponent({
           <LayersTree
             componentId={componentId}
             root={component.layout}
-            onSelectLayer={setLayerId}
-            selectedLayerId={layerId}
+            onSelectLayer={selectLayer}
+            selectedLayerId={refs.selectedLayerId}
             onLayerChange={updateComponentRootLayer}
             refs={refs}
             applyAction={applyAction}

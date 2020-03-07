@@ -1,5 +1,9 @@
 import * as T from "./types";
-import { deleteComponentProp, editComponentProp } from "./actions";
+import {
+  deleteComponentProp,
+  editComponentProp,
+  default as applyActions
+} from "./actions";
 import {
   makeContainerLayer,
   makeDefaultColors,
@@ -9,9 +13,12 @@ import {
   makeTextLayer,
   makeComponentLayer
 } from "./factories";
+import { getComponentOrThrow } from "./layerUtils";
 
 function makeRefsFixture(): T.Refs {
   return {
+    selectedLayerId: undefined,
+    artboards: new Map(),
     isSaved: true,
     fileName: "",
     colors: makeDefaultColors(),
@@ -19,6 +26,15 @@ function makeRefsFixture(): T.Refs {
     fontFamilies: makeDefaultFontFamilies(),
     breakpoints: makeDefaultBreakpoints(),
     components: new Map()
+  };
+}
+
+function makeComponent(overrides: Partial<T.Component> = {}): T.Component {
+  return {
+    name: "component-name",
+    props: [],
+    examples: [],
+    ...overrides
   };
 }
 
@@ -30,9 +46,12 @@ describe("deleteComponentProp", () => {
     refs.components.set(componentId, {
       name: "name",
       props: [{ name: "my-prop", type: "text" }],
-      layout: makeTextLayer(refs, { bindings: { content: { propName: prop } } })
+      layout: makeTextLayer(refs, {
+        bindings: { content: { propName: prop } }
+      }),
+      examples: []
     });
-    const newComponents = deleteComponentProp(
+    const newRefs = deleteComponentProp(
       {
         type: "deleteComponentProp",
         componentId,
@@ -40,8 +59,8 @@ describe("deleteComponentProp", () => {
       },
       refs
     );
-    expect(newComponents.get(componentId)!.props).toEqual([]);
-    expect(newComponents.get(componentId)!.layout!.bindings).toEqual({});
+    expect(newRefs.components.get(componentId)!.props).toEqual([]);
+    expect(newRefs.components.get(componentId)!.layout!.bindings).toEqual({});
   });
 
   test("should remove binding that use prop for deep child", () => {
@@ -59,9 +78,10 @@ describe("deleteComponentProp", () => {
             ]
           })
         ]
-      })
+      }),
+      examples: []
     });
-    const newComponents = deleteComponentProp(
+    const newRefs = deleteComponentProp(
       {
         type: "deleteComponentProp",
         componentId,
@@ -69,7 +89,7 @@ describe("deleteComponentProp", () => {
       },
       refs
     );
-    const newComponent = newComponents.get(componentId)!;
+    const newComponent = newRefs.components.get(componentId)!;
     const layout = newComponent.layout as T.ContainerLayer;
     const textLayer = (layout.children[0] as T.ContainerLayer)
       .children[0] as T.TextLayer;
@@ -83,7 +103,8 @@ describe("deleteComponentProp", () => {
     const prop = "my-prop";
     refs.components.set(componentId, {
       name: "name",
-      props: [{ name: "my-prop", type: "text" }]
+      props: [{ name: "my-prop", type: "text" }],
+      examples: []
     });
 
     const parentComponent: T.Component = {
@@ -104,10 +125,11 @@ describe("deleteComponentProp", () => {
             propName: "dummyProp"
           }
         }
-      }
+      },
+      examples: []
     };
     refs.components.set(parentComponentId, parentComponent);
-    const newComponents = deleteComponentProp(
+    const newRefs = deleteComponentProp(
       {
         type: "deleteComponentProp",
         componentId,
@@ -115,7 +137,7 @@ describe("deleteComponentProp", () => {
       },
       refs
     );
-    const newParentComponent = newComponents.get(parentComponentId)!;
+    const newParentComponent = newRefs.components.get(parentComponentId)!;
     const newComponentLayer = newParentComponent.layout as T.ComponentLayer;
     expect(newComponentLayer.props).toEqual({});
     expect(newComponentLayer.bindings).toEqual({});
@@ -130,9 +152,10 @@ describe("editComponentProp", () => {
     const newProp = "new";
     refs.components.set(componentId, {
       name: "name",
-      props: [{ name: oldProp, type: "text" }]
+      props: [{ name: oldProp, type: "text" }],
+      examples: []
     });
-    const newComponents = editComponentProp(
+    const newRefs = editComponentProp(
       {
         type: "editComponentProp",
         componentId,
@@ -141,7 +164,29 @@ describe("editComponentProp", () => {
       },
       refs
     );
-    const component = newComponents.get(componentId)!;
+    const component = newRefs.components.get(componentId)!;
     expect(component.props).toEqual([{ name: newProp, type: "text" }]);
+  });
+});
+
+describe("addLayer", () => {
+  test("should add layer and select it", () => {
+    const refs = makeRefsFixture();
+    const layerId = "newLayerId";
+    refs.components.set("componentId", makeComponent());
+    const newRefs = applyActions(
+      {
+        type: "addLayer",
+        componentId: "componentId",
+        layerType: "text",
+        layerId
+      },
+      refs
+    );
+
+    expect(getComponentOrThrow("componentId", newRefs).layout!.id).toBe(
+      layerId
+    );
+    expect(newRefs.selectedLayerId).toBe(layerId);
   });
 });
