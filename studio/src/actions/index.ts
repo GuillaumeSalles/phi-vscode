@@ -1,14 +1,14 @@
-import * as T from "./types";
-import { set } from "./helpers/immutable-map";
+import * as T from "../types";
+import { set } from "../helpers/immutable-map";
 import {
   isComponentLayer,
   findLayerById,
   canHaveChildren,
   updateLayer,
   getComponentOrThrow
-} from "./layerUtils";
+} from "../layerUtils";
 import uuid from "uuid/v4";
-import { makeLayer } from "./factories";
+import { makeLayer } from "../factories";
 
 function replaceComponent(
   refs: T.Refs,

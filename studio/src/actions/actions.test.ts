@@ -1,9 +1,9 @@
-import * as T from "./types";
+import * as T from "../types";
 import {
   deleteComponentProp,
   editComponentProp,
   default as applyActions
-} from "./actions";
+} from "../actions";
 import {
   makeContainerLayer,
   makeDefaultColors,
@@ -12,8 +12,8 @@ import {
   makeDefaultBreakpoints,
   makeTextLayer,
   makeComponentLayer
-} from "./factories";
-import { getComponentOrThrow } from "./layerUtils";
+} from "../factories";
+import { getComponentOrThrow } from "../layerUtils";
 
 function makeRefsFixture(): T.Refs {
   return {

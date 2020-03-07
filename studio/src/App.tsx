@@ -21,7 +21,7 @@ import { makeDefaultProject } from "./factories";
 import { open } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
-import _applyAction from "./actions";
+import _applyAction from "./actions/index";
 import VsCodeComponent from "./pages/ComponentView/VsCodeComponent";
 
 type Router = RouteComponentProps<{}, StaticContext, any>;

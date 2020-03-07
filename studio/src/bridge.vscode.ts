@@ -1,5 +1,4 @@
-export default function () {
-
+export default function() {
   return {
     electron: {
       ipcRenderer: {
@@ -24,7 +23,7 @@ export default function () {
       throw new Error("Not implemented");
     },
     save: async () => {
-      
+      throw new Error("Not implemented");
     }
-  }
+  };
 }
