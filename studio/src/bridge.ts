@@ -32,7 +32,7 @@ type API = {
   writeFile: (path: string, content: string) => Promise<void>;
   readFile: (path: string, encoding: string) => Promise<string>;
   save: (refs: T.Refs) => Promise<string | undefined>;
-  onAction: (action: T.Action) => void;
+  onAction: (action: T.Action, refs: T.Refs) => void;
   //path: typeof import("path")
 };
 

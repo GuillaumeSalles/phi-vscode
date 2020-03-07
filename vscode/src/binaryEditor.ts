@@ -37,9 +37,9 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
       this.update(document.uri);
     });
     model.onUndo(() => {
-      this.undo(document.uri)
-    })
-    model.onApplyEdits((edits) => {
+      this.undo(document.uri);
+    });
+    model.onApplyEdits(edits => {
       this.applyEdits(document.uri, edits);
     });
     return model;
@@ -84,7 +84,11 @@ export class PaletteEditorProvider implements vscode.CustomEditorProvider {
     }
   }
 
-  private applyEdits(resource: vscode.Uri, edits: readonly Edit[], trigger?: PaletteEditor) {
+  private applyEdits(
+    resource: vscode.Uri,
+    edits: readonly Edit[],
+    trigger?: PaletteEditor
+  ) {
     const editors = this.editors.get(resource.toString());
     if (!editors) {
       throw new Error(`No editors found for ${resource.toString()}`);
@@ -101,6 +105,7 @@ class CatDrawModel extends Disposable
   implements
     vscode.CustomEditorCapabilities,
     vscode.CustomEditorEditingCapability<Edit> {
+  private _lastContent: any;
   private readonly _edits: Edit[] = [];
 
   public static async create(resource: vscode.Uri): Promise<CatDrawModel> {
@@ -115,15 +120,15 @@ class CatDrawModel extends Disposable
     private readonly initialValue: Uint8Array
   ) {
     super();
+
+    this._lastContent = initialValue.toString();
   }
 
   private readonly _onDidChange = this._register(
     new vscode.EventEmitter<void>()
   );
 
-  private readonly _onUndo = this._register(
-    new vscode.EventEmitter<void>()
-  );
+  private readonly _onUndo = this._register(new vscode.EventEmitter<void>());
 
   private readonly _onApplyEdits = this._register(
     new vscode.EventEmitter<readonly Edit[]>()
@@ -137,16 +142,16 @@ class CatDrawModel extends Disposable
   public readonly onApplyEdits = this._onApplyEdits.event;
 
   public getContent() {
-    // TODO
-    return "";
-    // return this._edits.length
-    //   ? this._edits[this._edits.length - 1].data
-    //   : this.initialValue;
+    return this._lastContent;
   }
 
   public onEdit(edit: Edit) {
     this._edits.push(edit);
     this._onDidEdit.fire(edit);
+  }
+
+  public setLastContent(data: any) {
+    this._lastContent = data;
   }
 
   public async save(): Promise<void> {
@@ -173,10 +178,6 @@ class CatDrawModel extends Disposable
       this._edits.pop();
     }
     this._onUndo.fire();
-  }
-
-  private update() {
-    this._onDidChange.fire();
   }
 
   async backup() {
@@ -213,9 +214,10 @@ export class PaletteEditor extends Disposable {
       switch (message.type) {
         case "action":
           const edit: Edit = {
-            action: message.action,
+            action: message.action
           };
           this.document.userData?.onEdit(edit);
+          this.document.userData?.setLastContent(message.data);
           break;
       }
     });
@@ -296,6 +298,7 @@ export class PaletteEditor extends Disposable {
     <script>
       window.__MODE__ = "VSCODE";
       window.__vscode__ = acquireVsCodeApi();
+      window.__initialState__ = ${this.document.userData?.getContent()}
 
       !(function(e) {
         function t(t) {
@@ -399,7 +402,7 @@ export class PaletteEditor extends Disposable {
 
     this.panel.webview.postMessage({
       type: "undo"
-    })
+    });
   }
 
   public async applyEdits(edits: readonly Edit[]) {
@@ -410,7 +413,7 @@ export class PaletteEditor extends Disposable {
     this.panel.webview.postMessage({
       type: "applyActions",
       actions: edits.map(edit => edit.action)
-    })
+    });
   }
 
   public async update() {

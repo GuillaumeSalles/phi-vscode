@@ -18,7 +18,7 @@ import { set, del, firstKey } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
-import { open } from "./fileUtils";
+import { open, jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
 import _applyAction, { applyActions, undo } from "./actions/index";
@@ -60,6 +60,7 @@ const actionsStack: T.Action[] = [];
 
 function App() {
   const mode = (window as any).__MODE__;
+  const initialState = (window as any).__initialState__;
 
   const router = useRouter();
   const history = useHistory();
@@ -77,9 +78,12 @@ function App() {
 
   useEffect(() => {
     if (mode === "VSCODE") {
-      const refs = makeDefaultProject();
-      setRefs(refs);
-      history.push("/vscode/component");
+      if (initialState) {
+        setRefs(jsonToRefs(undefined, true, initialState));
+      } else {
+        setRefs(makeDefaultProject());
+      }
+      history.push("/typography");
     }
   }, [mode]);
 
@@ -163,8 +167,9 @@ function App() {
       "\n",
       JSON.stringify(action)
     );
-    onAction(action);
-    setRefs(_applyAction(actionsStack, action, refs));
+    const newRefs = _applyAction(actionsStack, action, refs);
+    onAction(action, newRefs);
+    setRefs(newRefs);
   }
 
   function menu() {

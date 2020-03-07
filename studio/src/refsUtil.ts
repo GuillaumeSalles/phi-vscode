@@ -10,3 +10,20 @@ export function filterComponentsWhenLayer(
     layerTreeToArray(component.layout).some(layerPredicate)
   );
 }
+
+export function refsToJson(current: T.Refs) {
+  return JSON.stringify({
+    colors: mapToArray(current.colors),
+    fontSizes: mapToArray(current.fontSizes),
+    fontFamilies: mapToArray(current.fontFamilies),
+    breakpoints: mapToArray(current.breakpoints),
+    components: mapToArray(current.components)
+  });
+}
+
+function mapToArray(map: Map<string, any>) {
+  return Array.from(map.entries()).map(entry => ({
+    id: entry[0],
+    ...entry[1]
+  }));
+}

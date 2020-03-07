@@ -1,4 +1,6 @@
 import * as T from "./types";
+import { jsonToRefs } from "./fileUtils";
+import { refsToJson } from "./refsUtil";
 
 export default function() {
   return {
@@ -27,10 +29,10 @@ export default function() {
     save: async () => {
       throw new Error("Not implemented");
     },
-    onAction: (action: T.Action) => {
+    onAction: (action: T.Action, refs: T.Refs) => {
       if ((window as any).__vscode__) {
         const vscode = (window as any).__vscode__;
-        vscode.postMessage({ type: "action", action });
+        vscode.postMessage({ type: "action", action, data: refsToJson(refs) });
       }
     }
   };

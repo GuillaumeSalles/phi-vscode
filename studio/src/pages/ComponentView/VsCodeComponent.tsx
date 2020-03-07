@@ -66,15 +66,6 @@ export default function VsCodeComponent({
     onComponentChange(componentId, newComponent);
   }
 
-  function updateComponentRootLayer(newLayer: T.Layer | undefined) {
-    const newComponent = {
-      ...component,
-      layout: newLayer
-    };
-    applyAction(selectLayer(newLayer ? newLayer.id : undefined));
-    onComponentChange(componentId, newComponent);
-  }
-
   return (
     <Layout
       topBar={null}

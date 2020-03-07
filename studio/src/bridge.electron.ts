@@ -1,4 +1,5 @@
 import * as T from "./types";
+import { refsToJson } from "./refsUtil";
 
 export default function() {
   const r = (window as any).require;
@@ -23,28 +24,12 @@ export default function() {
       return;
     }
     try {
-      await writeFile(
-        path,
-        JSON.stringify({
-          colors: mapToArray(current.colors),
-          fontSizes: mapToArray(current.fontSizes),
-          fontFamilies: mapToArray(current.fontFamilies),
-          breakpoints: mapToArray(current.breakpoints),
-          components: mapToArray(current.components)
-        })
-      );
+      await writeFile(path, refsToJson(current));
     } catch (er) {
       console.log(er);
     }
 
     return path;
-  }
-
-  function mapToArray(map: Map<string, any>) {
-    return Array.from(map.entries()).map(entry => ({
-      id: entry[0],
-      ...entry[1]
-    }));
   }
 
   return {
