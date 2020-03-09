@@ -528,6 +528,26 @@ function updateLayerTagHandler(action: T.UpdateLayerTag, refs: T.Refs) {
   });
 }
 
+function updateLayerBindingHandler(action: T.UpdateLayerBinding, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    return {
+      bindings: {
+        ...layer.bindings,
+        [action.layerProp]: { propName: action.componentProp }
+      }
+    };
+  });
+}
+
+function deleteLayerBindingHandler(action: T.DeleteLayerBinding, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    const { [action.layerProp]: unusedValue, ...newBindings } = layer.bindings;
+    return {
+      bindings: newBindings
+    };
+  });
+}
+
 function initProjectHandler(action: T.InitProject, refs: T.Refs) {
   return action.refs;
 }
@@ -569,6 +589,10 @@ export default function applyAction(
       return updateLayerPropHandler(action, refs);
     case "updateLayerTag":
       return updateLayerTagHandler(action, refs);
+    case "updateLayerBinding":
+      return updateLayerBindingHandler(action, refs);
+    case "deleteLayerBinding":
+      return deleteLayerBindingHandler(action, refs);
   }
 }
 

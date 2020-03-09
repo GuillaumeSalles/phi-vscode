@@ -265,13 +265,12 @@ function ComponentView({
                   applyAction={applyAction}
                 />
                 <HtmlLayerBindings
+                  componentId={componentId}
                   component={component}
                   layer={selectedLayer}
                   refs={refs}
                   bindings={selectedLayer.bindings}
-                  onChange={bindings =>
-                    updateComponentLayer({ ...selectedLayer, bindings })
-                  }
+                  applyAction={applyAction}
                 />
               </>
             ) : (

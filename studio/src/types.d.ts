@@ -376,6 +376,21 @@ type UpdateLayerTag = {
   tag: TextLayerTag;
 };
 
+type UpdateLayerBinding = {
+  type: "updateLayerBinding";
+  componentId: string;
+  layerId: string;
+  layerProp: string;
+  componentProp: string;
+};
+
+type DeleteLayerBinding = {
+  type: "deleteLayerBinding";
+  componentId: string;
+  layerId: string;
+  layerProp: string;
+};
+
 type Action =
   | InitProject
   | AddLayer
@@ -385,6 +400,8 @@ type Action =
   | SelectLayer
   | UpdateLayerProp
   | UpdateLayerTag
+  | UpdateLayerBinding
+  | DeleteLayerBinding
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp

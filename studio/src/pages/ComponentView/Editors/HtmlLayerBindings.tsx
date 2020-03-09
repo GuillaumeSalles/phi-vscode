@@ -9,8 +9,9 @@ import { getComponentOrThrow } from "../../../layerUtils";
 
 type Props = {
   component: T.Component;
+  componentId: string;
+  applyAction: (action: T.Action) => void;
   bindings: T.Bindings;
-  onChange: (bindings: T.Bindings) => void;
   layer: T.Layer;
   refs: T.Refs;
 };
@@ -36,8 +37,9 @@ export default function HtmlLayerBindings({
   layer,
   refs,
   bindings,
-  onChange,
-  component
+  component,
+  componentId,
+  applyAction
 }: Props) {
   const options = component.props
     .map(prop => [prop.name, prop.name])
@@ -56,10 +58,20 @@ export default function HtmlLayerBindings({
               value={value}
               onChange={propName => {
                 if (propName === "none") {
-                  const { [prop]: unusedValue, ...newBinding } = bindings;
-                  onChange(newBinding);
+                  applyAction({
+                    type: "deleteLayerBinding",
+                    componentId,
+                    layerId: layer.id,
+                    layerProp: prop
+                  });
                 } else {
-                  onChange({ ...bindings, [prop]: { propName } });
+                  applyAction({
+                    type: "updateLayerBinding",
+                    componentId,
+                    layerId: layer.id,
+                    layerProp: prop,
+                    componentProp: propName
+                  });
                 }
               }}
               options={options}
