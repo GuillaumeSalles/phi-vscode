@@ -38,21 +38,27 @@ function navigateToFirstComponentOrDefault(
 function initProject(
   router: Router,
   refs: T.Refs,
-  setRefs: (refs: T.Refs) => void
+  applyAction: (action: T.Action) => void
 ) {
   router.history.push("/");
-  setRefs(refs);
+  applyAction({ type: "initProject", refs });
   navigateToFirstComponentOrDefault(router, refs.components);
 }
 
-function createProject(router: Router, setRefs: (refs: T.Refs) => void) {
-  initProject(router, makeDefaultProject(), setRefs);
+function createProject(
+  router: Router,
+  applyAction: (action: T.Action) => void
+) {
+  initProject(router, makeDefaultProject(), applyAction);
 }
 
-async function openProject(router: Router, setRefs: (refs: T.Refs) => void) {
+async function openProject(
+  router: Router,
+  applyAction: (action: T.Action) => void
+) {
   const refs = await open();
   if (refs) {
-    initProject(router, refs, setRefs);
+    initProject(router, refs, applyAction);
   }
 }
 
@@ -110,10 +116,10 @@ function App() {
     async function listener(event: any, message: string) {
       switch (message) {
         case "new-project":
-          createProject(router, setRefs);
+          createProject(router, applyAction);
           break;
         case "open-project":
-          await openProject(router, setRefs);
+          await openProject(router, applyAction);
           break;
         case "save-project":
           const fileName = await save(fresh.current);
@@ -132,18 +138,30 @@ function App() {
     };
   }, [router, setRefs, setParialRefs]);
 
+  const undoAction = useCallback(() => {
+    console.group("Undo");
+    const newRefs = undo(actionsStack);
+    console.log("New State", newRefs);
+    console.groupEnd();
+    setRefs(newRefs);
+  }, []);
+
+  function applyAction(action: T.Action) {
+    console.group("Apply Action");
+    console.log("Action: ", action);
+    console.log("Actions Stack: ", actionsStack);
+    const newRefs = _applyAction(actionsStack, action, refs);
+    console.log("New State: ", newRefs);
+    console.groupEnd();
+    onAction(action, newRefs);
+    setRefs(newRefs);
+  }
+
   useEffect(() => {
     function listener(e: MessageEvent) {
       if (e.data.type === "undo") {
-        console.log("undo", JSON.stringify(actionsStack), "\n");
-        setRefs(undo(actionsStack));
+        undoAction();
       } else if (e.data.type === "applyActions") {
-        console.log(
-          "applyActions",
-          JSON.stringify(actionsStack),
-          "\n",
-          JSON.stringify(e.data.actions)
-        );
         const actions = e.data.actions as T.Action[];
         setRefs(applyActions(actionsStack, actions, refs));
       }
@@ -158,18 +176,6 @@ function App() {
 
   function onComponentChange(id: string, newComponent: T.Component) {
     setComponents(set(refs.components, id, newComponent));
-  }
-
-  function applyAction(action: T.Action) {
-    console.log(
-      "on action",
-      JSON.stringify(actionsStack),
-      "\n",
-      JSON.stringify(action)
-    );
-    const newRefs = _applyAction(actionsStack, action, refs);
-    onAction(action, newRefs);
-    setRefs(newRefs);
   }
 
   function menu() {
@@ -194,9 +200,9 @@ function App() {
         exact
         render={() => (
           <Home
-            onNewProjectClick={() => createProject(router, setRefs)}
-            openProject={() => openProject(router, setRefs)}
-            openExampleProject={refs => initProject(router, refs, setRefs)}
+            onNewProjectClick={() => createProject(router, applyAction)}
+            openProject={() => openProject(router, applyAction)}
+            openExampleProject={refs => initProject(router, refs, applyAction)}
           />
         )}
       />
@@ -287,6 +293,7 @@ function App() {
           );
         }}
       />
+      <button onClick={undoAction}>Undo</button>
     </React.Fragment>
   );
 }

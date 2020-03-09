@@ -25,6 +25,30 @@ function replaceComponent(
   };
 }
 
+function replaceLayer<TLayer extends T.Layer>(
+  refs: T.Refs,
+  componentId: string,
+  layerId: string,
+  update: (layer: TLayer) => Partial<TLayer>
+) {
+  return replaceComponent(refs, componentId, component => {
+    if (component.layout == null) {
+      throw new Error("Cannot replace layer if component.layout is null");
+    }
+    const layer = findLayerById(component.layout, layerId);
+    if (layer == null) {
+      throw new Error("Layer not found");
+    }
+    return {
+      ...component,
+      layout: updateLayer(component.layout, {
+        ...layer,
+        ...update(layer as TLayer)
+      })
+    };
+  });
+}
+
 function visitLayer(root: T.Layer, visitor: LayerVisitor): T.Layer {
   switch (root.type) {
     case "container":
@@ -474,6 +498,18 @@ function moveLayerAction(action: T.MoveLayer, refs: T.Refs) {
   });
 }
 
+function updateLayerPropHandler(action: T.UpdateLayerProp, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    return {
+      props: { ...layer.props, [action.name]: action.value }
+    };
+  });
+}
+
+function initProjectHandler(action: T.InitProject, refs: T.Refs) {
+  return action.refs;
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -481,6 +517,8 @@ export default function applyAction(
 ): T.Refs {
   actionsStack.push(action);
   switch (action.type) {
+    case "initProject":
+      return initProjectHandler(action, refs);
     case "addComponentProp":
       return addComponentProp(action, refs);
     case "editComponentProp":
@@ -505,6 +543,8 @@ export default function applyAction(
       return renameLayer(action, refs);
     case "moveLayer":
       return moveLayerAction(action, refs);
+    case "updateLayerProp":
+      return updateLayerPropHandler(action, refs);
   }
 }
 

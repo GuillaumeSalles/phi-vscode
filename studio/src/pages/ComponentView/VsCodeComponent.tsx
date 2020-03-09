@@ -146,10 +146,12 @@ export default function VsCodeComponent({
             {isEditingHTML ? (
               <React.Fragment>
                 <HtmlEditor
+                  componentId={componentId}
                   component={component}
                   layer={selectedLayer}
                   onChange={updateComponentLayer}
                   refs={refs}
+                  applyAction={applyAction}
                 />
                 <HtmlLayerBindings
                   component={component}

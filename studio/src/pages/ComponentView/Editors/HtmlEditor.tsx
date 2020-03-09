@@ -22,30 +22,40 @@ const tags: T.TextLayerTag[] = [
 const textTagsOptions = listToEntries(tags);
 
 type Props = {
+  componentId: string;
   component: T.Component;
   layer: T.Layer;
   onChange: (layer: T.Layer) => void;
   refs: T.Refs;
+  applyAction: (action: T.Action) => void;
 };
 
 export default function HtmlEditor(props: Props) {
-  const { layer, onChange, refs } = props;
+  const { layer, onChange, refs, applyAction, componentId } = props;
 
   function updateLayer<TLayer>(newProps: Partial<TLayer>) {
     onChange({ ...layer, ...newProps });
   }
 
-  switch (props.layer.type) {
+  function updateLayerProp(name: string, value?: string) {
+    applyAction({
+      type: "updateLayerProp",
+      componentId,
+      layerId: layer.id,
+      name,
+      value
+    });
+  }
+
+  switch (
+    props.layer.type // TODO: Make it generic, switch is not needed anymore
+  ) {
     case "text":
-      const textProps = props.layer.props;
-      const updateProps = (newProps: Partial<T.TextLayerProps>) => {
-        updateLayer({ props: { ...textProps, ...newProps } });
-      };
       return (
         <Section title="Default Props">
           <Field label="Tag">
             <Select
-              value={props.layer.tag}
+              value={props.layer.props.tag}
               onChange={tag => updateLayer({ tag })}
               options={textTagsOptions}
             />
@@ -53,8 +63,8 @@ export default function HtmlEditor(props: Props) {
           <Field label="Content">
             <TextAreaInput
               placeholder="content"
-              value={textProps.content}
-              onChange={content => updateProps({ content })}
+              value={props.layer.props.content}
+              onChange={content => updateLayerProp("content", content)}
             />
           </Field>
         </Section>
@@ -63,7 +73,6 @@ export default function HtmlEditor(props: Props) {
       return null;
     case "component":
       const refComponent = getComponentOrThrow(props.layer.id, refs);
-      const layerProps = props.layer.props;
       return (
         <Section title="Default Props">
           {refComponent.props.map(prop => {
@@ -72,13 +81,11 @@ export default function HtmlEditor(props: Props) {
                 <TextInput
                   cssOverrides={{ width: "100%" }}
                   value={
-                    layerProps[prop.name] == null ? "" : layerProps[prop.name]
+                    props.layer.props[prop.name] == null
+                      ? ""
+                      : props.layer.props[prop.name]
                   }
-                  onChange={value =>
-                    updateLayer({
-                      props: { ...layerProps, [prop.name]: value }
-                    })
-                  }
+                  onChange={value => updateLayerProp(prop.name, value)}
                 />
               </Field>
             );
@@ -86,61 +93,53 @@ export default function HtmlEditor(props: Props) {
         </Section>
       );
     case "link":
-      const linkProps = props.layer.props;
-      const updateLinkProps = (newProps: Partial<T.LinkLayerProps>) => {
-        updateLayer({ props: { ...linkProps, ...newProps } });
-      };
       return (
         <Section title="Default Props">
           <Field label="content">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={linkProps.content}
-              onChange={content => updateLinkProps({ content })}
+              value={props.layer.props.content}
+              onChange={content => updateLayerProp("content", content)}
             />
           </Field>
           <Field label="href">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={linkProps.href}
-              onChange={href => updateLinkProps({ href })}
+              value={props.layer.props.href}
+              onChange={href => updateLayerProp("href", href)}
             />
           </Field>
         </Section>
       );
     case "image": {
-      const imageProps = props.layer.props;
-      const updateProps = (newProps: Partial<T.ImageProps>) => {
-        updateLayer({ props: { ...imageProps, ...newProps } });
-      };
       return (
         <Section title="Default Props">
           <Field label="src">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={imageProps.src}
-              onChange={src => updateProps({ src })}
+              value={props.layer.props.src}
+              onChange={src => updateLayerProp("src", src)}
             />
           </Field>
           <Field label="height">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={imageProps.height}
-              onChange={height => updateProps({ height })}
+              value={props.layer.props.height}
+              onChange={height => updateLayerProp("height", height)}
             />
           </Field>
           <Field label="width">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={imageProps.width}
-              onChange={width => updateProps({ width })}
+              value={props.layer.props.width}
+              onChange={width => updateLayerProp("width", width)}
             />
           </Field>
           <Field label="alt">
             <TextInput
               cssOverrides={{ width: "100%" }}
-              value={imageProps.alt}
-              onChange={alt => updateProps({ alt })}
+              value={props.layer.props.alt}
+              onChange={alt => updateLayerProp("height", alt)}
             />
           </Field>
         </Section>

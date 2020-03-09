@@ -8,7 +8,7 @@ type Props = {
   layer: T.Layer;
   refs: T.Refs;
   width: number;
-  props: T.ComponentPropertiesValues;
+  props: T.LayerProps;
 };
 
 function lengthToCss(
@@ -205,7 +205,7 @@ function makeLayerStyle(
 
 function contentOrBindingContent(
   layer: T.TextLayer | T.LinkLayer,
-  props: T.ComponentPropertiesValues
+  props: T.LayerProps
 ) {
   return layer.bindings.content != null &&
     props[layer.bindings.content.propName] != null
@@ -217,7 +217,7 @@ function makeChildren(
   layer: T.Layer,
   refs: T.Refs,
   width: number,
-  props: T.ComponentPropertiesValues
+  props: T.LayerProps
 ) {
   switch (layer.type) {
     case "image":
@@ -280,7 +280,7 @@ function makePaddingStyle(layer: T.Padding) {
 function applyBindings(
   props: any,
   layer: T.Layer,
-  componentProps: T.ComponentPropertiesValues
+  componentProps: T.LayerProps
 ) {
   const newProps = {
     ...props

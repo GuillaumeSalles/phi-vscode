@@ -16,7 +16,7 @@ import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
 import { findLayerById, updateLayer } from "../../layerUtils";
-import { useStateWithGetter, useWarningDialog } from "../../hooks";
+import { useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import OkCancelModal from "../../components/OkCancelModal";
 import Button from "../../components/Button";
@@ -107,15 +107,6 @@ function ComponentView({
       layout: updateLayer(component.layout, newLayer)
     };
     applyAction(selectLayer(newLayer.id));
-    onComponentChange(componentId, newComponent);
-  }
-
-  function updateComponentRootLayer(newLayer: T.Layer | undefined) {
-    const newComponent = {
-      ...component,
-      layout: newLayer
-    };
-    applyAction(selectLayer(newLayer ? newLayer.id : undefined));
     onComponentChange(componentId, newComponent);
   }
 
@@ -267,10 +258,12 @@ function ComponentView({
             {isEditingHTML ? (
               <>
                 <HtmlEditor
+                  componentId={componentId}
                   component={component}
                   layer={selectedLayer}
                   onChange={updateComponentLayer}
                   refs={refs}
+                  applyAction={applyAction}
                 />
                 <HtmlLayerBindings
                   component={component}

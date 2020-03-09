@@ -180,6 +180,7 @@ export function makeContainerLayer(
     mediaQueries: [],
     children: [],
     bindings: {},
+    props: {},
     style: {
       display: "flex",
       flexDirection: "column",

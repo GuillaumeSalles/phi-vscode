@@ -10,7 +10,7 @@ export type Component = {
 export type ComponentExample = {
   id: string;
   name: string;
-  props: ComponentPropertiesValues;
+  props: LayerProps;
 };
 
 export type ComponentProp = {
@@ -26,6 +26,7 @@ export interface ILayer {
   style: LayerStyle;
   mediaQueries: Array<MediaQuery>;
   bindings: Bindings;
+  props: LayerProps;
 }
 
 export type Bindings = {
@@ -45,12 +46,11 @@ export type Layer =
 
 export type LayerType = "container" | "text" | "link" | "image" | "component";
 
-export type ComponentPropertiesValues = { [name: string]: any };
+export type LayerProps = { [name: string]: any };
 
 export interface ComponentLayer extends ILayer {
   type: "component";
   componentId: string;
-  props: ComponentPropertiesValues;
 }
 
 export interface ContainerLayer extends ILayer {
@@ -62,37 +62,18 @@ export interface ContainerLayer extends ILayer {
 export interface ImageLayer extends ILayer {
   type: "image";
   tag: "img";
-  props: ImageProps;
 }
-
-export type ImageProps = {
-  src: string;
-  alt: string;
-  height?: string;
-  width?: string;
-};
 
 export interface TextLayer extends ILayer {
   type: "text";
   tag: TextLayerTag;
-  props: TextLayerProps;
 }
-
-type TextLayerProps = {
-  content: string;
-};
 
 export interface LinkLayer extends ILayer {
   type: "link";
   tag: "a";
   children: Layer[];
-  props: LinkLayerProps;
 }
-
-export type LinkLayerProps = {
-  content: string;
-  href: string;
-};
 
 type StyleOverride = {
   id: string;
@@ -295,6 +276,11 @@ export type Refs = {
   components: ComponentMap;
 };
 
+type InitProject = {
+  type: "initProject";
+  refs: Refs;
+};
+
 type AddComponentProp = {
   type: "addComponentProp";
   componentId: string;
@@ -375,12 +361,22 @@ type MoveLayer = {
   position: number;
 };
 
+type UpdateLayerProp = {
+  type: "updateLayerProp";
+  componentId: string;
+  layerId: string;
+  name: string;
+  value: any;
+};
+
 type Action =
+  | InitProject
   | AddLayer
   | DeleteLayer
   | RenameLayer
   | MoveLayer
   | SelectLayer
+  | UpdateLayerProp
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp
