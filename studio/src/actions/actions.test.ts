@@ -1,9 +1,9 @@
 import * as T from "../types";
 import applyAction, {
-  deleteComponentProp,
-  editComponentProp,
+  deleteComponentPropHandler,
+  editComponentPropHandler,
   applyActions,
-  addLayerAction,
+  addLayerActionHandler,
   undo
 } from "../actions";
 import {
@@ -55,7 +55,7 @@ describe("deleteComponentProp", () => {
       }),
       examples: []
     });
-    const newRefs = deleteComponentProp(
+    const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
@@ -85,7 +85,7 @@ describe("deleteComponentProp", () => {
       }),
       examples: []
     });
-    const newRefs = deleteComponentProp(
+    const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
@@ -133,7 +133,7 @@ describe("deleteComponentProp", () => {
       examples: []
     };
     refs.components.set(parentComponentId, parentComponent);
-    const newRefs = deleteComponentProp(
+    const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
@@ -159,7 +159,7 @@ describe("editComponentProp", () => {
       props: [{ name: oldProp, type: "text" }],
       examples: []
     });
-    const newRefs = editComponentProp(
+    const newRefs = editComponentPropHandler(
       {
         type: "editComponentProp",
         componentId,
@@ -178,7 +178,7 @@ describe("addLayer", () => {
     const refs = makeRefsFixture();
     const layerId = "newLayerId";
     refs.components.set("componentId", makeComponent());
-    const newRefs = addLayerAction(
+    const newRefs = addLayerActionHandler(
       {
         type: "addLayer",
         componentId: "componentId",

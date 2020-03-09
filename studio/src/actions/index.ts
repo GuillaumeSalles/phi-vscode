@@ -62,13 +62,19 @@ function visitLayer(root: T.Layer, visitor: LayerVisitor): T.Layer {
   }
 }
 
-export function addComponentProp(action: T.AddComponentProp, refs: T.Refs) {
+export function addComponentPropHandler(
+  action: T.AddComponentProp,
+  refs: T.Refs
+) {
   return replaceComponent(refs, action.componentId, c => ({
     props: [...c.props, { name: action.prop, type: "text" }]
   }));
 }
 
-export function editComponentProp(action: T.EditComponentProp, refs: T.Refs) {
+export function editComponentPropHandler(
+  action: T.EditComponentProp,
+  refs: T.Refs
+) {
   return {
     ...refs,
     components: new Map(
@@ -181,7 +187,7 @@ function renamePropertyFromComponentLayer(
   };
 }
 
-export function deleteComponentProp(
+export function deleteComponentPropHandler(
   action: T.DeleteComponentProp,
   refs: T.Refs
 ) {
@@ -274,13 +280,16 @@ function deleteAllBindingsThatUseProp<T extends T.Layer>(
   return layer;
 }
 
-export function renameComponent(action: T.RenameComponent, refs: T.Refs) {
+export function renameComponentHandler(
+  action: T.RenameComponent,
+  refs: T.Refs
+) {
   return replaceComponent(refs, action.componentId, c => ({
     name: action.name
   }));
 }
 
-export function addComponentExample(
+export function addComponentExampleHandler(
   action: T.AddComponentExample,
   refs: T.Refs
 ) {
@@ -289,7 +298,7 @@ export function addComponentExample(
   }));
 }
 
-export function deleteComponentExample(
+export function deleteComponentExampleHandler(
   action: T.DeleteComponentExample,
   refs: T.Refs
 ) {
@@ -298,7 +307,7 @@ export function deleteComponentExample(
   }));
 }
 
-export function updateComponentExampleProp(
+export function updateComponentExamplePropHandler(
   action: T.UpdateComponentExampleProp,
   refs: T.Refs
 ) {
@@ -346,7 +355,7 @@ function addLayer(
   }
 }
 
-export function addLayerAction(action: T.AddLayer, refs: T.Refs) {
+export function addLayerActionHandler(action: T.AddLayer, refs: T.Refs) {
   const result = replaceComponent(refs, action.componentId, component => {
     const newLayer = makeLayer(
       action.layerId,
@@ -386,7 +395,7 @@ function deleteLayer(
   };
 }
 
-function deleteLayerAction(action: T.DeleteLayer, refs: T.Refs) {
+function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs) {
   const result = replaceComponent(refs, action.componentId, component => {
     return {
       ...component,
@@ -402,14 +411,14 @@ function deleteLayerAction(action: T.DeleteLayer, refs: T.Refs) {
   };
 }
 
-function selectLayer(action: T.SelectLayer, refs: T.Refs) {
+function selectLayerHandler(action: T.SelectLayer, refs: T.Refs) {
   return {
     ...refs,
     selectedLayerId: action.layerId
   };
 }
 
-function renameLayer(action: T.RenameLayer, refs: T.Refs) {
+function renameLayerHandler(action: T.RenameLayer, refs: T.Refs) {
   const result = replaceComponent(refs, action.componentId, component => {
     const layer = findLayerById(component.layout!, action.layerId);
 
@@ -484,7 +493,7 @@ function insertLayer(
   return root;
 }
 
-function moveLayerAction(action: T.MoveLayer, refs: T.Refs) {
+function moveLayerActionHandler(action: T.MoveLayer, refs: T.Refs) {
   return replaceComponent(refs, action.componentId, component => {
     return {
       ...component,
@@ -498,7 +507,10 @@ function moveLayerAction(action: T.MoveLayer, refs: T.Refs) {
   });
 }
 
-function updateLayerPropHandler(action: T.UpdateLayerProp, refs: T.Refs) {
+function updateLayerPropHandlerHandler(
+  action: T.UpdateLayerProp,
+  refs: T.Refs
+) {
   return replaceLayer(refs, action.componentId, action.layerId, layer => {
     return {
       props: { ...layer.props, [action.name]: action.value }
@@ -520,31 +532,31 @@ export default function applyAction(
     case "initProject":
       return initProjectHandler(action, refs);
     case "addComponentProp":
-      return addComponentProp(action, refs);
+      return addComponentPropHandler(action, refs);
     case "editComponentProp":
-      return editComponentProp(action, refs);
+      return editComponentPropHandler(action, refs);
     case "deleteComponentProp":
-      return deleteComponentProp(action, refs);
+      return deleteComponentPropHandler(action, refs);
     case "renameComponent":
-      return renameComponent(action, refs);
+      return renameComponentHandler(action, refs);
     case "addComponentExample":
-      return addComponentExample(action, refs);
+      return addComponentExampleHandler(action, refs);
     case "deleteComponentExample":
-      return deleteComponentExample(action, refs);
+      return deleteComponentExampleHandler(action, refs);
     case "updateComponentExampleProp":
-      return updateComponentExampleProp(action, refs);
+      return updateComponentExamplePropHandler(action, refs);
     case "addLayer":
-      return addLayerAction(action, refs);
+      return addLayerActionHandler(action, refs);
     case "deleteLayer":
-      return deleteLayerAction(action, refs);
+      return deleteLayerActionHandler(action, refs);
     case "selectLayer":
-      return selectLayer(action, refs);
+      return selectLayerHandler(action, refs);
     case "renameLayer":
-      return renameLayer(action, refs);
+      return renameLayerHandler(action, refs);
     case "moveLayer":
-      return moveLayerAction(action, refs);
+      return moveLayerActionHandler(action, refs);
     case "updateLayerProp":
-      return updateLayerPropHandler(action, refs);
+      return updateLayerPropHandlerHandler(action, refs);
   }
 }
 
