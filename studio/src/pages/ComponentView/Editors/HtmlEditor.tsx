@@ -25,17 +25,12 @@ type Props = {
   componentId: string;
   component: T.Component;
   layer: T.Layer;
-  onChange: (layer: T.Layer) => void;
   refs: T.Refs;
   applyAction: (action: T.Action) => void;
 };
 
 export default function HtmlEditor(props: Props) {
-  const { layer, onChange, refs, applyAction, componentId } = props;
-
-  function updateLayer<TLayer>(newProps: Partial<TLayer>) {
-    onChange({ ...layer, ...newProps });
-  }
+  const { layer, refs, applyAction, componentId } = props;
 
   function updateLayerProp(name: string, value?: string) {
     applyAction({
@@ -44,6 +39,15 @@ export default function HtmlEditor(props: Props) {
       layerId: layer.id,
       name,
       value
+    });
+  }
+
+  function updateLayerTag(tag: T.TextLayerTag) {
+    applyAction({
+      type: "updateLayerTag",
+      componentId,
+      layerId: layer.id,
+      tag
     });
   }
 
@@ -56,7 +60,7 @@ export default function HtmlEditor(props: Props) {
           <Field label="Tag">
             <Select
               value={props.layer.props.tag}
-              onChange={tag => updateLayer({ tag })}
+              onChange={tag => updateLayerTag(tag)}
               options={textTagsOptions}
             />
           </Field>

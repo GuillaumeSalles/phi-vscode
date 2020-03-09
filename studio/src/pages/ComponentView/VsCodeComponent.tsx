@@ -149,7 +149,6 @@ export default function VsCodeComponent({
                   componentId={componentId}
                   component={component}
                   layer={selectedLayer}
-                  onChange={updateComponentLayer}
                   refs={refs}
                   applyAction={applyAction}
                 />

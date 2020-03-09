@@ -369,6 +369,13 @@ type UpdateLayerProp = {
   value: any;
 };
 
+type UpdateLayerTag = {
+  type: "updateLayerTag";
+  componentId: string;
+  layerId: string;
+  tag: TextLayerTag;
+};
+
 type Action =
   | InitProject
   | AddLayer
@@ -377,6 +384,7 @@ type Action =
   | MoveLayer
   | SelectLayer
   | UpdateLayerProp
+  | UpdateLayerTag
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp

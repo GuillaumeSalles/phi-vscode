@@ -507,13 +507,23 @@ function moveLayerActionHandler(action: T.MoveLayer, refs: T.Refs) {
   });
 }
 
-function updateLayerPropHandlerHandler(
-  action: T.UpdateLayerProp,
-  refs: T.Refs
-) {
+function updateLayerPropHandler(action: T.UpdateLayerProp, refs: T.Refs) {
   return replaceLayer(refs, action.componentId, action.layerId, layer => {
     return {
       props: { ...layer.props, [action.name]: action.value }
+    };
+  });
+}
+
+function updateLayerTagHandler(action: T.UpdateLayerTag, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    if (layer.type !== "text") {
+      throw new Error(
+        "Replace tag value is only supported for text layer for now"
+      );
+    }
+    return {
+      tag: action.tag
     };
   });
 }
@@ -556,7 +566,9 @@ export default function applyAction(
     case "moveLayer":
       return moveLayerActionHandler(action, refs);
     case "updateLayerProp":
-      return updateLayerPropHandlerHandler(action, refs);
+      return updateLayerPropHandler(action, refs);
+    case "updateLayerTag":
+      return updateLayerTagHandler(action, refs);
   }
 }
 
