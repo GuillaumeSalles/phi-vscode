@@ -2,8 +2,6 @@
 import { jsx } from "@emotion/core";
 import { column, row, sectionTitle } from "../styles";
 import * as T from "../types";
-import { Link } from "react-router-dom";
-import { useRouter } from "../useRouter";
 import AddButton from "./AddButton";
 import OkCancelModal from "./OkCancelModal";
 import React from "react";
@@ -11,12 +9,11 @@ import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateComponentName } from "../validators";
 import SecondaryButton from "./SecondaryButton";
 import Button from "./Button";
-import applyAction from "../actions";
+import uuid from "uuid";
 
 type Props = {
   components: T.ComponentMap;
   applyAction: (action: T.Action) => void;
-  onAddComponent: (name: string) => void;
   uiState: T.UIState;
 };
 
@@ -59,12 +56,16 @@ function MenuItem({
   );
 }
 
-function Menu({ components, onAddComponent, applyAction, uiState }: Props) {
+function Menu({ components, applyAction, uiState }: Props) {
   const nameEntry = useStringFormEntry("", value =>
     validateComponentName(value, null, components)
   );
   const createComponentDialog = useDialogForm([nameEntry], () => {
-    onAddComponent(nameEntry.value);
+    applyAction({
+      type: "addComponent",
+      name: nameEntry.value,
+      componentId: uuid()
+    });
   });
   return (
     <div

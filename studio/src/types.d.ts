@@ -334,6 +334,12 @@ type EditComponentProp = {
   newProp: string;
 };
 
+type AddComponent = {
+  type: "addComponent";
+  componentId: string;
+  name: string;
+};
+
 type RenameComponent = {
   type: "renameComponent";
   componentId: string;
@@ -445,6 +451,7 @@ type Action =
   | AddComponentProp
   | EditComponentProp
   | DeleteComponentProp
+  | AddComponent
   | RenameComponent
   | DeleteComponent
   | AddComponentExample

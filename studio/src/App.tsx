@@ -3,61 +3,30 @@ import { jsx } from "@emotion/core";
 import React, { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
-import {
-  Route,
-  RouteComponentProps,
-  StaticContext,
-  useHistory
-} from "react-router";
 import { electron, save, onAction } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
-import { set, del, firstKey } from "./helpers/immutable-map";
+import { set } from "./helpers/immutable-map";
 import Home from "./pages/Home";
-import { useRouter } from "./useRouter";
 import { makeDefaultProject } from "./factories";
 import { open, jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
-import uuid from "uuid/v4";
 import _applyAction, { applyActions, undo } from "./actions/index";
 
-type Router = RouteComponentProps<{}, StaticContext, any>;
-
-function navigateToFirstComponentOrDefault(
-  router: Router,
-  components: T.ComponentMap
-) {
-  router.history.push(
-    components.size > 0 ? `/components/${firstKey(components)}` : `/typography`
-  );
-}
-
-function initProject(
-  router: Router,
-  refs: T.Refs,
-  applyAction: (action: T.Action) => void
-) {
-  router.history.push("/");
+function initProject(refs: T.Refs, applyAction: (action: T.Action) => void) {
   applyAction({ type: "initProject", refs });
-  navigateToFirstComponentOrDefault(router, refs.components);
 }
 
-function createProject(
-  router: Router,
-  applyAction: (action: T.Action) => void
-) {
-  initProject(router, makeDefaultProject(), applyAction);
+function createProject(applyAction: (action: T.Action) => void) {
+  initProject(makeDefaultProject(), applyAction);
 }
 
-async function openProject(
-  router: Router,
-  applyAction: (action: T.Action) => void
-) {
+async function openProject(applyAction: (action: T.Action) => void) {
   const refs = await open();
   if (refs) {
-    initProject(router, refs, applyAction);
+    initProject(refs, applyAction);
   }
 }
 
@@ -66,9 +35,6 @@ const actionsStack: T.Action[] = [];
 function App() {
   const mode = (window as any).__MODE__;
   const initialState = (window as any).__initialState__;
-
-  const router = useRouter();
-  const history = useHistory();
 
   const [refs, setRefs] = useState<T.Refs>({
     uiState: {
@@ -91,7 +57,6 @@ function App() {
       } else {
         setRefs(makeDefaultProject());
       }
-      history.push("/typography");
     }
   }, [mode]);
 
@@ -118,10 +83,10 @@ function App() {
     async function listener(event: any, message: string) {
       switch (message) {
         case "new-project":
-          createProject(router, applyAction);
+          createProject(applyAction);
           break;
         case "open-project":
-          await openProject(router, applyAction);
+          await openProject(applyAction);
           break;
         case "save-project":
           const fileName = await save(fresh.current);
@@ -138,7 +103,7 @@ function App() {
     return () => {
       electron.ipcRenderer.removeListener("actions", listener);
     };
-  }, [router, setRefs, setParialRefs]);
+  }, [setRefs, setParialRefs]);
 
   const undoAction = useCallback(() => {
     console.group("Undo");
@@ -174,7 +139,7 @@ function App() {
     return () => {
       window.removeEventListener("message", listener);
     };
-  }, [router, refs]);
+  }, [refs]);
 
   function onComponentChange(id: string, newComponent: T.Component) {
     setComponents(set(refs.components, id, newComponent));
@@ -186,13 +151,6 @@ function App() {
         applyAction={applyAction}
         uiState={refs.uiState}
         components={refs.components}
-        onAddComponent={name => {
-          const id = uuid();
-          setComponents(
-            set(refs.components, id, { name, props: [], examples: [] })
-          );
-          router.history.push(`/components/${id}`);
-        }}
       />
     );
   }
@@ -225,9 +183,9 @@ function App() {
     case "home":
       return (
         <Home
-          onNewProjectClick={() => createProject(router, applyAction)}
-          openProject={() => openProject(router, applyAction)}
-          openExampleProject={refs => initProject(router, refs, applyAction)}
+          onNewProjectClick={() => createProject(applyAction)}
+          openProject={() => openProject(applyAction)}
+          openExampleProject={refs => initProject(refs, applyAction)}
         />
       );
       break;

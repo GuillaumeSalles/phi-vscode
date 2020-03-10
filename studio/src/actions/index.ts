@@ -10,6 +10,12 @@ import {
 import uuid from "uuid/v4";
 import { makeLayer, makeDefaultProject } from "../factories";
 
+function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
+  return components.size === 0
+    ? { type: "typography" }
+    : { type: "component", componentId: firstKey(components) };
+}
+
 function replaceComponent(
   refs: T.Refs,
   componentId: string,
@@ -297,10 +303,7 @@ export function deleteComponentHandler(
   return {
     ...refs,
     components,
-    uiState:
-      components.size === 0
-        ? { type: "typography" }
-        : { type: "component", componentId: firstKey(components) }
+    uiState: goToFirstComponentOrDefault(components)
   };
 }
 
@@ -582,8 +585,23 @@ function deleteLayerBindingHandler(action: T.DeleteLayerBinding, refs: T.Refs) {
   });
 }
 
-function initProjectHandler(action: T.InitProject, refs: T.Refs) {
-  return action.refs;
+function addComponentHandler(action: T.AddComponent, refs: T.Refs): T.Refs {
+  return {
+    ...refs,
+    components: set(refs.components, action.componentId, {
+      name: action.name,
+      props: [],
+      examples: []
+    }),
+    uiState: { type: "component", componentId: action.componentId }
+  };
+}
+
+function initProjectHandler(action: T.InitProject, refs: T.Refs): T.Refs {
+  return {
+    ...action.refs,
+    uiState: goToFirstComponentOrDefault(action.refs.components)
+  };
 }
 
 function goToHandler(action: T.GoTo, refs: T.Refs) {
@@ -612,6 +630,8 @@ export default function applyAction(
       return deleteComponentPropHandler(action, refs);
     case "renameComponent":
       return renameComponentHandler(action, refs);
+    case "addComponent":
+      return addComponentHandler(action, refs);
     case "deleteComponent":
       return deleteComponentHandler(action, refs);
     case "addComponentExample":
