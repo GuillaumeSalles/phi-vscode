@@ -18,8 +18,9 @@ import { assertUnreachable } from "../../../utils";
 
 type Props<TLayer> = {
   layer: TLayer;
-  onChange: (layer: TLayer) => void;
   refs: T.Refs;
+  componentId: string;
+  applyAction: (action: T.Action) => void;
 };
 
 function layerTypeToSupportedDisplay(type: T.LayerType): T.DisplayProperty[] {
@@ -38,7 +39,8 @@ function layerTypeToSupportedDisplay(type: T.LayerType): T.DisplayProperty[] {
 
 export default function LayerEditor<TLayer extends T.Layer>({
   layer,
-  onChange,
+  componentId,
+  applyAction,
   refs
 }: Props<TLayer>) {
   const [mediaQuery, setMediaQuery] = useState("default");
@@ -47,41 +49,25 @@ export default function LayerEditor<TLayer extends T.Layer>({
     ? layer.style
     : layer.mediaQueries.find(mq => mq.id === mediaQuery)!.style;
 
-  const updateStyle = (newProps: Partial<T.LayerStyle>): Partial<T.Layer> => {
-    return isDefault
-      ? { style: { ...style, ...newProps } }
-      : {
-          mediaQueries: layer.mediaQueries.map(mq =>
-            mq.id === mediaQuery
-              ? {
-                  ...mq,
-                  style: { ...style, ...newProps }
-                }
-              : mq
-          )
-        };
-  };
-
   const addMediaQuery = (id: string, breakpoint: T.Ref): void => {
-    updateLayer({
-      mediaQueries: [
-        ...layer.mediaQueries,
-        {
-          id,
-          minWidth: breakpoint,
-          style: { ...layer.style }
-        }
-      ]
+    applyAction({
+      type: "addMediaQuery",
+      componentId,
+      layerId: layer.id,
+      mediaQueryId: id,
+      breakpointId: breakpoint.id
     });
     setMediaQuery(id);
   };
 
-  function updateLayer(newProps: Partial<T.Layer>) {
-    onChange({ ...layer, ...newProps });
-  }
-
-  function updateLayerStyle(newProps: Partial<T.LayerStyle>) {
-    updateLayer(updateStyle(newProps));
+  function updateLayerStyle(style: Partial<T.LayerStyle>) {
+    applyAction({
+      type: "updateLayerStyle",
+      componentId,
+      layerId: layer.id,
+      style,
+      mediaQueryId: mediaQuery !== "default" ? mediaQuery : undefined
+    });
   }
 
   // TODO: Component styling

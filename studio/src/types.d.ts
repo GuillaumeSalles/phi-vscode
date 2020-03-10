@@ -436,6 +436,22 @@ type DeleteLayerBinding = {
   layerProp: string;
 };
 
+type UpdateLayerStyle = {
+  type: "updateLayerStyle";
+  componentId: string;
+  layerId: string;
+  style: Partial<LayerStyle>;
+  mediaQueryId?: string;
+};
+
+type AddMediaQuery = {
+  type: "addMediaQuery";
+  componentId: string;
+  layerId: string;
+  mediaQueryId: string;
+  breakpointId: string;
+};
+
 type Action =
   | GoTo
   | InitProject
@@ -456,4 +472,6 @@ type Action =
   | DeleteComponent
   | AddComponentExample
   | DeleteComponentExample
-  | UpdateComponentExampleProp;
+  | UpdateComponentExampleProp
+  | UpdateLayerStyle
+  | AddMediaQuery;

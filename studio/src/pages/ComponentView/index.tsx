@@ -56,14 +56,12 @@ type Props = {
   menu: React.ReactNode;
   componentId: string;
   layerId?: string;
-  onComponentChange: (id: string, component: T.Component) => void;
   refs: T.Refs;
   applyAction: (action: T.Action) => void;
 };
 
 function ComponentView({
   menu,
-  onComponentChange,
   refs,
   applyAction,
   componentId,
@@ -107,7 +105,7 @@ function ComponentView({
       layout: updateLayer(component.layout, newLayer)
     };
     applyAction(selectLayer(newLayer.id));
-    onComponentChange(componentId, newComponent);
+    // onComponentChange(componentId, newComponent);
   }
 
   return (
@@ -277,7 +275,8 @@ function ComponentView({
               <LayerEditor
                 layer={selectedLayer}
                 refs={refs}
-                onChange={updateComponentLayer}
+                componentId={componentId}
+                applyAction={applyAction}
               />
             )}
           </div>

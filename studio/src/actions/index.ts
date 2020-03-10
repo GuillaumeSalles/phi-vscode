@@ -611,6 +611,41 @@ function goToHandler(action: T.GoTo, refs: T.Refs) {
   };
 }
 
+function updateLayerStyleHandler(action: T.UpdateLayerStyle, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    if (action.mediaQueryId == null) {
+      return {
+        style: { ...layer.style, ...action.style }
+      };
+    }
+    return {
+      mediaQueries: layer.mediaQueries.map(mq =>
+        mq.id === action.mediaQueryId
+          ? {
+              ...mq,
+              style: { ...mq.style, ...action.style }
+            }
+          : mq
+      )
+    };
+  });
+}
+
+function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs) {
+  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+    return {
+      mediaQueries: [
+        ...layer.mediaQueries,
+        {
+          id: action.mediaQueryId,
+          minWidth: { type: "ref", id: action.breakpointId },
+          style: { ...layer.style }
+        }
+      ]
+    };
+  });
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -658,6 +693,10 @@ export default function applyAction(
       return updateLayerBindingHandler(action, refs);
     case "deleteLayerBinding":
       return deleteLayerBindingHandler(action, refs);
+    case "updateLayerStyle":
+      return updateLayerStyleHandler(action, refs);
+    case "addMediaQuery":
+      return addMediaQueryHandler(action, refs);
   }
 }
 

@@ -195,7 +195,6 @@ function App() {
           menu={menu()}
           componentId={uiState.componentId}
           layerId={uiState.layerId}
-          onComponentChange={onComponentChange}
           refs={refs}
           applyAction={applyAction}
         />
