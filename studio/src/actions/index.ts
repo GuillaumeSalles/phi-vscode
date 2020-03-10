@@ -428,8 +428,6 @@ function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
     };
   });
 
-  const component = getComponentOrThrow(action.componentId, result);
-
   return {
     ...result,
     uiState: {

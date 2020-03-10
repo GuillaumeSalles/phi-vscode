@@ -1,7 +1,7 @@
 import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
-import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
+import { firstKey } from "./helpers/immutable-map";
 import { layerTypeToName, layerTreeToArray } from "./layerUtils";
 import { assertUnreachable } from "./utils";
 

@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import logo from "../logo.png";
 
 type Props = {
   color?: string;

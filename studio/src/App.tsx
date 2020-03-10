@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
 import { electron, save, onAction } from "./bridge";
@@ -32,9 +32,10 @@ async function openProject(applyAction: (action: T.Action) => void) {
 
 const actionsStack: T.Action[] = [];
 
+const initialState = (window as any).__initialState__;
+
 function App() {
   const mode = (window as any).__MODE__;
-  const initialState = (window as any).__initialState__;
 
   const [refs, setRefs] = useState<T.Refs>({
     uiState: {
@@ -67,12 +68,19 @@ function App() {
     });
   }
 
-  function setComponents(components: T.ComponentMap) {
-    setParialRefs({
-      components,
-      isSaved: false
-    });
-  }
+  const applyAction = useCallback(
+    (action: T.Action) => {
+      console.group("Apply Action");
+      console.log("Action: ", action);
+      console.log("Actions Stack: ", actionsStack);
+      const newRefs = _applyAction(actionsStack, action, refs);
+      console.log("New State: ", newRefs);
+      console.groupEnd();
+      onAction(action, newRefs);
+      setRefs(newRefs);
+    },
+    [refs]
+  );
 
   const fresh = useRef<T.Refs>(refs);
   useEffect(() => {
@@ -103,7 +111,7 @@ function App() {
     return () => {
       electron.ipcRenderer.removeListener("actions", listener);
     };
-  }, [setRefs, setParialRefs]);
+  }, [applyAction, setRefs, setParialRefs]);
 
   const undoAction = useCallback(() => {
     console.group("Undo");
@@ -112,17 +120,6 @@ function App() {
     console.groupEnd();
     setRefs(newRefs);
   }, []);
-
-  function applyAction(action: T.Action) {
-    console.group("Apply Action");
-    console.log("Action: ", action);
-    console.log("Actions Stack: ", actionsStack);
-    const newRefs = _applyAction(actionsStack, action, refs);
-    console.log("New State: ", newRefs);
-    console.groupEnd();
-    onAction(action, newRefs);
-    setRefs(newRefs);
-  }
 
   useEffect(() => {
     function listener(e: MessageEvent) {
@@ -140,10 +137,6 @@ function App() {
       window.removeEventListener("message", listener);
     };
   }, [refs]);
-
-  function onComponentChange(id: string, newComponent: T.Component) {
-    setComponents(set(refs.components, id, newComponent));
-  }
 
   function menu() {
     return (

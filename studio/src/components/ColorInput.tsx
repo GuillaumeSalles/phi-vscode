@@ -27,7 +27,7 @@ function ColorInput({ value, colors, onChange }: Props) {
       value={colorId}
       options={options}
       onChange={value =>
-        onChange(value == "none" ? undefined : { type: "ref", id: value })
+        onChange(value === "none" ? undefined : { type: "ref", id: value })
       }
       backgroundColor={backgroundColor}
       color={contrastColor}

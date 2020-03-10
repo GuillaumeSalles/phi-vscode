@@ -15,7 +15,7 @@ import HtmlEditor from "./Editors/HtmlEditor";
 import { Layout } from "../../components/Layout";
 import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
-import { findLayerById, updateLayer } from "../../layerUtils";
+import { findLayerById } from "../../layerUtils";
 import { useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import OkCancelModal from "../../components/OkCancelModal";
@@ -29,7 +29,6 @@ import {
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
-import { selectLayer } from "../../actions/factories";
 
 const tabStyle = css({
   display: "flex",
@@ -98,15 +97,6 @@ function ComponentView({
     component.layout && layerId
       ? findLayerById(component.layout, layerId)
       : undefined;
-
-  function updateComponentLayer(newLayer: T.Layer) {
-    const newComponent = {
-      ...component,
-      layout: updateLayer(component.layout, newLayer)
-    };
-    applyAction(selectLayer(newLayer.id));
-    // onComponentChange(componentId, newComponent);
-  }
 
   return (
     <Layout

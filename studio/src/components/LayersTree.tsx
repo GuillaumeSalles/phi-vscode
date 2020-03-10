@@ -243,7 +243,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
         layerId
       });
     },
-    [applyAction, layerId, componentId]
+    [applyAction, componentId]
   );
 
   const onRename = useCallback(
@@ -259,7 +259,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
     (layer: T.Layer) => {
       applyAction({ type: "deleteLayer", componentId, layerId: layer.id });
     },
-    [applyAction]
+    [applyAction, componentId]
   );
 
   const onLayerClick = useCallback(
