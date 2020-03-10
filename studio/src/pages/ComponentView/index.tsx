@@ -110,6 +110,7 @@ function ComponentView({
         isEditing ? (
           <>
             <LayersTree
+              layerId={layerId}
               componentId={componentId}
               root={component.layout}
               refs={refs}
