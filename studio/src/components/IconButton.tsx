@@ -22,6 +22,7 @@ export default function IconButton({
       padding: 0,
       background: "transparent",
       opacity: 0.65,
+      cursor: "pointer",
       ":focus": {
         outline: "none",
         opacity: 0.9

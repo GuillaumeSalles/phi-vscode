@@ -11,15 +11,24 @@ import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateComponentName } from "../validators";
 import SecondaryButton from "./SecondaryButton";
 import Button from "./Button";
+import applyAction from "../actions";
 
 type Props = {
   components: T.ComponentMap;
+  applyAction: (action: T.Action) => void;
   onAddComponent: (name: string) => void;
+  uiState: T.UIState;
 };
 
-function MenuItem({ href, text }: { href: string; text: string }) {
-  const pathname = useRouter().location.pathname;
-  const isSelected = pathname === href;
+function MenuItem({
+  onClick,
+  text,
+  isSelected
+}: {
+  onClick: () => void;
+  text: string;
+  isSelected: boolean;
+}) {
   return (
     <div
       css={{
@@ -28,24 +37,29 @@ function MenuItem({ href, text }: { href: string; text: string }) {
         borderLeft: isSelected ? "4px solid black" : "none"
       }}
     >
-      <Link
-        to={href}
+      <button
+        onClick={onClick}
         css={{
           fontSize: "14px",
           color: "rgb(0, 0, 0)",
           boxSizing: "border-box",
           textDecoration: "none",
           fontWeight: isSelected ? 600 : 400,
-          cursor: "pointer"
+          cursor: "pointer",
+          background: "none",
+          outline: "none",
+          border: "none",
+          margin: "0",
+          padding: "0"
         }}
       >
         {text}
-      </Link>
+      </button>
     </div>
   );
 }
 
-function Menu({ components, onAddComponent }: Props) {
+function Menu({ components, onAddComponent, applyAction, uiState }: Props) {
   const nameEntry = useStringFormEntry("", value =>
     validateComponentName(value, null, components)
   );
@@ -84,9 +98,25 @@ function Menu({ components, onAddComponent }: Props) {
         >
           Styles
         </span>
-        <MenuItem href="/typography" text="Typography" />
-        <MenuItem href="/colors" text="Colors" />
-        <MenuItem href="/breakpoints" text="Breakpoints" />
+        <MenuItem
+          onClick={() =>
+            applyAction({ type: "goTo", to: { type: "typography" } })
+          }
+          text="Typography"
+          isSelected={uiState.type === "typography"}
+        />
+        <MenuItem
+          onClick={() => applyAction({ type: "goTo", to: { type: "colors" } })}
+          text="Colors"
+          isSelected={uiState.type === "colors"}
+        />
+        <MenuItem
+          onClick={() =>
+            applyAction({ type: "goTo", to: { type: "breakpoints" } })
+          }
+          text="Breakpoints"
+          isSelected={uiState.type === "breakpoints"}
+        />
         <div
           css={[
             row,
@@ -99,8 +129,16 @@ function Menu({ components, onAddComponent }: Props) {
         {Array.from(components.entries()).map(entry => (
           <MenuItem
             key={entry[0]}
-            href={`/components/${entry[0]}`}
+            onClick={() =>
+              applyAction({
+                type: "goTo",
+                to: { type: "component", componentId: entry[0] }
+              })
+            }
             text={entry[1].name}
+            isSelected={
+              uiState.type === "component" && uiState.componentId === entry[0]
+            }
           />
         ))}
       </div>

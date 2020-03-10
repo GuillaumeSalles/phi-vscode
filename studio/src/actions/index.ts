@@ -1,5 +1,5 @@
 import * as T from "../types";
-import { set } from "../helpers/immutable-map";
+import { set, del, firstKey } from "../helpers/immutable-map";
 import {
   isComponentLayer,
   findLayerById,
@@ -289,6 +289,21 @@ export function renameComponentHandler(
   }));
 }
 
+export function deleteComponentHandler(
+  action: T.DeleteComponent,
+  refs: T.Refs
+): T.Refs {
+  const components = del(refs.components, action.componentId);
+  return {
+    ...refs,
+    components,
+    uiState:
+      components.size === 0
+        ? { type: "typography" }
+        : { type: "component", componentId: firstKey(components) }
+  };
+}
+
 export function addComponentExampleHandler(
   action: T.AddComponentExample,
   refs: T.Refs
@@ -355,7 +370,10 @@ function addLayer(
   }
 }
 
-export function addLayerActionHandler(action: T.AddLayer, refs: T.Refs) {
+export function addLayerActionHandler(
+  action: T.AddLayer,
+  refs: T.Refs
+): T.Refs {
   const result = replaceComponent(refs, action.componentId, component => {
     const newLayer = makeLayer(
       action.layerId,
@@ -371,7 +389,11 @@ export function addLayerActionHandler(action: T.AddLayer, refs: T.Refs) {
   });
   return {
     ...result,
-    selectedLayerId: action.layerId
+    uiState: {
+      type: "component",
+      componentId: action.componentId,
+      layerId: action.layerId
+    }
   };
 }
 
@@ -395,7 +417,7 @@ function deleteLayer(
   };
 }
 
-function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs) {
+function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
   const result = replaceComponent(refs, action.componentId, component => {
     return {
       ...component,
@@ -407,18 +429,26 @@ function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs) {
 
   return {
     ...result,
-    selectedLayerId: component.layout ? component.layout.id : undefined
+    uiState: {
+      type: "component",
+      componentId: action.componentId,
+      layerId: action.layerId
+    }
   };
 }
 
-function selectLayerHandler(action: T.SelectLayer, refs: T.Refs) {
+function selectLayerHandler(action: T.SelectLayer, refs: T.Refs): T.Refs {
   return {
     ...refs,
-    selectedLayerId: action.layerId
+    uiState: {
+      type: "component",
+      componentId: (refs.uiState as T.UIStateComponent).componentId,
+      layerId: action.layerId
+    }
   };
 }
 
-function renameLayerHandler(action: T.RenameLayer, refs: T.Refs) {
+function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
   const result = replaceComponent(refs, action.componentId, component => {
     const layer = findLayerById(component.layout!, action.layerId);
 
@@ -436,7 +466,11 @@ function renameLayerHandler(action: T.RenameLayer, refs: T.Refs) {
   });
   return {
     ...result,
-    selectedLayerId: action.layerId
+    uiState: {
+      type: "component",
+      componentId: action.componentId,
+      layerId: action.layerId
+    }
   };
 }
 
@@ -552,6 +586,13 @@ function initProjectHandler(action: T.InitProject, refs: T.Refs) {
   return action.refs;
 }
 
+function goToHandler(action: T.GoTo, refs: T.Refs) {
+  return {
+    ...refs,
+    uiState: action.to
+  };
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -559,6 +600,8 @@ export default function applyAction(
 ): T.Refs {
   actionsStack.push(action);
   switch (action.type) {
+    case "goTo":
+      return goToHandler(action, refs);
     case "initProject":
       return initProjectHandler(action, refs);
     case "addComponentProp":
@@ -569,6 +612,8 @@ export default function applyAction(
       return deleteComponentPropHandler(action, refs);
     case "renameComponent":
       return renameComponentHandler(action, refs);
+    case "deleteComponent":
+      return deleteComponentHandler(action, refs);
     case "addComponentExample":
       return addComponentExampleHandler(action, refs);
     case "deleteComponentExample":

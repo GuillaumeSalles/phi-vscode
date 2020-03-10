@@ -55,19 +55,19 @@ const selectedTabStyle = css(tabStyle, {
 type Props = {
   menu: React.ReactNode;
   componentId: string;
+  layerId?: string;
   onComponentChange: (id: string, component: T.Component) => void;
-  onDelete: (id: string) => void;
   refs: T.Refs;
   applyAction: (action: T.Action) => void;
 };
 
 function ComponentView({
   menu,
-  componentId,
   onComponentChange,
   refs,
-  onDelete,
-  applyAction
+  applyAction,
+  componentId,
+  layerId
 }: Props) {
   const component = refs.components.get(componentId)!;
 
@@ -97,8 +97,8 @@ function ComponentView({
   const [isEditingHTML, setIsEditingHTML] = useState(true);
 
   const selectedLayer =
-    component.layout && refs.selectedLayerId
-      ? findLayerById(component.layout, refs.selectedLayerId)
+    component.layout && layerId
+      ? findLayerById(component.layout, layerId)
       : undefined;
 
   function updateComponentLayer(newLayer: T.Layer) {
@@ -177,7 +177,7 @@ function ComponentView({
                       icon={<Delete height={20} width={20} />}
                       onClick={() => {
                         if (componentsThatUseCurrentComponent.length === 0) {
-                          onDelete(componentId);
+                          applyAction({ type: "deleteComponent", componentId });
                         } else {
                           deleteRefDialog.open();
                         }

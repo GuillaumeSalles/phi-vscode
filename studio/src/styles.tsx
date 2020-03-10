@@ -59,6 +59,7 @@ export const primaryButton = css({
   fontSize: "14px",
   color: "white",
   background: colors.primary,
+  cursor: "pointer",
   ":disabled": {
     cursor: "not-allowed"
   }
@@ -73,6 +74,7 @@ export const secondaryButton = css({
   fontSize: "14px",
   color: "#333333",
   background: "#E8E8E8",
+  cursor: "pointer",
   ":disabled": {
     cursor: "not-allowed"
   }

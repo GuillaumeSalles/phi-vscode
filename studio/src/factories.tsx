@@ -278,6 +278,10 @@ export function makeDefaultProject(componentId = defaultComponentId): T.Refs {
   return {
     fileName: undefined,
     isSaved: false,
+    uiState: {
+      type: "component",
+      componentId
+    },
     artboards,
     colors,
     fontFamilies,

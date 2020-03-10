@@ -2,7 +2,6 @@ import * as T from "./types";
 import { electron, readFile } from "./bridge";
 import { makeDefaultArtboards } from "./factories";
 
-
 function arrayToMap(array: any[]) {
   return new Map(
     array.map((item: any) => {
@@ -20,6 +19,9 @@ export function jsonToRefs(
   return {
     isSaved,
     fileName,
+    uiState: {
+      type: "typography"
+    },
     artboards: makeDefaultArtboards(),
     components: arrayToMap(data.components),
     fontSizes: arrayToMap(data.fontSizes),

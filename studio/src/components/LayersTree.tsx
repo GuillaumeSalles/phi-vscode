@@ -19,6 +19,7 @@ import { selectLayer } from "../actions/factories";
 
 type Props = {
   componentId: string;
+  layerId?: string;
   root?: T.Layer;
   refs: T.Refs;
   applyAction: (action: T.Action) => void;
@@ -210,7 +211,7 @@ export function findInsertionPosition(
   };
 }
 
-function LayersTree({ componentId, root, refs, applyAction }: Props) {
+function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
   const [draggedIndex, setDraggedIndex] = useState<number | undefined>();
   const [dragIndicatorPosition, setDragIndicatorPosition] = useState<
     DropPosition | undefined
@@ -219,14 +220,12 @@ function LayersTree({ componentId, root, refs, applyAction }: Props) {
     validateLayerName(value, root)
   );
   const selectedLayer =
-    root && refs.selectedLayerId
-      ? findLayerById(root, refs.selectedLayerId)
-      : undefined;
+    root && layerId ? findLayerById(root, layerId) : undefined;
 
   const renameDialog = useDialogForm([layerNameEntry], () => {
     applyAction({
       type: "renameLayer",
-      layerId: refs.selectedLayerId!,
+      layerId: layerId!,
       componentId,
       name: layerNameEntry.value
     });
@@ -238,13 +237,13 @@ function LayersTree({ componentId, root, refs, applyAction }: Props) {
       applyAction({
         type: "addLayer",
         componentId,
-        parentLayerId: refs.selectedLayerId,
+        parentLayerId: layerId,
         layerComponentId,
         layerType,
         layerId
       });
     },
-    [applyAction, refs.selectedLayerId, componentId]
+    [applyAction, layerId, componentId]
   );
 
   const onRename = useCallback(
@@ -381,7 +380,7 @@ function LayersTree({ componentId, root, refs, applyAction }: Props) {
             onClick={onLayerClick}
             onRename={onRename}
             onDelete={onDelete}
-            isSelected={item.layer.id === refs.selectedLayerId}
+            isSelected={item.layer.id === layerId}
           />
         ))}
       </div>

@@ -264,9 +264,38 @@ export type ArtboardDefinition = {
   backgroundColor: string;
 };
 
+export type UIState =
+  | UIStateComponent
+  | UIStateTypography
+  | UIStateBreakpoints
+  | UIStateColors
+  | UIStateHome;
+
+export type UIStateComponent = {
+  type: "component";
+  componentId: string;
+  layerId?: string;
+};
+
+export type UIStateHome = {
+  type: "home";
+};
+
+export type UIStateTypography = {
+  type: "typography";
+};
+
+export type UIStateBreakpoints = {
+  type: "breakpoints";
+};
+
+export type UIStateColors = {
+  type: "colors";
+};
+
 export type Refs = {
   isSaved: boolean;
-  selectedLayerId?: string;
+  uiState: UIState;
   fileName: string | undefined;
   artboards: ArtboardsMap;
   colors: ColorsMap;
@@ -274,6 +303,11 @@ export type Refs = {
   fontFamilies: FontFamiliesMap;
   breakpoints: BreakpointsMap;
   components: ComponentMap;
+};
+
+type GoTo = {
+  type: "goTo";
+  to: UIState;
 };
 
 type InitProject = {
@@ -304,6 +338,11 @@ type RenameComponent = {
   type: "renameComponent";
   componentId: string;
   name: string;
+};
+
+type DeleteComponent = {
+  type: "deleteComponent";
+  componentId: string;
 };
 
 type AddComponentExample = {
@@ -392,6 +431,7 @@ type DeleteLayerBinding = {
 };
 
 type Action =
+  | GoTo
   | InitProject
   | AddLayer
   | DeleteLayer
@@ -406,6 +446,7 @@ type Action =
   | EditComponentProp
   | DeleteComponentProp
   | RenameComponent
+  | DeleteComponent
   | AddComponentExample
   | DeleteComponentExample
   | UpdateComponentExampleProp;

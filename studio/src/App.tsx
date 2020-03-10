@@ -22,7 +22,6 @@ import { open, jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
 import uuid from "uuid/v4";
 import _applyAction, { applyActions, undo } from "./actions/index";
-import VsCodeComponent from "./pages/ComponentView/VsCodeComponent";
 
 type Router = RouteComponentProps<{}, StaticContext, any>;
 
@@ -72,6 +71,9 @@ function App() {
   const history = useHistory();
 
   const [refs, setRefs] = useState<T.Refs>({
+    uiState: {
+      type: "home"
+    },
     isSaved: true,
     fileName: undefined,
     components: new Map(),
@@ -181,6 +183,8 @@ function App() {
   function menu() {
     return (
       <Menu
+        applyAction={applyAction}
+        uiState={refs.uiState}
         components={refs.components}
         onAddComponent={name => {
           const id = uuid();
@@ -193,109 +197,81 @@ function App() {
     );
   }
 
-  return (
-    <React.Fragment>
-      <Route
-        path="/"
-        exact
-        render={() => (
-          <Home
-            onNewProjectClick={() => createProject(router, applyAction)}
-            openProject={() => openProject(router, applyAction)}
-            openExampleProject={refs => initProject(router, refs, applyAction)}
-          />
-        )}
-      />
-      <Route
-        path="/typography"
-        render={() => (
-          <Typography
-            menu={menu()}
-            refs={refs}
-            fontFamilies={refs.fontFamilies}
-            onFontFamiliesChange={fontFamilies => {
-              setParialRefs({
-                fontFamilies,
-                isSaved: false
-              });
-            }}
-            fontSizes={refs.fontSizes}
-            onFontSizesChange={fontSizes => {
-              setParialRefs({
-                fontSizes,
-                isSaved: false
-              });
-            }}
-          />
-        )}
-      />
-      <Route
-        path="/colors"
-        render={() => (
-          <Colors
-            menu={menu()}
-            refs={refs}
-            colors={refs.colors}
-            onColorsChange={colors => {
-              setParialRefs({
-                colors,
-                isSaved: false
-              });
-            }}
-          />
-        )}
-      />
-      <Route
-        path="/breakpoints"
-        render={() => (
-          <Breakpoints
-            refs={refs}
-            menu={menu()}
-            breakpoints={refs.breakpoints}
-            onBreakpointsChange={breakpoints => {
-              setParialRefs({
-                breakpoints,
-                isSaved: false
-              });
-            }}
-          />
-        )}
-      />
-      <Route
-        path="/components/:id"
-        render={props => {
-          return (
-            <ComponentView
-              menu={menu()}
-              componentId={props.match.params.id}
-              onComponentChange={onComponentChange}
-              onDelete={id => {
-                const newComponents = del(refs.components, id);
-                navigateToFirstComponentOrDefault(router, newComponents);
-                setComponents(newComponents);
-              }}
-              refs={refs}
-              applyAction={applyAction}
-            />
-          );
-        }}
-      />
-      <Route
-        path="/vscode/component"
-        render={props => {
-          return (
-            <VsCodeComponent
-              componentId={firstKey(refs.components)}
-              onComponentChange={onComponentChange}
-              refs={refs}
-              applyAction={applyAction}
-            />
-          );
-        }}
-      />
-      <button onClick={undoAction}>Undo</button>
-    </React.Fragment>
-  );
+  const uiState = refs.uiState;
+
+  switch (uiState.type) {
+    case "typography":
+      return (
+        <Typography
+          menu={menu()}
+          refs={refs}
+          fontFamilies={refs.fontFamilies}
+          onFontFamiliesChange={fontFamilies => {
+            setParialRefs({
+              fontFamilies,
+              isSaved: false
+            });
+          }}
+          fontSizes={refs.fontSizes}
+          onFontSizesChange={fontSizes => {
+            setParialRefs({
+              fontSizes,
+              isSaved: false
+            });
+          }}
+        />
+      );
+      break;
+    case "home":
+      return (
+        <Home
+          onNewProjectClick={() => createProject(router, applyAction)}
+          openProject={() => openProject(router, applyAction)}
+          openExampleProject={refs => initProject(router, refs, applyAction)}
+        />
+      );
+      break;
+    case "component":
+      return (
+        <ComponentView
+          menu={menu()}
+          componentId={uiState.componentId}
+          layerId={uiState.layerId}
+          onComponentChange={onComponentChange}
+          refs={refs}
+          applyAction={applyAction}
+        />
+      );
+    case "colors":
+      return (
+        <Colors
+          menu={menu()}
+          refs={refs}
+          colors={refs.colors}
+          onColorsChange={colors => {
+            setParialRefs({
+              colors,
+              isSaved: false
+            });
+          }}
+        />
+      );
+      break;
+    case "breakpoints":
+      return (
+        <Breakpoints
+          refs={refs}
+          menu={menu()}
+          breakpoints={refs.breakpoints}
+          onBreakpointsChange={breakpoints => {
+            setParialRefs({
+              breakpoints,
+              isSaved: false
+            });
+          }}
+        />
+      );
+  }
 }
 
 export default App;
