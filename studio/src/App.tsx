@@ -8,7 +8,6 @@ import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
-import { set } from "./helpers/immutable-map";
 import Home from "./pages/Home";
 import { makeDefaultProject } from "./factories";
 import { open, jsonToRefs } from "./fileUtils";
@@ -61,7 +60,7 @@ function App() {
     }
   }, [mode]);
 
-  function setParialRefs(partialRefs: Partial<T.Refs>) {
+  function setPartialRefs(partialRefs: Partial<T.Refs>) {
     setRefs({
       ...refs,
       ...partialRefs
@@ -99,7 +98,7 @@ function App() {
         case "save-project":
           const fileName = await save(fresh.current);
           if (fileName) {
-            setParialRefs({
+            setPartialRefs({
               fileName,
               isSaved: true
             });
@@ -111,7 +110,7 @@ function App() {
     return () => {
       electron.ipcRenderer.removeListener("actions", listener);
     };
-  }, [applyAction, setRefs, setParialRefs]);
+  }, [applyAction, setRefs, setPartialRefs]);
 
   const undoAction = useCallback(() => {
     console.group("Undo");
@@ -157,22 +156,10 @@ function App() {
           menu={menu()}
           refs={refs}
           fontFamilies={refs.fontFamilies}
-          onFontFamiliesChange={fontFamilies => {
-            setParialRefs({
-              fontFamilies,
-              isSaved: false
-            });
-          }}
           fontSizes={refs.fontSizes}
-          onFontSizesChange={fontSizes => {
-            setParialRefs({
-              fontSizes,
-              isSaved: false
-            });
-          }}
+          applyAction={applyAction}
         />
       );
-      break;
     case "home":
       return (
         <Home
@@ -181,7 +168,6 @@ function App() {
           openExampleProject={refs => initProject(refs, applyAction)}
         />
       );
-      break;
     case "component":
       return (
         <ComponentView
@@ -198,27 +184,16 @@ function App() {
           menu={menu()}
           refs={refs}
           colors={refs.colors}
-          onColorsChange={colors => {
-            setParialRefs({
-              colors,
-              isSaved: false
-            });
-          }}
+          applyAction={applyAction}
         />
       );
-      break;
     case "breakpoints":
       return (
         <Breakpoints
           refs={refs}
           menu={menu()}
           breakpoints={refs.breakpoints}
-          onBreakpointsChange={breakpoints => {
-            setParialRefs({
-              breakpoints,
-              isSaved: false
-            });
-          }}
+          applyAction={applyAction}
         />
       );
   }

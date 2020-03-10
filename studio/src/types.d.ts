@@ -305,6 +305,21 @@ export type Refs = {
   components: ComponentMap;
 };
 
+export type RefType = "fontFamilies" | "fontSizes" | "breakpoints" | "colors";
+
+export type UpdateRef = {
+  type: "updateRef";
+  refId: string;
+  refType: RefType;
+  newRef: any; // TODO: Type properly
+};
+
+export type DeleteRef = {
+  type: "deleteRef";
+  refType: RefType;
+  refId: string;
+};
+
 type GoTo = {
   type: "goTo";
   to: UIState;
@@ -454,6 +469,8 @@ type AddMediaQuery = {
 
 type Action =
   | GoTo
+  | UpdateRef
+  | DeleteRef
   | InitProject
   | AddLayer
   | DeleteLayer

@@ -20,7 +20,7 @@ type Props = {
   menu: React.ReactNode;
   refs: T.Refs;
   colors: Map<string, T.ColorDefinition>;
-  onColorsChange: (newColors: Map<string, T.ColorDefinition>) => void;
+  applyAction: (action: T.Action) => void;
 };
 
 function isColorUsingRef(color: T.Color | undefined, refId: string): boolean {
@@ -34,7 +34,7 @@ function isLayerStyleUsingColor(style: T.LayerStyle, refId: string) {
   );
 }
 
-function Colors({ menu, refs, colors, onColorsChange }: Props) {
+function Colors({ menu, refs, colors, applyAction }: Props) {
   const valueEntry = useStringFormEntry("", validateColorValue);
   const {
     nameEntry,
@@ -46,9 +46,10 @@ function Colors({ menu, refs, colors, onColorsChange }: Props) {
     deleteRefDialogProps,
     closeDeleteRefDialogProps
   } = useRefManagement(
+    "colors",
     "Color",
     colors,
-    onColorsChange,
+    applyAction,
     [valueEntry],
     color => {
       valueEntry.setValue(color.value);

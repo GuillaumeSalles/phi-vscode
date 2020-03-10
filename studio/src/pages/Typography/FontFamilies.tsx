@@ -18,13 +18,13 @@ function isUsingFontSize(style: T.LayerStyle, refId: string): boolean {
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
-  onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;
+  applyAction: (action: T.Action) => void;
   refs: T.Refs;
 };
 
 export default function FontFamilies({
   fontFamilies,
-  onFontFamiliesChange,
+  applyAction,
   refs
 }: Props) {
   const valueEntry = useStringFormEntry("", () => {
@@ -39,9 +39,10 @@ export default function FontFamilies({
     deleteRefDialogProps,
     closeDeleteRefDialogProps
   } = useRefManagement(
+    "fontFamilies",
     "Font family",
     fontFamilies,
-    onFontFamiliesChange,
+    applyAction,
     [valueEntry],
     fontFamily => {
       valueEntry.setValue(fontFamily.value);

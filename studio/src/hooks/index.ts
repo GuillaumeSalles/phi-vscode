@@ -104,9 +104,10 @@ export function useDeleteRefDialog<TRef extends { name: string }>(
 }
 
 export function useRefManagement<TRef extends { name: string }>(
+  refType: T.RefType,
   prefix: string,
   refs: Map<string, TRef>,
-  onRefsChanges: (newRefs: Map<string, TRef>) => void,
+  applyAction: (action: T.Action) => void,
   formEntries: FormEntry<any, any>[],
   prepareEditForm: (ref: TRef) => void,
   formToRef: (name: string) => TRef,
@@ -119,9 +120,12 @@ export function useRefManagement<TRef extends { name: string }>(
     validateRefName(value, selectedRefId, refs, prefix)
   );
   const dialog = useDialogForm([nameEntry].concat(formEntries), () => {
-    onRefsChanges(
-      set(refs, isEditing ? selectedRefId! : uuid(), formToRef(nameEntry.value))
-    );
+    applyAction({
+      type: "updateRef",
+      refType,
+      refId: isEditing ? selectedRefId! : uuid(),
+      newRef: formToRef(nameEntry.value)
+    });
   });
   const deleteRefDialog = useDeleteRefDialog(
     prefix,
@@ -167,7 +171,7 @@ export function useRefManagement<TRef extends { name: string }>(
         if (componentsThatUseRef.length > 0) {
           deleteRefDialog.open();
         } else {
-          onRefsChanges(del(refs, selectedRefId!));
+          applyAction({ type: "deleteRef", refId: selectedRefId!, refType });
           selectRef(null);
         }
       }

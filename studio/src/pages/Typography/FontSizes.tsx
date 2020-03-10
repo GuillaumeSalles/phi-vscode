@@ -14,7 +14,7 @@ import { isLayerUsingRef } from "../../layerUtils";
 
 type Props = {
   items: T.FontSizesMap;
-  onItemsChange: (items: T.FontSizesMap) => void;
+  applyAction: (action: T.Action) => void;
   refs: T.Refs;
 };
 
@@ -22,7 +22,7 @@ function isUsingFontSize(style: T.LayerStyle, refId: string): boolean {
   return style.fontSize != null && style.fontSize.id === refId;
 }
 
-export default function FontSizes({ items, onItemsChange, refs }: Props) {
+export default function FontSizes({ items, applyAction, refs }: Props) {
   const valueEntry = useStringFormEntry("", () => {
     return undefined;
   });
@@ -35,9 +35,10 @@ export default function FontSizes({ items, onItemsChange, refs }: Props) {
     deleteRefDialogProps,
     closeDeleteRefDialogProps
   } = useRefManagement(
+    "fontSizes",
     "Font size",
     items,
-    onItemsChange,
+    applyAction,
     [valueEntry],
     fontSizes => {
       valueEntry.setValue(fontSizes.value);

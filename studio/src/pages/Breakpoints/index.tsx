@@ -23,10 +23,10 @@ type Props = {
   menu: React.ReactNode;
   refs: T.Refs;
   breakpoints: T.BreakpointsMap;
-  onBreakpointsChange: (newBp: T.BreakpointsMap) => void;
+  applyAction: (action: T.Action) => void;
 };
 
-function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
+function Breakpoints({ menu, refs, breakpoints, applyAction }: Props) {
   const valueEntry = useNumberFormEntry(undefined, value =>
     validateBreakpointValue(value)
   );
@@ -40,9 +40,10 @@ function Breakpoints({ menu, refs, breakpoints, onBreakpointsChange }: Props) {
     deleteRefDialogProps,
     closeDeleteRefDialogProps
   } = useRefManagement(
+    "breakpoints",
     "Breakpoint",
     breakpoints,
-    onBreakpointsChange,
+    applyAction,
     [valueEntry],
     breakpoint => {
       valueEntry.setValue(breakpoint.value.value);

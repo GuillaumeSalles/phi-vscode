@@ -644,6 +644,23 @@ function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs) {
   });
 }
 
+function updateRefHandler(action: T.UpdateRef, refs: T.Refs): T.Refs {
+  return {
+    ...refs,
+    [action.refType]: set(refs[action.refType], action.refId, action.newRef)
+  };
+}
+
+function deleteRefHandler(action: T.DeleteRef, refs: T.Refs): T.Refs {
+  return {
+    ...refs,
+    [action.refType]: del(
+      refs[action.refType] as Map<string, any>,
+      action.refId
+    )
+  };
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -695,6 +712,10 @@ export default function applyAction(
       return updateLayerStyleHandler(action, refs);
     case "addMediaQuery":
       return addMediaQueryHandler(action, refs);
+    case "updateRef":
+      return updateRefHandler(action, refs);
+    case "deleteRef":
+      return deleteRefHandler(action, refs);
   }
 }
 

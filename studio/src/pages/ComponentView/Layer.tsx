@@ -318,7 +318,7 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
 
 function Layer({ layer, refs, width, props }: Props) {
   if (layer.type === "component") {
-    const component = getComponentOrThrow(layer.id, refs);
+    const component = getComponentOrThrow(layer.componentId, refs);
     if (component.layout == null) {
       return null;
     }

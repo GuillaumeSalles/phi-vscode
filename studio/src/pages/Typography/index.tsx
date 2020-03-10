@@ -10,21 +10,17 @@ import TopBar from "../../components/TopBar";
 type Props = {
   menu: React.ReactNode;
   refs: T.Refs;
-
   fontFamilies: T.FontFamiliesMap;
-  onFontFamiliesChange: (fontFamilies: T.FontFamiliesMap) => void;
-
   fontSizes: T.FontSizesMap;
-  onFontSizesChange: (fontSizes: T.FontSizesMap) => void;
+  applyAction: (action: T.Action) => void;
 };
 
 function Typography({
   menu,
   refs,
   fontFamilies,
-  onFontFamiliesChange,
   fontSizes,
-  onFontSizesChange
+  applyAction
 }: Props) {
   return (
     <Layout
@@ -36,13 +32,9 @@ function Typography({
           <FontFamilies
             refs={refs}
             fontFamilies={fontFamilies}
-            onFontFamiliesChange={onFontFamiliesChange}
+            applyAction={applyAction}
           />
-          <FontSizes
-            refs={refs}
-            items={fontSizes}
-            onItemsChange={onFontSizesChange}
-          />
+          <FontSizes refs={refs} items={fontSizes} applyAction={applyAction} />
         </div>
       }
     />
