@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
-import { column, heading, row } from "../../styles";
+import { column, heading, row, colors } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
@@ -94,7 +94,6 @@ function Breakpoints({ menu, refs, breakpoints, applyAction }: Props) {
                     fontWeight: 400,
                     fontSize: "14px",
                     lineHeight: "16px",
-                    color: "rgb(153, 153, 153)",
                     display: "flex",
                     padding: "0 10px",
                     alignItems: "center",

@@ -1,15 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
-import { column, heading, colors, shadow1 } from "../../styles";
-
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
-const editorCustomStyle = {
-  backgroundColor: colors.canvasBackground,
-  fontSize: "13px",
-  boxShadow: "inset rgba(0, 0, 0, 0.12) 0px 2px 5px 0px"
-};
+import { column, heading, colors, shadow1, fonts } from "../../styles";
 
 type Props = {
   component: T.Component;
@@ -99,16 +91,28 @@ export default function CodeExamples({ component }: Props) {
           height: "300px",
           maxHeight: "300px",
           minHeight: "300px",
-          background: colors.sideBarBackground,
-          borderLeft: "solid 1px #DDD",
-          borderRight: "solid 1px #DDD"
+          background: colors.sideBarBackground
         }
       ]}
     >
       <h1 css={heading}>React</h1>
-      <SyntaxHighlighter language="jsx" customStyle={editorCustomStyle}>
-        {componentToCodeExample(component)}
-      </SyntaxHighlighter>
+      <pre
+        css={{
+          background: colors.canvasBackground,
+          fontSize: "13px",
+          boxShadow: "inset rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
+          padding: "1em",
+          margin: "0.5em 0px",
+          overflow: "auto",
+          "::-webkit-scrollbar-corner": {
+            background: "transparent"
+          }
+        }}
+      >
+        <code css={{ fontFamily: fonts.mono, color: colors.sideBarForeground }}>
+          {componentToCodeExample(component)}
+        </code>
+      </pre>
     </div>
   );
 }

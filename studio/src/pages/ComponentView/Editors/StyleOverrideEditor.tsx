@@ -5,7 +5,7 @@ import AddButton from "../../../components/AddButton";
 import { useToggle } from "../../../hooks";
 import { useRef } from "react";
 import Popover from "../../../components/Popover";
-import { card, row, column, sectionTitle } from "../../../styles";
+import { card, row, column, sectionTitle, colors } from "../../../styles";
 import {
   ColorEditor,
   FontSizeEditor,
@@ -175,15 +175,16 @@ export default function StyleOverrideEditor({
         position="top"
       >
         <div
-          css={[
-            card,
-            {
-              margin: "8px 0",
-              width: "234px",
-              height: "400px",
-              overflow: "auto"
-            }
-          ]}
+          css={{
+            boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",
+            background: colors.popupBackground,
+            borderRadius: "2px",
+            transition: "all 0.2s ease 0s",
+            margin: "8px 0",
+            width: "234px",
+            height: "400px",
+            overflow: "auto"
+          }}
         >
           {propertiesToAdd.map(property => (
             <button
@@ -193,7 +194,6 @@ export default function StyleOverrideEditor({
                   ...style,
                   [property[0]]: rootStyle[property[0]]
                 };
-                console.log(newStyle);
                 onChange(newStyle);
               }}
               css={[
@@ -204,8 +204,10 @@ export default function StyleOverrideEditor({
                   border: "none",
                   width: "100%",
                   fontSize: "14px",
+                  background: "transparent",
+                  color: colors.sideBarForeground,
                   ":hover": {
-                    backgroundColor: "#EAEAEA"
+                    backgroundColor: colors.listHoverBackground
                   }
                 }
               ]}

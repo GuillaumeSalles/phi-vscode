@@ -34,21 +34,16 @@ const tabStyle = css({
   display: "flex",
   flex: "1 1 auto",
   fontSize: "14px",
-  background: "white",
   justifyContent: "center",
   alignItems: "center",
   border: "none",
   cursor: "pointer",
-  color: "rgb(136, 136, 136)",
-  ":focus": {
-    outline: "none",
-    background: "#F6F6F6"
-  }
+  color: colors.sideBarForeground,
+  background: colors.sideBarBackground
 });
 
 const selectedTabStyle = css(tabStyle, {
-  borderBottom: `solid 2px ${colors.primary}`,
-  color: "black"
+  background: colors.sideBarSectionHeaderBackground
 });
 
 type Props = {
@@ -129,7 +124,17 @@ function ComponentView({
       center={
         <div css={[column, { height: "100%", overflowX: "hidden" }]}>
           <div
-            css={[column, mainPadding, { flex: "1 1 auto", overflowX: "auto" }]}
+            css={[
+              column,
+              mainPadding,
+              {
+                flex: "1 1 auto",
+                overflowX: "auto",
+                "::-webkit-scrollbar-corner": {
+                  background: "transparent"
+                }
+              }
+            ]}
           >
             <div
               css={[
@@ -226,8 +231,7 @@ function ComponentView({
                 {
                   flex: "0 0 auto",
                   height: "40px",
-                  alignItems: "stretch",
-                  borderBottom: "solid 1px #DDD"
+                  alignItems: "stretch"
                 }
               ]}
             >

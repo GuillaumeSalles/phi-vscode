@@ -164,8 +164,7 @@ export default function StyleOverridesEditor({
                 column,
                 {
                   margin: "4px 8px",
-                  background: "white",
-                  border: `solid 1px ${colors.border}`
+                  background: colors.sideBarSectionHeaderBackground
                 }
               ]}
             >
@@ -175,7 +174,7 @@ export default function StyleOverridesEditor({
                   row,
                   {
                     padding: "8px",
-                    borderBottom: `solid 1px ${colors.border}`,
+                    borderBottom: `solid 1px ${colors.sideBarBackground}`,
                     alignItems: "center",
                     fontSize: "14px",
                     ":hover button": {

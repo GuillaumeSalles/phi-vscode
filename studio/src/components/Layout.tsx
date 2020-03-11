@@ -36,17 +36,19 @@ export function Layout({ left, center, right, topBar }: Props) {
           overflowX: "auto"
         }}
       >
-        <div
-          css={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "32px"
-          }}
-        >
-          {topBar}
-        </div>
+        {(window as any).__MODE__ != "VSCODE" && (
+          <div
+            css={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "32px"
+            }}
+          >
+            {topBar}
+          </div>
+        )}
         <div
           css={{
             height: "100%",

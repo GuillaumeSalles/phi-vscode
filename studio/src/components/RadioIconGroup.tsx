@@ -21,7 +21,9 @@ function RadioIconInput<TValue extends string>({
       css={{
         padding: "4px 8px",
         display: "flex",
-        background: isSelected ? colors.primary : "#F0F0F0"
+        background: isSelected
+          ? colors.radioIconActiveBackground
+          : colors.radioIconBackground
       }}
     >
       <input

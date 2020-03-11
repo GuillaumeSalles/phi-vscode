@@ -22,7 +22,6 @@ export default React.forwardRef<any, Props>(
           primaryButton,
           {
             color: "white",
-            background: colors.primary,
             margin
           }
         ]}

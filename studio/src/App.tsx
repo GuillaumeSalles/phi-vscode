@@ -13,6 +13,8 @@ import { makeDefaultProject } from "./factories";
 import { open, jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
 import _applyAction, { applyActions, undo } from "./actions/index";
+import React from "react";
+import Debugger from "./components/Debugger";
 
 function initProject(refs: T.Refs, applyAction: (action: T.Action) => void) {
   applyAction({ type: "initProject", refs });
@@ -31,34 +33,25 @@ async function openProject(applyAction: (action: T.Action) => void) {
 
 const actionsStack: T.Action[] = [];
 
-const initialState = (window as any).__initialState__;
+const initialState: T.Refs =
+  (window as any).__MODE__ === "VSCODE"
+    ? jsonToRefs(undefined, true, (window as any).__initialState__)
+    : {
+        uiState: {
+          type: "home"
+        },
+        isSaved: true,
+        fileName: undefined,
+        components: new Map(),
+        artboards: new Map(),
+        colors: new Map(),
+        fontFamilies: new Map(),
+        fontSizes: new Map(),
+        breakpoints: new Map()
+      };
 
 function App() {
-  const mode = (window as any).__MODE__;
-
-  const [refs, setRefs] = useState<T.Refs>({
-    uiState: {
-      type: "home"
-    },
-    isSaved: true,
-    fileName: undefined,
-    components: new Map(),
-    artboards: new Map(),
-    colors: new Map(),
-    fontFamilies: new Map(),
-    fontSizes: new Map(),
-    breakpoints: new Map()
-  });
-
-  useEffect(() => {
-    if (mode === "VSCODE") {
-      if (initialState) {
-        setRefs(jsonToRefs(undefined, true, initialState));
-      } else {
-        setRefs(makeDefaultProject());
-      }
-    }
-  }, [mode]);
+  const [refs, setRefs] = useState<T.Refs>(initialState);
 
   function setPartialRefs(partialRefs: Partial<T.Refs>) {
     setRefs({
@@ -114,7 +107,7 @@ function App() {
 
   const undoAction = useCallback(() => {
     console.group("Undo");
-    const newRefs = undo(actionsStack);
+    const newRefs = undo(actionsStack, initialState);
     console.log("New State", newRefs);
     console.groupEnd();
     setRefs(newRefs);

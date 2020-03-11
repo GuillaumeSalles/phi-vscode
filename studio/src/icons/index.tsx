@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import { colors } from "../styles";
 
 type Props = {
   color?: string;
@@ -36,13 +37,15 @@ export function Add({ color = "black", height = 14, width = 14 }: Props) {
       height={height}
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
+      css={{
+        stroke: colors.iconColor
+      }}
     >
       <line
         x1="10"
         y1="0"
         x2="10"
         y2="20"
-        stroke={color}
         strokeWidth="3"
         strokeLinecap="round"
       />
@@ -51,7 +54,6 @@ export function Add({ color = "black", height = 14, width = 14 }: Props) {
         y1="10"
         x2="20"
         y2="10"
-        stroke={color}
         strokeWidth="3"
         strokeLinecap="round"
       />
@@ -70,6 +72,9 @@ export function Delete({ height, width }: DeleteProps) {
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
+      css={{
+        fill: colors.iconColor
+      }}
       viewBox="0 0 24 24"
     >
       <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
@@ -90,6 +95,9 @@ export function Edit({ height, width }: EditProps) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
       <path d="M0 0h24v24H0z" fill="none" />
@@ -109,6 +117,9 @@ export function Link({ height, width }: LinkProps) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path d="M0 0h24v24H0z" fill="none" />
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
@@ -123,6 +134,9 @@ export function Text({ height, width }: Dimension) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M9.17 15.5h5.64l1.14 3h2.09l-5.11-13h-1.86l-5.11 13h2.09l1.12-3zM12 7.98l2.07 5.52H9.93L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z" />
@@ -137,6 +151,9 @@ export function Container({ height, width }: Dimension) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M21 18H2v2h19v-2zm-2-8v4H4v-4h15m1-2H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm1-4H2v2h19V4z" />
@@ -200,6 +217,9 @@ export function Image({ height, width }: Dimension) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
@@ -214,6 +234,9 @@ export function Component({ height, width }: Dimension) {
       width={height}
       height={width}
       viewBox="0 0 24 24"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9 17v2H5v-2h4M21 3h-8v6h8V3zM11 3H3v10h8V3zm10 8h-8v10h8V11zm-10 4H3v6h8v-6z" />
@@ -228,6 +251,9 @@ export function Settings({ height, width }: Dimension) {
       width={height}
       height={width}
       viewBox="0 0 20 20"
+      css={{
+        fill: colors.iconColor
+      }}
     >
       <path fill="none" d="M0 0h20v20H0V0z" />
       <path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z" />

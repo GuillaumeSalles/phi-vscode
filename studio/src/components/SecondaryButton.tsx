@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import React, { KeyboardEvent } from "react";
-import { primaryButton } from "../styles";
+import { primaryButton, colors } from "../styles";
 
 type Props = {
   text: string;
@@ -22,9 +22,12 @@ export default React.forwardRef<any, Props>(
         css={[
           primaryButton,
           {
-            color: "#333333",
-            background: "#E8E8E8",
-            margin
+            background: colors.secondaryButtonBackground,
+            color: colors.secondaryButtonForeground,
+            margin,
+            ":hover": {
+              background: colors.secondaryButtonBackground
+            }
           }
         ]}
         onClick={onClick}

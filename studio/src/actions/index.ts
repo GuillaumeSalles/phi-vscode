@@ -719,12 +719,12 @@ export default function applyAction(
   }
 }
 
-export function undo(actionsStack: T.Action[]) {
+export function undo(actionsStack: T.Action[], initialState: T.Refs) {
   const newStack: T.Action[] = [];
   actionsStack.pop();
   return actionsStack.reduce((newRefs, action) => {
     return applyAction(newStack, action, newRefs);
-  }, makeDefaultProject());
+  }, initialState);
 }
 
 export function applyActions(

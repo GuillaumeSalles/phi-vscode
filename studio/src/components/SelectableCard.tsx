@@ -18,7 +18,7 @@ export default function SelectableCard({
   const styles = css(
     selectableCard,
     {
-      borderColor: isSelected ? colors.primary : "transparent"
+      borderColor: isSelected ? colors.selectedCardBorder : "transparent"
     },
     css(overrides)
   );

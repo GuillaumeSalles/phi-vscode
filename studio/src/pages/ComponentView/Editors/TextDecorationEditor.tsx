@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row } from "../../../styles";
+import { row, colors } from "../../../styles";
 import { ToggleButton } from "../../../components/ToggleButton";
 import { Underline, Strikethrough } from "../../../icons";
 import Field from "../../../components/Field";
@@ -37,7 +37,11 @@ export default function TextDecorationEditor({ style, onChange }: Props) {
             <Underline
               height={16}
               width={16}
-              fill={isChecked ? "white" : "black"}
+              fill={
+                isChecked
+                  ? colors.radioIconActiveForeground
+                  : colors.radioIconForeground
+              }
             />
           )}
         />
@@ -55,7 +59,11 @@ export default function TextDecorationEditor({ style, onChange }: Props) {
             <Strikethrough
               height={16}
               width={16}
-              fill={isChecked ? "white" : "black"}
+              fill={
+                isChecked
+                  ? colors.radioIconActiveForeground
+                  : colors.radioIconForeground
+              }
             />
           )}
         />

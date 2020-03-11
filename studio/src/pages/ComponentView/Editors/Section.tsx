@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { sectionTitle, column, row } from "../../../styles";
+import { sectionTitle, column, row, colors } from "../../../styles";
 
 type Props = {
   title: string;
@@ -10,29 +10,42 @@ type Props = {
 
 export default function Section({ title, children, topRightButton }: Props) {
   return (
-    <div
-      css={[
-        column,
-        {
-          flexShrink: 0,
-          padding: "8px",
-          borderBottom: "solid 1px #DDD"
-        }
-      ]}
-    >
+    <div css={[column]}>
       <div
         css={[
           row,
           {
-            margin: "4px 8px",
-            justifyContent: "space-between"
+            padding: "4px 16px",
+            justifyContent: "space-between",
+            background: colors.sideBarSectionHeaderBackground
           }
         ]}
       >
-        <h4 css={[sectionTitle]}>{title}</h4>
+        <h4
+          css={{
+            margin: 0,
+            fontSize: "11x",
+            textTransform: "uppercase",
+            letterSpacing: "1.3px",
+            fontWeight: "bold",
+            color: colors.sideBarSectionHeaderForeground
+          }}
+        >
+          {title}
+        </h4>
         {topRightButton != null && topRightButton}
       </div>
-      {children}
+      <div
+        css={[
+          column,
+          {
+            flexShrink: 0,
+            padding: "8px"
+          }
+        ]}
+      >
+        {children}
+      </div>
     </div>
   );
 }

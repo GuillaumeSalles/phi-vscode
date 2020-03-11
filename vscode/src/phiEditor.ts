@@ -420,11 +420,5 @@ export class PhiEditor extends Disposable {
     if (this.isDisposed) {
       return;
     }
-
-    // TODO;
-    // this.panel.webview.postMessage({
-    //   type: "setValue",
-    //   value: this.document.userData!.getStrokes()
-    // });
   }
 }

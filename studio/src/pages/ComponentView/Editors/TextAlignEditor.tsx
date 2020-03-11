@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { row } from "../../../styles";
+import { row, colors } from "../../../styles";
 import RadioIconGroup from "../../../components/RadioIconGroup";
 import Field from "../../../components/Field";
 
@@ -79,24 +79,50 @@ export default function TextAlignEditor({ style, onChange }: Props) {
           options={[
             [
               "left",
-              ({ isSelected }) => <Left fill={isSelected ? "white" : "black"} />
+              ({ isSelected }) => (
+                <Left
+                  fill={
+                    isSelected
+                      ? colors.radioIconActiveForeground
+                      : colors.radioIconForeground
+                  }
+                />
+              )
             ],
             [
               "center",
               ({ isSelected }) => (
-                <Center fill={isSelected ? "white" : "black"} />
+                <Center
+                  fill={
+                    isSelected
+                      ? colors.radioIconActiveForeground
+                      : colors.radioIconForeground
+                  }
+                />
               )
             ],
             [
               "right",
               ({ isSelected }) => (
-                <Right fill={isSelected ? "white" : "black"} />
+                <Right
+                  fill={
+                    isSelected
+                      ? colors.radioIconActiveForeground
+                      : colors.radioIconForeground
+                  }
+                />
               )
             ],
             [
               "justify",
               ({ isSelected }) => (
-                <Justify fill={isSelected ? "white" : "black"} />
+                <Justify
+                  fill={
+                    isSelected
+                      ? colors.radioIconActiveForeground
+                      : colors.radioIconForeground
+                  }
+                />
               )
             ]
           ]}

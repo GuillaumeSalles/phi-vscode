@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, Interpolation, css } from "@emotion/core";
 import { MouseEventHandler } from "react";
+import { colors } from "../styles";
 
 type Props = {
   icon: React.ReactNode;
@@ -21,14 +22,14 @@ export default function IconButton({
       margin: 0,
       padding: 0,
       background: "transparent",
-      opacity: 0.65,
+      opacity: 0.7,
       cursor: "pointer",
       ":focus": {
         outline: "none",
-        opacity: 0.9
+        opacity: 1
       },
       ":hover": {
-        opacity: 0.9
+        opacity: 1
       },
       ":disabled": {
         opacity: 0.2

@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../types";
 import { useRef } from "react";
 import Popover from "./Popover";
-import { card, row } from "../styles";
+import { card, row, colors } from "../styles";
 import { layerTypeToIcon } from "./LayersTree";
 import AddButton from "./AddButton";
 import { useToggle } from "../hooks";
@@ -27,7 +27,16 @@ export default function AddLayerPopover({ disabled, onAdd, refs }: Props) {
         onDismiss={popover.deactivate}
         position="bottom"
       >
-        <div css={[card, { margin: "8px 0", width: "240px" }]}>
+        <div
+          css={[
+            {
+              boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",
+              background: colors.popupBackground,
+              margin: "8px 0",
+              width: "240px"
+            }
+          ]}
+        >
           <Item
             name="Container"
             onClick={() => onAdd("container")}
@@ -85,8 +94,10 @@ function Item({
           border: "none",
           width: "100%",
           fontSize: "14px",
+          background: "transparent",
+          color: colors.sideBarForeground,
           ":hover": {
-            backgroundColor: "#EAEAEA"
+            backgroundColor: colors.listHoverBackground
           }
         }
       ]}

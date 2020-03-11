@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { column, row, sectionTitle } from "../styles";
+import { column, row, sectionTitle, colors } from "../styles";
 import * as T from "../types";
 import AddButton from "./AddButton";
 import OkCancelModal from "./OkCancelModal";
@@ -31,14 +31,16 @@ function MenuItem({
       css={{
         padding: "8px 8px 8px 24px",
         paddingLeft: isSelected ? "20px" : "24px",
-        borderLeft: isSelected ? "4px solid black" : "none"
+        borderLeft: isSelected
+          ? `4px solid ${colors.sideBarForeground}`
+          : "none"
       }}
     >
       <button
         onClick={onClick}
         css={{
           fontSize: "14px",
-          color: "rgb(0, 0, 0)",
+          color: colors.sideBarForeground,
           boxSizing: "border-box",
           textDecoration: "none",
           fontWeight: isSelected ? 600 : 400,

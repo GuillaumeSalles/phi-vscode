@@ -19,7 +19,9 @@ export function ToggleButton({
       css={{
         padding: "4px 8px",
         display: "flex",
-        background: isChecked ? colors.primary : "#F0F0F0"
+        background: isChecked
+          ? colors.radioIconActiveBackground
+          : colors.radioIconBackground
       }}
     >
       <input

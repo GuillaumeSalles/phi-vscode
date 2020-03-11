@@ -19,9 +19,9 @@ function ColorInput({ value, colors, onChange }: Props) {
     Array.from(colors.entries()).map(entry => [entry[0], entry[1].name])
   );
   const backgroundColor =
-    value != null ? colors.get(colorId)!.value : "transparent";
+    value != null ? colors.get(colorId)!.value : undefined;
   const contrastColor =
-    value != null ? getContrastColor(colors.get(colorId)!.value) : "black";
+    value != null ? getContrastColor(colors.get(colorId)!.value) : undefined;
   return (
     <Select
       value={colorId}

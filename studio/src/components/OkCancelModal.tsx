@@ -53,7 +53,7 @@ export default function OkCancelModal({
               fontSize: "14px",
               fontWeight: "normal",
               margin: "0 0 8px 0",
-              color: "#333333"
+              color: colors.sideBarForeground
             }}
           >
             {title}
@@ -61,7 +61,7 @@ export default function OkCancelModal({
           {description && (
             <p
               css={{
-                color: "rgb(102, 102, 102)",
+                color: colors.sideBarForeground,
                 fontWeight: 400,
                 fontSize: "14px",
                 lineHeight: "24px",

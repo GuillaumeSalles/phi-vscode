@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, Interpolation, css } from "@emotion/core";
 import { ChangeEvent, KeyboardEvent, forwardRef } from "react";
+import { textInput } from "../../styles";
 
 type Props<TValue> = {
   width?: string;
@@ -54,27 +55,7 @@ export default forwardRef<HTMLSelectElement, Props<string>>(
           onFocus={onFocus}
           onKeyDown={onKeyDown}
           ref={ref}
-          css={{
-            boxShadow: "none",
-            boxSizing: "border-box",
-            display: "block",
-            fontSize: "14px",
-            lineHeight: "27px",
-            height: "28px",
-            width: "100%",
-            backgroundColor: "transparent",
-            caretColor: "rgb(0, 0, 0)",
-            border: "none",
-            outline: "0px",
-            borderRadius: "2px",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            borderColor: "rgb(225, 225, 225)",
-            borderImage: "initial",
-            transition: "border 0.2s ease 0s, color 0.2s ease 0s",
-            background: "rgb(255, 255, 255)",
-            padding: "4px 10px"
-          }}
+          css={textInput}
         >
           {options.map(option => (
             <option key={option[0]} value={option[0]}>

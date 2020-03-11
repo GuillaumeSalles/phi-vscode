@@ -15,7 +15,7 @@ function Select<TValue extends string>({
   value,
   onChange,
   options,
-  color = "black",
+  color = colors.sideBarForeground,
   backgroundColor = "transparent",
   width = "88px"
 }: Props<TValue>) {
@@ -54,6 +54,7 @@ function Select<TValue extends string>({
         css={{
           color,
           backgroundColor,
+          fontWeight: "bold",
           WebkitAppearance: "none",
           height: "100%",
           boxShadow: "none",

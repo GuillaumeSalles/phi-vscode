@@ -3,10 +3,49 @@ import { css } from "@emotion/core";
 
 export const colors = {
   front: "white",
-  sideBarBackground: "#FAFAFA",
-  canvasBackground: "#F0F0F0",
-  primary: "#0076FF",
-  border: "#DDDDDD"
+  iconColor: "var(--vscode-icon-foreground)",
+
+  sideBarSectionHeaderBackground:
+    "var(--vscode-sideBarSectionHeader-background)",
+  sideBarSectionHeaderForeground: "var(--vscode-foreground)",
+
+  sideBarForeground: "var(--vscode-foreground)",
+  sideBarBackground: "var(--vscode-sideBar-background)",
+  canvasBackground: "var(--vscode-editor-background)",
+
+  primary: "var(--vscode-statusBar-background)",
+  border: "#DDDDDD",
+
+  buttonForeground: "var(--vscode-button-foreground)",
+  buttonBackground: "var(--vscode-button-background)",
+  buttonHoverBackground: "var(--vscode-button-hoverBackground)",
+
+  secondaryButtonBackground: "var(--vscode-input-background)",
+  secondaryButtonForeground: "var(--vscode-input-foreground)",
+
+  inputBackground: "var(--vscode-input-background)",
+  inputForeground: "var(--vscode-input-foreground)",
+  inputBorder: "var(--vscode-input-border)",
+  inputActiveBorder: "var(--vscode-inputOption-activeBorder)",
+  inputPlaceholderForeground: "var(--vscode-input-placeholderForeground)",
+
+  listHoverBackground: "var(--vscode-list-hoverBackground)",
+
+  selectedCardBorder: "#0076FF",
+
+  popupBackground: "var(--vscode-activityBar-background)",
+
+  radioIconBackground: "var(--vscode-sideBarSectionHeader-background)",
+  radioIconForeground: "var(--vscode-foreground)",
+
+  radioIconActiveBackground: "var(--vscode-button-background)",
+  radioIconActiveForeground: "var(--vscode-button-foreground)",
+
+  seletableCardForeground: "black"
+};
+
+export const fonts = {
+  mono: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`
 };
 
 export const column = css({
@@ -35,7 +74,7 @@ export const sectionTitle = css({
   textTransform: "uppercase",
   letterSpacing: "1.3px",
   fontWeight: 400,
-  color: "rgb(136, 136, 136)"
+  color: colors.sideBarSectionHeaderForeground
 });
 
 export const separator = {
@@ -57,26 +96,60 @@ export const primaryButton = css({
   borderRadius: "2px",
   lineHeight: "0px",
   fontSize: "14px",
-  color: "white",
-  background: colors.primary,
+  color: colors.buttonForeground,
+  background: colors.buttonBackground,
   cursor: "pointer",
+  ":hover": {
+    background: colors.buttonHoverBackground
+  },
   ":disabled": {
     cursor: "not-allowed"
   }
 });
 
-export const secondaryButton = css({
-  height: "32px",
-  padding: "12px 16px",
-  border: "none",
-  borderRadius: "2px",
-  lineHeight: "0px",
+export const textInput = css({
+  boxShadow: "none",
+  boxSizing: "border-box",
+  display: "block",
   fontSize: "14px",
-  color: "#333333",
-  background: "#E8E8E8",
-  cursor: "pointer",
-  ":disabled": {
-    cursor: "not-allowed"
+  lineHeight: "27px",
+  height: "28px",
+  width: "100%",
+  backgroundColor: colors.inputBackground,
+  color: colors.inputForeground,
+  caretColor: colors.inputForeground,
+  border: "none",
+  borderImage: "initial",
+  transition: "border 0.2s ease 0s, color 0.2s ease 0s",
+  padding: "4px 4px",
+  ":focus": {
+    outline: "1px solid -webkit-focus-ring-color",
+    outlineOffset: "-1px"
+  },
+  "::-webkit-input-placeholder": {
+    color: colors.inputPlaceholderForeground
+  }
+});
+
+export const styleEditorInput = css({
+  WebkitAppearance: "none",
+  borderStyle: "solid",
+  borderWidth: "0 0 1px 0",
+  borderColor: "transparent",
+  height: "24px",
+  fontSize: "12px",
+  lineHeight: 0,
+  padding: 0,
+  boxSizing: "border-box",
+  fontWeight: "bold",
+  width: "36px",
+  background: "none",
+  color: colors.sideBarForeground,
+  transition:
+    "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
+  ":focus": {
+    borderColor: colors.primary,
+    outline: 0
   }
 });
 
@@ -110,6 +183,7 @@ export const selectableCard = css(
     transition: "all 0.2s ease 0s",
     borderWidth: "2px",
     borderStyle: "solid",
+    color: colors.seletableCardForeground,
     ":hover": {
       boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
     }

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { column } from "../styles";
+import { column, colors } from "../styles";
 
 type Props = {
   label: string;
@@ -10,7 +10,9 @@ type Props = {
 function Field({ label, children }: Props) {
   return (
     <div css={[column, { margin: "4px 8px" }]}>
-      <label css={{ fontSize: "12px", color: "#999" }}>{label}</label>
+      <label css={{ fontSize: "12px", color: colors.sideBarForeground }}>
+        {label}
+      </label>
       {children}
     </div>
   );
