@@ -76,7 +76,7 @@ export default function HtmlEditor(props: Props) {
     case "container":
       return null;
     case "component":
-      const refComponent = getComponentOrThrow(props.layer.id, refs);
+      const refComponent = getComponentOrThrow(props.layer.componentId, refs);
       return (
         <Section title="Default Props">
           {refComponent.props.map(prop => {

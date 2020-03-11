@@ -256,6 +256,27 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
 
 export const defaultComponentId = "d275edc5-1d90-4081-b36a-61bb41009436";
 
+export function makeComponent(
+  overrides: Partial<T.Component> = {}
+): T.Component {
+  return {
+    name: "componentName",
+    props: [],
+    examples: [],
+    ...overrides
+  };
+}
+
+export function makeComponentProp(
+  overrides: Partial<T.ComponentProp> = {}
+): T.ComponentProp {
+  return {
+    name: "component-prop-name",
+    type: "text",
+    ...overrides
+  };
+}
+
 export function makeDefaultProject(componentId = defaultComponentId): T.Refs {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
@@ -269,7 +290,6 @@ export function makeDefaultProject(componentId = defaultComponentId): T.Refs {
       {
         name: "hello-world",
         props: [],
-        overrides: [],
         examples: []
       }
     ]

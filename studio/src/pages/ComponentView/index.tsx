@@ -29,6 +29,7 @@ import {
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
+import { selectLayer } from "../../actions/factories";
 
 const tabStyle = css({
   display: "flex",
@@ -165,7 +166,14 @@ function ComponentView({
                     <IconButton
                       cssOverrides={{ marginRight: "12px" }}
                       icon={<Edit height={20} width={20} />}
-                      onClick={() => setIsEditing(true)}
+                      onClick={() => {
+                        applyAction(
+                          selectLayer(
+                            component.layout ? component.layout.id : undefined
+                          )
+                        );
+                        setIsEditing(true);
+                      }}
                     />
                     <IconButton
                       icon={<Delete height={20} width={20} />}

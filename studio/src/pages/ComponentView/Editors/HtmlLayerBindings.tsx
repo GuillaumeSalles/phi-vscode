@@ -27,7 +27,7 @@ function getPropertiesNames(layer: T.Layer, refs: T.Refs): Array<string> {
     case "container":
       return [];
     case "component":
-      const component = getComponentOrThrow(layer.id, refs);
+      const component = getComponentOrThrow(layer.componentId, refs);
       return component.props.map(prop => prop.name);
   }
   assertUnreachable(layer);

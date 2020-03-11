@@ -34,14 +34,14 @@ async function openProject(applyAction: (action: T.Action) => void) {
 const actionsStack: T.Action[] = [];
 
 const initialState: T.Refs =
-  (window as any).__MODE__ === "VSCODE"
-    ? jsonToRefs(undefined, true, (window as any).__initialState__)
+  (window as any).__vscode__ !== undefined
+    ? jsonToRefs(undefined, true, (window as any).__vscode__.initialState)
     : {
         uiState: {
           type: "home"
         },
         isSaved: true,
-        fileName: undefined,
+        fileName: "",
         components: new Map(),
         artboards: new Map(),
         colors: new Map(),

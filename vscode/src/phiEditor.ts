@@ -296,9 +296,11 @@ export class PhiEditor extends Disposable {
       style="position:absolute;top:0;bottom:0;left:0;right:0;z-index:20;display:none"
     ></div>
     <script>
-      window.__MODE__ = "VSCODE";
-      window.__vscode__ = acquireVsCodeApi();
-      window.__initialState__ = ${this.document.userData?.getContent()}
+      window.__vscode__ = {
+        api: acquireVsCodeApi(),
+        initialState: ${this.document.userData?.getContent()},
+        fileDir: \`${path.parse(this.document.uri.toString()).dir}\`
+      };
 
       !(function(e) {
         function t(t) {

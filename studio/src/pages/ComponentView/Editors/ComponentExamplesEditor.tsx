@@ -39,7 +39,7 @@ export default function ComponentExamplesEditor({
   });
 
   return (
-    <div css={[column]}>
+    <div css={[column, { overflowY: "auto" }]}>
       <Section
         title="Examples"
         topRightButton={<AddButton onClick={createDialog.open} />}

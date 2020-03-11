@@ -277,30 +277,39 @@ function makePaddingStyle(layer: T.Padding) {
   };
 }
 
-function applyBindings(
-  props: any,
-  layer: T.Layer,
-  componentProps: T.LayerProps
-) {
-  const newProps = {
-    ...props
-  };
-  for (let prop in layer.bindings) {
-    const value = componentProps[layer.bindings[prop].propName];
-    if (value != null) {
-      newProps[prop] = value;
-    }
+/**
+ * TODO: Make it robust
+ */
+function imagePropToSrc(src: string | undefined) {
+  const fileDir = (window as any).__vscode__.fileDir;
+
+  if (src == null) {
+    return undefined;
   }
-  return newProps;
+
+  if (src.startsWith("http")) {
+    return src;
+  }
+
+  if (fileDir != null && fileDir.startsWith("file:///")) {
+    return `vscode-resource://file///${fileDir.slice(8)}/${src}`;
+  }
+
+  return src;
 }
 
 function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
   const css = makeLayerStyle(layer, refs, width);
   switch (layer.type) {
     case "image":
+      const src = imagePropToSrc(layer.props.src);
       return {
         css,
-        ...layer.props
+        crossOrigin: "anonymous",
+        src,
+        height: layer.props.height,
+        width: layer.props.width,
+        alt: layer.props.alt
       };
     case "text":
     case "container":
@@ -316,6 +325,46 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
   assertUnreachable(layer);
 }
 
+function applyBindings(
+  props: any,
+  layer: T.Layer,
+  componentProps: T.LayerProps
+) {
+  const newProps = {
+    ...props
+  };
+  for (let prop in layer.bindings) {
+    const value = componentProps[layer.bindings[prop].propName];
+
+    if (value != null && value != "") {
+      if (prop === "src" && layer.type === "image") {
+        newProps[prop] = imagePropToSrc(value);
+      } else {
+        newProps[prop] = value;
+      }
+    }
+  }
+  return newProps;
+}
+
+export function makeJsxLayerProps(
+  layer: T.Layer,
+  refs: T.Refs,
+  width: number,
+  props: any
+) {
+  return applyBindings(makeLayerProps(layer, refs, width), layer, props);
+}
+
+export function forwardJsxLayerProps(
+  layer: T.ComponentLayer,
+  refs: T.Refs,
+  width: number,
+  props: any
+) {
+  return applyBindings(makeLayerProps(layer, refs, width), layer, props);
+}
+
 function Layer({ layer, refs, width, props }: Props) {
   if (layer.type === "component") {
     const component = getComponentOrThrow(layer.componentId, refs);
@@ -328,13 +377,13 @@ function Layer({ layer, refs, width, props }: Props) {
         layer={component.layout}
         refs={refs}
         width={width}
-        props={applyBindings(makeLayerProps(layer, refs, width), layer, props)}
+        props={makeJsxLayerProps(layer, refs, width, props)}
       />
     );
   }
   return jsx(
     layer.tag,
-    applyBindings(makeLayerProps(layer, refs, width), layer, props),
+    makeJsxLayerProps(layer, refs, width, props),
     makeChildren(layer, refs, width, props)
   );
 }

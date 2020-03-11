@@ -233,14 +233,13 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
 
   const addLayerCallback = useCallback(
     (layerType: T.LayerType, layerComponentId?: string) => {
-      const layerId = uuid();
       applyAction({
         type: "addLayer",
         componentId,
         parentLayerId: layerId,
         layerComponentId,
         layerType,
-        layerId
+        layerId: uuid()
       });
     },
     [applyAction, componentId]

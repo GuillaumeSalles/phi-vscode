@@ -15,31 +15,13 @@ import {
   makeTextLayer,
   makeComponentLayer,
   defaultComponentId,
-  makeDefaultProject
+  makeDefaultProject,
+  makeComponent
 } from "../factories";
 import { getComponentOrThrow } from "../layerUtils";
 
 function makeRefsFixture(): T.Refs {
-  return {
-    selectedLayerId: undefined,
-    artboards: new Map(),
-    isSaved: true,
-    fileName: "",
-    colors: makeDefaultColors(),
-    fontSizes: makeDefaultFontSizes(),
-    fontFamilies: makeDefaultFontFamilies(),
-    breakpoints: makeDefaultBreakpoints(),
-    components: new Map()
-  };
-}
-
-function makeComponent(overrides: Partial<T.Component> = {}): T.Component {
-  return {
-    name: "component-name",
-    props: [],
-    examples: [],
-    ...overrides
-  };
+  return makeDefaultProject();
 }
 
 describe("deleteComponentProp", () => {
@@ -191,64 +173,107 @@ describe("addLayer", () => {
     expect(getComponentOrThrow("componentId", newRefs).layout!.id).toBe(
       layerId
     );
-    expect(newRefs.selectedLayerId).toBe(layerId);
-  });
-});
 
-describe("undo", () => {
-  test("should undo last action", () => {
-    const layerId = "layerId";
-    const actions: T.Action[] = [
+    if (newRefs.uiState.type !== "component") {
+      fail("component view should be displayed after adding a layer");
+    }
+
+    expect(newRefs.uiState.componentId).toBe("componentId");
+    expect(newRefs.uiState.layerId).toBe(layerId);
+  });
+
+  test("should add layer with a specific parent layer id", () => {
+    const refs = makeRefsFixture();
+    const layerId = "newLayerId";
+    refs.components.set(
+      "componentId",
+      makeComponent({
+        layout: makeContainerLayer(refs, {
+          id: "parentLayer"
+        })
+      })
+    );
+    const newRefs = addLayerActionHandler(
       {
         type: "addLayer",
-        componentId: defaultComponentId,
+        componentId: "componentId",
         layerType: "text",
-        layerId
-      }
-    ];
-    const refs = undo(actions);
-    expect(refs.components.get(defaultComponentId)?.layout).toBe(undefined);
+        layerId,
+        parentLayerId: "parentLayer"
+      },
+      refs
+    );
+
+    const component = getComponentOrThrow("componentId", newRefs);
+
+    if (component.layout == null) {
+      fail("Add layer should not delete component layout");
+    }
+
+    expect(component.layout.id).toBe("parentLayer");
+
+    if (component.layout.type !== "container") {
+      fail("Expected component layout to be a container");
+    }
+
+    expect(component.layout.children[0].id).toBe(layerId);
   });
 });
 
-describe("undo & redo", () => {
-  test("basic test", () => {
-    const layerId = "layerId";
-    const childLayerId = "childLayerId";
-    const firstAction: T.Action = {
-      type: "addLayer",
-      componentId: defaultComponentId,
-      layerType: "container",
-      layerId
-    };
-    const secondAction: T.Action = {
-      type: "addLayer",
-      componentId: defaultComponentId,
-      layerType: "text",
-      layerId: childLayerId,
-      parentLayerId: layerId
-    };
-    const actionsStack: T.Action[] = [];
+// describe("undo", () => {
+//   test("should undo last action", () => {
+//     const layerId = "layerId";
+//     const actions: T.Action[] = [
+//       {
+//         type: "addLayer",
+//         componentId: defaultComponentId,
+//         layerType: "text",
+//         layerId
+//       }
+//     ];
+//     const refs = undo(actions);
+//     expect(refs.components.get(defaultComponentId)?.layout).toBe(undefined);
+//   });
+// });
 
-    const refs1 = applyAction(actionsStack, firstAction, makeDefaultProject());
-    expect(refs1.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
+// describe("undo & redo", () => {
+//   test("basic test", () => {
+//     const layerId = "layerId";
+//     const childLayerId = "childLayerId";
+//     const firstAction: T.Action = {
+//       type: "addLayer",
+//       componentId: defaultComponentId,
+//       layerType: "container",
+//       layerId
+//     };
+//     const secondAction: T.Action = {
+//       type: "addLayer",
+//       componentId: defaultComponentId,
+//       layerType: "text",
+//       layerId: childLayerId,
+//       parentLayerId: layerId
+//     };
+//     const actionsStack: T.Action[] = [];
 
-    const refs2 = applyAction(actionsStack, secondAction, refs1);
-    expect(refs2.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
-    expect(
-      (refs2.components.get(defaultComponentId)?.layout as T.ContainerLayer)
-        .children[0].id
-    ).toBe(childLayerId);
+//     const refs1 = applyAction(actionsStack, firstAction, makeDefaultProject());
+//     expect(refs1.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
 
-    const refsAfterUndo = undo(actionsStack);
+//     const refs2 = applyAction(actionsStack, secondAction, refs1);
+//     expect(refs2.components.get(defaultComponentId)?.layout?.id).toBe(layerId);
+//     expect(
+//       (refs2.components.get(defaultComponentId)?.layout as T.ContainerLayer)
+//         .children[0].id
+//     ).toBe(childLayerId);
 
-    const refsAfterRedo = applyActions(
-      actionsStack,
-      [secondAction],
-      refsAfterUndo
-    );
-    expect(refsAfterRedo.components.get(defaultComponentId)?.layout?.id).toBe(
-      layerId
-    );
-  });
-});
+//     const refsAfterUndo = undo(actionsStack);
+
+//     const refsAfterRedo = applyActions(
+//       actionsStack,
+//       [secondAction],
+//       refsAfterUndo
+//     );
+//     expect(refsAfterRedo.components.get(defaultComponentId)?.layout?.id).toBe(
+//       layerId
+//     );
+//   });
+// });

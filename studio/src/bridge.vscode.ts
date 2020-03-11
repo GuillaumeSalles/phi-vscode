@@ -31,7 +31,7 @@ export default function() {
     },
     onAction: (action: T.Action, refs: T.Refs) => {
       if ((window as any).__vscode__) {
-        const vscode = (window as any).__vscode__;
+        const vscode = (window as any).__vscode__.api;
         vscode.postMessage({ type: "action", action, data: refsToJson(refs) });
       }
     }
