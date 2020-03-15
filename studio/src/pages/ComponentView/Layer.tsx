@@ -281,7 +281,7 @@ function makePaddingStyle(layer: T.Padding) {
  * TODO: Make it robust
  */
 function imagePropToSrc(src: string | undefined) {
-  const fileDir = (window as any).__vscode__.fileDir;
+  const fileDir = (window as any).__vscode__?.fileDir;
 
   if (src == null) {
     return undefined;
@@ -349,15 +349,6 @@ function applyBindings(
 
 export function makeJsxLayerProps(
   layer: T.Layer,
-  refs: T.Refs,
-  width: number,
-  props: any
-) {
-  return applyBindings(makeLayerProps(layer, refs, width), layer, props);
-}
-
-export function forwardJsxLayerProps(
-  layer: T.ComponentLayer,
   refs: T.Refs,
   width: number,
   props: any

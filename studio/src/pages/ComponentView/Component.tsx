@@ -44,7 +44,7 @@ function Component({ component, refs }: Props) {
                         <Layer
                           layer={component.layout}
                           refs={refs}
-                          width={parseInt(entry[1].width.slice(-2))}
+                          width={parseInt(entry[1].width.slice(0, -2))}
                           props={example.props}
                         />
                       )}

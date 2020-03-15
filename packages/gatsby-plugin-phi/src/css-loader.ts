@@ -182,7 +182,7 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
       style.opacity != null ? style.opacity.toString() : undefined
     )}
     ${cssProp(
-      "backgroundColor",
+      "background-color",
       colorToCss(style.backgroundColor, refs.colors)
     )}
     ${cssProp("text-decoration", textDecorationToCss(style))}

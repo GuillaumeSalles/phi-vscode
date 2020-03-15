@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { Profile } from "../Twitter.phi"
+import { Profile, Tmp } from "../Twitter.phi"
 
 import ReactProfile from "../images/ReactProfile.png"
 import ReactBackground from "../images/ReactBackground.jpeg"
