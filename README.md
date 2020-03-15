@@ -72,7 +72,7 @@ module.exports = {
 ```javascript
 import { HelloWorld } from "./path/to/file.phi";
 
-const IndexPage = () => <HelloWorld name="world" />;
+const IndexPage = () => <HelloWorld />;
 ```
 
 #### Conventions
