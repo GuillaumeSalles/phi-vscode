@@ -58,9 +58,9 @@ module.exports = {
 - Import your component directly from your react code.
 
 ```javascript
-import { Hello } from "./YourPhiFile.phi";
+import { HelloWorld } from "./path/to/file.phi";
 
-const IndexPage = () => <Hello name="world" />;
+const IndexPage = () => <HelloWorld name="world" />;
 ```
 
 #### Conventions
