@@ -20,11 +20,6 @@ Phi is still in alpha so you will encounters some bugs.
 ![Code example](/assets/CodeExample.png)
 
 
-### Result
-
-![Gatsby preview](/assets/GatsbyResult.png)
-
-
 ## Getting Started
 
 Phi is using a VS Code the [Custom webview editor API](https://github.com/microsoft/vscode/issues/77131). It's only available in the insiders build so there is no way to download it from the VS Code extensions marketplace (yet).
