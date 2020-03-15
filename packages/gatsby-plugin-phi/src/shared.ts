@@ -1,5 +1,15 @@
 import * as T from "../../../studio/src/types";
 
+function flatten<T>(arrOfArr: T[][]) {
+  const result = [];
+  for (let arr of arrOfArr) {
+    for (let item of arr) {
+      result.push(item);
+    }
+  }
+  return result;
+}
+
 export function arrayToMap(array: any[]) {
   return new Map(
     array.map((color: any) => {
@@ -15,7 +25,7 @@ export function layerTreeToArray(root: T.Layer | undefined): T.Layer[] {
   }
   const result = [root];
   if (root.type === "container" || root.type === "link") {
-    return result.concat(root.children.map(layerTreeToArray).flat());
+    return result.concat(flatten(root.children.map(layerTreeToArray)));
   }
   return result;
 }

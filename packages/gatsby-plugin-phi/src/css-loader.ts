@@ -240,7 +240,8 @@ export function phiToCss(data: any) {
     // TODO: Refactor project state to not file name and isSaved in refs
     isSaved: true,
     fileName: "",
-    artboards: new Map()
+    artboards: new Map(),
+    uiState: { type: "typography" }
   };
 
   return Array.from(components.values())
