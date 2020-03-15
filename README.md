@@ -35,7 +35,7 @@ The `--enable-proposed-api` flag is to allow Phi to use the not yet release `Cus
 
 - You are now ready to design your own components!
 
-### Import component in your Gatsby project
+### Import components in your Gatsby project
 
 - Install `gatsby-plugin-phi` in your gatsby app
 
@@ -72,4 +72,4 @@ Properties are defined in `kebab-case` in Phi but are imported in `camelCase`.
 Example `my-prop` become `myProp`;
 
 
-### Import component in your Next.js project _Coming soon_
+### Import components in your Next.js project _Coming soon_
