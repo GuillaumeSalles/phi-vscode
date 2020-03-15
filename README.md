@@ -8,6 +8,23 @@ Phi is a VS Code extension that lets you define the specs of your components and
 
 Phi is still in alpha so you will encounters some bugs.
 
+## How it works
+
+### Design your components in VS Code
+
+![Phi Extension Demo](/assets/PhiEditor.png)
+
+
+### Import component from .phi file
+
+![Code example](/assets/CodeExample.png)
+
+
+### Result
+
+![Gatsby preview](/assets/GatsbyResult.png)
+
+
 ## Getting Started
 
 Phi is using a VS Code the [Custom webview editor API](https://github.com/microsoft/vscode/issues/77131). It's only available in the insiders build so there is no way to download it from the VS Code extensions marketplace (yet).
