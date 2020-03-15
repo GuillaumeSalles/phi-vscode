@@ -6,7 +6,7 @@ Design components in Visual Studio Code, generate code you can trust.
 
 Phi is a VS Code extension that lets you define the specs of your components and then generate code you can use in your web apps. By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
-Phi is still in alpha so you will encounters some bugs.
+__Phi is still in alpha so you will encounters some bugs.__
 
 ## How it works
 
