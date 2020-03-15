@@ -1,4 +1,4 @@
-import * as T from "../../../studio/src/types";
+import * as T from "../../../electron/src/types";
 import { arrayToMap, kebabToPascal, layerTreeToArray } from "./shared";
 
 function lengthToCss(length?: T.Length, defaultValue?: string) {
@@ -182,7 +182,7 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
       style.opacity != null ? style.opacity.toString() : undefined
     )}
     ${cssProp(
-      "backgroundColor",
+      "background-color",
       colorToCss(style.backgroundColor, refs.colors)
     )}
     ${cssProp("text-decoration", textDecorationToCss(style))}
@@ -240,7 +240,8 @@ export function phiToCss(data: any) {
     // TODO: Refactor project state to not file name and isSaved in refs
     isSaved: true,
     fileName: "",
-    artboards: new Map()
+    artboards: new Map(),
+    uiState: { type: "typography" }
   };
 
   return Array.from(components.values())

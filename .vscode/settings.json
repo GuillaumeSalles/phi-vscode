@@ -1,3 +1,4 @@
 {
-  "typescript.tsdk": "./studio/node_modules/typescript/lib"
+  "typescript.tsdk": "./electron/node_modules/typescript/lib",
+  "editor.formatOnSave": true
 }

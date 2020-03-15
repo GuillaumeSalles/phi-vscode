@@ -1,5 +1,5 @@
 import ts from "typescript";
-import * as T from "../../../studio/src/types";
+import * as T from "../../../electron/src/types";
 import loaderUtils from "loader-utils";
 import {
   arrayToMap,
@@ -100,6 +100,23 @@ function componentLayerAttributeMap(
   return map;
 }
 
+function propValueToAttributeValue(
+  layerType: T.LayerType,
+  name: string,
+  value: string
+) {
+  if (layerType === "image" && name === "src") {
+    if (value.startsWith("http")) {
+      return ts.createStringLiteral(value);
+    }
+    return ts.createCall(ts.createIdentifier("require"), undefined, [
+      ts.createStringLiteral(value)
+    ]);
+  }
+
+  return ts.createStringLiteral(value);
+}
+
 function createSimpleAttributeMap(
   layer: T.Layer,
   components: T.ComponentMap
@@ -118,7 +135,7 @@ function createSimpleAttributeMap(
           .map(([propName, value]) => {
             return [
               layerPropNameToJsxAttributeName(propName),
-              ts.createStringLiteral(value!)
+              propValueToAttributeValue(layer.type, propName, value)
             ];
           })
       );
