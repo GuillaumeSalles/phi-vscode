@@ -8,7 +8,7 @@ import {
   getComponentOrThrow
 } from "../layerUtils";
 import uuid from "uuid/v4";
-import { makeLayer, makeDefaultProject } from "../factories";
+import { makeLayer } from "../factories";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0

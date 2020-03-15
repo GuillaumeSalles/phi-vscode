@@ -3,3 +3,4 @@ out
 node_modules
 .vscode-test
 content/static
+*.vsix

@@ -275,6 +275,8 @@ export class PhiEditor extends Disposable {
       })
       .join("");
 
+    const initialState = this.document.userData?.getContent() || "undefined";
+
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -298,78 +300,78 @@ export class PhiEditor extends Disposable {
     <script>
       window.__vscode__ = {
         api: acquireVsCodeApi(),
-        initialState: ${this.document.userData?.getContent()},
+        initialState: ${initialState},
         fileDir: \`${path.parse(this.document.uri.toString()).dir}\`
       };
 
       !(function(e) {
-        function t(t) {
+        function r(r) {
           for (
-            var n, i, l = t[0], f = t[1], a = t[2], c = 0, s = [];
-            c < l.length;
+            var n, l, i = r[0], p = r[1], f = r[2], c = 0, s = [];
+            c < i.length;
             c++
           )
-            (i = l[c]),
-              Object.prototype.hasOwnProperty.call(o, i) &&
-                o[i] &&
-                s.push(o[i][0]),
-              (o[i] = 0);
-          for (n in f)
-            Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]);
-          for (p && p(t); s.length; ) s.shift()();
-          return u.push.apply(u, a || []), r();
+            (l = i[c]),
+              Object.prototype.hasOwnProperty.call(o, l) &&
+                o[l] &&
+                s.push(o[l][0]),
+              (o[l] = 0);
+          for (n in p)
+            Object.prototype.hasOwnProperty.call(p, n) && (e[n] = p[n]);
+          for (a && a(r); s.length; ) s.shift()();
+          return u.push.apply(u, f || []), t();
         }
-        function r() {
-          for (var e, t = 0; t < u.length; t++) {
-            for (var r = u[t], n = !0, l = 1; l < r.length; l++) {
-              var f = r[l];
-              0 !== o[f] && (n = !1);
+        function t() {
+          for (var e, r = 0; r < u.length; r++) {
+            for (var t = u[r], n = !0, i = 1; i < t.length; i++) {
+              var p = t[i];
+              0 !== o[p] && (n = !1);
             }
-            n && (u.splice(t--, 1), (e = i((i.s = r[0]))));
+            n && (u.splice(r--, 1), (e = l((l.s = t[0]))));
           }
           return e;
         }
         var n = {},
           o = { 1: 0 },
           u = [];
-        function i(t) {
-          if (n[t]) return n[t].exports;
-          var r = (n[t] = { i: t, l: !1, exports: {} });
-          return e[t].call(r.exports, r, r.exports, i), (r.l = !0), r.exports;
+        function l(r) {
+          if (n[r]) return n[r].exports;
+          var t = (n[r] = { i: r, l: !1, exports: {} });
+          return e[r].call(t.exports, t, t.exports, l), (t.l = !0), t.exports;
         }
-        (i.m = e),
-          (i.c = n),
-          (i.d = function(e, t, r) {
-            i.o(e, t) ||
-              Object.defineProperty(e, t, { enumerable: !0, get: r });
+        (l.m = e),
+          (l.c = n),
+          (l.d = function(e, r, t) {
+            l.o(e, r) ||
+              Object.defineProperty(e, r, { enumerable: !0, get: t });
           }),
-          (i.r = function(e) {
+          (l.r = function(e) {
             "undefined" != typeof Symbol &&
               Symbol.toStringTag &&
               Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
               Object.defineProperty(e, "__esModule", { value: !0 });
           }),
-          (i.t = function(e, t) {
-            if ((1 & t && (e = i(e)), 8 & t)) return e;
-            if (4 & t && "object" == typeof e && e && e.__esModule) return e;
-            var r = Object.create(null);
+          (l.t = function(e, r) {
+            if ((1 & r && (e = l(e)), 8 & r)) return e;
+            if (4 & r && "object" == typeof e && e && e.__esModule) return e;
+            var t = Object.create(null);
             if (
-              (i.r(r),
-              Object.defineProperty(r, "default", { enumerable: !0, value: e }),
-              2 & t && "string" != typeof e)
+              (l.r(t),
+              Object.defineProperty(t, "default", { enumerable: !0, value: e }),
+              2 & r && "string" != typeof e)
             )
               for (var n in e)
-                i.d(
-                  r,
+                l.d(
+                  t,
                   n,
-                  function(t) {
-                    return e[t];
+                  function(r) {
+                    return e[r];
                   }.bind(null, n)
                 );
-            return r;
+            return t;
           }),
-          (i.n = function(e) {
-            var t =
+          (l.n = function(e) {
+            var r =
               e && e.__esModule
                 ? function() {
                     return e.default;
@@ -377,18 +379,19 @@ export class PhiEditor extends Disposable {
                 : function() {
                     return e;
                   };
-            return i.d(t, "a", t), t;
+            return l.d(r, "a", r), r;
           }),
-          (i.o = function(e, t) {
-            return Object.prototype.hasOwnProperty.call(e, t);
+          (l.o = function(e, r) {
+            return Object.prototype.hasOwnProperty.call(e, r);
           }),
-          (i.p = "./");
-        var l = (this.webpackJsonpstudio = this.webpackJsonpstudio || []),
-          f = l.push.bind(l);
-        (l.push = t), (l = l.slice());
-        for (var a = 0; a < l.length; a++) t(l[a]);
-        var p = f;
-        r();
+          (l.p = "./");
+        var i = (this["webpackJsonpphi-electron"] =
+            this["webpackJsonpphi-electron"] || []),
+          p = i.push.bind(i);
+        (i.push = r), (i = i.slice());
+        for (var f = 0; f < i.length; f++) r(i[f]);
+        var a = p;
+        t();
       })([]);
     </script>
     ${jsTags}

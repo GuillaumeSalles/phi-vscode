@@ -8,11 +8,36 @@ Phi is a VS Code extension that lets you define the specs of your components and
 
 Phi is still in alpha so you will encounters some bugs.
 
-## Code generation
+## Getting Started
 
-### Gatsby
+Phi is using a VS Code the [Custom webview editor API](https://github.com/microsoft/vscode/issues/77131). It's only available in the insiders build so there is no way to download it from the VS Code extensions marketplace (yet).
 
-Install `gatsby-plugin-phi` in your gatsby app
+### Install the Phi Extension
+
+- Donwload VS Code insiders - https://code.visualstudio.com/insiders/
+- Open VS Code insiders and Add `code-insiders` to PATH like this : https://github.com/Microsoft/vscode/issues/6627#issuecomment-267456703
+- Download the last release .vsix package of Phi [here](TODO) or in the [releases tab](https://github.com/GuillaumeSalles/phi-vscode/releases)
+- Open your gatsby project on VS Code insiders with this command
+
+```shell
+code-insiders {path-to-your-gatsby-project} --enable-proposed-api GuillaumeSalles.phi
+```
+
+The `--enable-proposed-api` flag is to allow Phi to use the not yet release `Custom webview editor API`.
+
+- Install the vsix previously downloaded via the Extensions tab.
+  ![TODO](TODO)
+
+- Create a new a file with a `.phi` extension and save it.
+
+- At this point, you should be able to see the Phi custom editor in your VS Code instance
+  ![TODO](TODO)
+
+- You are now ready to design your own components!
+
+### Import component in your Gatsby project
+
+- Install `gatsby-plugin-phi` in your gatsby app
 
 ```shell
 npm install --save-dev gatsby-plugin-phi
@@ -40,7 +65,7 @@ const IndexPage = () => <Hello name="world" />;
 
 #### Conventions
 
-Components are defined in `kebab-case` in Phi but are imported in `PascalCase`.
+Components names are defined in `kebab-case` in Phi but are imported in `PascalCase`.
 Example `hello-world` becomes `HelloWorld`.
 
 Properties are defined in `kebab-case` in Phi but are imported in `camelCase`.

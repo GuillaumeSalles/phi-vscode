@@ -1,7 +1,7 @@
 import uuid from "uuid/v4";
 import * as T from "./types";
 import { colors } from "./styles";
-import { firstKey } from "./helpers/immutable-map";
+import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
 import { layerTypeToName, layerTreeToArray } from "./layerUtils";
 import { assertUnreachable } from "./utils";
 
@@ -145,7 +145,7 @@ export function makeTextLayer(
     type: "text",
     id: uuid(),
     name: "Text",
-    tag: "p",
+    tag: "span",
     mediaQueries: [],
     bindings: {},
     props: {
@@ -205,8 +205,8 @@ export function makeDefaultFontFamilies(): T.FontFamiliesMap {
 export function makeDefaultColors(): T.ColorsMap {
   const white = entry({ name: "white", value: "#FFFFFF" });
   const black = entry({ name: "black", value: "#000000" });
-  const primary = entry({ name: "primary", value: colors.primary });
-  return new Map([black, white, primary]);
+  const primary = entry({ name: "primary", value: "#0076FF" });
+  return new Map([white, black, primary]);
 }
 
 export function makeDefaultBreakpoints(): T.BreakpointsMap {
@@ -221,7 +221,7 @@ export function makeDefaultBreakpoints(): T.BreakpointsMap {
 export function makeDefaultFontSizes(): T.FontSizesMap {
   const fontSizes = new Map(
     [14, 16, 18, 24, 26, 32].map((x, index) =>
-      entry({ name: `FS${index + 1}`, value: `${x}px` })
+      entry({ name: `fs-${index + 1}`, value: `${x}px` })
     )
   );
   return fontSizes;
@@ -254,8 +254,6 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
   ]);
 }
 
-export const defaultComponentId = "d275edc5-1d90-4081-b36a-61bb41009436";
-
 export function makeComponent(
   overrides: Partial<T.Component> = {}
 ): T.Component {
@@ -277,36 +275,73 @@ export function makeComponentProp(
   };
 }
 
-export function makeDefaultProject(componentId = defaultComponentId): T.Refs {
+export function makeDefaultProject(): T.Refs {
   const fontFamilies = makeDefaultFontFamilies();
   const colors = makeDefaultColors();
   const breakpoints = makeDefaultBreakpoints();
   const fontSizes = makeDefaultFontSizes();
   const artboards = makeDefaultArtboards();
 
-  const components: T.ComponentMap = new Map([
-    [
-      componentId,
-      {
-        name: "hello-world",
-        props: [],
-        examples: []
-      }
-    ]
-  ]);
-
-  return {
+  const refs: T.Refs = {
     fileName: undefined,
     isSaved: false,
     uiState: {
-      type: "component",
-      componentId
+      type: "typography"
     },
     artboards,
     colors,
     fontFamilies,
     fontSizes: new Map(fontSizes),
     breakpoints,
-    components
+    components: new Map()
   };
+
+  const components: T.ComponentMap = new Map([
+    [
+      uuid(),
+      {
+        name: "hello-world",
+        props: [],
+        examples: [],
+        layout: makeContainerLayer(refs, {
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            alignContent: "stretch",
+            overrides: []
+          },
+          children: [
+            makeTextLayer(refs, {
+              props: {
+                content: "Hello World"
+              },
+              style: {
+                backgroundColor: makeRef(getKeyByIndex(colors, 2)),
+                color: makeRef(firstKey(colors)),
+                paddingBottom: "16px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                paddingTop: "16px",
+                borderBottomLeftRadius: "3px",
+                borderBottomRightRadius: "3px",
+                borderTopLeftRadius: "3px",
+                borderTopRightRadius: "3px"
+              }
+            })
+          ]
+        })
+      }
+    ]
+  ]);
+
+  refs.components = components;
+  refs.uiState = {
+    type: "component",
+    componentId: firstKey(components)
+  };
+
+  return refs;
 }

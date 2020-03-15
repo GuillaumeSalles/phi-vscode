@@ -1,20 +1,13 @@
 import * as T from "../types";
-import applyAction, {
+import {
   deleteComponentPropHandler,
   editComponentPropHandler,
-  applyActions,
-  addLayerActionHandler,
-  undo
+  addLayerActionHandler
 } from "../actions";
 import {
   makeContainerLayer,
-  makeDefaultColors,
-  makeDefaultFontSizes,
-  makeDefaultFontFamilies,
-  makeDefaultBreakpoints,
   makeTextLayer,
   makeComponentLayer,
-  defaultComponentId,
   makeDefaultProject,
   makeComponent
 } from "../factories";

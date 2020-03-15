@@ -33,22 +33,15 @@ async function openProject(applyAction: (action: T.Action) => void) {
 
 const actionsStack: T.Action[] = [];
 
-const initialState: T.Refs =
-  (window as any).__vscode__ !== undefined
-    ? jsonToRefs(undefined, true, (window as any).__vscode__.initialState)
-    : {
-        uiState: {
-          type: "home"
-        },
-        isSaved: true,
-        fileName: "",
-        components: new Map(),
-        artboards: new Map(),
-        colors: new Map(),
-        fontFamilies: new Map(),
-        fontSizes: new Map(),
-        breakpoints: new Map()
-      };
+function makeInitialState(): T.Refs {
+  const vscode = (window as any).__vscode__;
+  if (vscode && vscode.initialState) {
+    return jsonToRefs(undefined, true, (window as any).__vscode__.initialState);
+  }
+  return makeDefaultProject();
+}
+
+const initialState = makeInitialState();
 
 function App() {
   const [refs, setRefs] = useState<T.Refs>(initialState);
