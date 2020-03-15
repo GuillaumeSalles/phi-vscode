@@ -14,9 +14,9 @@ Phi is using a VS Code the [Custom webview editor API](https://github.com/micros
 
 ### Install the Phi Extension
 
-- Donwload VS Code insiders - https://code.visualstudio.com/insiders/
-- Open VS Code insiders and Add `code-insiders` to PATH like this : https://github.com/Microsoft/vscode/issues/6627#issuecomment-267456703
-- Download the last release .vsix package of Phi [here](TODO) or in the [releases tab](https://github.com/GuillaumeSalles/phi-vscode/releases)
+- Donwload [VS Code insiders](https://code.visualstudio.com/insiders/)
+- Open VS Code insiders and Add `code-insiders` to PATH like [this]( https://github.com/Microsoft/vscode/issues/6627#issuecomment-267456703)
+- Download the last release .vsix package of Phi [here](https://github.com/GuillaumeSalles/phi-vscode/releases/download/v0.1.0/phi-0.1.0.vsix) or in the [releases tab](https://github.com/GuillaumeSalles/phi-vscode/releases)
 - Open your gatsby project on VS Code insiders with this command
 
 ```shell
@@ -26,7 +26,7 @@ code-insiders {path-to-your-gatsby-project} --enable-proposed-api GuillaumeSalle
 The `--enable-proposed-api` flag is to allow Phi to use the not yet release `Custom webview editor API`.
 
 - Install the vsix previously downloaded via the Extensions tab.
-  ![Install VSIX menu in vscode ](/assets/InstallVSIX.png)
+  ![Install VSIX menu in vscode](/assets/InstallVSIX.png)
 
 - Create a new a file with a `.phi` extension and save it.
 
