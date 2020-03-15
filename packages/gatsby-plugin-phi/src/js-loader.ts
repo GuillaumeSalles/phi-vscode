@@ -1,5 +1,5 @@
 import ts from "typescript";
-import * as T from "../../../studio/src/types";
+import * as T from "../../../electron/src/types";
 import loaderUtils from "loader-utils";
 import {
   arrayToMap,

@@ -1,14 +1,12 @@
-# Phi Studio
+# Phi for Visual Studio Code
 
-Design components for the web, generate code you can trust.
+Design components in Visual Studio Code, generate code you can trust.
 
-## What is Phi Studio?
+## What is Phi for VS Code?
 
-Phi Studio lets you define the specs of your components and then generate code you can use in your web apps. By limiting the scope to the web platform, Phi Studio can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
+Phi is a VS Code extension that lets you define the specs of your components and then generate code you can use in your web apps. By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
-Phi Studio is not a creativity tool.
-
-Phi is still at a really early stage so you will probably encounters some bugs.
+Phi is still in alpha so you will encounters some bugs.
 
 ## Code generation
 
@@ -42,10 +40,10 @@ const IndexPage = () => <Hello name="world" />;
 
 #### Conventions
 
-Components are defined in `kebab-case` in Phi Studio but are imported in `PascalCase`.
+Components are defined in `kebab-case` in Phi but are imported in `PascalCase`.
 Example `hello-world` becomes `HelloWorld`.
 
-Properties are defined in `kebab-case` in Phi Studio but are imported in `camelCase`.
+Properties are defined in `kebab-case` in Phi but are imported in `camelCase`.
 Example `my-prop` become `myProp`;
 
 ### Next.js _Coming soon_

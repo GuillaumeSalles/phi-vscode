@@ -30,7 +30,7 @@ export default function Home({
         <div css={[column, { padding: "8px" }]}>
           <div css={[row, { alignItems: "center" }]}>
             <Logo height={24} width={24} />
-            <h4 css={[sectionTitle, { marginLeft: "4px" }]}>Phi Studio</h4>
+            <h4 css={[sectionTitle, { marginLeft: "4px" }]}>Phi for VS Code</h4>
           </div>
           <div css={[column, { marginTop: "8px" }]}>
             <Button

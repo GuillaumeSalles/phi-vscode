@@ -1,4 +1,4 @@
-import * as T from "../../../studio/src/types";
+import * as T from "../../../electron/src/types";
 
 function flatten<T>(arrOfArr: T[][]) {
   const result = [];

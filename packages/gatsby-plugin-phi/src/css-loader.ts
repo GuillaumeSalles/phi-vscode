@@ -1,4 +1,4 @@
-import * as T from "../../../studio/src/types";
+import * as T from "../../../electron/src/types";
 import { arrayToMap, kebabToPascal, layerTreeToArray } from "./shared";
 
 function lengthToCss(length?: T.Length, defaultValue?: string) {

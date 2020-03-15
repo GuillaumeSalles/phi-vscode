@@ -73,8 +73,7 @@ export default function FontSizes({ items, applyAction, refs }: Props) {
             onClick={() => selectRef(entry[0])}
           >
             <div css={{ fontSize: entry[1].value, margin: "12px" }}>
-              Phi Studio - Create components visually and generate code you can
-              trust.
+              Phi - Create components visually and generate code you can trust.
             </div>
           </SelectableCard>
         </div>

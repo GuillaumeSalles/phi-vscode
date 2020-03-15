@@ -1,17 +1,17 @@
 {
-  "name": "studio",
+  "name": "phi-electron",
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
   "author": "Guillaume Salles",
   "main": "server/electron.js",
   "build": {
-    "appId": "com.electron.phi-studio",
+    "appId": "com.electron.phi",
     "files": [
       "build/**/*",
       "node_modules/**/*"
     ],
-    "productName": "Phi Studio",
+    "productName": "Phi",
     "mac": {
       "category": "public.app-category.graphics-design"
     },
@@ -35,13 +35,13 @@
   },
   "scripts": {
     "start": "nf start -p 3000",
-    "build": "npm run build:cra && cp -a ./server/. ./build/ && npm run electron-dist",
-    "build:cra": "rm -rf ../vscode/content/static && react-scripts build && mv build/static ../vscode/content/static",
+    "build": "npm run react:build && cp -a ./server/. ./build/ && npm run electron-dist",
+    "react:start": "BROWSER=none react-scripts start",
+    "react:build": "rm -rf ../vscode/content/static && react-scripts build && mv build/static ../vscode/content/static",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-start": "node src/start-react",
-    "react-start": "BROWSER=none react-scripts start",
     "pack": "build --dir",
     "dist": "npm run build && build",
     "postinstall": "electron-builder install-app-deps",
