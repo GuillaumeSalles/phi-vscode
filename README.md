@@ -28,7 +28,7 @@ Phi is using a VS Code the [Custom webview editor API](https://github.com/micros
 
 - Donwload [VS Code insiders](https://code.visualstudio.com/insiders/)
 - Open VS Code insiders and Add `code-insiders` to PATH like [this]( https://github.com/Microsoft/vscode/issues/6627#issuecomment-267456703)
-- Download the last release .vsix package of Phi [here](https://github.com/GuillaumeSalles/phi-vscode/releases/download/v0.1.0/phi-0.1.0.vsix) or in the [releases tab](https://github.com/GuillaumeSalles/phi-vscode/releases)
+- Download the last release .vsix package of Phi [here](https://github.com/GuillaumeSalles/phi-vscode/releases/download/v0.3.0/phi-0.3.0.vsix) or in the [releases tab](https://github.com/GuillaumeSalles/phi-vscode/releases)
 - Open your gatsby project on VS Code insiders with this command
 
 ```shell
