@@ -1,6 +1,6 @@
 # Phi for Visual Studio Code
 
-Design components for the web in Visual Studio Code. Generate code you code you can trust.
+Design components for the web in Visual Studio Code. Generate code you code you ~~can trust~~ (ok, maybe not yet).
 
 ## What is Phi for VS Code?
 
