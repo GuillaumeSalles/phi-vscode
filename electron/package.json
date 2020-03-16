@@ -4,6 +4,12 @@
   "private": true,
   "homepage": "./",
   "author": "Guillaume Salles",
+  "license": "GNU GPL V3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GuillaumeSalles/phi-vscode.git",
+    "directory": "electron"
+  },
   "main": "server/electron.js",
   "build": {
     "appId": "com.electron.phi",

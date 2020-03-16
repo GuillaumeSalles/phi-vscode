@@ -1,14 +1,23 @@
 {
   "name": "gatsby-plugin-phi",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.3.0",
+  "description": "Gatsby plugin to generate code based on .phi file format",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GuillaumeSalles/phi-vscode.git",
+    "directory": "packages/gatsby-plugin-phi"
+  },
   "main": "index.js",
+  "files": [
+    "dist",
+    "gatsby-node.js"
+  ],
   "scripts": {
     "start": "tsc --watch",
     "test": "jest --watch"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Guillaume Salles",
+  "license": "GNU GPL V3.0",
   "dependencies": {
     "@types/loader-utils": "^1.1.3",
     "loader-utils": "^1.2.3",
