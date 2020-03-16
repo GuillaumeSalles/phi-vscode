@@ -10,10 +10,15 @@ interface Edit {
   readonly action: any;
 }
 
-export class PhiEditorProvider implements vscode.CustomEditorProvider {
+export class PhiEditorProvider
+  implements
+    vscode.CustomEditorProvider,
+    vscode.CustomEditorEditingDelegate<Edit> {
   public static readonly viewType = "testWebviewEditor.phi";
 
   private readonly editors = new Map<string, Set<PhiEditor>>();
+
+  public readonly editingDelegate = this;
 
   public constructor(private readonly extensionPath: string) {}
 
@@ -24,25 +29,19 @@ export class PhiEditorProvider implements vscode.CustomEditorProvider {
     );
   }
 
-  async resolveCustomDocument(
-    document: vscode.CustomDocument
-  ): Promise<vscode.CustomEditorCapabilities> {
+  async resolveCustomDocument(document: vscode.CustomDocument): Promise<void> {
     const model = await PhiModel.create(document.uri);
     document.userData = model;
     document.onDidDispose(() => {
       console.log("Dispose document");
       model.dispose();
     });
+    model.onDidEdit(edit => {
+      this._onDidEdit.fire({ document, edit });
+    });
     model.onDidChange(() => {
       this.update(document.uri);
     });
-    model.onUndo(() => {
-      this.undo(document.uri);
-    });
-    model.onApplyEdits(edits => {
-      this.applyEdits(document.uri, edits);
-    });
-    return model;
   }
 
   public async resolveCustomEditor(
@@ -84,27 +83,67 @@ export class PhiEditorProvider implements vscode.CustomEditorProvider {
     }
   }
 
-  private applyEdits(
-    resource: vscode.Uri,
-    edits: readonly Edit[],
-    trigger?: PhiEditor
-  ) {
-    const editors = this.editors.get(resource.toString());
+  //#region CustomEditorDelegate
+
+  async save(
+    document: DocumentType,
+    _cancellation: vscode.CancellationToken
+  ): Promise<void> {
+    return document.userData?.save();
+  }
+
+  async saveAs(
+    document: DocumentType,
+    targetResource: vscode.Uri
+  ): Promise<void> {
+    return document.userData?.saveAs(targetResource);
+  }
+
+  private readonly _onDidEdit = new vscode.EventEmitter<
+    vscode.CustomDocumentEditEvent<Edit>
+  >();
+  public readonly onDidEdit = this._onDidEdit.event;
+
+  async applyEdits(
+    document: DocumentType,
+    edits: readonly Edit[]
+  ): Promise<void> {
+    document.userData?.applyEdits(edits);
+    const editors = this.editors.get(document.uri.toString());
     if (!editors) {
-      throw new Error(`No editors found for ${resource.toString()}`);
+      throw new Error(`No editors found for ${document.uri.toString()}`);
     }
     for (const editor of editors) {
-      if (editor !== trigger) {
-        editor.applyEdits(edits);
-      }
+      editor.applyEdits(edits);
     }
   }
+
+  async undoEdits(
+    document: DocumentType,
+    edits: readonly Edit[]
+  ): Promise<void> {
+    document.userData?.undoEdits(edits);
+    this.undo(document.uri);
+  }
+
+  async revert(
+    document: DocumentType,
+    edits: vscode.CustomDocumentRevert
+  ): Promise<void> {
+    return document.userData?.revert(edits);
+  }
+
+  async backup(
+    document: DocumentType,
+    cancellation: vscode.CancellationToken
+  ): Promise<void> {
+    return document.userData?.backup();
+  }
+
+  //#endregion
 }
 
-class PhiModel extends Disposable
-  implements
-    vscode.CustomEditorCapabilities,
-    vscode.CustomEditorEditingCapability<Edit> {
+class PhiModel extends Disposable {
   private _lastContent: any;
   private readonly _edits: Edit[] = [];
 
@@ -112,8 +151,6 @@ class PhiModel extends Disposable
     const buffer = await vscode.workspace.fs.readFile(resource);
     return new PhiModel(resource, buffer);
   }
-
-  public readonly editing = this;
 
   private constructor(
     private readonly resource: vscode.Uri,
@@ -128,8 +165,6 @@ class PhiModel extends Disposable
     new vscode.EventEmitter<void>()
   );
 
-  private readonly _onUndo = this._register(new vscode.EventEmitter<void>());
-
   private readonly _onApplyEdits = this._register(
     new vscode.EventEmitter<readonly Edit[]>()
   );
@@ -138,8 +173,6 @@ class PhiModel extends Disposable
 
   private readonly _onDidEdit = this._register(new vscode.EventEmitter<Edit>());
   public readonly onDidEdit = this._onDidEdit.event;
-  public readonly onUndo = this._onUndo.event;
-  public readonly onApplyEdits = this._onApplyEdits.event;
 
   public getContent() {
     return this._lastContent;
@@ -168,21 +201,23 @@ class PhiModel extends Disposable
     );
   }
 
-  async applyEdits(edits: readonly Edit[]): Promise<void> {
+  applyEdits(edits: readonly Edit[]) {
     this._edits.push(...edits);
-    this._onApplyEdits.fire(edits);
   }
 
-  async undoEdits(edits: readonly Edit[]): Promise<void> {
+  async revert(revert: vscode.CustomDocumentRevert): Promise<void> {
+    // TODO
+  }
+
+  undoEdits(edits: readonly Edit[]) {
     for (let i = 0; i < edits.length; ++i) {
       this._edits.pop();
     }
-    this._onUndo.fire();
   }
 
   async backup() {
     // TODO
-    return true;
+    return;
   }
 }
 

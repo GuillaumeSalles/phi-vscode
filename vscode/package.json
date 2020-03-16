@@ -2,12 +2,12 @@
   "name": "phi",
   "displayName": "Phi",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "enableProposedApi": true,
   "publisher": "GuillaumeSalles",
   "repository": "https://github.com/GuillaumeSalles/phi-vscode",
   "engines": {
-    "vscode": "^1.43.0"
+    "vscode": "^1.44.0"
   },
   "categories": [
     "Other"
