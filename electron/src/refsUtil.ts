@@ -12,14 +12,18 @@ export function filterComponentsWhenLayer(
 }
 
 export function refsToJson(current: T.Refs) {
-  return JSON.stringify({
-    uiState: current.uiState,
-    colors: mapToArray(current.colors),
-    fontSizes: mapToArray(current.fontSizes),
-    fontFamilies: mapToArray(current.fontFamilies),
-    breakpoints: mapToArray(current.breakpoints),
-    components: mapToArray(current.components)
-  });
+  return JSON.stringify(
+    {
+      uiState: current.uiState,
+      colors: mapToArray(current.colors),
+      fontSizes: mapToArray(current.fontSizes),
+      fontFamilies: mapToArray(current.fontFamilies),
+      breakpoints: mapToArray(current.breakpoints),
+      components: mapToArray(current.components)
+    },
+    null,
+    2
+  );
 }
 
 function mapToArray(map: Map<string, any>) {

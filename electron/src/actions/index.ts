@@ -13,7 +13,11 @@ import { makeLayer } from "../factories";
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
     ? { type: "typography" }
-    : { type: "component", componentId: firstKey(components) };
+    : {
+        type: "component",
+        componentId: firstKey(components),
+        isEditing: false
+      };
 }
 
 function replaceComponent(
@@ -395,7 +399,8 @@ export function addLayerActionHandler(
     uiState: {
       type: "component",
       componentId: action.componentId,
-      layerId: action.layerId
+      layerId: action.layerId,
+      isEditing: true
     }
   };
 }
@@ -433,7 +438,8 @@ function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
     uiState: {
       type: "component",
       componentId: action.componentId,
-      layerId: action.layerId
+      layerId: action.layerId,
+      isEditing: true
     }
   };
 }
@@ -444,7 +450,8 @@ function selectLayerHandler(action: T.SelectLayer, refs: T.Refs): T.Refs {
     uiState: {
       type: "component",
       componentId: (refs.uiState as T.UIStateComponent).componentId,
-      layerId: action.layerId
+      layerId: action.layerId,
+      isEditing: true
     }
   };
 }
@@ -470,7 +477,8 @@ function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
     uiState: {
       type: "component",
       componentId: action.componentId,
-      layerId: action.layerId
+      layerId: action.layerId,
+      isEditing: true
     }
   };
 }
@@ -591,7 +599,11 @@ function addComponentHandler(action: T.AddComponent, refs: T.Refs): T.Refs {
       props: [],
       examples: []
     }),
-    uiState: { type: "component", componentId: action.componentId }
+    uiState: {
+      type: "component",
+      componentId: action.componentId,
+      isEditing: true
+    }
   };
 }
 
@@ -661,6 +673,39 @@ function deleteRefHandler(action: T.DeleteRef, refs: T.Refs): T.Refs {
   };
 }
 
+function editComponentHandler(action: T.EditComponent, refs: T.Refs): T.Refs {
+  if (refs.uiState.type !== "component") {
+    throw new Error(`uiState.type should be "component" to start editing it`);
+  }
+  const component = getComponentOrThrow(refs.uiState.componentId, refs);
+
+  return {
+    ...refs,
+    uiState: {
+      ...refs.uiState,
+      isEditing: true,
+      layerId: component.layout?.id
+    }
+  };
+}
+
+function stopEditComponentHandler(
+  action: T.StopEditComponent,
+  refs: T.Refs
+): T.Refs {
+  if (refs.uiState.type !== "component") {
+    throw new Error(`uiState.type should be "component" to start editing it`);
+  }
+  return {
+    ...refs,
+    uiState: {
+      ...refs.uiState,
+      layerId: undefined,
+      isEditing: false
+    }
+  };
+}
+
 export default function applyAction(
   actionsStack: T.Action[],
   action: T.Action,
@@ -716,6 +761,10 @@ export default function applyAction(
       return updateRefHandler(action, refs);
     case "deleteRef":
       return deleteRefHandler(action, refs);
+    case "editComponent":
+      return editComponentHandler(action, refs);
+    case "stopEditComponent":
+      return stopEditComponentHandler(action, refs);
   }
 }
 

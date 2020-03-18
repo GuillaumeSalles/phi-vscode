@@ -135,7 +135,11 @@ function Menu({ components, applyAction, uiState }: Props) {
             onClick={() =>
               applyAction({
                 type: "goTo",
-                to: { type: "component", componentId: entry[0] }
+                to: {
+                  type: "component",
+                  componentId: entry[0],
+                  isEditing: false
+                }
               })
             }
             text={entry[1].name}

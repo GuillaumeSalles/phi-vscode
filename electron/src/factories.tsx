@@ -340,7 +340,8 @@ export function makeDefaultProject(): T.Refs {
   refs.components = components;
   refs.uiState = {
     type: "component",
-    componentId: firstKey(components)
+    componentId: firstKey(components),
+    isEditing: false
   };
 
   return refs;

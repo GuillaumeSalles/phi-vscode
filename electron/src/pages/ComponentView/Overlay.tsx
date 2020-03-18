@@ -28,7 +28,14 @@ export function Overlay({ layerId, domRefs }: Props) {
   return (
     <div
       ref={ref}
-      css={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+      css={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: "none"
+      }}
     >
       {domRefRect && overlayRect && (
         <Fragment>

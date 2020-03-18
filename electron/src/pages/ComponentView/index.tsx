@@ -55,6 +55,14 @@ type Props = {
   applyAction: (action: T.Action) => void;
 };
 
+function getUiState(refs: T.Refs): T.UIStateComponent {
+  if (refs.uiState.type !== "component") {
+    throw new Error(`Expected uiState.type to equals "component"`);
+  }
+
+  return refs.uiState;
+}
+
 function ComponentView({
   menu,
   refs,
@@ -63,6 +71,7 @@ function ComponentView({
   layerId
 }: Props) {
   const component = refs.components.get(componentId)!;
+  const uiState = getUiState(refs);
 
   const nameEntry = useStringFormEntry("", value =>
     validateRefName(value, componentId, refs.components, "Components")
@@ -86,7 +95,6 @@ function ComponentView({
       .join(", ")}.`
   );
 
-  const [isEditing, setIsEditing] = useState(false);
   const [isEditingHTML, setIsEditingHTML] = useState(true);
 
   const selectedLayer =
@@ -103,7 +111,7 @@ function ComponentView({
         </div>
       }
       left={
-        isEditing ? (
+        uiState.isEditing ? (
           <>
             <LayersTree
               layerId={layerId}
@@ -149,7 +157,7 @@ function ComponentView({
             >
               <h1 css={heading}>{component.name}</h1>
               <div css={[row, { marginLeft: "28px" }]}>
-                {isEditing ? (
+                {uiState.isEditing ? (
                   <React.Fragment>
                     <Button
                       margin="0 12px 0 0"
@@ -159,7 +167,10 @@ function ComponentView({
                         nameEntry.setValue(component.name);
                       }}
                     />
-                    <Button text="Done" onClick={() => setIsEditing(false)} />
+                    <Button
+                      text="Done"
+                      onClick={() => applyAction({ type: "stopEditComponent" })}
+                    />
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
@@ -167,12 +178,9 @@ function ComponentView({
                       cssOverrides={{ marginRight: "12px" }}
                       icon={<Edit height={20} width={20} />}
                       onClick={() => {
-                        applyAction(
-                          selectLayer(
-                            component.layout ? component.layout.id : undefined
-                          )
-                        );
-                        setIsEditing(true);
+                        applyAction({
+                          type: "editComponent"
+                        });
                       }}
                     />
                     <IconButton
@@ -216,11 +224,13 @@ function ComponentView({
               }
             />
           </div>
-          {isEditing === false && <CodeExamples component={component} />}
+          {uiState.isEditing === false && (
+            <CodeExamples component={component} />
+          )}
         </div>
       }
       right={
-        isEditing && selectedLayer ? (
+        uiState.isEditing && selectedLayer ? (
           <div
             css={[
               column,

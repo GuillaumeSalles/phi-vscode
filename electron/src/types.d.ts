@@ -275,6 +275,7 @@ export type UIStateComponent = {
   type: "component";
   componentId: string;
   layerId?: string;
+  isEditing: boolean;
 };
 
 export type UIStateHome = {
@@ -467,6 +468,14 @@ type AddMediaQuery = {
   breakpointId: string;
 };
 
+type EditComponent = {
+  type: "editComponent";
+};
+
+type StopEditComponent = {
+  type: "stopEditComponent";
+};
+
 type Action =
   | GoTo
   | UpdateRef
@@ -477,6 +486,8 @@ type Action =
   | RenameLayer
   | MoveLayer
   | SelectLayer
+  | EditComponent
+  | StopEditComponent
   | UpdateLayerProp
   | UpdateLayerTag
   | UpdateLayerBinding
