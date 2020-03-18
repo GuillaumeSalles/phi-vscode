@@ -12,9 +12,7 @@ import Home from "./pages/Home";
 import { makeDefaultProject } from "./factories";
 import { open, jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
-import _applyAction, { applyActions, undo } from "./actions/index";
-import React from "react";
-import Debugger from "./components/Debugger";
+import _applyAction from "./actions/index";
 
 function initProject(refs: T.Refs, applyAction: (action: T.Action) => void) {
   applyAction({ type: "initProject", refs });
@@ -73,7 +71,7 @@ function App() {
   });
 
   useEffect(() => {
-    async function listener(event: any, message: string) {
+    async function listener(message: string) {
       switch (message) {
         case "new-project":
           createProject(applyAction);
@@ -98,21 +96,11 @@ function App() {
     };
   }, [applyAction, setRefs, setPartialRefs]);
 
-  const undoAction = useCallback(() => {
-    console.group("Undo");
-    const newRefs = undo(actionsStack, initialState);
-    console.log("New State", newRefs);
-    console.groupEnd();
-    setRefs(newRefs);
-  }, []);
-
   useEffect(() => {
     function listener(e: MessageEvent) {
-      if (e.data.type === "undo") {
-        undoAction();
-      } else if (e.data.type === "applyActions") {
-        const actions = e.data.actions as T.Action[];
-        setRefs(applyActions(actionsStack, actions, refs));
+      if (e.data.type === "setValue") {
+        console.log("Set value");
+        setRefs(jsonToRefs(undefined, true, JSON.parse(e.data.value)));
       }
     }
 

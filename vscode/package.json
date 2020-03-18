@@ -55,5 +55,8 @@
     "mocha": "^7.0.1",
     "typescript": "^3.7.5",
     "vscode-test": "^1.3.0"
+  },
+  "dependencies": {
+    "p-limit": "^2.2.2"
   }
 }

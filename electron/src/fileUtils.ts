@@ -19,9 +19,7 @@ export function jsonToRefs(
   return {
     isSaved,
     fileName,
-    uiState: {
-      type: "typography"
-    },
+    uiState: data.uiState || { type: "typography" },
     artboards: makeDefaultArtboards(),
     components: arrayToMap(data.components),
     fontSizes: arrayToMap(data.fontSizes),

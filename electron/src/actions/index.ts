@@ -719,22 +719,4 @@ export default function applyAction(
   }
 }
 
-export function undo(actionsStack: T.Action[], initialState: T.Refs) {
-  const newStack: T.Action[] = [];
-  actionsStack.pop();
-  return actionsStack.reduce((newRefs, action) => {
-    return applyAction(newStack, action, newRefs);
-  }, initialState);
-}
-
-export function applyActions(
-  actionsStack: T.Action[],
-  actions: T.Action[],
-  currentRefs: T.Refs
-) {
-  return actions.reduce((newRefs, action) => {
-    return applyAction(actionsStack, action, newRefs);
-  }, currentRefs);
-}
-
 type LayerVisitor = <T extends T.Layer>(layer: T) => T;

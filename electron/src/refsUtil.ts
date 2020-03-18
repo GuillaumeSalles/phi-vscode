@@ -13,6 +13,7 @@ export function filterComponentsWhenLayer(
 
 export function refsToJson(current: T.Refs) {
   return JSON.stringify({
+    uiState: current.uiState,
     colors: mapToArray(current.colors),
     fontSizes: mapToArray(current.fontSizes),
     fontFamilies: mapToArray(current.fontFamilies),
