@@ -9,6 +9,7 @@ type Props = {
   refs: T.Refs;
   width: number;
   props: T.LayerProps;
+  domRefs?: Map<string, HTMLBaseElement>;
 };
 
 function lengthToCss(
@@ -217,7 +218,8 @@ function makeChildren(
   layer: T.Layer,
   refs: T.Refs,
   width: number,
-  props: T.LayerProps
+  props: T.LayerProps,
+  domRefs?: Map<string, HTMLBaseElement>
 ) {
   switch (layer.type) {
     case "image":
@@ -233,12 +235,20 @@ function makeChildren(
               refs={refs}
               width={width}
               props={props}
+              domRefs={domRefs}
             />
           ))
         : contentOrBindingContent(layer, props);
     case "container":
       return layer.children.map(c => (
-        <Layer key={c.id} layer={c} refs={refs} width={width} props={props} />
+        <Layer
+          key={c.id}
+          layer={c}
+          refs={refs}
+          width={width}
+          props={props}
+          domRefs={domRefs}
+        />
       ));
     case "component":
       return new Error(
@@ -299,12 +309,10 @@ function imagePropToSrc(src: string | undefined) {
 }
 
 function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
-  const css = makeLayerStyle(layer, refs, width);
   switch (layer.type) {
     case "image":
       const src = imagePropToSrc(layer.props.src);
       return {
-        css,
         crossOrigin: "anonymous",
         src,
         height: layer.props.height,
@@ -313,10 +321,9 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
       };
     case "text":
     case "container":
-      return { css };
+      return {};
     case "link":
       return {
-        css,
         href: layer.props.href
       };
     case "component":
@@ -336,7 +343,7 @@ function applyBindings(
   for (let prop in layer.bindings) {
     const value = componentProps[layer.bindings[prop].propName];
 
-    if (value != null && value != "") {
+    if (value != null && value !== "") {
       if (prop === "src" && layer.type === "image") {
         newProps[prop] = imagePropToSrc(value);
       } else {
@@ -351,12 +358,25 @@ export function makeJsxLayerProps(
   layer: T.Layer,
   refs: T.Refs,
   width: number,
-  props: any
+  props: any,
+  domRefs?: Map<string, HTMLBaseElement>
 ) {
-  return applyBindings(makeLayerProps(layer, refs, width), layer, props);
+  const css = makeLayerStyle(layer, refs, width);
+
+  const result = applyBindings(
+    makeLayerProps(layer, refs, width),
+    layer,
+    props
+  );
+  result.css = css;
+  result.ref = domRefs
+    ? (inst: HTMLBaseElement) =>
+        inst === null ? domRefs.delete(layer.id) : domRefs.set(layer.id, inst)
+    : undefined;
+  return result;
 }
 
-function Layer({ layer, refs, width, props }: Props) {
+function Layer({ layer, refs, width, props, domRefs }: Props) {
   if (layer.type === "component") {
     const component = getComponentOrThrow(layer.componentId, refs);
     if (component.layout == null) {
@@ -368,14 +388,14 @@ function Layer({ layer, refs, width, props }: Props) {
         layer={component.layout}
         refs={refs}
         width={width}
-        props={makeJsxLayerProps(layer, refs, width, props)}
+        props={makeJsxLayerProps(layer, refs, width, props, undefined)}
       />
     );
   }
   return jsx(
     layer.tag,
-    makeJsxLayerProps(layer, refs, width, props),
-    makeChildren(layer, refs, width, props)
+    makeJsxLayerProps(layer, refs, width, props, domRefs),
+    makeChildren(layer, refs, width, props, domRefs)
   );
 }
 

@@ -189,7 +189,7 @@ function ComponentView({
                 )}
               </div>
             </div>
-            <Component component={component} refs={refs} />
+            <Component component={component} refs={refs} layerId={layerId} />
             <OkCancelModal
               {...deleteRefDialog.dialogProps}
               buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
@@ -216,7 +216,7 @@ function ComponentView({
               }
             />
           </div>
-          {isEditing == false && <CodeExamples component={component} />}
+          {isEditing === false && <CodeExamples component={component} />}
         </div>
       }
       right={

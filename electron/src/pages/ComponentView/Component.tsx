@@ -3,13 +3,66 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
+import { useRef } from "react";
+import { Overlay } from "./Overlay";
 
 type Props = {
+  layerId?: string;
   component: T.Component;
   refs: T.Refs;
 };
 
-function Component({ component, refs }: Props) {
+function ComponentExampleViewer({
+  component,
+  refs,
+  example,
+  artboard,
+  layerId
+}: Props & { example: T.ComponentExample; artboard: T.ArtboardDefinition }) {
+  /**
+   * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
+   */
+  let domRefs = useRef<Map<string, HTMLBaseElement>>(new Map()).current;
+
+  return (
+    <div key={example.id} css={[column, { marginRight: "48px" }]}>
+      <h3
+        css={{
+          color: "rgb(153, 153, 153)",
+          fontSize: "12px",
+          margin: "0 0 4px 0",
+          fontWeight: 400
+        }}
+      >
+        {artboard.name} - {artboard.width}
+      </h3>
+      <div
+        css={[
+          {
+            position: "relative",
+            border: "none",
+            background: artboard.backgroundColor,
+            width: artboard.width,
+            height: artboard.height
+          }
+        ]}
+      >
+        {component.layout && (
+          <Layer
+            layer={component.layout}
+            refs={refs}
+            width={parseInt(artboard.width.slice(0, -2))}
+            props={example.props}
+            domRefs={domRefs}
+          />
+        )}
+        <Overlay domRefs={domRefs} layerId={layerId} />
+      </div>
+    </div>
+  );
+}
+
+function Component({ component, refs, layerId }: Props) {
   return (
     <div css={column}>
       {Array.from(refs.artboards.entries()).map(entry => (
@@ -19,37 +72,14 @@ function Component({ component, refs }: Props) {
               .concat(component.examples)
               .map(example => {
                 return (
-                  <div key={example.id} css={[column, { marginRight: "48px" }]}>
-                    <h3
-                      css={{
-                        color: "rgb(153, 153, 153)",
-                        fontSize: "12px",
-                        margin: "0 0 4px 0",
-                        fontWeight: 400
-                      }}
-                    >
-                      {entry[1].name} - {entry[1].width}
-                    </h3>
-                    <div
-                      css={[
-                        {
-                          border: "none",
-                          background: entry[1].backgroundColor,
-                          width: entry[1].width,
-                          height: entry[1].height
-                        }
-                      ]}
-                    >
-                      {component.layout && (
-                        <Layer
-                          layer={component.layout}
-                          refs={refs}
-                          width={parseInt(entry[1].width.slice(0, -2))}
-                          props={example.props}
-                        />
-                      )}
-                    </div>
-                  </div>
+                  <ComponentExampleViewer
+                    key={example.id}
+                    component={component}
+                    layerId={layerId}
+                    refs={refs}
+                    example={example}
+                    artboard={entry[1]}
+                  />
                 );
               })}
           </div>
