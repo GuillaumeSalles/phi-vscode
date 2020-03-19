@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
-import { useRef, useLayoutEffect, useState, useEffect } from "react";
+import { useRef } from "react";
 import { Overlay } from "./Overlay";
 
 type Props = {

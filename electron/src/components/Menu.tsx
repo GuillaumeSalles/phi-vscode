@@ -138,7 +138,8 @@ function Menu({ components, applyAction, uiState }: Props) {
                 to: {
                   type: "component",
                   componentId: entry[0],
-                  isEditing: false
+                  isEditing: false,
+                  layerEditorMode: "html"
                 }
               })
             }

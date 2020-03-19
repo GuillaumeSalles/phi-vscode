@@ -10,13 +10,24 @@ import {
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
 
+function uiStateComponentOrThrow(refs: T.Refs): T.UIStateComponent {
+  if (refs.uiState.type !== "component") {
+    throw new Error(
+      `Expected uiState.type to be "component" but got ${refs.uiState.type}`
+    );
+  }
+
+  return refs.uiState;
+}
+
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
     ? { type: "typography" }
     : {
         type: "component",
         componentId: firstKey(components),
-        isEditing: false
+        isEditing: false,
+        layerEditorMode: "html"
       };
 }
 
@@ -397,10 +408,8 @@ export function addLayerActionHandler(
   return {
     ...result,
     uiState: {
-      type: "component",
-      componentId: action.componentId,
-      layerId: action.layerId,
-      isEditing: true
+      ...uiStateComponentOrThrow(refs),
+      layerId: action.layerId
     }
   };
 }
@@ -436,10 +445,8 @@ function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
   return {
     ...result,
     uiState: {
-      type: "component",
-      componentId: action.componentId,
-      layerId: action.layerId,
-      isEditing: true
+      ...uiStateComponentOrThrow(refs),
+      layerId: undefined
     }
   };
 }
@@ -448,10 +455,8 @@ function selectLayerHandler(action: T.SelectLayer, refs: T.Refs): T.Refs {
   return {
     ...refs,
     uiState: {
-      type: "component",
-      componentId: (refs.uiState as T.UIStateComponent).componentId,
-      layerId: action.layerId,
-      isEditing: true
+      ...uiStateComponentOrThrow(refs),
+      layerId: action.layerId
     }
   };
 }
@@ -472,13 +477,15 @@ function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
       })
     };
   });
+
+  const uiState = uiStateComponentOrThrow(refs);
+
   return {
     ...result,
     uiState: {
-      type: "component",
+      ...uiState,
       componentId: action.componentId,
-      layerId: action.layerId,
-      isEditing: true
+      layerId: action.layerId
     }
   };
 }
@@ -602,7 +609,8 @@ function addComponentHandler(action: T.AddComponent, refs: T.Refs): T.Refs {
     uiState: {
       type: "component",
       componentId: action.componentId,
-      isEditing: true
+      isEditing: true,
+      layerEditorMode: "html"
     }
   };
 }
@@ -706,6 +714,22 @@ function stopEditComponentHandler(
   };
 }
 
+function setLayerEditorModeHandler(
+  action: T.SetLayerEditorMode,
+  refs: T.Refs
+): T.Refs {
+  if (refs.uiState.type !== "component") {
+    throw new Error(`uiState.type should be "component" to start editing it`);
+  }
+  return {
+    ...refs,
+    uiState: {
+      ...refs.uiState,
+      layerEditorMode: action.mode
+    }
+  };
+}
+
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
@@ -760,6 +784,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return editComponentHandler(action, refs);
     case "stopEditComponent":
       return stopEditComponentHandler(action, refs);
+    case "setLayerEditorMode":
+      return setLayerEditorModeHandler(action, refs);
   }
 }
 

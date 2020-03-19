@@ -100,7 +100,7 @@ function ComponentView({
       .join(", ")}.`
   );
 
-  const [isEditingHTML, setIsEditingHTML] = useState(true);
+  const isEditingHTML = uiState.layerEditorMode === "html";
 
   const selectedLayer =
     component.layout && layerId
@@ -265,13 +265,17 @@ function ComponentView({
             >
               <button
                 css={isEditingHTML ? selectedTabStyle : tabStyle}
-                onClick={() => setIsEditingHTML(true)}
+                onClick={() =>
+                  applyAction({ type: "setLayerEditorMode", mode: "html" })
+                }
               >
                 HTML
               </button>
               <button
                 css={isEditingHTML ? tabStyle : selectedTabStyle}
-                onClick={() => setIsEditingHTML(false)}
+                onClick={() =>
+                  applyAction({ type: "setLayerEditorMode", mode: "css" })
+                }
               >
                 CSS
               </button>

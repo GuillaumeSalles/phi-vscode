@@ -276,7 +276,10 @@ export type UIStateComponent = {
   componentId: string;
   layerId?: string;
   isEditing: boolean;
+  layerEditorMode: LayerEditorMode;
 };
+
+export type LayerEditorMode = "html" | "css";
 
 export type UIStateHome = {
   type: "home";
@@ -476,6 +479,11 @@ type StopEditComponent = {
   type: "stopEditComponent";
 };
 
+type SetLayerEditorMode = {
+  type: "setLayerEditorMode";
+  mode: LayerEditorMode;
+};
+
 type Action =
   | GoTo
   | UpdateRef
@@ -502,4 +510,5 @@ type Action =
   | DeleteComponentExample
   | UpdateComponentExampleProp
   | UpdateLayerStyle
-  | AddMediaQuery;
+  | AddMediaQuery
+  | SetLayerEditorMode;

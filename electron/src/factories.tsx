@@ -1,6 +1,5 @@
 import uuid from "uuid/v4";
 import * as T from "./types";
-import { colors } from "./styles";
 import { firstKey, getKeyByIndex } from "./helpers/immutable-map";
 import { layerTypeToName, layerTreeToArray } from "./layerUtils";
 import { assertUnreachable } from "./utils";
@@ -345,7 +344,8 @@ export function makeDefaultProject(): T.Refs {
   refs.uiState = {
     type: "component",
     componentId: firstKey(components),
-    isEditing: false
+    isEditing: false,
+    layerEditorMode: "html"
   };
 
   return refs;
