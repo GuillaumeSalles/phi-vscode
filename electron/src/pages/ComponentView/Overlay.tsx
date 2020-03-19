@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import * as T from "../../types";
 import { useRef, Fragment } from "react";
 
 type Props = {
@@ -17,13 +16,6 @@ export function Overlay({ layerId, domRefs }: Props) {
     ? domRefs.get(layerId)?.getBoundingClientRect()
     : undefined;
   const overlayRect = ref.current?.getBoundingClientRect();
-
-  if (layerId) {
-    const htmlLayer = domRefs.get(layerId);
-    if (htmlLayer) {
-      console.log(htmlLayer.getBoundingClientRect());
-    }
-  }
 
   return (
     <div

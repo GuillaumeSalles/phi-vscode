@@ -370,9 +370,11 @@ export function makeJsxLayerProps(
   );
   result.css = css;
   result.ref = domRefs
-    ? (inst: HTMLBaseElement) =>
-        inst === null ? domRefs.delete(layer.id) : domRefs.set(layer.id, inst)
+    ? (inst: HTMLBaseElement) => {
+        inst === null ? domRefs.delete(layer.id) : domRefs.set(layer.id, inst);
+      }
     : undefined;
+  result.key = layer.id;
   return result;
 }
 

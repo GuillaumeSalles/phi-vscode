@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
 import { filterComponentsWhenLayer } from "../../refsUtil";
@@ -29,7 +29,6 @@ import {
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
-import { selectLayer } from "../../actions/factories";
 
 const tabStyle = css({
   display: "flex",
@@ -70,6 +69,12 @@ function ComponentView({
   componentId,
   layerId
 }: Props) {
+  useEffect(() => {
+    return () => {
+      console.log("Destroy ComponentView");
+    };
+  }, []);
+
   const component = refs.components.get(componentId)!;
   const uiState = getUiState(refs);
 
@@ -197,7 +202,12 @@ function ComponentView({
                 )}
               </div>
             </div>
-            <Component component={component} refs={refs} layerId={layerId} />
+            <Component
+              key={componentId}
+              component={component}
+              refs={refs}
+              layerId={layerId}
+            />
             <OkCancelModal
               {...deleteRefDialog.dialogProps}
               buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}

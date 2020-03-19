@@ -706,12 +706,7 @@ function stopEditComponentHandler(
   };
 }
 
-export default function applyAction(
-  actionsStack: T.Action[],
-  action: T.Action,
-  refs: T.Refs
-): T.Refs {
-  actionsStack.push(action);
+export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
       return goToHandler(action, refs);

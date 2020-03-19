@@ -227,10 +227,14 @@ export function makeDefaultFontSizes(): T.FontSizesMap {
   return fontSizes;
 }
 
+const iPhoneX = "3c6c1f84-c6b2-46d7-97f9-750cfe25df73";
+const iPad = "3c6c1f84-c6b2-46d7-97f9-750cfe25df74";
+const iPadPro = "3c6c1f84-c6b2-46d7-97f9-750cfe25df75";
+
 export function makeDefaultArtboards(): T.ArtboardsMap {
   return new Map([
     [
-      uuid(),
+      iPhoneX,
       {
         name: "iPhone X",
         width: "375px",
@@ -239,11 +243,11 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
       }
     ],
     [
-      uuid(),
+      iPad,
       { name: "iPad", width: "768px", height: "auto", backgroundColor: "white" }
     ],
     [
-      uuid(),
+      iPadPro,
       {
         name: "iPad Pro",
         width: "1024px",

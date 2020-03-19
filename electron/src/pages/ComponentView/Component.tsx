@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
-import { useRef } from "react";
+import { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { Overlay } from "./Overlay";
 
 type Props = {
@@ -49,6 +49,7 @@ function ComponentExampleViewer({
       >
         {component.layout && (
           <Layer
+            key={component.layout.id}
             layer={component.layout}
             refs={refs}
             width={parseInt(artboard.width.slice(0, -2))}
