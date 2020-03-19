@@ -362,48 +362,69 @@ export function makeJsxLayerProps(
   refs: T.Refs,
   width: number,
   props: any,
-  refCallback?: RefCallback
-) {
-  const css = makeLayerStyle(layer, refs, width);
+  ref?: (element: HTMLBaseElement | null) => void
+): any {
+  if (layer.type === "component") {
+    const component = getComponentOrThrow(layer.componentId, refs);
+    if (component.layout == null) {
+      return {};
+    }
+    const _props = applyBindings(
+      makeLayerProps(layer, refs, width),
+      layer,
+      props
+    );
+    return makeJsxLayerProps(component.layout, refs, width, _props, ref);
+  }
 
+  const css = makeLayerStyle(layer, refs, width);
   const result = applyBindings(
     makeLayerProps(layer, refs, width),
     layer,
     props
   );
   result.css = css;
-  result.ref = refCallback
-    ? (inst: HTMLBaseElement) => {
-        refCallback(layer.id, inst);
-      }
-    : undefined;
+  result.ref = ref;
   result.key = layer.id;
   return result;
+}
+
+function getNonVirtualLayer(
+  refs: T.Refs,
+  layer?: T.Layer
+): Exclude<T.Layer, T.ComponentLayer> | undefined {
+  if (layer == null) {
+    return undefined;
+  }
+
+  if (layer.type === "component") {
+    const component = getComponentOrThrow(layer.componentId, refs);
+    return getNonVirtualLayer(refs, component.layout);
+  }
+
+  return layer;
 }
 
 /**
  * Component needs to be memoized to avoid rerendering after setState on refCallback
  */
 const Layer = memo(({ layer, refs, width, props, refCallback }: Props) => {
-  if (layer.type === "component") {
-    const component = getComponentOrThrow(layer.componentId, refs);
-    if (component.layout == null) {
-      return null;
-    }
+  const nonVirtualLayer = getNonVirtualLayer(refs, layer);
 
-    return (
-      <Layer
-        layer={component.layout}
-        refs={refs}
-        width={width}
-        props={makeJsxLayerProps(layer, refs, width, props, undefined)}
-      />
-    );
+  if (nonVirtualLayer == null) {
+    return null;
   }
+
   return jsx(
-    layer.tag,
-    makeJsxLayerProps(layer, refs, width, props, refCallback),
-    makeChildren(layer, refs, width, props, refCallback)
+    nonVirtualLayer.tag,
+    makeJsxLayerProps(
+      layer,
+      refs,
+      width,
+      props,
+      refCallback ? element => refCallback(layer.id, element) : undefined
+    ),
+    makeChildren(nonVirtualLayer, refs, width, props, refCallback)
   );
 });
 
