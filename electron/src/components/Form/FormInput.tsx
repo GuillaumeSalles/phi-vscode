@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { ChangeEvent, KeyboardEvent, forwardRef } from "react";
-import { colors, textInput } from "../../styles";
+import { textInput } from "../../styles";
 
 type Props = {
   placeholder: string;

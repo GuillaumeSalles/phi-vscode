@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../types";
-import { column, heading, row, colors } from "../../styles";
+import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";

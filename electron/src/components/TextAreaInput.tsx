@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { colors, styleEditorInput } from "../styles";
+import { colors } from "../styles";
 
 type Props = {
   placeholder?: string;

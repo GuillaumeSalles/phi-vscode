@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import * as T from "./types";
 import { useState } from "react";
 import { onAction } from "./bridge";
@@ -8,26 +8,10 @@ import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
 import Breakpoints from "./pages/Breakpoints";
 import ComponentView from "./pages/ComponentView";
-import Home from "./pages/Home";
 import { makeDefaultProject } from "./factories";
-import { open, jsonToRefs } from "./fileUtils";
+import { jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
 import _applyAction from "./actions/index";
-
-function initProject(refs: T.Refs, applyAction: (action: T.Action) => void) {
-  applyAction({ type: "initProject", refs });
-}
-
-function createProject(applyAction: (action: T.Action) => void) {
-  initProject(makeDefaultProject(), applyAction);
-}
-
-async function openProject(applyAction: (action: T.Action) => void) {
-  const refs = await open();
-  if (refs) {
-    initProject(refs, applyAction);
-  }
-}
 
 function makeInitialState(): T.Refs {
   const vscode = (window as any).__vscode__;
@@ -97,14 +81,6 @@ function App() {
           fontFamilies={refs.fontFamilies}
           fontSizes={refs.fontSizes}
           applyAction={applyAction}
-        />
-      );
-    case "home":
-      return (
-        <Home
-          onNewProjectClick={() => createProject(applyAction)}
-          openProject={() => openProject(applyAction)}
-          openExampleProject={refs => initProject(refs, applyAction)}
         />
       );
     case "component":

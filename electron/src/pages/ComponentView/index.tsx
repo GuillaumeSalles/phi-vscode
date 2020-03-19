@@ -8,7 +8,6 @@ import Component from "./Component";
 // import SettingsEditor from "./SettingsEditor";
 import CodeExamples from "./CodeExamples";
 import SecondaryButton from "../../components/SecondaryButton";
-import { useState } from "react";
 import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import HtmlEditor from "./Editors/HtmlEditor";

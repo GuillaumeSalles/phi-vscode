@@ -5,7 +5,7 @@ import AddButton from "../../../components/AddButton";
 import { useToggle } from "../../../hooks";
 import { useRef } from "react";
 import Popover from "../../../components/Popover";
-import { card, row, column, sectionTitle, colors } from "../../../styles";
+import { row, column, sectionTitle, colors } from "../../../styles";
 import {
   ColorEditor,
   FontSizeEditor,

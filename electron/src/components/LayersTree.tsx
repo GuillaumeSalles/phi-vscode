@@ -242,7 +242,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
         layerId: uuid()
       });
     },
-    [applyAction, componentId]
+    [applyAction, componentId, layerId]
   );
 
   const onRename = useCallback(

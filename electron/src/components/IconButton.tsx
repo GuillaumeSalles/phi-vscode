@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, Interpolation, css } from "@emotion/core";
 import { MouseEventHandler } from "react";
-import { colors } from "../styles";
 
 type Props = {
   icon: React.ReactNode;

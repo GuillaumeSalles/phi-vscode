@@ -5,7 +5,7 @@ import {
   FormEntry,
   useDialogForm
 } from "../components/Form";
-import { del, set, valuesAsArray } from "../helpers/immutable-map";
+import { valuesAsArray } from "../helpers/immutable-map";
 import uuid from "uuid/v4";
 import * as T from "../types";
 import { layerTreeToArray } from "../layerUtils";

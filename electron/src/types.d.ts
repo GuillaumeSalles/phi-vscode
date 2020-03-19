@@ -268,8 +268,7 @@ export type UIState =
   | UIStateComponent
   | UIStateTypography
   | UIStateBreakpoints
-  | UIStateColors
-  | UIStateHome;
+  | UIStateColors;
 
 export type UIStateComponent = {
   type: "component";
@@ -280,10 +279,6 @@ export type UIStateComponent = {
 };
 
 export type LayerEditorMode = "html" | "css";
-
-export type UIStateHome = {
-  type: "home";
-};
 
 export type UIStateTypography = {
   type: "typography";

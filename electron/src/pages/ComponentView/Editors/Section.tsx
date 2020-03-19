@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { sectionTitle, column, row, colors } from "../../../styles";
+import { column, row, colors } from "../../../styles";
 
 type Props = {
   title: string;

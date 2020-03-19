@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../types";
 import { useRef } from "react";
 import Popover from "./Popover";
-import { card, row, colors } from "../styles";
+import { row, colors } from "../styles";
 import { layerTypeToIcon } from "./LayersTree";
 import AddButton from "./AddButton";
 import { useToggle } from "../hooks";

@@ -1,5 +1,4 @@
 import * as T from "./types";
-import { jsonToRefs } from "./fileUtils";
 import { refsToJson } from "./refsUtil";
 
 export default function() {

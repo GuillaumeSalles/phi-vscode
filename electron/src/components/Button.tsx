@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { primaryButton, colors } from "../styles";
+import { primaryButton } from "../styles";
 import React, { KeyboardEvent } from "react";
 
 type Props = {
