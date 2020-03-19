@@ -3,13 +3,16 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
 import { getComponentOrThrow } from "../../layerUtils";
+import { useMemo, memo } from "react";
+
+type RefCallback = (layerId: string, element: HTMLBaseElement | null) => void;
 
 type Props = {
   layer: T.Layer;
   refs: T.Refs;
   width: number;
   props: T.LayerProps;
-  domRefs?: Map<string, HTMLBaseElement>;
+  refCallback?: RefCallback;
 };
 
 function lengthToCss(
@@ -219,7 +222,7 @@ function makeChildren(
   refs: T.Refs,
   width: number,
   props: T.LayerProps,
-  domRefs?: Map<string, HTMLBaseElement>
+  refCallback?: RefCallback
 ) {
   switch (layer.type) {
     case "image":
@@ -235,7 +238,7 @@ function makeChildren(
               refs={refs}
               width={width}
               props={props}
-              domRefs={domRefs}
+              refCallback={refCallback}
             />
           ))
         : contentOrBindingContent(layer, props);
@@ -247,7 +250,7 @@ function makeChildren(
           refs={refs}
           width={width}
           props={props}
-          domRefs={domRefs}
+          refCallback={refCallback}
         />
       ));
     case "component":
@@ -359,7 +362,7 @@ export function makeJsxLayerProps(
   refs: T.Refs,
   width: number,
   props: any,
-  domRefs?: Map<string, HTMLBaseElement>
+  refCallback?: RefCallback
 ) {
   const css = makeLayerStyle(layer, refs, width);
 
@@ -369,16 +372,19 @@ export function makeJsxLayerProps(
     props
   );
   result.css = css;
-  result.ref = domRefs
+  result.ref = refCallback
     ? (inst: HTMLBaseElement) => {
-        inst === null ? domRefs.delete(layer.id) : domRefs.set(layer.id, inst);
+        refCallback(layer.id, inst);
       }
     : undefined;
   result.key = layer.id;
   return result;
 }
 
-function Layer({ layer, refs, width, props, domRefs }: Props) {
+/**
+ * Component needs to be memoized to avoid rerendering after setState on refCallback
+ */
+const Layer = memo(({ layer, refs, width, props, refCallback }: Props) => {
   if (layer.type === "component") {
     const component = getComponentOrThrow(layer.componentId, refs);
     if (component.layout == null) {
@@ -396,9 +402,9 @@ function Layer({ layer, refs, width, props, domRefs }: Props) {
   }
   return jsx(
     layer.tag,
-    makeJsxLayerProps(layer, refs, width, props, domRefs),
-    makeChildren(layer, refs, width, props, domRefs)
+    makeJsxLayerProps(layer, refs, width, props, refCallback),
+    makeChildren(layer, refs, width, props, refCallback)
   );
-}
+});
 
 export default Layer;

@@ -3,8 +3,9 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { Overlay } from "./Overlay";
+import { del, set } from "../../helpers/immutable-map";
 
 type Props = {
   layerId?: string;
@@ -22,7 +23,22 @@ function ComponentExampleViewer({
   /**
    * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
    */
-  let domRefs = useRef<Map<string, HTMLBaseElement>>(new Map()).current;
+  // let domRefs = useRef<Map<string, HTMLBaseElement>>(new Map()).current;
+  // const refCallback = (id: string, element: HTMLBaseElement | null) => {
+  //   element === null ? domRefs.delete(id) : domRefs.set(id, element);
+  // };
+
+  let [domRefs, setDomRefs] = useState<Map<string, HTMLBaseElement>>(new Map());
+  const refCallback = useCallback(
+    (id: string, element: HTMLBaseElement | null) => {
+      setDomRefs(previousDomRefs =>
+        element === null
+          ? del(previousDomRefs, id)
+          : set(previousDomRefs, id, element)
+      );
+    },
+    []
+  );
 
   return (
     <div key={example.id} css={[column, { marginRight: "48px" }]}>
@@ -54,7 +70,7 @@ function ComponentExampleViewer({
             refs={refs}
             width={parseInt(artboard.width.slice(0, -2))}
             props={example.props}
-            domRefs={domRefs}
+            refCallback={refCallback}
           />
         )}
         <Overlay domRefs={domRefs} layerId={layerId} />
