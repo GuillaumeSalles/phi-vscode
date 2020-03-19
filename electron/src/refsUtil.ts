@@ -32,3 +32,13 @@ function mapToArray(map: Map<string, any>) {
     ...entry[1]
   }));
 }
+
+export function uiStateComponentOrThrow(refs: T.Refs): T.UIStateComponent {
+  if (refs.uiState.type !== "component") {
+    throw new Error(
+      `Expected uiState.type to be "component" but got ${refs.uiState.type}`
+    );
+  }
+
+  return refs.uiState;
+}

@@ -274,6 +274,7 @@ export type UIStateComponent = {
   type: "component";
   componentId: string;
   layerId?: string;
+  hoveredLayerId?: string;
   isEditing: boolean;
   layerEditorMode: LayerEditorMode;
 };
@@ -479,6 +480,11 @@ type SetLayerEditorMode = {
   mode: LayerEditorMode;
 };
 
+type HoverLayer = {
+  type: "hoverLayer";
+  layerId?: string;
+};
+
 type Action =
   | GoTo
   | UpdateRef
@@ -489,6 +495,7 @@ type Action =
   | RenameLayer
   | MoveLayer
   | SelectLayer
+  | HoverLayer
   | EditComponent
   | StopEditComponent
   | UpdateLayerProp

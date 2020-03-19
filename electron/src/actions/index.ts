@@ -9,16 +9,7 @@ import {
 } from "../layerUtils";
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
-
-function uiStateComponentOrThrow(refs: T.Refs): T.UIStateComponent {
-  if (refs.uiState.type !== "component") {
-    throw new Error(
-      `Expected uiState.type to be "component" but got ${refs.uiState.type}`
-    );
-  }
-
-  return refs.uiState;
-}
+import { uiStateComponentOrThrow } from "../refsUtil";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
@@ -718,14 +709,21 @@ function setLayerEditorModeHandler(
   action: T.SetLayerEditorMode,
   refs: T.Refs
 ): T.Refs {
-  if (refs.uiState.type !== "component") {
-    throw new Error(`uiState.type should be "component" to start editing it`);
-  }
   return {
     ...refs,
     uiState: {
-      ...refs.uiState,
+      ...uiStateComponentOrThrow(refs),
       layerEditorMode: action.mode
+    }
+  };
+}
+
+function hoverLayerHandler(action: T.HoverLayer, refs: T.Refs): T.Refs {
+  return {
+    ...refs,
+    uiState: {
+      ...uiStateComponentOrThrow(refs),
+      hoveredLayerId: action.layerId
     }
   };
 }
@@ -786,6 +784,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return stopEditComponentHandler(action, refs);
     case "setLayerEditorMode":
       return setLayerEditorModeHandler(action, refs);
+    case "hoverLayer":
+      return hoverLayerHandler(action, refs);
   }
 }
 

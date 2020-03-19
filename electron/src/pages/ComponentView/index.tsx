@@ -3,7 +3,10 @@ import { jsx, css } from "@emotion/core";
 import React, { useEffect } from "react";
 import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
-import { filterComponentsWhenLayer } from "../../refsUtil";
+import {
+  filterComponentsWhenLayer,
+  uiStateComponentOrThrow
+} from "../../refsUtil";
 import Component from "./Component";
 // import SettingsEditor from "./SettingsEditor";
 import CodeExamples from "./CodeExamples";
@@ -53,14 +56,6 @@ type Props = {
   applyAction: (action: T.Action) => void;
 };
 
-function getUiState(refs: T.Refs): T.UIStateComponent {
-  if (refs.uiState.type !== "component") {
-    throw new Error(`Expected uiState.type to equals "component"`);
-  }
-
-  return refs.uiState;
-}
-
 function ComponentView({
   menu,
   refs,
@@ -75,7 +70,7 @@ function ComponentView({
   }, []);
 
   const component = refs.components.get(componentId)!;
-  const uiState = getUiState(refs);
+  const uiState = uiStateComponentOrThrow(refs);
 
   const nameEntry = useStringFormEntry("", value =>
     validateRefName(value, componentId, refs.components, "Components")
@@ -201,12 +196,7 @@ function ComponentView({
                 )}
               </div>
             </div>
-            <Component
-              key={componentId}
-              component={component}
-              refs={refs}
-              layerId={layerId}
-            />
+            <Component key={componentId} component={component} refs={refs} />
             <OkCancelModal
               {...deleteRefDialog.dialogProps}
               buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}

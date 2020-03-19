@@ -271,6 +271,22 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
   const treeViewRef = useRef<HTMLDivElement>(null);
   const flattenLayers = useMemo(() => flattenLayer(root), [root]);
 
+  const onMouseOver = useCallback(
+    (layer: T.Layer) => {
+      applyAction({
+        type: "hoverLayer",
+        layerId: layer.id
+      });
+    },
+    [applyAction]
+  );
+
+  const onTreeMouseLeave = useCallback(() => {
+    applyAction({
+      type: "hoverLayer"
+    });
+  }, [applyAction]);
+
   return (
     <div
       css={[
@@ -366,6 +382,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
             draggedIndex,
             dragIndicatorPosition
           )}
+          onMouseLeave={onTreeMouseLeave}
         />
         {flattenLayers.map((item, index) => (
           <LayersTreeItemComponent
@@ -380,6 +397,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
             onRename={onRename}
             onDelete={onDelete}
             isSelected={item.layer.id === layerId}
+            onMouseOver={onMouseOver}
           />
         ))}
       </div>

@@ -3,12 +3,11 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
-import { useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Overlay } from "./Overlay";
 import { del, set } from "../../helpers/immutable-map";
 
 type Props = {
-  layerId?: string;
   component: T.Component;
   refs: T.Refs;
 };
@@ -17,8 +16,7 @@ function ComponentExampleViewer({
   component,
   refs,
   example,
-  artboard,
-  layerId
+  artboard
 }: Props & { example: T.ComponentExample; artboard: T.ArtboardDefinition }) {
   /**
    * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
@@ -73,13 +71,13 @@ function ComponentExampleViewer({
             refCallback={refCallback}
           />
         )}
-        <Overlay domRefs={domRefs} layerId={layerId} />
+        <Overlay domRefs={domRefs} refs={refs} />
       </div>
     </div>
   );
 }
 
-function Component({ component, refs, layerId }: Props) {
+function Component({ component, refs }: Props) {
   return (
     <div css={column}>
       {Array.from(refs.artboards.entries()).map(entry => (
@@ -92,7 +90,6 @@ function Component({ component, refs, layerId }: Props) {
                   <ComponentExampleViewer
                     key={example.id}
                     component={component}
-                    layerId={layerId}
                     refs={refs}
                     example={example}
                     artboard={entry[1]}

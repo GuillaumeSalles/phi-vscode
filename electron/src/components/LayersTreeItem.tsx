@@ -17,6 +17,7 @@ type Props = {
   isSelected: boolean;
   onRename: (layer: T.Layer) => void;
   onDelete: (layer: T.Layer) => void;
+  onMouseOver: (layer: T.Layer) => void;
 };
 
 export default function LayersTreeItemComponent({
@@ -29,7 +30,8 @@ export default function LayersTreeItemComponent({
   onClick,
   onRename,
   isSelected,
-  onDelete
+  onDelete,
+  onMouseOver
 }: Props) {
   return (
     <div
@@ -37,6 +39,7 @@ export default function LayersTreeItemComponent({
       onDragStart={() => onDragStart(index)}
       onDragEnd={() => onDragEnd(undefined)}
       onClick={() => onClick(layer.id)}
+      onMouseOver={() => onMouseOver(layer)}
       css={[
         row,
         {

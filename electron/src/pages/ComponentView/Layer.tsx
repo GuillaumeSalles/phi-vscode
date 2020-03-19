@@ -3,7 +3,7 @@ import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
 import { getComponentOrThrow } from "../../layerUtils";
-import { useMemo, memo } from "react";
+import { memo } from "react";
 
 type RefCallback = (layerId: string, element: HTMLBaseElement | null) => void;
 
