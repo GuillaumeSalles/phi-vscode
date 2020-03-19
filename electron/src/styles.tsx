@@ -1,6 +1,32 @@
 /** @jsx jsx */
 import { css } from "@emotion/core";
 
+function setCssVariable(name: string, value: string) {
+  document.documentElement.style.setProperty(name, value);
+}
+
+if ((window as any).__vscode__ == null) {
+  document.documentElement.style.color = "#d6deeb";
+  document.documentElement.style.background = "#011627";
+
+  setCssVariable("--vscode-icon-foreground", "#c5c5c5");
+  setCssVariable("--vscode-foreground", "#d6deeb");
+  setCssVariable("--vscode-sideBarSectionHeader-background", "#011627");
+  setCssVariable("--vscode-sideBar-background", "#011627");
+  setCssVariable("--vscode-editor-background", "#011627");
+  setCssVariable("--vscode-button-foreground", "#ffffffcc");
+  setCssVariable("--vscode-button-background", "#7e57c2cc");
+  setCssVariable("--vscode-button-hoverBackground", "#7e57c2");
+  setCssVariable("--vscode-input-background", "#0b253a");
+  setCssVariable("--vscode-input-foreground", "#ffffffcc");
+  setCssVariable("--vscode-input-border", "#5f7e97");
+  setCssVariable("--vscode-inputOption-activeBorder", "#ffffffcc");
+  setCssVariable("--vscode-input-placeholderForeground", "#5f7e97");
+  setCssVariable("--vscode-list-hoverBackground", "#011627");
+  setCssVariable("--vscode-statusBar-background", "#202431");
+  setCssVariable("--vscode-activityBar-background", "#011627");
+}
+
 export const colors = {
   front: "white",
   iconColor: "var(--vscode-icon-foreground)",
