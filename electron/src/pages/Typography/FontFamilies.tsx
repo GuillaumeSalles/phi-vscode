@@ -18,7 +18,7 @@ function isUsingFontSize(style: T.LayerStyle, refId: string): boolean {
 
 type Props = {
   fontFamilies: T.FontFamiliesMap;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
   refs: T.Refs;
 };
 

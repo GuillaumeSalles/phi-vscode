@@ -20,7 +20,7 @@ type Props<TLayer> = {
   layer: TLayer;
   refs: T.Refs;
   componentId: string;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 function layerTypeToSupportedDisplay(type: T.LayerType): T.DisplayProperty[] {

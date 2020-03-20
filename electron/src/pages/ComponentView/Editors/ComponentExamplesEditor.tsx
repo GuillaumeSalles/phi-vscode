@@ -21,7 +21,7 @@ import { Delete } from "../../../icons";
 type Props = {
   component: T.Component;
   componentId: string;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 export default function ComponentExamplesEditor({

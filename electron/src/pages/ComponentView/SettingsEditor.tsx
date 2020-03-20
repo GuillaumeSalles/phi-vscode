@@ -20,7 +20,7 @@ import Button from "../../components/Button";
 
 type Props = {
   refs: T.Refs;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 export default function SettingsEditor({ refs, applyAction }: Props) {

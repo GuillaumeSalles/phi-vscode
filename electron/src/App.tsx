@@ -12,25 +12,24 @@ import { makeDefaultProject } from "./factories";
 import { jsonToRefs } from "./fileUtils";
 import Menu from "./components/Menu";
 import _applyAction from "./actions/index";
+import fakeProject from "./mockInitialState.json";
 
 function makeInitialState(): T.Refs {
   const vscode = (window as any).__vscode__;
-  if (vscode && vscode.initialState) {
-    return jsonToRefs(undefined, true, (window as any).__vscode__.initialState);
+  if (vscode) {
+    if (vscode.initialState) {
+      return jsonToRefs(undefined, true, vscode.initialState);
+    } else {
+      return makeDefaultProject();
+    }
   }
-  return makeDefaultProject();
+  return jsonToRefs(undefined, true, fakeProject);
 }
 
 const initialState = makeInitialState();
 
 function App() {
   const [refs, setRefs] = useState<T.Refs>(initialState);
-
-  useEffect(() => {
-    return () => {
-      console.log("Destroy ");
-    };
-  }, []);
 
   const applyAction = useCallback(
     (action: T.Action) => {

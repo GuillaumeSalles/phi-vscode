@@ -26,7 +26,7 @@ type Props = {
   component: T.Component;
   layer: T.Layer;
   refs: T.Refs;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 export default function HtmlEditor(props: Props) {

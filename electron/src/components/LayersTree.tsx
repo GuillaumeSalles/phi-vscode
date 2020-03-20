@@ -22,7 +22,7 @@ type Props = {
   layerId?: string;
   root?: T.Layer;
   refs: T.Refs;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 export type LayersTreeItem = {
@@ -333,6 +333,7 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
         />
       </div>
       <div
+        onMouseLeave={onTreeMouseLeave}
         ref={treeViewRef}
         css={[column, { position: "relative", height: "100%" }]}
         onDragOver={e => {
@@ -382,7 +383,6 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
             draggedIndex,
             dragIndicatorPosition
           )}
-          onMouseLeave={onTreeMouseLeave}
         />
         {flattenLayers.map((item, index) => (
           <LayersTreeItemComponent

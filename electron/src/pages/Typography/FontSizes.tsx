@@ -14,7 +14,7 @@ import { isLayerUsingRef } from "../../layerUtils";
 
 type Props = {
   items: T.FontSizesMap;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
   refs: T.Refs;
 };
 

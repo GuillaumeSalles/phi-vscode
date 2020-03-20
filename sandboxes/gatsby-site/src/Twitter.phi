@@ -2,7 +2,9 @@
   "uiState": {
     "type": "component",
     "componentId": "194e5e83-399d-40c0-86da-1527a5887eca",
-    "isEditing": false
+    "isEditing": true,
+    "layerId": "a326f716-9b40-46c8-92ba-d5f5ae4686de",
+    "hoveredLayerId": "0a65852c-1f6f-4b40-97d0-1fe448cdbe65"
   },
   "colors": [
     {

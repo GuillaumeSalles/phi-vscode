@@ -20,7 +20,7 @@ type Props = {
   menu: React.ReactNode;
   refs: T.Refs;
   colors: Map<string, T.ColorDefinition>;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 function isColorUsingRef(color: T.Color | undefined, refId: string): boolean {

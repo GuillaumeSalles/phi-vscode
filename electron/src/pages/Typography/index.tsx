@@ -12,7 +12,7 @@ type Props = {
   refs: T.Refs;
   fontFamilies: T.FontFamiliesMap;
   fontSizes: T.FontSizesMap;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 function Typography({

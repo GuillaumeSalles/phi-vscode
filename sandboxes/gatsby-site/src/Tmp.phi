@@ -1,0 +1,245 @@
+{
+  "uiState": {
+    "type": "component",
+    "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
+    "isEditing": false,
+    "layerEditorMode": "html"
+  },
+  "colors": [
+    {
+      "id": "3746d7c6-005b-4434-8a9c-652cb78e3379",
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "id": "805f4f43-a4c8-4851-b854-95569e864057",
+      "name": "black",
+      "value": "#000000"
+    },
+    {
+      "id": "8dea480b-346c-4a97-a040-c746dcebd560",
+      "name": "primary",
+      "value": "#0076FF"
+    }
+  ],
+  "fontSizes": [
+    {
+      "id": "a481de76-c516-4194-9af8-74dc61dd8c87",
+      "name": "fs-1",
+      "value": "14px"
+    },
+    {
+      "id": "7d98a86d-b3c4-43bc-b320-252b5e7b492d",
+      "name": "fs-2",
+      "value": "16px"
+    },
+    {
+      "id": "2b179b22-995e-4cda-bc63-d848df47a403",
+      "name": "fs-3",
+      "value": "18px"
+    },
+    {
+      "id": "0dc4e9a5-4ea1-41f6-8997-6658f8098af0",
+      "name": "fs-4",
+      "value": "24px"
+    },
+    {
+      "id": "8f102e7d-cc11-4a1c-a53e-2da0bca5a45c",
+      "name": "fs-5",
+      "value": "26px"
+    },
+    {
+      "id": "0ee988d2-2d15-4de0-b5f6-0be8c04233f7",
+      "name": "fs-6",
+      "value": "32px"
+    }
+  ],
+  "fontFamilies": [
+    {
+      "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8",
+      "name": "default",
+      "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", sans-serif"
+    }
+  ],
+  "breakpoints": [
+    {
+      "id": "337a87ad-b7e1-43f6-b30b-da5c7332df3a",
+      "name": "small",
+      "value": {
+        "type": "px",
+        "value": 544
+      }
+    },
+    {
+      "id": "5f498807-b7fc-45c7-9dd4-9e745862d3c0",
+      "name": "medium",
+      "value": {
+        "type": "px",
+        "value": 768
+      }
+    },
+    {
+      "id": "4c591a0a-1fab-4034-95e6-f59fde3cb9f8",
+      "name": "large",
+      "value": {
+        "type": "px",
+        "value": 1012
+      }
+    },
+    {
+      "id": "a032efb2-3dba-4bd5-a081-390ceda4fc94",
+      "name": "xlarge",
+      "value": {
+        "type": "px",
+        "value": 1280
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "577137bc-eaab-4eb5-b193-fe195c465314",
+      "name": "square",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "container",
+        "id": "547fbe1b-da86-4e44-ab6a-d7ece4c2aa66",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [],
+        "bindings": {},
+        "props": {},
+        "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "flexWrap": "nowrap",
+          "justifyContent": "flex-start",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "width": "100px",
+          "height": "100px",
+          "backgroundColor": {
+            "type": "ref",
+            "id": "8dea480b-346c-4a97-a040-c746dcebd560"
+          }
+        }
+      }
+    },
+    {
+      "id": "c5d05a75-a7d9-47ce-ac09-73030b697ed2",
+      "name": "three-squares",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "container",
+        "id": "d7cf92a9-7a0a-4af5-8273-49f5958d5a91",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [
+          {
+            "type": "component",
+            "id": "7dce3b00-f6bf-4e72-9a96-5f6f2f82a929",
+            "name": "square-1",
+            "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          },
+          {
+            "type": "component",
+            "id": "0e3f196e-677b-46b8-a58e-a9634e8e974d",
+            "name": "square-2",
+            "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          },
+          {
+            "type": "component",
+            "id": "f84832e6-e32b-4e99-ba73-dc70725815e2",
+            "name": "square-3",
+            "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          }
+        ],
+        "bindings": {},
+        "props": {},
+        "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "flexWrap": "nowrap",
+          "justifyContent": "space-between",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "height": "400px"
+        }
+      }
+    },
+    {
+      "id": "96e1910f-cc4b-44df-8275-612e7857122d",
+      "name": "three-times-three-squares",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "container",
+        "id": "5b88c79a-fb31-4b4b-b319-fd1812f98327",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [
+          {
+            "type": "component",
+            "id": "30ffb017-9598-4e3d-b01e-9c2bbb3fa0b4",
+            "name": "squares-1",
+            "componentId": "c5d05a75-a7d9-47ce-ac09-73030b697ed2",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          },
+          {
+            "type": "component",
+            "id": "631eab84-b90c-4510-a28c-eefa1876ca50",
+            "name": "squares-2",
+            "componentId": "c5d05a75-a7d9-47ce-ac09-73030b697ed2",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          },
+          {
+            "type": "component",
+            "id": "11a71b2e-4476-48cb-95a3-cbebeda88a7f",
+            "name": "squares-3",
+            "componentId": "c5d05a75-a7d9-47ce-ac09-73030b697ed2",
+            "mediaQueries": [],
+            "bindings": {},
+            "style": {},
+            "props": {}
+          }
+        ],
+        "bindings": {},
+        "props": {},
+        "style": {
+          "display": "flex",
+          "flexDirection": "row",
+          "flexWrap": "nowrap",
+          "justifyContent": "space-between",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "width": "450px"
+        }
+      }
+    }
+  ]
+}

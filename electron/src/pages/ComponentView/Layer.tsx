@@ -13,6 +13,10 @@ type Props = {
   width: number;
   props: T.LayerProps;
   refCallback?: RefCallback;
+  /**
+   * Represents the top layer that the overlay will intercept
+   */
+  overlayLayerId?: string;
 };
 
 function lengthToCss(
@@ -222,6 +226,7 @@ function makeChildren(
   refs: T.Refs,
   width: number,
   props: T.LayerProps,
+  overlayLayerId?: string,
   refCallback?: RefCallback
 ) {
   switch (layer.type) {
@@ -238,6 +243,7 @@ function makeChildren(
               refs={refs}
               width={width}
               props={props}
+              overlayLayerId={overlayLayerId}
               refCallback={refCallback}
             />
           ))
@@ -250,6 +256,7 @@ function makeChildren(
           refs={refs}
           width={width}
           props={props}
+          overlayLayerId={overlayLayerId}
           refCallback={refCallback}
         />
       ));
@@ -362,6 +369,7 @@ export function makeJsxLayerProps(
   refs: T.Refs,
   width: number,
   props: any,
+  overlayLayerId: string,
   ref?: (element: HTMLBaseElement | null) => void
 ): any {
   if (layer.type === "component") {
@@ -374,7 +382,14 @@ export function makeJsxLayerProps(
       layer,
       props
     );
-    return makeJsxLayerProps(component.layout, refs, width, _props, ref);
+    return makeJsxLayerProps(
+      component.layout,
+      refs,
+      width,
+      _props,
+      overlayLayerId,
+      ref
+    );
   }
 
   const css = makeLayerStyle(layer, refs, width);
@@ -386,6 +401,7 @@ export function makeJsxLayerProps(
   result.css = css;
   result.ref = ref;
   result.key = layer.id;
+  result["layer-id"] = overlayLayerId;
   return result;
 }
 
@@ -408,24 +424,40 @@ function getNonVirtualLayer(
 /**
  * Component needs to be memoized to avoid rerendering after setState on refCallback
  */
-const Layer = memo(({ layer, refs, width, props, refCallback }: Props) => {
-  const nonVirtualLayer = getNonVirtualLayer(refs, layer);
+const Layer = memo(
+  ({ layer, refs, width, props, refCallback, overlayLayerId }: Props) => {
+    const nonVirtualLayer = getNonVirtualLayer(refs, layer);
 
-  if (nonVirtualLayer == null) {
-    return null;
+    if (nonVirtualLayer == null) {
+      return null;
+    }
+
+    const isComponentLayer = nonVirtualLayer.id !== layer.id;
+
+    return jsx(
+      nonVirtualLayer.tag,
+      makeJsxLayerProps(
+        layer,
+        refs,
+        width,
+        props,
+        overlayLayerId == null ? layer.id : overlayLayerId,
+        refCallback ? element => refCallback(layer.id, element) : undefined
+      ),
+      makeChildren(
+        nonVirtualLayer,
+        refs,
+        width,
+        props,
+        isComponentLayer ? layer.id : undefined,
+        /**
+         * If current layer is virtual (component-layer), we don't forward ref callback
+         * Because children of the nonVirtualLayer are not accessible from the overlay
+         */
+        isComponentLayer ? undefined : refCallback
+      )
+    );
   }
-
-  return jsx(
-    nonVirtualLayer.tag,
-    makeJsxLayerProps(
-      layer,
-      refs,
-      width,
-      props,
-      refCallback ? element => refCallback(layer.id, element) : undefined
-    ),
-    makeChildren(nonVirtualLayer, refs, width, props, refCallback)
-  );
-});
+);
 
 export default Layer;

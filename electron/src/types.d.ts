@@ -514,3 +514,7 @@ type Action =
   | UpdateLayerStyle
   | AddMediaQuery
   | SetLayerEditorMode;
+
+type ActionType = Action["type"];
+
+type ApplyAction = (action: Action) => void;

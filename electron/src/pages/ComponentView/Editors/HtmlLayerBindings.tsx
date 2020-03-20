@@ -10,7 +10,7 @@ import { getComponentOrThrow } from "../../../layerUtils";
 type Props = {
   component: T.Component;
   componentId: string;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
   bindings: T.Bindings;
   layer: T.Layer;
   refs: T.Refs;

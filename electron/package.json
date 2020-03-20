@@ -42,7 +42,7 @@
   "scripts": {
     "start": "nf start -p 3000",
     "build": "npm run react:build && cp -a ./server/. ./build/ && npm run electron-dist",
-    "react:start": "BROWSER=none react-scripts start",
+    "react:start": "react-scripts start",
     "react:build": "react-scripts build",
     "vscode:build": "npm run react:build && rm -rf ../vscode/content/static && mkdir -p ../vscode/content && mv build/static ../vscode/content/static",
     "test": "react-scripts test --env=jsdom",

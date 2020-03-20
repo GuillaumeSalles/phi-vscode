@@ -23,7 +23,7 @@ type Props = {
   menu: React.ReactNode;
   refs: T.Refs;
   breakpoints: T.BreakpointsMap;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 function Breakpoints({ menu, refs, breakpoints, applyAction }: Props) {

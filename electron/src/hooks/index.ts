@@ -107,7 +107,7 @@ export function useRefManagement<TRef extends { name: string }>(
   refType: T.RefType,
   prefix: string,
   refs: Map<string, TRef>,
-  applyAction: (action: T.Action) => void,
+  applyAction: T.ApplyAction,
   formEntries: FormEntry<any, any>[],
   prepareEditForm: (ref: TRef) => void,
   formToRef: (name: string) => TRef,

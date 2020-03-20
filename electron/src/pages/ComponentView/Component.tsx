@@ -10,14 +10,24 @@ import { del, set } from "../../helpers/immutable-map";
 type Props = {
   component: T.Component;
   refs: T.Refs;
+  applyAction: T.ApplyAction;
+};
+
+type ComponentExampleViewerProps = {
+  example: T.ComponentExample;
+  artboard: T.ArtboardDefinition;
+  component: T.Component;
+  refs: T.Refs;
+  applyAction: T.ApplyAction;
 };
 
 function ComponentExampleViewer({
   component,
   refs,
   example,
-  artboard
-}: Props & { example: T.ComponentExample; artboard: T.ArtboardDefinition }) {
+  artboard,
+  applyAction
+}: ComponentExampleViewerProps) {
   /**
    * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
    */
@@ -51,6 +61,25 @@ function ComponentExampleViewer({
         {artboard.name} - {artboard.width}
       </h3>
       <div
+        onMouseLeave={event => {
+          applyAction({ type: "hoverLayer" });
+        }}
+        onMouseOver={event => {
+          const layerId = (event.target as HTMLBaseElement).getAttribute(
+            "layer-id"
+          );
+          if (layerId) {
+            applyAction({ type: "hoverLayer", layerId });
+          }
+        }}
+        onMouseDown={event => {
+          const layerId = (event.target as HTMLBaseElement).getAttribute(
+            "layer-id"
+          );
+          if (layerId) {
+            applyAction({ type: "selectLayer", layerId });
+          }
+        }}
         css={[
           {
             position: "relative",
@@ -77,7 +106,7 @@ function ComponentExampleViewer({
   );
 }
 
-function Component({ component, refs }: Props) {
+function Component({ component, refs, applyAction }: Props) {
   return (
     <div css={column}>
       {Array.from(refs.artboards.entries()).map(entry => (
@@ -93,6 +122,7 @@ function Component({ component, refs }: Props) {
                     refs={refs}
                     example={example}
                     artboard={entry[1]}
+                    applyAction={applyAction}
                   />
                 );
               })}

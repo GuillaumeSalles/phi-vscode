@@ -19,7 +19,7 @@ import { validateRefName } from "../../validators";
 type Props = {
   componentId: string;
   component: T.Component;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 export default function ComponentProps({

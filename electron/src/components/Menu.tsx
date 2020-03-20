@@ -13,7 +13,7 @@ import uuid from "uuid";
 
 type Props = {
   components: T.ComponentMap;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
   uiState: T.UIState;
 };
 

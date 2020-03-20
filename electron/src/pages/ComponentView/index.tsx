@@ -53,7 +53,7 @@ type Props = {
   componentId: string;
   layerId?: string;
   refs: T.Refs;
-  applyAction: (action: T.Action) => void;
+  applyAction: T.ApplyAction;
 };
 
 function ComponentView({
@@ -196,7 +196,12 @@ function ComponentView({
                 )}
               </div>
             </div>
-            <Component key={componentId} component={component} refs={refs} />
+            <Component
+              key={componentId}
+              component={component}
+              refs={refs}
+              applyAction={applyAction}
+            />
             <OkCancelModal
               {...deleteRefDialog.dialogProps}
               buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
