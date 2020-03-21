@@ -35,3 +35,12 @@ export function flat<T>(arrOfArr: T[][]): T[] {
   }
   return result;
 }
+
+/**
+ * I feel it's not the right way to handle events...
+ */
+export function stopKeydownPropagationIfNecessary(event: React.KeyboardEvent) {
+  if (event.key === "Backspace") {
+    event.stopPropagation();
+  }
+}

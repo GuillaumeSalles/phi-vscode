@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import ReactDOM from "react-dom";
+import { stopKeydownPropagationIfNecessary } from "../utils";
 
 const modalRoot = document.getElementById("modal-root")!;
 
@@ -25,7 +26,9 @@ export default function Modal(props: Props) {
         right: 0
       }}
     >
-      <div css={{ zIndex: 1 }}>{props.children}</div>
+      <div css={{ zIndex: 1 }} onKeyDown={stopKeydownPropagationIfNecessary}>
+        {props.children}
+      </div>
       <div
         css={{
           backgroundColor: "rgb(0, 0, 0)",

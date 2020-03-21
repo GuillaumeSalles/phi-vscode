@@ -14,7 +14,10 @@ import PositionEditor from "./PositionEditor";
 import { column } from "../../../styles";
 import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
-import { assertUnreachable } from "../../../utils";
+import {
+  assertUnreachable,
+  stopKeydownPropagationIfNecessary
+} from "../../../utils";
 
 type Props<TLayer> = {
   layer: TLayer;
@@ -76,7 +79,10 @@ export default function LayerEditor<TLayer extends T.Layer>({
   }
 
   return (
-    <div css={[column, { overflowY: "hidden" }]}>
+    <div
+      css={[column, { overflowY: "hidden" }]}
+      onKeyDown={stopKeydownPropagationIfNecessary}
+    >
       <div css={{ flex: "0 0 auto" }}>
         <MediaQueriesEditor
           selectedId={mediaQuery}

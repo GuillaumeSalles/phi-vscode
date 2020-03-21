@@ -63,12 +63,6 @@ function ComponentView({
   componentId,
   layerId
 }: Props) {
-  useEffect(() => {
-    return () => {
-      console.log("Destroy ComponentView");
-    };
-  }, []);
-
   const component = refs.components.get(componentId)!;
   const uiState = uiStateComponentOrThrow(refs);
 

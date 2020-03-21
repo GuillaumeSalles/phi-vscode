@@ -8,11 +8,18 @@ type Props = {
   center: React.ReactNode;
   right?: React.ReactNode;
   topBar?: React.ReactNode;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 };
 
-export function Layout({ left, center, right, topBar }: Props) {
+export function Layout({
+  left,
+  center,
+  right,
+  topBar,
+  onKeyDown = () => {}
+}: Props) {
   return (
-    <div css={[row, { width: "100%", height: "100%" }]}>
+    <div css={[row, { width: "100%", height: "100%" }]} onKeyDown={onKeyDown}>
       <div
         css={[
           {

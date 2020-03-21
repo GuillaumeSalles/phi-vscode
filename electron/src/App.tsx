@@ -45,9 +45,36 @@ function App() {
   );
 
   useEffect(() => {
+    function handleBackspace(refs: T.Refs) {
+      if (
+        refs.uiState.type === "component" &&
+        refs.uiState.layerId &&
+        refs.uiState.isEditing
+      ) {
+        applyAction({
+          type: "deleteLayer",
+          layerId: refs.uiState.layerId,
+          componentId: refs.uiState.componentId
+        });
+      }
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Backspace") {
+        handleBackspace(refs);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [applyAction, refs]);
+
+  useEffect(() => {
     function listener(e: MessageEvent) {
       if (e.data.type === "setValue") {
-        console.log("Set value");
         setRefs(jsonToRefs(undefined, true, JSON.parse(e.data.value)));
       }
     }

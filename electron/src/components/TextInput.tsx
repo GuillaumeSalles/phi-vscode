@@ -11,7 +11,13 @@ type Props = {
 function TextInput({ value, onChange, cssOverrides }: Props) {
   const style = css(styleEditorInput, css(cssOverrides));
   return (
-    <input css={style} value={value} onChange={e => onChange(e.target.value)} />
+    <input
+      css={style}
+      value={value}
+      onChange={e => {
+        onChange(e.target.value);
+      }}
+    />
   );
 }
 
