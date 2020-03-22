@@ -36,6 +36,9 @@ function App() {
       console.group("Apply Action");
       console.log("Action: ", action);
       const newRefs = _applyAction(action, refs);
+      if (newRefs === refs) {
+        return;
+      }
       console.log("New State: ", newRefs);
       console.groupEnd();
       onAction(action, newRefs);
@@ -45,24 +48,8 @@ function App() {
   );
 
   useEffect(() => {
-    function handleBackspace(refs: T.Refs) {
-      if (
-        refs.uiState.type === "component" &&
-        refs.uiState.layerId &&
-        refs.uiState.isEditing
-      ) {
-        applyAction({
-          type: "deleteLayer",
-          layerId: refs.uiState.layerId,
-          componentId: refs.uiState.componentId
-        });
-      }
-    }
-
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Backspace") {
-        handleBackspace(refs);
-      }
+      applyAction({ type: "globalShortcutAction", key: event.key });
     }
 
     window.addEventListener("keydown", onKeyDown);

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { styleEditorInput } from "../styles";
-import { stopKeydownPropagationIfNecessary } from "../utils";
 
 type Props = {
   value: number | null;

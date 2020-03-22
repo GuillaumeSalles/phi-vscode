@@ -5,7 +5,8 @@ import {
   findLayerById,
   canHaveChildren,
   updateLayer,
-  getComponentOrThrow
+  getComponentOrThrow,
+  findLayerByIdWithParent
 } from "../layerUtils";
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
@@ -425,11 +426,15 @@ function deleteLayer(
   };
 }
 
-function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
-  const result = replaceComponent(refs, action.componentId, component => {
+function deleteComponentLayer(
+  refs: T.Refs,
+  componentId: string,
+  layerId: string
+) {
+  const result = replaceComponent(refs, componentId, component => {
     return {
       ...component,
-      layout: deleteLayer(component.layout!, action.layerId)
+      layout: deleteLayer(component.layout!, layerId)
     };
   });
 
@@ -440,6 +445,10 @@ function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
       layerId: undefined
     }
   };
+}
+
+function deleteLayerActionHandler(action: T.DeleteLayer, refs: T.Refs): T.Refs {
+  return deleteComponentLayer(refs, action.componentId, action.layerId);
 }
 
 function selectLayerHandler(action: T.SelectLayer, refs: T.Refs): T.Refs {
@@ -728,10 +737,145 @@ function hoverLayerHandler(action: T.HoverLayer, refs: T.Refs): T.Refs {
   };
 }
 
+function handleBackspaceShortcut(refs: T.Refs) {
+  if (
+    refs.uiState.type === "component" &&
+    refs.uiState.layerId &&
+    refs.uiState.isEditing
+  ) {
+    return deleteComponentLayer(
+      refs,
+      refs.uiState.componentId,
+      refs.uiState.layerId
+    );
+  }
+
+  return refs;
+}
+
+function moveChildPositionUp(
+  refs: T.Refs,
+  componentId: string,
+  layer: T.Layer,
+  parent: T.ParentLayer
+) {
+  const childIndex = parent.children.indexOf(layer);
+
+  if (childIndex === 0) {
+    return refs;
+  }
+
+  return replaceComponent(refs, componentId, component => {
+    return {
+      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex - 1)
+    };
+  });
+}
+
+function moveChildPositionDown(
+  refs: T.Refs,
+  componentId: string,
+  layer: T.Layer,
+  parent: T.ParentLayer
+) {
+  const childIndex = parent.children.indexOf(layer);
+
+  if (childIndex === parent.children.length - 1) {
+    return refs;
+  }
+
+  return replaceComponent(refs, componentId, component => {
+    return {
+      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex + 1)
+    };
+  });
+}
+
+function handleArrowShortcut(
+  refs: T.Refs,
+  key: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
+): T.Refs {
+  if (
+    refs.uiState.type !== "component" ||
+    refs.uiState.layerId == null ||
+    refs.uiState.isEditing === false
+  ) {
+    return refs;
+  }
+
+  const component = getComponentOrThrow(refs.uiState.componentId, refs);
+  if (component.layout == null) {
+    return refs;
+  }
+  const { layer, parent } = findLayerByIdWithParent(
+    component.layout,
+    refs.uiState.layerId
+  );
+
+  if (layer == null || parent == null) {
+    return refs;
+  }
+
+  if (
+    parent.type === "container" &&
+    parent.style.display !== "flex" &&
+    // Container default display is flex
+    parent.style.display != null
+  ) {
+    return refs;
+  }
+
+  if (parent.type === "link" && parent.style.display !== "flex") {
+    return refs;
+  }
+
+  // TODO: handle style with media query
+  const dir = parent.style.flexDirection;
+
+  if (
+    (dir === "column" && key === "ArrowUp") ||
+    (dir === "row" && key === "ArrowLeft") ||
+    (dir === "column-reverse" && key === "ArrowDown") ||
+    (dir === "row-reverse" && key === "ArrowRight")
+  ) {
+    return moveChildPositionUp(refs, refs.uiState.componentId, layer, parent);
+  }
+
+  if (
+    (dir === "column" && key === "ArrowDown") ||
+    (dir === "row" && key === "ArrowRight") ||
+    (dir === "column-reverse" && key === "ArrowUp") ||
+    (dir === "row-reverse" && key === "ArrowLeft")
+  ) {
+    return moveChildPositionDown(refs, refs.uiState.componentId, layer, parent);
+  }
+
+  return refs;
+}
+
+function globalShortcutActionHandler(
+  action: T.GlobalShortcutAction,
+  refs: T.Refs
+): T.Refs {
+  switch (action.key) {
+    case "Backspace":
+      return handleBackspaceShortcut(refs);
+    case "ArrowUp":
+    case "ArrowRight":
+    case "ArrowDown":
+    case "ArrowLeft":
+      return handleArrowShortcut(refs, action.key);
+    default:
+      return refs;
+  }
+}
+
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
       return goToHandler(action, refs);
+    case "globalShortcutAction":
+      return globalShortcutActionHandler(action, refs);
     case "initProject":
       return initProjectHandler(action, refs);
     case "addComponentProp":

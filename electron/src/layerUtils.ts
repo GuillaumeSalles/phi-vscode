@@ -40,6 +40,41 @@ export function findLayerById(root: T.Layer, id: string): T.Layer | undefined {
   return;
 }
 
+export function findLayerByIdWithParent(
+  root: T.Layer,
+  id: string
+): {
+  layer: T.Layer | undefined;
+  parent: T.ParentLayer | undefined;
+} {
+  if (root.id === id) {
+    return {
+      layer: root,
+      parent: undefined
+    };
+  }
+
+  if (canHaveChildren(root)) {
+    for (const child of root.children) {
+      const result = findLayerByIdWithParent(child, id);
+      if (result.layer) {
+        if (result.parent) {
+          return result;
+        }
+        return {
+          layer: result.layer,
+          parent: root
+        };
+      }
+    }
+  }
+
+  return {
+    layer: undefined,
+    parent: undefined
+  };
+}
+
 export function updateLayer(
   rootLayer: T.Layer | undefined,
   newLayer: T.Layer

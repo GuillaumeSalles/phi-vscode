@@ -44,6 +44,8 @@ export type Layer =
   | ImageLayer
   | ComponentLayer;
 
+export type ParentLayer = ContainerLayer | LinkLayer;
+
 export type LayerType = "container" | "text" | "link" | "image" | "component";
 
 export type LayerProps = { [name: string]: any };
@@ -485,8 +487,14 @@ type HoverLayer = {
   layerId?: string;
 };
 
+type GlobalShortcutAction = {
+  type: "globalShortcutAction";
+  key: string;
+};
+
 type Action =
   | GoTo
+  | GlobalShortcutAction
   | UpdateRef
   | DeleteRef
   | InitProject
