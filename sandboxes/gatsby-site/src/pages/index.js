@@ -24,7 +24,8 @@ const IndexPage = () => (
       handle="@gatsbyjs"
       description="Build blazing fast, modern apps and websites with React"
       following="35"
-      followers="48.7K" />
+      followers="48.7K"
+    />
   </>
 )
 

@@ -1,9 +1,11 @@
 {
   "uiState": {
     "type": "component",
-    "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
-    "isEditing": false,
-    "layerEditorMode": "html"
+    "componentId": "96e1910f-cc4b-44df-8275-612e7857122d",
+    "isEditing": true,
+    "layerEditorMode": "css",
+    "hoveredLayerId": "5b88c79a-fb31-4b4b-b319-fd1812f98327",
+    "layerId": "5b88c79a-fb31-4b4b-b319-fd1812f98327"
   },
   "colors": [
     {
@@ -19,7 +21,7 @@
     {
       "id": "8dea480b-346c-4a97-a040-c746dcebd560",
       "name": "primary",
-      "value": "#0076FF"
+      "value": "#CCCCCC"
     }
   ],
   "fontSizes": [
@@ -129,7 +131,7 @@
     },
     {
       "id": "c5d05a75-a7d9-47ce-ac09-73030b697ed2",
-      "name": "three-squares",
+      "name": "squares-column",
       "props": [],
       "examples": [],
       "layout": {
@@ -180,13 +182,13 @@
           "alignItems": "stretch",
           "alignContent": "stretch",
           "overrides": [],
-          "height": "400px"
+          "height": "450px"
         }
       }
     },
     {
       "id": "96e1910f-cc4b-44df-8275-612e7857122d",
-      "name": "three-times-three-squares",
+      "name": "nine-squares",
       "props": [],
       "examples": [],
       "layout": {
