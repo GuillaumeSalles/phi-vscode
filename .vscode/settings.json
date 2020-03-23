@@ -1,4 +1,7 @@
 {
   "typescript.tsdk": "./electron/node_modules/typescript/lib",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "search.exclude": {
+    "**/dist": true
+  }
 }
