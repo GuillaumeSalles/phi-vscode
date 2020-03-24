@@ -86,7 +86,8 @@ function ComponentExampleViewer({
             border: "none",
             background: artboard.backgroundColor,
             width: artboard.width,
-            height: artboard.height
+            height: artboard.height,
+            overflow: "auto"
           }
         ]}
       >
