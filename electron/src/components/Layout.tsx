@@ -27,8 +27,7 @@ export function Layout({
             background: colors.sideBarBackground,
             height: "100%",
             zIndex: 1
-          },
-          shadow1
+          }
         ]}
       >
         {left}
@@ -45,6 +44,17 @@ export function Layout({
       >
         <div
           css={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1
+          }}
+        >
+          {topBar}
+        </div>
+        <div
+          css={{
             height: "100%",
             overflowY: "auto"
           }}
@@ -59,8 +69,7 @@ export function Layout({
             background: colors.sideBarBackground,
             height: "100%",
             zIndex: 1
-          },
-          shadow1
+          }
         ]}
       >
         {right}

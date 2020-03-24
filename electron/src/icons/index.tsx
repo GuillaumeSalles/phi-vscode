@@ -8,6 +8,10 @@ type Props = {
   width?: number;
 };
 
+type PropsWithOpacity = Props & {
+  opacity?: number;
+};
+
 export function Logo({ height, width }: Props) {
   return (
     <svg
@@ -110,53 +114,83 @@ type LinkProps = {
   width: number;
 };
 
-export function Link({ height, width }: LinkProps) {
+export function Link({
+  height,
+  width,
+  color = colors.iconColor,
+  opacity = 1
+}: PropsWithOpacity) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={height}
       height={width}
-      viewBox="0 0 24 24"
+      viewBox="0 0 512 512"
       css={{
-        fill: colors.iconColor
+        fill: color,
+        opacity
       }}
     >
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
+      <path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path>
     </svg>
   );
 }
 
-export function Text({ height, width }: Dimension) {
+export function Text({
+  height,
+  width,
+  color = colors.iconColor,
+  opacity = 1
+}: PropsWithOpacity) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={height}
       height={width}
-      viewBox="0 0 24 24"
+      viewBox="0 0 448 512"
       css={{
-        fill: colors.iconColor
+        fill: color,
+        opacity
       }}
     >
-      <path fill="none" d="M0 0h24v24H0V0z" />
-      <path d="M9.17 15.5h5.64l1.14 3h2.09l-5.11-13h-1.86l-5.11 13h2.09l1.12-3zM12 7.98l2.07 5.52H9.93L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z" />
+      <path d="M432 416h-23.41L277.88 53.69A32 32 0 0 0 247.58 32h-47.16a32 32 0 0 0-30.3 21.69L39.41 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-19.58l23.3-64h152.56l23.3 64H304a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM176.85 272L224 142.51 271.15 272z"></path>
     </svg>
   );
 }
 
-export function Container({ height, width }: Dimension) {
+export function Container({
+  height,
+  width,
+  color = colors.iconColor,
+  opacity = 1
+}: PropsWithOpacity) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={height}
       height={width}
-      viewBox="0 0 24 24"
+      viewBox="0 0 128 128"
       css={{
-        fill: colors.iconColor
+        stroke: color,
+        opacity
       }}
     >
-      <path fill="none" d="M0 0h24v24H0V0z" />
-      <path d="M21 18H2v2h19v-2zm-2-8v4H4v-4h15m1-2H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm1-4H2v2h19V4z" />
+      <rect
+        x="8"
+        y="8"
+        width="112"
+        height="40"
+        fill="transparent"
+        strokeWidth="12"
+      />
+      <rect
+        x="8"
+        y="80"
+        width="112"
+        height="40"
+        fill="transparent"
+        strokeWidth="12"
+      />
     </svg>
   );
 }
@@ -210,36 +244,80 @@ export function Strikethrough({ height, width, fill }: Dimension & Colors) {
   );
 }
 
-export function Image({ height, width }: Dimension) {
+export function Image({
+  height,
+  width,
+  color = colors.iconColor,
+  opacity = 1
+}: PropsWithOpacity) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={height}
       height={width}
-      viewBox="0 0 24 24"
+      viewBox="0 0 512 512"
       css={{
-        fill: colors.iconColor
+        fill: color,
+        opacity
       }}
     >
-      <path fill="none" d="M0 0h24v24H0V0z" />
-      <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
+      <path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 336H54a6 6 0 0 1-6-6V118a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v276a6 6 0 0 1-6 6zM128 152c-22.091 0-40 17.909-40 40s17.909 40 40 40 40-17.909 40-40-17.909-40-40-40zM96 352h320v-80l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L192 304l-39.515-39.515c-4.686-4.686-12.284-4.686-16.971 0L96 304v48z"></path>
     </svg>
   );
 }
 
-export function Component({ height, width }: Dimension) {
+export function Component({
+  height,
+  width,
+  color = colors.iconColor,
+  opacity = 1
+}: PropsWithOpacity) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={height}
       height={width}
-      viewBox="0 0 24 24"
+      viewBox="0 0 128 128"
       css={{
-        fill: colors.iconColor
+        stroke: color,
+        opacity
       }}
     >
-      <path fill="none" d="M0 0h24v24H0V0z" />
-      <path d="M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9 17v2H5v-2h4M21 3h-8v6h8V3zM11 3H3v10h8V3zm10 8h-8v10h8V11zm-10 4H3v6h8v-6z" />
+      <ellipse
+        cx="64"
+        cy="64"
+        rx="60"
+        ry="25"
+        fill="transparent"
+        strokeWidth="10"
+        transform="rotate(90, 64, 64)"
+      />
+      <ellipse
+        cx="64"
+        cy="64"
+        rx="60"
+        ry="25"
+        fill="transparent"
+        strokeWidth="10"
+        transform="rotate(210, 64, 64)"
+      />
+      <ellipse
+        cx="64"
+        cy="64"
+        rx="60"
+        ry="25"
+        fill="transparent"
+        strokeWidth="10"
+        transform="rotate(330, 64, 64)"
+      />
+      <ellipse
+        cx="64"
+        cy="64"
+        rx="2"
+        ry="2"
+        fill="transparent"
+        strokeWidth="10"
+      />
     </svg>
   );
 }

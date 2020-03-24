@@ -58,7 +58,14 @@ export default function LayersTreeItemComponent({
         }
       ]}
     >
-      <div css={{ flex: "0", height: "24px" }}>
+      <div
+        css={{
+          flex: "0",
+          height: "24px",
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
         {layerTypeToIcon(layer.type)}
       </div>
       <span

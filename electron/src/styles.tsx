@@ -6,25 +6,25 @@ function setCssVariable(name: string, value: string) {
 }
 
 if ((window as any).__vscode__ == null) {
-  document.documentElement.style.color = "#d6deeb";
-  document.documentElement.style.background = "#011627";
+  document.documentElement.style.color = "#d4d4d4";
+  document.documentElement.style.background = "#1e1e1e";
 
   setCssVariable("--vscode-icon-foreground", "#c5c5c5");
-  setCssVariable("--vscode-foreground", "#d6deeb");
-  setCssVariable("--vscode-sideBarSectionHeader-background", "#011627");
-  setCssVariable("--vscode-sideBar-background", "#011627");
-  setCssVariable("--vscode-editor-background", "#011627");
-  setCssVariable("--vscode-button-foreground", "#ffffffcc");
-  setCssVariable("--vscode-button-background", "#7e57c2cc");
-  setCssVariable("--vscode-button-hoverBackground", "#7e57c2");
-  setCssVariable("--vscode-input-background", "#0b253a");
-  setCssVariable("--vscode-input-foreground", "#ffffffcc");
+  setCssVariable("--vscode-foreground", "#cccccc");
+  setCssVariable("--vscode-sideBarSectionHeader-background", "#80808033");
+  setCssVariable("--vscode-sideBar-background", "#252526");
+  setCssVariable("--vscode-editor-background", "#1e1e1e");
+  setCssVariable("--vscode-button-foreground", "#ffffff");
+  setCssVariable("--vscode-button-background", "#0e639c");
+  setCssVariable("--vscode-button-hoverBackground", "#1177bb");
+  setCssVariable("--vscode-input-background", "#3c3c3c");
+  setCssVariable("--vscode-input-foreground", "#cccccc");
   setCssVariable("--vscode-input-border", "#5f7e97");
-  setCssVariable("--vscode-inputOption-activeBorder", "#ffffffcc");
-  setCssVariable("--vscode-input-placeholderForeground", "#5f7e97");
-  setCssVariable("--vscode-list-hoverBackground", "#011627");
-  setCssVariable("--vscode-statusBar-background", "#202431");
-  setCssVariable("--vscode-activityBar-background", "#011627");
+  setCssVariable("--vscode-inputOption-activeBorder", "#007acc00");
+  setCssVariable("--vscode-input-placeholderForeground", "#a6a6a6");
+  setCssVariable("--vscode-list-hoverBackground", "#2a2d2e");
+  setCssVariable("--vscode-statusBar-background", "#007acc");
+  setCssVariable("--vscode-activityBar-background", "#333333");
 }
 
 export const colors = {
@@ -67,7 +67,9 @@ export const colors = {
   radioIconActiveBackground: "var(--vscode-button-background)",
   radioIconActiveForeground: "var(--vscode-button-foreground)",
 
-  seletableCardForeground: "black"
+  seletableCardForeground: "black",
+
+  topBarBackground: "var(--vscode-activityBar-background)"
 };
 
 export const fonts = {

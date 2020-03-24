@@ -31,6 +31,8 @@ import {
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
+import { Link, Image, Text, Container } from "../../icons";
+import Toolbar from "./Toolbar";
 
 const tabStyle = css({
   display: "flex",
@@ -98,8 +100,83 @@ function ComponentView({
   return (
     <Layout
       topBar={
-        <div css={[row]}>
-          <TopBar fileName={refs.fileName} isSaved={refs.isSaved} />
+        <div
+          css={[
+            row,
+            {
+              alignItems: "center",
+              height: "40px",
+              background: colors.topBarBackground
+            }
+          ]}
+        >
+          <div css={{ flex: "0", width: "200px", minWidth: "200px" }}>
+            {uiState.isEditing && (
+              <Toolbar applyAction={applyAction} refs={refs} />
+            )}
+          </div>
+          <div
+            css={[
+              row,
+              {
+                flex: "1 1 auto",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "300px"
+              }
+            ]}
+          >
+            <div
+              css={{
+                margin: "0",
+                fontWeight: 400,
+                fontSize: "18px"
+              }}
+            >
+              {component.name}
+            </div>
+            <div css={[row, { marginLeft: "28px" }]}>
+              {uiState.isEditing ? (
+                <React.Fragment>
+                  <Button
+                    margin="0 12px 0 0"
+                    text="Rename"
+                    onClick={() => {
+                      renameComponentDialog.open();
+                      nameEntry.setValue(component.name);
+                    }}
+                  />
+                  <Button
+                    text="Done"
+                    onClick={() => applyAction({ type: "stopEditComponent" })}
+                  />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <IconButton
+                    cssOverrides={{ marginRight: "12px" }}
+                    icon={<Edit height={20} width={20} />}
+                    onClick={() => {
+                      applyAction({
+                        type: "editComponent"
+                      });
+                    }}
+                  />
+                  <IconButton
+                    icon={<Delete height={20} width={20} />}
+                    onClick={() => {
+                      if (componentsThatUseCurrentComponent.length === 0) {
+                        applyAction({ type: "deleteComponent", componentId });
+                      } else {
+                        deleteRefDialog.open();
+                      }
+                    }}
+                  />
+                </React.Fragment>
+              )}
+            </div>
+          </div>
+          <div></div>
           {/* <SettingsEditor refs={refs} applyAction={applyAction} /> */}
         </div>
       }
@@ -138,58 +215,6 @@ function ComponentView({
               }
             ]}
           >
-            <div
-              css={[
-                row,
-                {
-                  marginBottom: "20px",
-                  alignItems: "flex-end",
-                  minHeight: "32px"
-                }
-              ]}
-            >
-              <h1 css={heading}>{component.name}</h1>
-              <div css={[row, { marginLeft: "28px" }]}>
-                {uiState.isEditing ? (
-                  <React.Fragment>
-                    <Button
-                      margin="0 12px 0 0"
-                      text="Rename"
-                      onClick={() => {
-                        renameComponentDialog.open();
-                        nameEntry.setValue(component.name);
-                      }}
-                    />
-                    <Button
-                      text="Done"
-                      onClick={() => applyAction({ type: "stopEditComponent" })}
-                    />
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <IconButton
-                      cssOverrides={{ marginRight: "12px" }}
-                      icon={<Edit height={20} width={20} />}
-                      onClick={() => {
-                        applyAction({
-                          type: "editComponent"
-                        });
-                      }}
-                    />
-                    <IconButton
-                      icon={<Delete height={20} width={20} />}
-                      onClick={() => {
-                        if (componentsThatUseCurrentComponent.length === 0) {
-                          applyAction({ type: "deleteComponent", componentId });
-                        } else {
-                          deleteRefDialog.open();
-                        }
-                      }}
-                    />
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
             <Component
               key={componentId}
               component={component}

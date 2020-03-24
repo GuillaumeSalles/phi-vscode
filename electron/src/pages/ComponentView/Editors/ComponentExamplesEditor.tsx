@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as T from "../../../types";
-import { column } from "../../../styles";
+import { column, row, sectionTitle } from "../../../styles";
 import Field from "../../../components/Field";
 import TextInput from "../../../components/TextInput";
 import Section from "./Section";
@@ -40,11 +40,15 @@ export default function ComponentExamplesEditor({
 
   return (
     <div css={[column, { overflowY: "auto" }]}>
-      <Section
-        title="Examples"
-        topRightButton={<AddButton onClick={createDialog.open} />}
-        children={null}
-      />
+      <div
+        css={[
+          row,
+          { margin: "24px 24px 16px 24px", justifyContent: "space-between" }
+        ]}
+      >
+        <span css={[sectionTitle]}>Examples</span>
+        <AddButton onClick={createDialog.open} />
+      </div>
       {component.examples.map(example => {
         return (
           <Section
@@ -90,7 +94,7 @@ export default function ComponentExamplesEditor({
         );
       })}
       <OkCancelModal
-        title="Create new component"
+        title="Create new example"
         {...createDialog.dialogProps}
         buttons={
           <React.Fragment>

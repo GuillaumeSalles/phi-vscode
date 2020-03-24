@@ -8,7 +8,6 @@ import SelectableCard from "../components/SelectableCard";
 import OkCancelModal from "../components/OkCancelModal";
 import { getContrastColor } from "../utils";
 import { Layout } from "../components/Layout";
-import TopBar from "../components/TopBar";
 import { useStringFormEntry, FormInput } from "../components/Form";
 import { validateColorValue } from "../validators";
 import Button from "../components/Button";
@@ -63,7 +62,6 @@ function Colors({ menu, refs, colors, applyAction }: Props) {
   );
   return (
     <Layout
-      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
       left={menu}
       center={
         <div css={[column, mainPadding]}>

@@ -2,7 +2,6 @@
 import { jsx, InterpolationWithTheme } from "@emotion/core";
 import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
-import AddLayerPopover from "./AddLayerPopover";
 import { useRef, useState, useMemo, useCallback } from "react";
 import LayersTreeItemComponent from "./LayersTreeItem";
 import { findLayerById, canHaveChildren } from "../layerUtils";
@@ -14,7 +13,6 @@ import Button from "./Button";
 import SecondaryButton from "./SecondaryButton";
 import { assertUnreachable } from "../utils";
 import { Link, Image, Text, Container, Component } from "../icons";
-import uuid from "uuid";
 import { selectLayer } from "../actions/factories";
 
 type Props = {
@@ -80,15 +78,15 @@ type DepthsBoundaries = {
 export function layerTypeToIcon(type: T.LayerType) {
   switch (type) {
     case "text":
-      return <Text height={24} width={24} />;
+      return <Text height={20} width={20} />;
     case "link":
-      return <Link height={24} width={24} />;
+      return <Link height={20} width={20} />;
     case "container":
-      return <Container height={24} width={24} />;
+      return <Container height={20} width={20} />;
     case "image":
-      return <Image height={24} width={24} />;
+      return <Image height={20} width={20} />;
     case "component":
-      return <Component height={24} width={24} />;
+      return <Component height={20} width={20} />;
   }
   assertUnreachable(type);
 }
@@ -231,20 +229,6 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
     });
   });
 
-  const addLayerCallback = useCallback(
-    (layerType: T.LayerType, layerComponentId?: string) => {
-      applyAction({
-        type: "addLayer",
-        componentId,
-        parentLayerId: layerId,
-        layerComponentId,
-        layerType,
-        layerId: uuid()
-      });
-    },
-    [applyAction, componentId, layerId]
-  );
-
   const onRename = useCallback(
     (layer: T.Layer) => {
       renameDialog.open();
@@ -303,15 +287,6 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
         ]}
       >
         <h2 css={sectionTitle}>Layers</h2>
-        <AddLayerPopover
-          onAdd={addLayerCallback}
-          refs={refs}
-          disabled={
-            selectedLayer !== undefined &&
-            selectedLayer.type !== "container" &&
-            selectedLayer.type !== "link"
-          }
-        />
         <OkCancelModal
           title="Rename your layer"
           {...renameDialog.dialogProps}

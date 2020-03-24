@@ -148,7 +148,7 @@ export function makeTextLayer(
     mediaQueries: [],
     bindings: {},
     props: {
-      content: ""
+      content: "Text"
     },
     style: {
       display: "block",

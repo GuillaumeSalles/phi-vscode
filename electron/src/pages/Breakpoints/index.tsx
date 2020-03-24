@@ -5,7 +5,6 @@ import { column, heading, row } from "../../styles";
 import SecondaryButton from "../../components/SecondaryButton";
 import SelectableCard from "../../components/SelectableCard";
 import { Layout } from "../../components/Layout";
-import TopBar from "../../components/TopBar";
 import OkCancelModal from "../../components/OkCancelModal";
 import {
   useNumberFormEntry,
@@ -58,7 +57,6 @@ function Breakpoints({ menu, refs, breakpoints, applyAction }: Props) {
   );
   return (
     <Layout
-      topBar={<TopBar fileName={refs.fileName} isSaved={refs.isSaved} />}
       left={menu}
       center={
         <div css={[column]}>
