@@ -77,7 +77,7 @@ export interface LinkLayer extends ILayer {
   children: Layer[];
 }
 
-type StyleOverride = {
+export type StyleOverride = {
   id: string;
   pseudoClass: string;
   // layerId?: string;

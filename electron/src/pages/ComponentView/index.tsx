@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import React, { useEffect } from "react";
+import React from "react";
 import { column, mainPadding, heading, row, colors } from "../../styles";
 import * as T from "../../types";
 import {

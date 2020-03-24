@@ -1,5 +1,14 @@
 import ts from "typescript";
 import * as T from "@phi/shared";
+import {
+  assertUnreachable,
+  createSimpleJsxElement,
+  kebabToPascal,
+  createComponentPropsDestructuration,
+  layerTreeToArray,
+  layerToCss,
+  createLayerPropertiesJsx
+} from "@phi/shared";
 
 function createLayerJsx(
   component: T.Component,
@@ -9,12 +18,12 @@ function createLayerJsx(
   layerJsxProperties: ts.JsxAttribute[]
 ) {
   if (layer.type === "component") {
-    return T.createSimpleJsxElement(
-      T.kebabToPascal(components.get(layer.componentId)!.name),
+    return createSimpleJsxElement(
+      kebabToPascal(components.get(layer.componentId)!.name),
       [...layerJsxProperties]
     );
   }
-  return T.createSimpleJsxElement(
+  return createSimpleJsxElement(
     layer.tag,
     [
       ts.createJsxAttribute(
@@ -46,11 +55,11 @@ function createLayerChildrenJsx(
           componentName,
           child,
           components,
-          T.createLayerPropertiesJsx(component, layer, components)
+          createLayerPropertiesJsx(component, layer, components)
         )
       );
   }
-  T.assertUnreachable(layer);
+  assertUnreachable(layer);
 }
 
 function createComponentJsx(component: T.Component, refs: T.Refs) {
@@ -58,9 +67,9 @@ function createComponentJsx(component: T.Component, refs: T.Refs) {
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
     undefined,
-    T.kebabToPascal(component.name),
+    kebabToPascal(component.name),
     undefined,
-    T.createComponentPropsDestructuration(component),
+    createComponentPropsDestructuration(component),
     undefined,
     ts.createBlock([
       ts.createReturn(
@@ -90,13 +99,9 @@ function createComponentJsx(component: T.Component, refs: T.Refs) {
                 ts.createJsxExpression(
                   undefined,
                   ts.createNoSubstitutionTemplateLiteral(
-                    T.layerTreeToArray(component.layout)
+                    layerTreeToArray(component.layout)
                       .map(layer =>
-                        T.layerToCss(
-                          T.kebabToPascal(component.name),
-                          layer,
-                          refs
-                        )
+                        layerToCss(kebabToPascal(component.name), layer, refs)
                       )
                       .join("\n\n")
                   )

@@ -1,5 +1,14 @@
 import ts from "typescript";
 import * as T from "@phi/shared";
+import {
+  assertUnreachable,
+  createSimpleJsxElement,
+  kebabToPascal,
+  createComponentPropsDestructuration,
+  createLayerPropertiesJsx,
+  arrayToMap,
+  tsNodesToString
+} from "@phi/shared";
 
 function createLayerJsx(
   component: T.Component,
@@ -8,12 +17,12 @@ function createLayerJsx(
   components: T.ComponentMap
 ) {
   if (layer.type === "component") {
-    return T.createSimpleJsxElement(
-      T.kebabToPascal(components.get(layer.componentId)!.name),
-      [...T.createLayerPropertiesJsx(component, layer, components)]
+    return createSimpleJsxElement(
+      kebabToPascal(components.get(layer.componentId)!.name),
+      [...createLayerPropertiesJsx(component, layer, components)]
     );
   }
-  return T.createSimpleJsxElement(
+  return createSimpleJsxElement(
     layer.tag,
     [
       ts.createJsxAttribute(
@@ -26,7 +35,7 @@ function createLayerJsx(
           )
         )
       ),
-      ...T.createLayerPropertiesJsx(component, layer, components)
+      ...createLayerPropertiesJsx(component, layer, components)
     ],
     createLayerChildrenJsx(component, componentName, layer, components)
   );
@@ -49,34 +58,7 @@ function createLayerChildrenJsx(
         createLayerJsx(component, componentName, child, components)
       );
   }
-  T.assertUnreachable(layer);
-}
-
-function createComponentPropsDestructuration(component: T.Component) {
-  if (component.props.length === 0) {
-    return [];
-  }
-
-  return [
-    ts.createParameter(
-      undefined,
-      undefined,
-      undefined,
-      ts.createObjectBindingPattern(
-        component.props.map(prop => {
-          return ts.createBindingElement(
-            undefined,
-            undefined,
-            ts.createIdentifier(T.kebabToCamel(prop.name)),
-            undefined
-          );
-        })
-      ),
-      undefined,
-      undefined,
-      undefined
-    )
-  ];
+  assertUnreachable(layer);
 }
 
 function createComponentJsx(
@@ -87,7 +69,7 @@ function createComponentJsx(
     undefined,
     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
     undefined,
-    T.kebabToPascal(component.name),
+    kebabToPascal(component.name),
     undefined,
     createComponentPropsDestructuration(component),
     undefined,
@@ -105,9 +87,9 @@ function createComponentJsx(
 }
 
 export function phiToJs(data: any) {
-  const components = T.arrayToMap(data.components) as T.ComponentMap;
+  const components = arrayToMap(data.components) as T.ComponentMap;
 
-  return T.tsNodesToString(
+  return tsNodesToString(
     Array.from(components.values())
       .filter(c => c.layout != null)
       .map(c => createComponentJsx(c, components))
