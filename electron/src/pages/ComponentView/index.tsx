@@ -105,7 +105,7 @@ function ComponentView({
             row,
             {
               alignItems: "center",
-              height: "40px",
+              height: "48px",
               background: colors.topBarBackground
             }
           ]}
@@ -135,48 +135,49 @@ function ComponentView({
             >
               {component.name}
             </div>
-            <div css={[row, { marginLeft: "28px" }]}>
-              {uiState.isEditing ? (
-                <React.Fragment>
-                  <Button
-                    margin="0 12px 0 0"
-                    text="Rename"
-                    onClick={() => {
-                      renameComponentDialog.open();
-                      nameEntry.setValue(component.name);
-                    }}
-                  />
-                  <Button
-                    text="Done"
-                    onClick={() => applyAction({ type: "stopEditComponent" })}
-                  />
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <IconButton
-                    cssOverrides={{ marginRight: "12px" }}
-                    icon={<Edit height={20} width={20} />}
-                    onClick={() => {
-                      applyAction({
-                        type: "editComponent"
-                      });
-                    }}
-                  />
-                  <IconButton
-                    icon={<Delete height={20} width={20} />}
-                    onClick={() => {
-                      if (componentsThatUseCurrentComponent.length === 0) {
-                        applyAction({ type: "deleteComponent", componentId });
-                      } else {
-                        deleteRefDialog.open();
-                      }
-                    }}
-                  />
-                </React.Fragment>
-              )}
-            </div>
           </div>
-          <div></div>
+          <div css={[row]}>
+            {uiState.isEditing ? (
+              <React.Fragment>
+                <Button
+                  margin="0 12px 0 0"
+                  text="Done"
+                  onClick={() => applyAction({ type: "stopEditComponent" })}
+                />
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Button
+                  text="Edit"
+                  margin="0 12px 0 0"
+                  onClick={() => {
+                    applyAction({
+                      type: "editComponent"
+                    });
+                  }}
+                />
+                <Button
+                  margin="0 12px 0 0"
+                  text="Rename"
+                  onClick={() => {
+                    renameComponentDialog.open();
+                    nameEntry.setValue(component.name);
+                  }}
+                />
+                <Button
+                  text="Delete"
+                  margin="0 12px 0 0"
+                  onClick={() => {
+                    if (componentsThatUseCurrentComponent.length === 0) {
+                      applyAction({ type: "deleteComponent", componentId });
+                    } else {
+                      deleteRefDialog.open();
+                    }
+                  }}
+                />
+              </React.Fragment>
+            )}
+          </div>
           {/* <SettingsEditor refs={refs} applyAction={applyAction} /> */}
         </div>
       }
@@ -201,7 +202,12 @@ function ComponentView({
         )
       }
       center={
-        <div css={[column, { height: "100%", overflowX: "hidden" }]}>
+        <div
+          css={[
+            column,
+            { height: "100%", overflowX: "hidden", marginTop: "20px" }
+          ]}
+        >
           <div
             css={[
               column,
