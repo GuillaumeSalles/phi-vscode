@@ -365,17 +365,23 @@ function addLayer(
     return;
   }
 
-  const selectedLayer = findLayerById(root, selectedLayerId);
+  const { layer, parent } = findLayerByIdWithParent(root, selectedLayerId);
 
-  if (!selectedLayer) {
+  if (!layer) {
     throw new Error(`Layer with id ${selectedLayerId} not found in root`);
   }
 
-  if (canHaveChildren(selectedLayer)) {
-    console.log("Insert child");
+  if (canHaveChildren(layer)) {
     return updateLayer(root, {
-      ...selectedLayer,
-      children: [...selectedLayer.children].concat(newLayer)
+      ...layer,
+      children: [...layer.children].concat(newLayer)
+    });
+  }
+
+  if (parent) {
+    return updateLayer(root, {
+      ...parent,
+      children: [...parent.children].concat(newLayer)
     });
   }
 }
