@@ -9,7 +9,7 @@ type Props = {
 
 function Field({ label, children }: Props) {
   return (
-    <div css={[column, { margin: "4px 8px" }]}>
+    <div css={[column, { padding: "4px 8px" }]}>
       <label css={{ fontSize: "12px", color: colors.sideBarForeground }}>
         {label}
       </label>

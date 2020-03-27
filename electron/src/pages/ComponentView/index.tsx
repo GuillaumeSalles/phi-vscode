@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
 import React from "react";
-import { column, mainPadding, heading, row, colors } from "../../styles";
+import { column, mainPadding, row, colors } from "../../styles";
 import * as T from "../../types";
 import {
   filterComponentsWhenLayer,
@@ -15,15 +15,12 @@ import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import HtmlEditor from "./Editors/HtmlEditor";
 import { Layout } from "../../components/Layout";
-import TopBar from "../../components/TopBar";
 import ComponentProps from "./ComponentProps";
-import { findLayerById } from "../../layerUtils";
+import { findLayerByIdWithParent } from "../../layerUtils";
 import { useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
 import OkCancelModal from "../../components/OkCancelModal";
 import Button from "../../components/Button";
-import IconButton from "../../components/IconButton";
-import { Delete, Edit } from "../../icons";
 import {
   useStringFormEntry,
   useDialogForm,
@@ -31,7 +28,6 @@ import {
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
-import { Link, Image, Text, Container } from "../../icons";
 import Toolbar from "./Toolbar";
 
 const tabStyle = css({
@@ -92,10 +88,10 @@ function ComponentView({
 
   const isEditingHTML = uiState.layerEditorMode === "html";
 
-  const selectedLayer =
+  const { layer: selectedLayer, parent } =
     component.layout && layerId
-      ? findLayerById(component.layout, layerId)
-      : undefined;
+      ? findLayerByIdWithParent(component.layout, layerId)
+      : { layer: undefined, parent: undefined };
 
   return (
     <Layout
@@ -205,7 +201,7 @@ function ComponentView({
         <div
           css={[
             column,
-            { height: "100%", overflowX: "hidden", marginTop: "20px" }
+            { height: "100%", overflowX: "hidden", paddingTop: "20px" }
           ]}
         >
           <div
@@ -320,6 +316,7 @@ function ComponentView({
             ) : (
               <LayerEditor
                 layer={selectedLayer}
+                parentLayer={parent}
                 refs={refs}
                 componentId={componentId}
                 applyAction={applyAction}

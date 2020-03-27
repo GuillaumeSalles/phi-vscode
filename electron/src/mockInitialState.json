@@ -2,8 +2,9 @@
   "uiState": {
     "type": "component",
     "componentId": "577137bc-eaab-4eb5-b193-fe195c465314",
-    "isEditing": false,
-    "layerEditorMode": "html"
+    "isEditing": true,
+    "layerEditorMode": "css",
+    "layerId": "547fbe1b-da86-4e44-ab6a-d7ece4c2aa66"
   },
   "colors": [
     {

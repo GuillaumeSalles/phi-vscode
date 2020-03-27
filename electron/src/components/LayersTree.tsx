@@ -4,7 +4,7 @@ import * as T from "../types";
 import { column, row, colors, sectionTitle } from "../styles";
 import { useRef, useState, useMemo, useCallback } from "react";
 import LayersTreeItemComponent from "./LayersTreeItem";
-import { findLayerById, canHaveChildren } from "../layerUtils";
+import { canHaveChildren } from "../layerUtils";
 import OkCancelModal from "./OkCancelModal";
 import { useStringFormEntry, FormInput, useDialogForm } from "./Form";
 import { validateLayerName } from "../validators";
@@ -217,9 +217,6 @@ function LayersTree({ componentId, root, refs, applyAction, layerId }: Props) {
   const layerNameEntry = useStringFormEntry("", value =>
     validateLayerName(value, root)
   );
-  const selectedLayer =
-    root && layerId ? findLayerById(root, layerId) : undefined;
-
   const renameDialog = useDialogForm([layerNameEntry], () => {
     applyAction({
       type: "renameLayer",

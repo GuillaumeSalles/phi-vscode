@@ -21,6 +21,7 @@ import {
 
 type Props<TLayer> = {
   layer: TLayer;
+  parentLayer?: T.Layer;
   refs: T.Refs;
   componentId: string;
   applyAction: T.ApplyAction;
@@ -44,7 +45,8 @@ export default function LayerEditor<TLayer extends T.Layer>({
   layer,
   componentId,
   applyAction,
-  refs
+  refs,
+  parentLayer
 }: Props<TLayer>) {
   const [mediaQuery, setMediaQuery] = useState("default");
   const isDefault = mediaQuery === "default";
@@ -94,7 +96,15 @@ export default function LayerEditor<TLayer extends T.Layer>({
       </div>
 
       <div css={[column, { flex: "1 1 auto", overflowY: "auto" }]}>
-        <PositionEditor style={style} onChange={updateLayerStyle} />
+        {parentLayer != null && (
+          <PositionEditor
+            style={style}
+            onChange={updateLayerStyle}
+            parentStyle={parentLayer.style}
+            applyAction={applyAction}
+          />
+        )}
+        <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
         <LayerDisplayEditor
           allowedDisplays={layerTypeToSupportedDisplay(layer.type)}
           style={style}
@@ -109,7 +119,6 @@ export default function LayerEditor<TLayer extends T.Layer>({
         )}
         {style.display !== "none" && (
           <React.Fragment>
-            <DimensionsEditor dimensions={style} onChange={updateLayerStyle} />
             <MarginEditor margin={style} onChange={updateLayerStyle} />
             <PaddingEditor padding={style} onChange={updateLayerStyle} />
             <AppearanceEditor

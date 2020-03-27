@@ -178,6 +178,11 @@ export type HoverLayer = {
   layerId?: string;
 };
 
+export type MoveLayerUpOrDown = {
+  type: "moveLayerUpOrDown";
+  direction: "up" | "down";
+};
+
 export type GlobalShortcutAction = {
   type: "globalShortcutAction";
   key: string;
@@ -193,6 +198,7 @@ export type Action =
   | DeleteLayer
   | RenameLayer
   | MoveLayer
+  | MoveLayerUpOrDown
   | SelectLayer
   | HoverLayer
   | EditComponent

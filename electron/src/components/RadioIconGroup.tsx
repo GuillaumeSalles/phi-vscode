@@ -19,7 +19,7 @@ function RadioIconInput<TValue extends string>({
   return (
     <label
       css={{
-        padding: "4px 8px",
+        padding: "8px",
         display: "flex",
         background: isSelected
           ? colors.radioIconActiveBackground
@@ -45,7 +45,7 @@ function RadioIconInput<TValue extends string>({
 }
 
 type Props<TValue extends string> = {
-  value: TValue;
+  value?: TValue;
   onChange: (value: TValue) => void;
   name: string;
   options: [TValue, (props: { isSelected: boolean }) => React.ReactNode][];

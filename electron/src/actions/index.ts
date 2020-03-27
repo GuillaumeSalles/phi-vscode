@@ -11,6 +11,7 @@ import {
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
 import { uiStateComponentOrThrow } from "../refsUtil";
+import { assertUnreachable } from "@phi/shared";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
@@ -856,6 +857,48 @@ function handleArrowShortcut(
     return moveChildPositionDown(refs, refs.uiState.componentId, layer, parent);
   }
 
+  if (
+    (dir === "column" && key === "ArrowLeft") ||
+    (dir === "row" && key === "ArrowUp") ||
+    (dir === "column-reverse" && key === "ArrowRight") ||
+    (dir === "row-reverse" && key === "ArrowDown")
+  ) {
+    return replaceLayer(
+      refs,
+      refs.uiState.componentId,
+      refs.uiState.layerId,
+      layer => {
+        return {
+          style: {
+            ...layer.style,
+            alignSelf: "flex-start"
+          }
+        };
+      }
+    );
+  }
+
+  if (
+    (dir === "column" && key === "ArrowRight") ||
+    (dir === "row" && key === "ArrowDown") ||
+    (dir === "column-reverse" && key === "ArrowLeft") ||
+    (dir === "row-reverse" && key === "ArrowUp")
+  ) {
+    return replaceLayer(
+      refs,
+      refs.uiState.componentId,
+      refs.uiState.layerId,
+      layer => {
+        return {
+          style: {
+            ...layer.style,
+            alignSelf: "flex-end"
+          }
+        };
+      }
+    );
+  }
+
   return refs;
 }
 
@@ -874,6 +917,40 @@ function globalShortcutActionHandler(
     default:
       return refs;
   }
+}
+
+function moveLayerUpOrDownHandler(
+  action: T.MoveLayerUpOrDown,
+  refs: T.Refs
+): T.Refs {
+  const uiState = uiStateComponentOrThrow(refs);
+  const component = getComponentOrThrow(uiState.componentId, refs);
+
+  if (component.layout == null || uiState.layerId == null) {
+    return refs;
+  }
+
+  const { layer, parent } = findLayerByIdWithParent(
+    component.layout,
+    uiState.layerId
+  );
+
+  if (layer == null) {
+    throw new Error("Layer not found");
+  }
+
+  if (parent == null) {
+    throw new Error("Parent layer is needed to move child layer");
+  }
+
+  switch (action.direction) {
+    case "up":
+      return moveChildPositionUp(refs, uiState.componentId, layer, parent);
+    case "down":
+      return moveChildPositionDown(refs, uiState.componentId, layer, parent);
+  }
+
+  assertUnreachable(action.direction);
 }
 
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
@@ -912,6 +989,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return renameLayerHandler(action, refs);
     case "moveLayer":
       return moveLayerActionHandler(action, refs);
+    case "moveLayerUpOrDown":
+      return moveLayerUpOrDownHandler(action, refs);
     case "updateLayerProp":
       return updateLayerPropHandler(action, refs);
     case "updateLayerTag":

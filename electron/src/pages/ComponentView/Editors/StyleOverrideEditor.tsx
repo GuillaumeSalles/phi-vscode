@@ -73,6 +73,7 @@ const stylePropertiesMap: Map<keyof T.LayerStyle, string> = new Map([
   ["right", "Right"],
   ["bottom", "Bottom"],
   ["left", "Left"],
+  ["alignSelf", "Align Self"],
   // TODO: Handle border position
   ["borderTopWidth", "Border Width"],
   ["borderTopColor", "Border Color"],
@@ -332,6 +333,7 @@ function PropertyEditor({
           property={property}
         />
       );
+    case "alignSelf":
     case "overrides":
     case "borderRightWidth":
     case "borderBottomWidth":

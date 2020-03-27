@@ -187,7 +187,10 @@ export function makeContainerLayer(
       justifyContent: "flex-start",
       alignItems: "stretch",
       alignContent: "stretch",
-      overrides: []
+      overrides: [],
+      minHeight: "50px",
+      minWidth: "50px",
+      backgroundColor: makeRef(firstKey(refs.colors))
     },
     ...props
   };

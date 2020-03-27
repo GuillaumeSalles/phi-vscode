@@ -115,7 +115,15 @@ export type LayerStyle = Typography &
     right?: string;
     bottom?: string;
     left?: string;
+
+    alignSelf?: AlignSelfProperty;
   };
+
+export type AlignSelfProperty =
+  | "flex-start"
+  | "flex-end"
+  | "center"
+  | "stretch";
 
 export type PositionProperty = "absolute" | "relative";
 

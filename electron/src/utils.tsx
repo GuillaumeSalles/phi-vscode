@@ -36,11 +36,19 @@ export function flat<T>(arrOfArr: T[][]): T[] {
   return result;
 }
 
+const keysToBlock = new Set([
+  "Backspace",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight"
+]);
+
 /**
  * I feel it's not the right way to handle events...
  */
 export function stopKeydownPropagationIfNecessary(event: React.KeyboardEvent) {
-  if (event.key === "Backspace") {
+  if (keysToBlock.has(event.key)) {
     event.stopPropagation();
   }
 }

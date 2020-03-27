@@ -13,10 +13,11 @@ import {
   justifyContentList,
   alignItemsList,
   alignContentList,
-  borderStyleList,
-  positionList
+  borderStyleList
 } from "../../../constants";
 import TextInput from "../../../components/TextInput";
+import RadioIconGroup from "../../../components/RadioIconGroup";
+import { row } from "../../../styles";
 
 const flexDirectionOptions = listToEntries(flexDirectionList);
 const flexWrapOptions = listToEntries(flexWrapList);
@@ -24,7 +25,6 @@ const justifyContentOptions = listToEntries(justifyContentList);
 const alignItemsOptions = listToEntries(alignItemsList);
 const alignContentOptions = listToEntries(alignContentList);
 const borderStyleOptions = listToEntries(borderStyleList);
-const positionOptions = listToEntries<T.PositionProperty>(positionList);
 
 type Props = {
   style: T.LayerStyle;
@@ -100,14 +100,26 @@ export function FontSizeEditor({ style, onChange, refs }: PropsWithRefs) {
   );
 }
 
+export function InnerPositionPropertyEditor({ style, onChange }: Props) {
+  return (
+    <div css={row}>
+      <RadioIconGroup
+        name="text-align"
+        options={[
+          ["relative", () => <span>Relative</span>],
+          ["absolute", () => <span>Absolute</span>]
+        ]}
+        value={style.position == null ? "relative" : style.position}
+        onChange={position => onChange({ position })}
+      />
+    </div>
+  );
+}
+
 export function PositionPropertyEditor({ style, onChange }: Props) {
   return (
     <Field label="Position">
-      <Select
-        value={style.position || "relative"}
-        onChange={position => onChange({ position })}
-        options={positionOptions}
-      />
+      <InnerPositionPropertyEditor style={style} onChange={onChange} />
     </Field>
   );
 }

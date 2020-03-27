@@ -148,6 +148,7 @@ function layerStyleToCss(style: T.LayerStyle, refs: T.Refs) {
     )}
     ${cssProp("font-size", fontSizeToCss(style.fontSize, refs.fontSizes))}
     ${cssProp("font-weight", style.fontWeight)}
+    ${cssProp("align-self", style.alignSelf)}
   `;
 }
 

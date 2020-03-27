@@ -181,6 +181,25 @@ export const styleEditorInput = css({
   }
 });
 
+export const checkboxInputLabel = css({
+  WebkitAppearance: "none",
+  height: "24px",
+  fontSize: "12px",
+  lineHeight: 0,
+  padding: 0,
+  boxSizing: "border-box",
+  fontWeight: "bold",
+  width: "36px",
+  background: "none",
+  color: colors.sideBarForeground,
+  transition:
+    "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
+  ":focus": {
+    borderColor: colors.primary,
+    outline: 0
+  }
+});
+
 export const input = css({
   boxShadow: "none",
   boxSizing: "border-box",

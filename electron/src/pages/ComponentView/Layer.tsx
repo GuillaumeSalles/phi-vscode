@@ -193,6 +193,7 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
     letterSpacing: lengthToCss(style.letterSpacing, "0"),
     textAlign: style.textAlign,
     textDecoration: textDecorationToCss(style),
+    alignSelf: style.alignSelf,
     ...makeStyleOverrides(style, refs)
   };
 }
