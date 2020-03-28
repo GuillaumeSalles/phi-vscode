@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
 import Section from "./Section";
-import { SimpleTextPropertyEditor } from "./StylePropertyEditor";
+import { LengthPropertyEditor } from "./StylePropertyEditor";
 
 type Props = {
   margin: T.Margin;
@@ -14,29 +14,33 @@ export default function MarginEditor({ margin, onChange }: Props) {
   return (
     <Section title="Margin">
       <div css={row}>
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Top"
           style={margin}
           onChange={onChange}
           property="marginTop"
+          onlyPositive={false}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Right"
           style={margin}
           onChange={onChange}
           property="marginRight"
+          onlyPositive={false}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Bottom"
           style={margin}
           onChange={onChange}
           property="marginBottom"
+          onlyPositive={false}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Left"
           style={margin}
           onChange={onChange}
           property="marginLeft"
+          onlyPositive={false}
         />
       </div>
     </Section>

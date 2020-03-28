@@ -18,6 +18,7 @@ import {
 import TextInput from "../../../components/TextInput";
 import RadioIconGroup from "../../../components/RadioIconGroup";
 import { row } from "../../../styles";
+import LengthInput from "../../../components/LengthInput";
 
 const flexDirectionOptions = listToEntries(flexDirectionList);
 const flexWrapOptions = listToEntries(flexWrapList);
@@ -266,7 +267,7 @@ export function AlignContentEditor({ style, onChange }: Props) {
 export function BorderWidthEditor({ style, onChange, label }: Props & Label) {
   return (
     <Field label={label}>
-      <TextInput
+      <LengthInput
         value={style.borderTopWidth}
         onChange={borderWidth =>
           onChange({
@@ -276,6 +277,7 @@ export function BorderWidthEditor({ style, onChange, label }: Props & Label) {
             borderLeftWidth: borderWidth
           })
         }
+        onlyPositive={true}
       />
     </Field>
   );
@@ -319,6 +321,28 @@ export function BorderStyleEditor({ style, onChange, label }: Props & Label) {
             borderLeftStyle: style
           })
         }
+      />
+    </Field>
+  );
+}
+
+export function LengthPropertyEditor({
+  style,
+  onChange,
+  property,
+  label,
+  onlyPositive
+}: Props & {
+  property: keyof T.LayerStyle;
+  label: string;
+  onlyPositive: boolean;
+}) {
+  return (
+    <Field label={label}>
+      <LengthInput
+        onlyPositive={onlyPositive}
+        value={style[property] as string}
+        onChange={value => onChange({ [property]: value })}
       />
     </Field>
   );

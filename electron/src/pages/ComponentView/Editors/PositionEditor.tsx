@@ -4,8 +4,8 @@ import * as T from "../../../types";
 import { row } from "../../../styles";
 import Section from "./Section";
 import {
-  SimpleTextPropertyEditor,
-  InnerPositionPropertyEditor
+  InnerPositionPropertyEditor,
+  LengthPropertyEditor
 } from "./StylePropertyEditor";
 import AlignSelfEditor from "./AlignSelfEditor";
 import { ArrowUp, ArrowDown, ArrowRight, ArrowLeft } from "../../../icons";
@@ -31,29 +31,33 @@ export default function PositionEditor({
 
         {style.position === "absolute" && (
           <div css={[row, { paddingTop: "8px" }]}>
-            <SimpleTextPropertyEditor
+            <LengthPropertyEditor
               label="Top"
               style={style}
               onChange={onChange}
               property="top"
+              onlyPositive={false}
             />
-            <SimpleTextPropertyEditor
+            <LengthPropertyEditor
               label="Right"
               style={style}
               onChange={onChange}
               property="right"
+              onlyPositive={false}
             />
-            <SimpleTextPropertyEditor
+            <LengthPropertyEditor
               label="Bottom"
               style={style}
               onChange={onChange}
               property="bottom"
+              onlyPositive={false}
             />
-            <SimpleTextPropertyEditor
+            <LengthPropertyEditor
               label="Left"
               style={style}
               onChange={onChange}
               property="left"
+              onlyPositive={false}
             />
           </div>
         )}

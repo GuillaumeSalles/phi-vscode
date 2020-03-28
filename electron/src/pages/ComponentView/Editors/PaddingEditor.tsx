@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
 import Section from "./Section";
-import { SimpleTextPropertyEditor } from "./StylePropertyEditor";
+import { LengthPropertyEditor } from "./StylePropertyEditor";
 
 type Props = {
   padding: T.Padding;
@@ -14,29 +14,33 @@ export default function PaddingEditor({ padding, onChange }: Props) {
   return (
     <Section title="Padding">
       <div css={row}>
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Top"
           style={padding}
           onChange={onChange}
           property="paddingTop"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Right"
           style={padding}
           onChange={onChange}
           property="paddingRight"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Bottom"
           style={padding}
           onChange={onChange}
           property="paddingBottom"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Left"
           style={padding}
           onChange={onChange}
           property="paddingLeft"
+          onlyPositive={true}
         />
       </div>
     </Section>

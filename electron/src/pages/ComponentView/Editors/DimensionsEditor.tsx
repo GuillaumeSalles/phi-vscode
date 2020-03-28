@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../../types";
 import { row } from "../../../styles";
 import Section from "./Section";
-import { SimpleTextPropertyEditor } from "./StylePropertyEditor";
+import { LengthPropertyEditor } from "./StylePropertyEditor";
 
 type Props = {
   dimensions: T.Dimensions;
@@ -14,44 +14,50 @@ function DimensionsEditor({ dimensions, onChange }: Props) {
   return (
     <Section title="Dimensions">
       <div css={[row]}>
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Width"
           style={dimensions}
           onChange={onChange}
           property="width"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Min"
           style={dimensions}
           onChange={onChange}
           property="minWidth"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Max"
           style={dimensions}
           onChange={onChange}
           property="maxWidth"
+          onlyPositive={true}
         />
       </div>
 
       <div css={[row]}>
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Height"
           style={dimensions}
           onChange={onChange}
           property="height"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Min"
           style={dimensions}
           onChange={onChange}
           property="minHeight"
+          onlyPositive={true}
         />
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label="Max"
           style={dimensions}
           onChange={onChange}
           property="maxHeight"
+          onlyPositive={true}
         />
       </div>
     </Section>

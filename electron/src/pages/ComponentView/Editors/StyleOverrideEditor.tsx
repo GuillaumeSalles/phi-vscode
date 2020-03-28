@@ -19,13 +19,13 @@ import {
   JustifyContentEditor,
   AlignItemsEditor,
   AlignContentEditor,
-  SimpleTextPropertyEditor,
   BackgroundColorEditor,
   OpacityEditor,
   BorderWidthEditor,
   BorderColorEditor,
   BorderStyleEditor,
-  PositionPropertyEditor
+  PositionPropertyEditor,
+  LengthPropertyEditor
 } from "./StylePropertyEditor";
 import TextDecorationEditor from "./TextDecorationEditor";
 import IconButton from "../../../components/IconButton";
@@ -309,10 +309,6 @@ function PropertyEditor({
     case "width":
     case "minWidth":
     case "maxWidth":
-    case "marginTop":
-    case "marginRight":
-    case "marginBottom":
-    case "marginLeft":
     case "paddingTop":
     case "paddingRight":
     case "paddingBottom":
@@ -321,18 +317,34 @@ function PropertyEditor({
     case "borderTopRightRadius":
     case "borderBottomRightRadius":
     case "borderBottomLeftRadius":
+      return (
+        <LengthPropertyEditor
+          label={stylePropertiesMap.get(property)!}
+          style={style}
+          onChange={onChange}
+          property={property}
+          onlyPositive={true}
+        />
+      );
+
+    case "marginTop":
+    case "marginRight":
+    case "marginBottom":
+    case "marginLeft":
     case "top":
     case "right":
     case "bottom":
     case "left":
       return (
-        <SimpleTextPropertyEditor
+        <LengthPropertyEditor
           label={stylePropertiesMap.get(property)!}
           style={style}
           onChange={onChange}
           property={property}
+          onlyPositive={false}
         />
       );
+
     case "alignSelf":
     case "overrides":
     case "borderRightWidth":
