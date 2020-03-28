@@ -9,7 +9,8 @@ type Props = {
   domRefs: Map<string, HTMLBaseElement>;
 };
 
-const selectedLayerLines = "dashed 1px rgb(0,110,197)";
+const color = "rgb(0,110,197)";
+const selectedLayerLines = `dashed 1px ${color}`;
 
 export function Overlay({ refs, domRefs }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -101,6 +102,46 @@ export function Overlay({ refs, domRefs }: Props) {
               borderRight: selectedLayerLines
             }}
           />
+
+          {/* Bottom-Right */}
+          {/* <div
+            css={{
+              position: "absolute",
+              top:
+                selectedLayerRect.top -
+                overlayRect.top +
+                selectedLayerRect.height -
+                4,
+              left:
+                selectedLayerRect.left -
+                overlayRect.left +
+                selectedLayerRect.width -
+                4,
+              width: "8px",
+              height: "8px",
+              background: "white",
+              border: `solid 1px ${color}`
+            }}
+          /> */}
+
+          <div
+            css={{
+              position: "absolute",
+              top:
+                selectedLayerRect.top -
+                overlayRect.top +
+                selectedLayerRect.height,
+              left: selectedLayerRect.left - overlayRect.left - 50,
+              width: selectedLayerRect.width + 100,
+              color,
+              fontSize: "12px",
+              fontWeight: 500,
+              paddingTop: "4px",
+              textAlign: "center"
+            }}
+          >
+            {selectedLayerRect.width} x {selectedLayerRect.height}
+          </div>
         </Fragment>
       )}
     </div>
