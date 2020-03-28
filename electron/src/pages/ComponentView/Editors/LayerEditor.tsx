@@ -119,7 +119,9 @@ export default function LayerEditor<TLayer extends T.Layer>({
         )}
         {style.display !== "none" && (
           <React.Fragment>
-            <MarginEditor margin={style} onChange={updateLayerStyle} />
+            {parentLayer != null && (
+              <MarginEditor margin={style} onChange={updateLayerStyle} />
+            )}
             <PaddingEditor padding={style} onChange={updateLayerStyle} />
             <AppearanceEditor
               style={style}
