@@ -12,7 +12,13 @@ import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
 import { uiStateComponentOrThrow } from "../refsUtil";
 import { assertUnreachable, LayerStyle } from "@phi/shared";
-import { decrement, lengthToString, increment } from "../lengthUtils";
+import {
+  decrement,
+  lengthToString,
+  increment,
+  parseLength,
+  Unit
+} from "../lengthUtils";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
@@ -996,6 +1002,93 @@ function moveLayerUpOrDownHandler(
   assertUnreachable(action.direction);
 }
 
+function calculateResizeOffsetX(action: T.ResizeLayer) {
+  switch (action.direction) {
+    case "right":
+    case "bottom-right":
+    case "top-right":
+      return action.offset.x;
+    case "left":
+    case "bottom-left":
+    case "top-left":
+      return -action.offset.x;
+    case "top":
+    case "bottom":
+      return 0;
+  }
+}
+
+function calculateResizeOffsetY(action: T.ResizeLayer) {
+  switch (action.direction) {
+    case "bottom":
+    case "bottom-right":
+    case "bottom-left":
+      return action.offset.y;
+    case "top":
+    case "top-left":
+    case "top-right":
+      return -action.offset.y;
+    case "right":
+    case "left":
+      return 0;
+  }
+}
+
+function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
+  const uiState = uiStateComponentOrThrow(refs);
+  if (uiState.layerId == null) {
+    throw new Error(
+      `Expected uiState.layerId to be defined when resizing layer.`
+    );
+  }
+
+  return replaceLayerStyle(
+    refs,
+    uiState.componentId,
+    uiState.layerId,
+    style => {
+      const offsetX = calculateResizeOffsetX(action);
+      const offsetY = calculateResizeOffsetY(action);
+
+      const newStyle: Partial<T.LayerStyle> = {};
+
+      if (offsetX !== 0) {
+        const lengthWidth = parseLength(style.width, true);
+
+        newStyle.width = lengthToString(
+          lengthWidth
+            ? {
+                value: lengthWidth.value + offsetX,
+                unit: lengthWidth.unit
+              }
+            : {
+                value: action.canvasSize.width + offsetX,
+                unit: "px" as Unit
+              }
+        );
+      }
+
+      if (offsetY !== 0) {
+        const lengthHeight = parseLength(style.height, true);
+
+        newStyle.height = lengthToString(
+          lengthHeight
+            ? {
+                value: lengthHeight.value + offsetY,
+                unit: lengthHeight.unit
+              }
+            : {
+                value: action.canvasSize.height + offsetY,
+                unit: "px" as Unit
+              }
+        );
+      }
+
+      return newStyle;
+    }
+  );
+}
+
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
@@ -1044,6 +1137,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return deleteLayerBindingHandler(action, refs);
     case "updateLayerStyle":
       return updateLayerStyleHandler(action, refs);
+    case "resizeLayer":
+      return resizeLayerStyleHandler(action, refs);
     case "addMediaQuery":
       return addMediaQueryHandler(action, refs);
     case "updateRef":

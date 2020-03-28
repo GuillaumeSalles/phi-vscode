@@ -183,6 +183,29 @@ export type MoveLayerUpOrDown = {
   direction: "up" | "down";
 };
 
+export type ResizeLayerDirection =
+  | "bottom-right"
+  | "right"
+  | "bottom"
+  | "bottom-left"
+  | "left"
+  | "top-left"
+  | "top"
+  | "top-right";
+
+export type ResizeLayer = {
+  type: "resizeLayer";
+  canvasSize: {
+    height: number;
+    width: number;
+  };
+  offset: {
+    x: number;
+    y: number;
+  };
+  direction: ResizeLayerDirection;
+};
+
 export type GlobalShortcutAction = {
   type: "globalShortcutAction";
   key: string;
@@ -202,6 +225,7 @@ export type Action =
   | MoveLayerUpOrDown
   | SelectLayer
   | HoverLayer
+  | ResizeLayer
   | EditComponent
   | StopEditComponent
   | UpdateLayerProp

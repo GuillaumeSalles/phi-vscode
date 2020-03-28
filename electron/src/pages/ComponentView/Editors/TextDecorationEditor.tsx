@@ -35,8 +35,8 @@ export default function TextDecorationEditor({ style, onChange }: Props) {
           onChange={isUnderlined => updateTextDecoration({ isUnderlined })}
           icon={({ isChecked }) => (
             <Underline
-              height={16}
-              width={16}
+              height={20}
+              width={20}
               fill={
                 isChecked
                   ? colors.radioIconActiveForeground
@@ -57,8 +57,8 @@ export default function TextDecorationEditor({ style, onChange }: Props) {
           }
           icon={({ isChecked }) => (
             <Strikethrough
-              height={16}
-              width={16}
+              height={20}
+              width={20}
               fill={
                 isChecked
                   ? colors.radioIconActiveForeground

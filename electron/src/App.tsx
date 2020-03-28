@@ -59,6 +59,16 @@ function App() {
       if (event.key === "ArrowLeft" && event.metaKey) {
         event.preventDefault();
       }
+
+      // Disable scroll on layout with keys
+      if (
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown"
+      ) {
+        event.preventDefault();
+      }
     }
 
     window.addEventListener("keydown", onKeyDown);

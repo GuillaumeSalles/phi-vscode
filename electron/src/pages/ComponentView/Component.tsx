@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as T from "../../types";
 import Layer from "./Layer";
 import { column, row } from "../../styles";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Overlay } from "./Overlay";
 import { del, set } from "../../helpers/immutable-map";
 
@@ -36,6 +36,8 @@ function ComponentExampleViewer({
   //   element === null ? domRefs.delete(id) : domRefs.set(id, element);
   // };
 
+  let containerRef = useRef<HTMLDivElement>(null);
+
   let [domRefs, setDomRefs] = useState<Map<string, HTMLBaseElement>>(new Map());
   const refCallback = useCallback(
     (id: string, element: HTMLBaseElement | null) => {
@@ -61,6 +63,7 @@ function ComponentExampleViewer({
         {artboard.name} - {artboard.width}
       </h3>
       <div
+        ref={containerRef}
         onMouseLeave={event => {
           applyAction({ type: "hoverLayer" });
         }}
@@ -101,7 +104,12 @@ function ComponentExampleViewer({
             refCallback={refCallback}
           />
         )}
-        <Overlay domRefs={domRefs} refs={refs} />
+        <Overlay
+          domRefs={domRefs}
+          refs={refs}
+          containerRect={containerRef.current?.getBoundingClientRect()}
+          applyAction={applyAction}
+        />
       </div>
     </div>
   );
