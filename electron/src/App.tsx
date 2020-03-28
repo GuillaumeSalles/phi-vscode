@@ -49,7 +49,16 @@ function App() {
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      applyAction({ type: "globalShortcutAction", key: event.key });
+      applyAction({
+        type: "globalShortcutAction",
+        key: event.key,
+        metaKey: event.metaKey
+      });
+
+      // Disable navigate back on Chrome
+      if (event.key === "ArrowLeft" && event.metaKey) {
+        event.preventDefault();
+      }
     }
 
     window.addEventListener("keydown", onKeyDown);

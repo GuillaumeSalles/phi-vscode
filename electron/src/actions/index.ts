@@ -11,7 +11,8 @@ import {
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
 import { uiStateComponentOrThrow } from "../refsUtil";
-import { assertUnreachable } from "@phi/shared";
+import { assertUnreachable, LayerStyle } from "@phi/shared";
+import { decrement, lengthToString, increment } from "../lengthUtils";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
   return components.size === 0
@@ -59,6 +60,23 @@ function replaceLayer<TLayer extends T.Layer>(
         ...layer,
         ...update(layer as TLayer)
       })
+    };
+  });
+}
+
+function replaceLayerStyle(
+  refs: T.Refs,
+  componentId: string,
+  layerId: string,
+  update: (style: T.LayerStyle) => Partial<LayerStyle>
+) {
+  return replaceLayer(refs, componentId, layerId, layer => {
+    return {
+      ...layer,
+      style: {
+        ...layer.style,
+        ...update(layer.style)
+      }
     };
   });
 }
@@ -798,7 +816,7 @@ function moveChildPositionDown(
   });
 }
 
-function handleArrowShortcut(
+function handleArrowShortcutForPosition(
   refs: T.Refs,
   key: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
 ): T.Refs {
@@ -814,6 +832,7 @@ function handleArrowShortcut(
   if (component.layout == null) {
     return refs;
   }
+
   const { layer, parent } = findLayerByIdWithParent(
     component.layout,
     refs.uiState.layerId
@@ -863,18 +882,13 @@ function handleArrowShortcut(
     (dir === "column-reverse" && key === "ArrowRight") ||
     (dir === "row-reverse" && key === "ArrowDown")
   ) {
-    return replaceLayer(
+    return replaceLayerStyle(
       refs,
       refs.uiState.componentId,
       refs.uiState.layerId,
-      layer => {
-        return {
-          style: {
-            ...layer.style,
-            alignSelf: "flex-start"
-          }
-        };
-      }
+      () => ({
+        alignSelf: "flex-start"
+      })
     );
   }
 
@@ -884,22 +898,49 @@ function handleArrowShortcut(
     (dir === "column-reverse" && key === "ArrowLeft") ||
     (dir === "row-reverse" && key === "ArrowUp")
   ) {
-    return replaceLayer(
+    return replaceLayerStyle(
       refs,
       refs.uiState.componentId,
       refs.uiState.layerId,
-      layer => {
-        return {
-          style: {
-            ...layer.style,
-            alignSelf: "flex-end"
-          }
-        };
-      }
+      () => ({
+        alignSelf: "flex-end"
+      })
     );
   }
 
   return refs;
+}
+
+function handleArrowShortcutForSize(
+  refs: T.Refs,
+  key: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight"
+): T.Refs {
+  if (
+    refs.uiState.type !== "component" ||
+    refs.uiState.layerId == null ||
+    refs.uiState.isEditing === false
+  ) {
+    return refs;
+  }
+
+  return replaceLayerStyle(
+    refs,
+    refs.uiState.componentId,
+    refs.uiState.layerId,
+    style => {
+      const propertyName =
+        key === "ArrowUp" || key === "ArrowDown" ? "height" : "width";
+      const value = style[propertyName];
+      const newValue =
+        key === "ArrowDown" || key === "ArrowRight"
+          ? increment(value)
+          : decrement(value, true);
+
+      return {
+        [propertyName]: newValue ? lengthToString(newValue) : undefined
+      };
+    }
+  );
 }
 
 function globalShortcutActionHandler(
@@ -913,7 +954,9 @@ function globalShortcutActionHandler(
     case "ArrowRight":
     case "ArrowDown":
     case "ArrowLeft":
-      return handleArrowShortcut(refs, action.key);
+      return action.metaKey
+        ? handleArrowShortcutForSize(refs, action.key)
+        : handleArrowShortcutForPosition(refs, action.key);
     default:
       return refs;
   }

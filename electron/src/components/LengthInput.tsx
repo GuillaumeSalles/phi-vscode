@@ -2,6 +2,7 @@
 import { jsx, Interpolation, css } from "@emotion/core";
 import { styleEditorInput, colors } from "../styles";
 import { useState, useRef } from "react";
+import { parseLength, Unit, increment, decrement } from "../lengthUtils";
 
 type Props = {
   value: string | undefined;
@@ -9,56 +10,6 @@ type Props = {
   cssOverrides?: Interpolation;
   onlyPositive: boolean;
 };
-
-const units = ["px", "%"];
-type Unit = "px" | "%";
-type Length = {
-  value: number;
-  unit?: Unit;
-};
-
-export function parseLength(
-  value: string | undefined,
-  onlyPositive: boolean
-): Length | undefined {
-  if (value == null) {
-    return undefined;
-  }
-
-  let result = "";
-  let decimal = false;
-  let i = 0;
-
-  if (value[0] === "-") {
-    result += "-";
-    i++;
-  }
-
-  for (; i < value.length; i++) {
-    const char = value[i];
-    if (decimal === false && char === ".") {
-      result += char;
-      decimal = true;
-    } else if (char >= "0" && char <= "9") {
-      result += char;
-    } else {
-      break;
-    }
-  }
-
-  const suffix = value.slice(i);
-
-  if (result.length === 0) {
-    return undefined;
-  }
-
-  const parsedValue = Number.parseFloat(result);
-
-  return {
-    value: onlyPositive && parsedValue < 0 ? 0 : parsedValue,
-    unit: units.includes(suffix) ? (suffix as Unit) : undefined
-  };
-}
 
 export default function LengthInput({
   value,
@@ -69,31 +20,6 @@ export default function LengthInput({
   const [uncommited, setUncommited] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const unitRef = useRef<Unit>("px");
-
-  function increment() {
-    const length = parseLength(uncommited, onlyPositive);
-    if (!length) {
-      return;
-    }
-    const newUnit = length.unit || unitRef.current;
-    const newValue = length.value + 1;
-    setUncommited(newValue.toString());
-    onChange(newValue + newUnit);
-  }
-
-  function decrement() {
-    const length = parseLength(uncommited, onlyPositive);
-    if (!length) {
-      return;
-    }
-    if (length.value < 1 && onlyPositive) {
-      return;
-    }
-    const newUnit = length.unit || unitRef.current;
-    const newValue = length.value - 1;
-    setUncommited(newValue.toString());
-    onChange(newValue + newUnit);
-  }
 
   const style = css(styleEditorInput, css(cssOverrides));
   return (
@@ -118,11 +44,15 @@ export default function LengthInput({
         onKeyDown={e => {
           if (onlyPositive && e.key === "-") {
             e.preventDefault();
-          } else if (e.key === "ArrowUp") {
-            increment();
-            e.preventDefault();
-          } else if (e.key === "ArrowDown") {
-            decrement();
+          } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+            const newLength =
+              e.key === "ArrowUp"
+                ? increment(uncommited)
+                : decrement(uncommited, onlyPositive);
+            setUncommited(newLength ? newLength.value.toString() : "");
+            onChange(
+              newLength ? `${newLength.value}${unitRef.current}` : undefined
+            );
             e.preventDefault();
           }
         }}

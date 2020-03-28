@@ -186,6 +186,7 @@ export type MoveLayerUpOrDown = {
 export type GlobalShortcutAction = {
   type: "globalShortcutAction";
   key: string;
+  metaKey: boolean;
 };
 
 export type Action =
