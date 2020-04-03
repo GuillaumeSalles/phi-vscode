@@ -38,8 +38,8 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
     e: React.MouseEvent,
     direction: T.ResizeLayerDirection
   ) {
-    const initialX = e.clientX;
-    const initialY = e.clientY;
+    let initialX = e.clientX;
+    let initialY = e.clientY;
 
     function onMouseMove(e: MouseEvent) {
       applyAction({
@@ -54,6 +54,8 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
         },
         direction
       });
+      initialX = e.clientX;
+      initialY = e.clientY;
     }
 
     function onMouseUp(e: MouseEvent) {
@@ -63,6 +65,8 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
+
+    e.preventDefault();
   }
 
   return (

@@ -19,6 +19,7 @@ import TextInput from "../../../components/TextInput";
 import RadioIconGroup from "../../../components/RadioIconGroup";
 import { row } from "../../../styles";
 import LengthInput from "../../../components/LengthInput";
+import { memo } from "react";
 
 const flexDirectionOptions = listToEntries(flexDirectionList);
 const flexWrapOptions = listToEntries(flexWrapList);
@@ -38,6 +39,11 @@ type PropsWithRefs = Props & {
 
 type Label = {
   label: string;
+};
+
+type NewProps<T> = {
+  value: T;
+  onChange: (partialStyle: T.LayerStyle) => void;
 };
 
 export function ColorEditor({ style, onChange, refs }: PropsWithRefs) {
@@ -204,65 +210,75 @@ export function DisplayEditor({
   );
 }
 
-export function FlexDirectionEditor({ style, onChange }: Props) {
-  return (
-    <Field label="Direction">
-      <Select
-        value={style.flexDirection || "row"}
-        onChange={flexDirection => onChange({ flexDirection })}
-        options={flexDirectionOptions}
-      />
-    </Field>
-  );
-}
+export const FlexDirectionEditor = memo(
+  ({ value, onChange }: NewProps<T.FlexDirection | undefined>) => {
+    return (
+      <Field label="Direction">
+        <Select
+          value={value || "row"}
+          onChange={flexDirection => onChange({ flexDirection })}
+          options={flexDirectionOptions}
+        />
+      </Field>
+    );
+  }
+);
 
-export function FlexWrapEditor({ style, onChange }: Props) {
-  return (
-    <Field label="Wrap">
-      <Select
-        value={style.flexWrap || "nowrap"}
-        onChange={flexWrap => onChange({ flexWrap })}
-        options={flexWrapOptions}
-      />
-    </Field>
-  );
-}
+export const FlexWrapEditor = memo(
+  ({ value, onChange }: NewProps<T.FlexWrap | undefined>) => {
+    return (
+      <Field label="Wrap">
+        <Select
+          value={value || "nowrap"}
+          onChange={flexWrap => onChange({ flexWrap })}
+          options={flexWrapOptions}
+        />
+      </Field>
+    );
+  }
+);
 
-export function JustifyContentEditor({ style, onChange }: Props) {
-  return (
-    <Field label="Justify Content">
-      <Select
-        value={style.justifyContent || "flex-start"}
-        onChange={justifyContent => onChange({ justifyContent })}
-        options={justifyContentOptions}
-      />
-    </Field>
-  );
-}
+export const JustifyContentEditor = memo(
+  ({ value, onChange }: NewProps<T.JustifyContent | undefined>) => {
+    return (
+      <Field label="Justify Content">
+        <Select
+          value={value || "flex-start"}
+          onChange={justifyContent => onChange({ justifyContent })}
+          options={justifyContentOptions}
+        />
+      </Field>
+    );
+  }
+);
 
-export function AlignItemsEditor({ style, onChange }: Props) {
-  return (
-    <Field label="Align Items">
-      <Select
-        value={style.alignItems || "stretch"}
-        onChange={alignItems => onChange({ alignItems })}
-        options={alignItemsOptions}
-      />
-    </Field>
-  );
-}
+export const AlignItemsEditor = memo(
+  ({ value, onChange }: NewProps<T.AlignItems | undefined>) => {
+    return (
+      <Field label="Align Items">
+        <Select
+          value={value || "stretch"}
+          onChange={alignItems => onChange({ alignItems })}
+          options={alignItemsOptions}
+        />
+      </Field>
+    );
+  }
+);
 
-export function AlignContentEditor({ style, onChange }: Props) {
-  return (
-    <Field label="Align Content">
-      <Select
-        value={style.alignContent || "stretch"}
-        onChange={alignContent => onChange({ alignContent })}
-        options={alignContentOptions}
-      />
-    </Field>
-  );
-}
+export const AlignContentEditor = memo(
+  ({ value, onChange }: NewProps<T.AlignContent | undefined>) => {
+    return (
+      <Field label="Align Content">
+        <Select
+          value={value || "stretch"}
+          onChange={alignContent => onChange({ alignContent })}
+          options={alignContentOptions}
+        />
+      </Field>
+    );
+  }
+);
 
 export function BorderWidthEditor({ style, onChange, label }: Props & Label) {
   return (
@@ -326,27 +342,43 @@ export function BorderStyleEditor({ style, onChange, label }: Props & Label) {
   );
 }
 
-export function LengthPropertyEditor({
-  style,
-  onChange,
-  property,
-  label,
-  onlyPositive
-}: Props & {
-  property: keyof T.LayerStyle;
-  label: string;
-  onlyPositive: boolean;
-}) {
-  return (
-    <Field label={label}>
-      <LengthInput
-        onlyPositive={onlyPositive}
-        value={style[property] as string}
-        onChange={value => onChange({ [property]: value })}
-      />
-    </Field>
-  );
+function debugMemo(prev: any, next: any) {
+  for (const key in prev) {
+    if (prev[key] !== next[key]) {
+      console.log(`Memo failed because of ${key}`, prev, next);
+      return false;
+    }
+  }
+
+  return true;
 }
+
+export const LengthPropertyEditor = memo(
+  ({
+    value,
+    onChange,
+    property,
+    label,
+    onlyPositive
+  }: {
+    property: keyof T.LayerStyle;
+    label: string;
+    onlyPositive: boolean;
+    onChange: (partialStyle: Partial<T.LayerStyle>) => void;
+    value: string | undefined;
+  }) => {
+    return (
+      <Field label={label}>
+        <LengthInput
+          onlyPositive={onlyPositive}
+          value={value}
+          onChange={value => onChange({ [property]: value })}
+        />
+      </Field>
+    );
+  },
+  debugMemo
+);
 
 export function SimpleTextPropertyEditor({
   style,

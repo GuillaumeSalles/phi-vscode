@@ -15,7 +15,7 @@ import {
 
 type Props = {
   style: T.Display;
-  onChange: (style: T.Display) => void;
+  onChange: (style: Partial<T.Display>) => void;
   allowedDisplays: T.DisplayProperty[];
 };
 
@@ -24,25 +24,30 @@ export default function LayerDisplayEditor({
   onChange,
   allowedDisplays
 }: Props) {
-  function updateStyle(newProps: Partial<T.Display>) {
-    onChange({ ...style, ...newProps });
-  }
-
   return (
     <Section title="Layout">
       <div css={[row, { flexWrap: "wrap" }]}>
         <DisplayEditor
           style={style}
-          onChange={updateStyle}
+          onChange={onChange}
           allowedDisplays={allowedDisplays}
         />
         {style.display === "flex" && (
           <React.Fragment>
-            <FlexDirectionEditor style={style} onChange={updateStyle} />
-            <FlexWrapEditor style={style} onChange={updateStyle} />
-            <JustifyContentEditor style={style} onChange={updateStyle} />
-            <AlignItemsEditor style={style} onChange={updateStyle} />
-            <AlignContentEditor style={style} onChange={updateStyle} />
+            <FlexDirectionEditor
+              value={style.flexDirection}
+              onChange={onChange}
+            />
+            <FlexWrapEditor value={style.flexWrap} onChange={onChange} />
+            <JustifyContentEditor
+              value={style.justifyContent}
+              onChange={onChange}
+            />
+            <AlignItemsEditor value={style.alignItems} onChange={onChange} />
+            <AlignContentEditor
+              value={style.alignContent}
+              onChange={onChange}
+            />
           </React.Fragment>
         )}
       </div>

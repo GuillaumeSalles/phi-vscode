@@ -43,6 +43,7 @@
   "scripts": {
     "start": "npm run react:start",
     "start:all": "nf start -p 3000",
+    "start:prod": "npm run react:build -- --profile && serve -s build -l 4000",
     "build": "npm run react:build && cp -a ./server/. ./build/ && npm run electron-dist",
     "react:start": "react-scripts start",
     "react:build": "react-scripts build",

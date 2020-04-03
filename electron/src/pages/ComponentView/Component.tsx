@@ -26,7 +26,7 @@ function ComponentExampleViewer({
   refs,
   example,
   artboard,
-  applyAction
+  applyAction,
 }: ComponentExampleViewerProps) {
   /**
    * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
@@ -41,7 +41,7 @@ function ComponentExampleViewer({
   let [domRefs, setDomRefs] = useState<Map<string, HTMLBaseElement>>(new Map());
   const refCallback = useCallback(
     (id: string, element: HTMLBaseElement | null) => {
-      setDomRefs(previousDomRefs =>
+      setDomRefs((previousDomRefs) =>
         element === null
           ? del(previousDomRefs, id)
           : set(previousDomRefs, id, element)
@@ -57,17 +57,17 @@ function ComponentExampleViewer({
           color: "rgb(153, 153, 153)",
           fontSize: "12px",
           margin: "0 0 4px 0",
-          fontWeight: 400
+          fontWeight: 400,
         }}
       >
         {artboard.name} - {artboard.width}
       </h3>
       <div
         ref={containerRef}
-        onMouseLeave={event => {
+        onMouseLeave={(event) => {
           applyAction({ type: "hoverLayer" });
         }}
-        onMouseOver={event => {
+        onMouseOver={(event) => {
           const layerId = (event.target as HTMLBaseElement).getAttribute(
             "layer-id"
           );
@@ -75,7 +75,7 @@ function ComponentExampleViewer({
             applyAction({ type: "hoverLayer", layerId });
           }
         }}
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           const layerId = (event.target as HTMLBaseElement).getAttribute(
             "layer-id"
           );
@@ -90,8 +90,8 @@ function ComponentExampleViewer({
             background: artboard.backgroundColor,
             width: artboard.width,
             height: artboard.height,
-            overflow: "hidden"
-          }
+            overflow: "hidden",
+          },
         ]}
       >
         {component.layout && (
@@ -118,12 +118,12 @@ function ComponentExampleViewer({
 function Component({ component, refs, applyAction }: Props) {
   return (
     <div css={column}>
-      {Array.from(refs.artboards.entries()).map(entry => (
+      {Array.from(refs.artboards.entries()).map((entry) => (
         <div key={entry[0]} css={[column, { margin: "12px 0" }]}>
           <div css={[row]}>
             {[{ id: "default", name: "Default", props: {} }]
               .concat(component.examples)
-              .map(example => {
+              .map((example) => {
                 return (
                   <ComponentExampleViewer
                     key={example.id}

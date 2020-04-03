@@ -263,15 +263,24 @@ function PropertyEditor({
         />
       );
     case "flexDirection":
-      return <FlexDirectionEditor style={style} onChange={onChange} />;
+      return (
+        <FlexDirectionEditor value={style.flexDirection} onChange={onChange} />
+      );
     case "flexWrap":
-      return <FlexWrapEditor style={style} onChange={onChange} />;
+      return <FlexWrapEditor value={style.flexWrap} onChange={onChange} />;
     case "justifyContent":
-      return <JustifyContentEditor style={style} onChange={onChange} />;
+      return (
+        <JustifyContentEditor
+          value={style.justifyContent}
+          onChange={onChange}
+        />
+      );
     case "alignItems":
-      return <AlignItemsEditor style={style} onChange={onChange} />;
+      return <AlignItemsEditor value={style.alignItems} onChange={onChange} />;
     case "alignContent":
-      return <AlignContentEditor style={style} onChange={onChange} />;
+      return (
+        <AlignContentEditor value={style.alignContent} onChange={onChange} />
+      );
     case "backgroundColor":
       return (
         <BackgroundColorEditor style={style} onChange={onChange} refs={refs} />
@@ -320,7 +329,7 @@ function PropertyEditor({
       return (
         <LengthPropertyEditor
           label={stylePropertiesMap.get(property)!}
-          style={style}
+          value={style[property]}
           onChange={onChange}
           property={property}
           onlyPositive={true}
@@ -338,7 +347,7 @@ function PropertyEditor({
       return (
         <LengthPropertyEditor
           label={stylePropertiesMap.get(property)!}
-          style={style}
+          value={style[property]}
           onChange={onChange}
           property={property}
           onlyPositive={false}

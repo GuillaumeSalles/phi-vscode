@@ -661,7 +661,13 @@ function goToHandler(action: T.GoTo, refs: T.Refs) {
 }
 
 function updateLayerStyleHandler(action: T.UpdateLayerStyle, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  const uiState = uiStateComponentOrThrow(refs);
+  if (uiState.layerId == null) {
+    throw new Error(
+      "Expected uiState.layerId to be defined to update layer style."
+    );
+  }
+  return replaceLayer(refs, uiState.componentId, uiState.layerId, layer => {
     if (action.mediaQueryId == null) {
       return {
         style: { ...layer.style, ...action.style }

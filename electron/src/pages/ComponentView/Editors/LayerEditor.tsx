@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import * as T from "../../../types";
 import PaddingEditor from "./PaddingEditor";
 import MarginEditor from "./MarginEditor";
@@ -65,15 +65,16 @@ export default function LayerEditor<TLayer extends T.Layer>({
     setMediaQuery(id);
   };
 
-  function updateLayerStyle(style: Partial<T.LayerStyle>) {
-    applyAction({
-      type: "updateLayerStyle",
-      componentId,
-      layerId: layer.id,
-      style,
-      mediaQueryId: mediaQuery !== "default" ? mediaQuery : undefined
-    });
-  }
+  const updateLayerStyle = useCallback(
+    (style: Partial<T.LayerStyle>) => {
+      applyAction({
+        type: "updateLayerStyle",
+        style,
+        mediaQueryId: mediaQuery !== "default" ? mediaQuery : undefined
+      });
+    },
+    [applyAction, mediaQuery]
+  );
 
   // TODO: Component styling
   if (layer.type === "component") {
