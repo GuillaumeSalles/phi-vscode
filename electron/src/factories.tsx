@@ -21,7 +21,7 @@ export function generateUniqueLayerName(
   root: T.Layer | undefined
 ) {
   const existingNames = new Set(
-    layerTreeToArray(root).map(layer => layer.name)
+    layerTreeToArray(root).map((layer) => layer.name)
   );
 
   const prefix = layerTypeToName(type);
@@ -59,7 +59,7 @@ export function makeLayer(
       if (componentId == null) {
         throw new Error("ComponentId is required to create a component layer");
       }
-      return makeComponentLayer(refs, name, componentId);
+      return makeComponentLayer(refs, name, componentId, { id });
   }
   assertUnreachable(type);
 }
@@ -79,7 +79,7 @@ export function makeComponentLayer(
     bindings: {},
     style: {},
     props: {},
-    ...props
+    ...props,
   };
 }
 
@@ -94,12 +94,12 @@ export function makeImageLayer(
     tag: "img",
     props: {
       src: "",
-      alt: ""
+      alt: "",
     },
     mediaQueries: [],
     style: {},
     bindings: {},
-    ...props
+    ...props,
   };
 }
 
@@ -117,22 +117,22 @@ export function makeLinkLayer(
     bindings: {},
     props: {
       content: "link",
-      href: ""
+      href: "",
     },
     style: {
       display: "inline",
       textDecoration: {
         isStrikedThrough: false,
-        isUnderlined: true
+        isUnderlined: true,
       },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
       fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2,
-      overrides: []
+      overrides: [],
     },
-    ...props
+    ...props,
   };
 }
 
@@ -148,22 +148,22 @@ export function makeTextLayer(
     mediaQueries: [],
     bindings: {},
     props: {
-      content: "Text"
+      content: "Text",
     },
     style: {
       display: "block",
       textDecoration: {
         isStrikedThrough: false,
-        isUnderlined: false
+        isUnderlined: false,
       },
       color: makeRef(firstKey(refs.colors)),
       fontFamily: makeRef(firstKey(refs.fontFamilies)),
       fontSize: makeRef(firstKey(refs.fontSizes)),
       textAlign: "left",
       lineHeight: 1.2,
-      overrides: []
+      overrides: [],
     },
-    ...props
+    ...props,
   };
 }
 
@@ -190,16 +190,17 @@ export function makeContainerLayer(
       overrides: [],
       minHeight: "50px",
       minWidth: "50px",
-      backgroundColor: makeRef(firstKey(refs.colors))
+      backgroundColor: makeRef(firstKey(refs.colors)),
     },
-    ...props
+    ...props,
   };
 }
 
 export function makeDefaultFontFamilies(): T.FontFamiliesMap {
   const defaultFontFamily = entry({
     name: "default",
-    value: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
+    value:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
   });
   return new Map([defaultFontFamily]);
 }
@@ -216,7 +217,7 @@ export function makeDefaultBreakpoints(): T.BreakpointsMap {
     entry({ name: "small", value: px(544) }),
     entry({ name: "medium", value: px(768) }),
     entry({ name: "large", value: px(1012) }),
-    entry({ name: "xlarge", value: px(1280) })
+    entry({ name: "xlarge", value: px(1280) }),
   ]);
 }
 
@@ -241,12 +242,17 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
         name: "iPhone X",
         width: "375px",
         height: "auto",
-        backgroundColor: "white"
-      }
+        backgroundColor: "white",
+      },
     ],
     [
       iPad,
-      { name: "iPad", width: "768px", height: "auto", backgroundColor: "white" }
+      {
+        name: "iPad",
+        width: "768px",
+        height: "auto",
+        backgroundColor: "white",
+      },
     ],
     [
       iPadPro,
@@ -254,9 +260,9 @@ export function makeDefaultArtboards(): T.ArtboardsMap {
         name: "iPad Pro",
         width: "1024px",
         height: "auto",
-        backgroundColor: "white"
-      }
-    ]
+        backgroundColor: "white",
+      },
+    ],
   ]);
 }
 
@@ -267,7 +273,7 @@ export function makeComponent(
     name: "componentName",
     props: [],
     examples: [],
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -277,7 +283,7 @@ export function makeComponentProp(
   return {
     name: "component-prop-name",
     type: "text",
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -292,14 +298,14 @@ export function makeDefaultProject(): T.Refs {
     fileName: undefined,
     isSaved: false,
     uiState: {
-      type: "typography"
+      type: "typography",
     },
     artboards,
     colors,
     fontFamilies,
     fontSizes: new Map(fontSizes),
     breakpoints,
-    components: new Map()
+    components: new Map(),
   };
 
   const components: T.ComponentMap = new Map([
@@ -317,12 +323,12 @@ export function makeDefaultProject(): T.Refs {
             justifyContent: "flex-start",
             alignItems: "flex-start",
             alignContent: "stretch",
-            overrides: []
+            overrides: [],
           },
           children: [
             makeTextLayer(refs, {
               props: {
-                content: "Hello World"
+                content: "Hello World",
               },
               style: {
                 backgroundColor: makeRef(getKeyByIndex(colors, 2)),
@@ -334,13 +340,13 @@ export function makeDefaultProject(): T.Refs {
                 borderBottomLeftRadius: "3px",
                 borderBottomRightRadius: "3px",
                 borderTopLeftRadius: "3px",
-                borderTopRightRadius: "3px"
-              }
-            })
-          ]
-        })
-      }
-    ]
+                borderTopRightRadius: "3px",
+              },
+            }),
+          ],
+        }),
+      },
+    ],
   ]);
 
   refs.components = components;
@@ -348,7 +354,7 @@ export function makeDefaultProject(): T.Refs {
     type: "component",
     componentId: firstKey(components),
     isEditing: false,
-    layerEditorMode: "html"
+    layerEditorMode: "html",
   };
 
   return refs;

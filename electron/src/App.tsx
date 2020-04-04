@@ -31,12 +31,11 @@ function reducer(state: T.Refs, action: T.Action) {
   // console.group("Apply Action");
   // console.log("Action: ", action);
   const newRefs = _applyAction(action, state);
-  if (newRefs === state) {
-    return state;
+  if (newRefs !== state) {
+    onAction(action, newRefs);
   }
   // console.log("New State: ", newRefs);
   // console.groupEnd();
-  onAction(action, newRefs);
   return newRefs;
 }
 
