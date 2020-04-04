@@ -1,3 +1,5 @@
+import { Refs } from "@phi/shared";
+
 export type RefType = "fontFamilies" | "fontSizes" | "breakpoints" | "colors";
 
 export type UpdateRef = {
@@ -210,9 +212,15 @@ export type GlobalShortcutAction = {
   metaKey: boolean;
 };
 
+export type ResetAction = {
+  type: "reset";
+  refs: Refs;
+};
+
 export type Action =
   | GoTo
   | GlobalShortcutAction
+  | ResetAction
   | UpdateRef
   | DeleteRef
   | InitProject

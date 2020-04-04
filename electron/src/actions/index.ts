@@ -1098,12 +1098,18 @@ function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
   );
 }
 
+function resetHandler(action: T.ResetAction, refs: T.Refs): T.Refs {
+  return action.refs;
+}
+
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
       return goToHandler(action, refs);
     case "globalShortcutAction":
       return globalShortcutActionHandler(action, refs);
+    case "reset":
+      return resetHandler(action, refs);
     case "initProject":
       return initProjectHandler(action, refs);
     case "addComponentProp":

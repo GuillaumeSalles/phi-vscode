@@ -77,7 +77,10 @@ function App() {
   useEffect(() => {
     function listener(e: MessageEvent) {
       if (e.data.type === "setValue") {
-        //applyAction(jsonToRefs(undefined, true, JSON.parse(e.data.value)));
+        applyAction({
+          type: "reset",
+          refs: jsonToRefs(undefined, true, JSON.parse(e.data.value)),
+        });
       }
     }
 
