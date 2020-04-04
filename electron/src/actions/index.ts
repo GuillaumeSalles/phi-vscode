@@ -901,9 +901,11 @@ function handleArrowShortcutForPosition(
       refs,
       refs.uiState.componentId,
       refs.uiState.layerId,
-      () => ({
-        alignSelf: "flex-start",
-      })
+      (style) => {
+        return {
+          alignSelf: style.alignSelf === "flex-end" ? "center" : "flex-start",
+        };
+      }
     );
   }
 
@@ -917,9 +919,11 @@ function handleArrowShortcutForPosition(
       refs,
       refs.uiState.componentId,
       refs.uiState.layerId,
-      () => ({
-        alignSelf: "flex-end",
-      })
+      (style) => {
+        return {
+          alignSelf: style.alignSelf === "flex-start" ? "center" : "flex-end",
+        };
+      }
     );
   }
 
