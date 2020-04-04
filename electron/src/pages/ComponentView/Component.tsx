@@ -6,6 +6,7 @@ import { column, row } from "../../styles";
 import { useState, useCallback, useRef } from "react";
 import { Overlay } from "./Overlay";
 import { del, set } from "../../helpers/immutable-map";
+import { RefsProvider } from "./RefsContext";
 
 type Props = {
   component: T.Component;
@@ -98,7 +99,6 @@ function ComponentExampleViewer({
           <Layer
             key={component.layout.id}
             layer={component.layout}
-            refs={refs}
             width={parseInt(artboard.width.slice(0, -2))}
             props={example.props}
             refCallback={refCallback}
@@ -115,15 +115,20 @@ function ComponentExampleViewer({
   );
 }
 
+const defaultExample = {
+  id: "default",
+  name: "Default",
+  props: {},
+};
+
 function Component({ component, refs, applyAction }: Props) {
   return (
-    <div css={column}>
-      {Array.from(refs.artboards.entries()).map((entry) => (
-        <div key={entry[0]} css={[column, { margin: "12px 0" }]}>
-          <div css={[row]}>
-            {[{ id: "default", name: "Default", props: {} }]
-              .concat(component.examples)
-              .map((example) => {
+    <RefsProvider refs={refs}>
+      <div css={column}>
+        {Array.from(refs.artboards.entries()).map((entry) => (
+          <div key={entry[0]} css={[column, { margin: "12px 0" }]}>
+            <div css={[row]}>
+              {[defaultExample].concat(component.examples).map((example) => {
                 return (
                   <ComponentExampleViewer
                     key={example.id}
@@ -135,10 +140,11 @@ function Component({ component, refs, applyAction }: Props) {
                   />
                 );
               })}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </RefsProvider>
   );
 }
 

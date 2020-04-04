@@ -4,12 +4,12 @@ import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
 import { getComponentOrThrow } from "../../layerUtils";
 import { memo } from "react";
+import { useRefs } from "./RefsContext";
 
 type RefCallback = (layerId: string, element: HTMLBaseElement | null) => void;
 
 type Props = {
   layer: T.Layer;
-  refs: T.Refs;
   width: number;
   props: T.LayerProps;
   refCallback?: RefCallback;
@@ -241,7 +241,6 @@ function makeChildren(
             <Layer
               key={c.id}
               layer={c}
-              refs={refs}
               width={width}
               props={props}
               overlayLayerId={overlayLayerId}
@@ -254,7 +253,6 @@ function makeChildren(
         <Layer
           key={c.id}
           layer={c}
-          refs={refs}
           width={width}
           props={props}
           overlayLayerId={overlayLayerId}
@@ -418,7 +416,8 @@ function getNonVirtualLayer(
  * Component needs to be memoized to avoid rerendering after setState on refCallback
  */
 const Layer = memo(
-  ({ layer, refs, width, props, refCallback, overlayLayerId }: Props) => {
+  ({ layer, width, props, refCallback, overlayLayerId }: Props) => {
+    const refs = useRefs();
     const nonVirtualLayer = getNonVirtualLayer(refs, layer);
 
     if (nonVirtualLayer == null) {

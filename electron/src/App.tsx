@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useEffect, useCallback, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import * as T from "./types";
-import { useState } from "react";
 import { onAction } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -29,14 +28,14 @@ function makeInitialState(): T.Refs {
 const initialState = makeInitialState();
 
 function reducer(state: T.Refs, action: T.Action) {
-  console.group("Apply Action");
-  console.log("Action: ", action);
+  // console.group("Apply Action");
+  // console.log("Action: ", action);
   const newRefs = _applyAction(action, state);
   if (newRefs === state) {
     return state;
   }
-  console.log("New State: ", newRefs);
-  console.groupEnd();
+  // console.log("New State: ", newRefs);
+  // console.groupEnd();
   onAction(action, newRefs);
   return newRefs;
 }
@@ -49,7 +48,7 @@ function App() {
       applyAction({
         type: "globalShortcutAction",
         key: event.key,
-        metaKey: event.metaKey
+        metaKey: event.metaKey,
       });
 
       // Disable navigate back on Chrome

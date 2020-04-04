@@ -13,7 +13,7 @@ import {
   justifyContentList,
   alignItemsList,
   alignContentList,
-  borderStyleList
+  borderStyleList,
 } from "../../../constants";
 import TextInput from "../../../components/TextInput";
 import RadioIconGroup from "../../../components/RadioIconGroup";
@@ -52,7 +52,7 @@ export function ColorEditor({ style, onChange, refs }: PropsWithRefs) {
       <ColorInput
         colors={refs.colors}
         value={style.color}
-        onChange={value => onChange({ color: value })}
+        onChange={(value) => onChange({ color: value })}
       />
     </Field>
   );
@@ -61,14 +61,14 @@ export function ColorEditor({ style, onChange, refs }: PropsWithRefs) {
 export function BackgroundColorEditor({
   style,
   onChange,
-  refs
+  refs,
 }: PropsWithRefs) {
   return (
     <Field label="Background Color">
       <ColorInput
         colors={refs.colors}
         value={style.backgroundColor}
-        onChange={value => onChange({ backgroundColor: value })}
+        onChange={(value) => onChange({ backgroundColor: value })}
       />
     </Field>
   );
@@ -82,7 +82,7 @@ export function OpacityEditor({ style, onChange }: Props) {
         max={1}
         step={0.01}
         value={style.opacity != null ? style.opacity : 1}
-        onChange={opacity =>
+        onChange={(opacity) =>
           onChange({ opacity: opacity != null ? opacity : 1 })
         }
       />
@@ -97,10 +97,10 @@ export function FontSizeEditor({ style, onChange, refs }: PropsWithRefs) {
         value={
           style.fontSize != null ? style.fontSize.id : firstKey(refs.fontSizes)
         }
-        onChange={value => onChange({ fontSize: { type: "ref", id: value } })}
-        options={Array.from(refs.fontSizes.entries()).map(entry => [
+        onChange={(value) => onChange({ fontSize: { type: "ref", id: value } })}
+        options={Array.from(refs.fontSizes.entries()).map((entry) => [
           entry[0],
-          entry[1].name
+          entry[1].name,
         ])}
       />
     </Field>
@@ -114,10 +114,10 @@ export function InnerPositionPropertyEditor({ style, onChange }: Props) {
         name="text-align"
         options={[
           ["relative", () => <span>Relative</span>],
-          ["absolute", () => <span>Absolute</span>]
+          ["absolute", () => <span>Absolute</span>],
         ]}
         value={style.position == null ? "relative" : style.position}
-        onChange={position => onChange({ position })}
+        onChange={(position) => onChange({ position })}
       />
     </div>
   );
@@ -140,10 +140,12 @@ export function FontFamilyEditor({ style, onChange, refs }: PropsWithRefs) {
             ? style.fontFamily.id
             : firstKey(refs.fontFamilies)
         }
-        onChange={value => onChange({ fontFamily: { type: "ref", id: value } })}
-        options={Array.from(refs.fontFamilies.entries()).map(entry => [
+        onChange={(value) =>
+          onChange({ fontFamily: { type: "ref", id: value } })
+        }
+        options={Array.from(refs.fontFamilies.entries()).map((entry) => [
           entry[0],
-          entry[1].name
+          entry[1].name,
         ])}
       />
     </Field>
@@ -166,9 +168,9 @@ export function LineHeightEditor({ style, onChange }: Props) {
     <Field label="Line">
       <NumberInput
         value={style.lineHeight != null ? style.lineHeight : 1.2}
-        onChange={lineHeight =>
+        onChange={(lineHeight) =>
           onChange({
-            lineHeight: lineHeight === null ? 1.2 : lineHeight
+            lineHeight: lineHeight === null ? 1.2 : lineHeight,
           })
         }
       />
@@ -182,9 +184,9 @@ export function LetterSpacingEditor({ style, onChange }: Props) {
       <NumberInput
         step={0.5}
         value={style.letterSpacing != null ? style.letterSpacing.value : 0}
-        onChange={value =>
+        onChange={(value) =>
           onChange({
-            letterSpacing: value !== null ? { type: "px", value } : undefined
+            letterSpacing: value !== null ? { type: "px", value } : undefined,
           })
         }
       />
@@ -195,7 +197,7 @@ export function LetterSpacingEditor({ style, onChange }: Props) {
 export function DisplayEditor({
   style,
   onChange,
-  allowedDisplays
+  allowedDisplays,
 }: Props & {
   allowedDisplays: T.DisplayProperty[];
 }) {
@@ -203,7 +205,7 @@ export function DisplayEditor({
     <Field label="Display">
       <Select
         value={style.display || "inline"}
-        onChange={display => onChange({ display })}
+        onChange={(display) => onChange({ display })}
         options={listToEntries(allowedDisplays)}
       />
     </Field>
@@ -216,7 +218,7 @@ export const FlexDirectionEditor = memo(
       <Field label="Direction">
         <Select
           value={value || "row"}
-          onChange={flexDirection => onChange({ flexDirection })}
+          onChange={(flexDirection) => onChange({ flexDirection })}
           options={flexDirectionOptions}
         />
       </Field>
@@ -230,7 +232,7 @@ export const FlexWrapEditor = memo(
       <Field label="Wrap">
         <Select
           value={value || "nowrap"}
-          onChange={flexWrap => onChange({ flexWrap })}
+          onChange={(flexWrap) => onChange({ flexWrap })}
           options={flexWrapOptions}
         />
       </Field>
@@ -244,7 +246,7 @@ export const JustifyContentEditor = memo(
       <Field label="Justify Content">
         <Select
           value={value || "flex-start"}
-          onChange={justifyContent => onChange({ justifyContent })}
+          onChange={(justifyContent) => onChange({ justifyContent })}
           options={justifyContentOptions}
         />
       </Field>
@@ -258,7 +260,7 @@ export const AlignItemsEditor = memo(
       <Field label="Align Items">
         <Select
           value={value || "stretch"}
-          onChange={alignItems => onChange({ alignItems })}
+          onChange={(alignItems) => onChange({ alignItems })}
           options={alignItemsOptions}
         />
       </Field>
@@ -272,7 +274,7 @@ export const AlignContentEditor = memo(
       <Field label="Align Content">
         <Select
           value={value || "stretch"}
-          onChange={alignContent => onChange({ alignContent })}
+          onChange={(alignContent) => onChange({ alignContent })}
           options={alignContentOptions}
         />
       </Field>
@@ -285,12 +287,12 @@ export function BorderWidthEditor({ style, onChange, label }: Props & Label) {
     <Field label={label}>
       <LengthInput
         value={style.borderTopWidth}
-        onChange={borderWidth =>
+        onChange={(borderWidth) =>
           onChange({
             borderTopWidth: borderWidth,
             borderRightWidth: borderWidth,
             borderBottomWidth: borderWidth,
-            borderLeftWidth: borderWidth
+            borderLeftWidth: borderWidth,
           })
         }
         onlyPositive={true}
@@ -303,19 +305,19 @@ export function BorderColorEditor({
   style,
   onChange,
   refs,
-  label
+  label,
 }: PropsWithRefs & Label) {
   return (
     <Field label={label}>
       <ColorInput
         colors={refs.colors}
         value={style.borderTopColor}
-        onChange={color =>
+        onChange={(color) =>
           onChange({
             borderTopColor: color,
             borderRightColor: color,
             borderBottomColor: color,
-            borderLeftColor: color
+            borderLeftColor: color,
           })
         }
       />
@@ -329,28 +331,17 @@ export function BorderStyleEditor({ style, onChange, label }: Props & Label) {
       <Select
         value={style.borderTopStyle || "none"}
         options={borderStyleOptions}
-        onChange={style =>
+        onChange={(style) =>
           onChange({
             borderTopStyle: style,
             borderRightStyle: style,
             borderBottomStyle: style,
-            borderLeftStyle: style
+            borderLeftStyle: style,
           })
         }
       />
     </Field>
   );
-}
-
-function debugMemo(prev: any, next: any) {
-  for (const key in prev) {
-    if (prev[key] !== next[key]) {
-      console.log(`Memo failed because of ${key}`, prev, next);
-      return false;
-    }
-  }
-
-  return true;
 }
 
 export const LengthPropertyEditor = memo(
@@ -359,7 +350,7 @@ export const LengthPropertyEditor = memo(
     onChange,
     property,
     label,
-    onlyPositive
+    onlyPositive,
   }: {
     property: keyof T.LayerStyle;
     label: string;
@@ -372,19 +363,18 @@ export const LengthPropertyEditor = memo(
         <LengthInput
           onlyPositive={onlyPositive}
           value={value}
-          onChange={value => onChange({ [property]: value })}
+          onChange={(value) => onChange({ [property]: value })}
         />
       </Field>
     );
-  },
-  debugMemo
+  }
 );
 
 export function SimpleTextPropertyEditor({
   style,
   onChange,
   property,
-  label
+  label,
 }: Props & {
   property: keyof T.LayerStyle;
   label: string;
@@ -393,7 +383,7 @@ export function SimpleTextPropertyEditor({
     <Field label={label}>
       <TextInput
         value={style[property] != null ? (style[property] as string) : ""}
-        onChange={value => onChange({ [property]: value })}
+        onChange={(value) => onChange({ [property]: value })}
       />
     </Field>
   );
