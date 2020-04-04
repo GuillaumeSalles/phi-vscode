@@ -6,7 +6,7 @@ import {
   canHaveChildren,
   updateLayer,
   getComponentOrThrow,
-  findLayerByIdWithParent
+  findLayerByIdWithParent,
 } from "../layerUtils";
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
@@ -17,7 +17,7 @@ import {
   lengthToString,
   increment,
   parseLength,
-  Unit
+  Unit,
 } from "../lengthUtils";
 
 function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
@@ -27,7 +27,7 @@ function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
         type: "component",
         componentId: firstKey(components),
         isEditing: false,
-        layerEditorMode: "html"
+        layerEditorMode: "html",
       };
 }
 
@@ -41,8 +41,8 @@ function replaceComponent(
     ...refs,
     components: set(refs.components, componentId, {
       ...component,
-      ...update(component)
-    })
+      ...update(component),
+    }),
   };
 }
 
@@ -52,7 +52,7 @@ function replaceLayer<TLayer extends T.Layer>(
   layerId: string,
   update: (layer: TLayer) => Partial<TLayer>
 ) {
-  return replaceComponent(refs, componentId, component => {
+  return replaceComponent(refs, componentId, (component) => {
     if (component.layout == null) {
       throw new Error("Cannot replace layer if component.layout is null");
     }
@@ -64,8 +64,8 @@ function replaceLayer<TLayer extends T.Layer>(
       ...component,
       layout: updateLayer(component.layout, {
         ...layer,
-        ...update(layer as TLayer)
-      })
+        ...update(layer as TLayer),
+      }),
     };
   });
 }
@@ -76,13 +76,13 @@ function replaceLayerStyle(
   layerId: string,
   update: (style: T.LayerStyle) => Partial<LayerStyle>
 ) {
-  return replaceLayer(refs, componentId, layerId, layer => {
+  return replaceLayer(refs, componentId, layerId, (layer) => {
     return {
       ...layer,
       style: {
         ...layer.style,
-        ...update(layer.style)
-      }
+        ...update(layer.style),
+      },
     };
   });
 }
@@ -93,7 +93,7 @@ function visitLayer(root: T.Layer, visitor: LayerVisitor): T.Layer {
     case "link":
       return {
         ...visitor(root),
-        children: root.children.map(child => visitLayer(child, visitor))
+        children: root.children.map((child) => visitLayer(child, visitor)),
       };
     default:
       return visitor(root);
@@ -104,8 +104,8 @@ export function addComponentPropHandler(
   action: T.AddComponentProp,
   refs: T.Refs
 ) {
-  return replaceComponent(refs, action.componentId, c => ({
-    props: [...c.props, { name: action.prop, type: "text" }]
+  return replaceComponent(refs, action.componentId, (c) => ({
+    props: [...c.props, { name: action.prop, type: "text" }],
   }));
 }
 
@@ -124,7 +124,7 @@ export function editComponentPropHandler(
               component,
               action.oldProp,
               action.newProp
-            )
+            ),
           ];
         }
 
@@ -135,10 +135,10 @@ export function editComponentPropHandler(
             action.componentId,
             action.oldProp,
             action.newProp
-          )
+          ),
         ];
       })
-    )
+    ),
   };
 }
 
@@ -149,12 +149,12 @@ function renamePropertyFromComponent(
 ): T.Component {
   const newComponent = {
     ...component,
-    props: component.props.map(prop =>
+    props: component.props.map((prop) =>
       prop.name === oldProp ? { name: newProp, type: prop.type } : prop
-    )
+    ),
   };
   if (component.layout) {
-    newComponent.layout = visitLayer(component.layout, layer =>
+    newComponent.layout = visitLayer(component.layout, (layer) =>
       renameAllBindingsThatUseProp(layer, oldProp, newProp)
     );
   }
@@ -167,7 +167,9 @@ function renameAllBindingsThatUseProp<T extends T.Layer>(
   newProp: string
 ): T {
   if (
-    Object.values(layer.bindings).some(binding => binding.propName === oldProp)
+    Object.values(layer.bindings).some(
+      (binding) => binding.propName === oldProp
+    )
   ) {
     return {
       ...layer,
@@ -181,7 +183,7 @@ function renameAllBindingsThatUseProp<T extends T.Layer>(
           return newBindings;
         },
         {} as T.Bindings
-      )
+      ),
     };
   }
   return layer;
@@ -199,17 +201,17 @@ function renamePropertyFromComponentLayer(
 
   return {
     ...component,
-    layout: visitLayer(component.layout, layer => {
+    layout: visitLayer(component.layout, (layer) => {
       if (isComponentLayer(layer) && layer.componentId === childComponentId) {
         const props = {
-          ...layer.props
+          ...layer.props,
         };
         const propValue = props[oldProp];
         delete props[oldProp];
         props[newProp] = propValue;
 
         const bindings = {
-          ...layer.bindings
+          ...layer.bindings,
         };
         const bindingValue = bindings[oldProp];
         delete bindings[oldProp];
@@ -217,11 +219,11 @@ function renamePropertyFromComponentLayer(
         return {
           ...layer,
           props,
-          bindings
+          bindings,
         };
       }
       return layer;
-    })
+    }),
   };
 }
 
@@ -236,7 +238,7 @@ export function deleteComponentPropHandler(
         if (componentId === action.componentId) {
           return [
             componentId,
-            deletePropertyFromComponent(component, action.prop)
+            deletePropertyFromComponent(component, action.prop),
           ];
         }
 
@@ -246,10 +248,10 @@ export function deleteComponentPropHandler(
             component,
             action.componentId,
             action.prop
-          )
+          ),
         ];
       })
-    )
+    ),
   };
 }
 
@@ -259,10 +261,10 @@ function deletePropertyFromComponent(
 ): T.Component {
   const newComponent = {
     ...component,
-    props: component.props.filter(prop => prop.name !== propName)
+    props: component.props.filter((prop) => prop.name !== propName),
   };
   if (component.layout) {
-    newComponent.layout = visitLayer(component.layout, layer =>
+    newComponent.layout = visitLayer(component.layout, (layer) =>
       deleteAllBindingsThatUseProp(layer, propName)
     );
   }
@@ -280,18 +282,18 @@ function deletePropertyFromComponentLayer(
 
   return {
     ...component,
-    layout: visitLayer(component.layout, layer => {
+    layout: visitLayer(component.layout, (layer) => {
       if (isComponentLayer(layer) && layer.componentId === childComponentId) {
         const { [propName]: unusedProp, ...props } = layer.props;
         const { [propName]: unusedBinding, ...bindings } = layer.bindings;
         return {
           ...layer,
           props,
-          bindings
+          bindings,
         };
       }
       return layer;
-    })
+    }),
   };
 }
 
@@ -300,7 +302,9 @@ function deleteAllBindingsThatUseProp<T extends T.Layer>(
   propName: string
 ): T {
   if (
-    Object.values(layer.bindings).some(binding => binding.propName === propName)
+    Object.values(layer.bindings).some(
+      (binding) => binding.propName === propName
+    )
   ) {
     return {
       ...layer,
@@ -312,7 +316,7 @@ function deleteAllBindingsThatUseProp<T extends T.Layer>(
           return newBindings;
         },
         {} as T.Bindings
-      )
+      ),
     };
   }
   return layer;
@@ -322,8 +326,8 @@ export function renameComponentHandler(
   action: T.RenameComponent,
   refs: T.Refs
 ) {
-  return replaceComponent(refs, action.componentId, c => ({
-    name: action.name
+  return replaceComponent(refs, action.componentId, (c) => ({
+    name: action.name,
   }));
 }
 
@@ -335,7 +339,7 @@ export function deleteComponentHandler(
   return {
     ...refs,
     components,
-    uiState: goToFirstComponentOrDefault(components)
+    uiState: goToFirstComponentOrDefault(components),
   };
 }
 
@@ -343,8 +347,8 @@ export function addComponentExampleHandler(
   action: T.AddComponentExample,
   refs: T.Refs
 ) {
-  return replaceComponent(refs, action.componentId, c => ({
-    examples: c.examples.concat([{ props: {}, name: action.name, id: uuid() }])
+  return replaceComponent(refs, action.componentId, (c) => ({
+    examples: c.examples.concat([{ props: {}, name: action.name, id: uuid() }]),
   }));
 }
 
@@ -352,8 +356,8 @@ export function deleteComponentExampleHandler(
   action: T.DeleteComponentExample,
   refs: T.Refs
 ) {
-  return replaceComponent(refs, action.componentId, c => ({
-    examples: c.examples.filter(e => e.id !== action.id)
+  return replaceComponent(refs, action.componentId, (c) => ({
+    examples: c.examples.filter((e) => e.id !== action.id),
   }));
 }
 
@@ -361,18 +365,18 @@ export function updateComponentExamplePropHandler(
   action: T.UpdateComponentExampleProp,
   refs: T.Refs
 ) {
-  return replaceComponent(refs, action.componentId, c => ({
-    examples: c.examples.map(example =>
+  return replaceComponent(refs, action.componentId, (c) => ({
+    examples: c.examples.map((example) =>
       example.id === action.exampleId
         ? {
             ...example,
             props: {
               ...example.props,
-              [action.prop]: action.value
-            }
+              [action.prop]: action.value,
+            },
           }
         : example
-    )
+    ),
   }));
 }
 
@@ -382,7 +386,6 @@ function addLayer(
   newLayer: T.Layer
 ): T.Layer | undefined {
   if (!root) {
-    console.log("root is undefined");
     return newLayer;
   }
 
@@ -399,14 +402,14 @@ function addLayer(
   if (canHaveChildren(layer)) {
     return updateLayer(root, {
       ...layer,
-      children: [...layer.children].concat(newLayer)
+      children: [...layer.children].concat(newLayer),
     });
   }
 
   if (parent) {
     return updateLayer(root, {
       ...parent,
-      children: [...parent.children].concat(newLayer)
+      children: [...parent.children].concat(newLayer),
     });
   }
 }
@@ -415,7 +418,7 @@ export function addLayerActionHandler(
   action: T.AddLayer,
   refs: T.Refs
 ): T.Refs {
-  const result = replaceComponent(refs, action.componentId, component => {
+  const result = replaceComponent(refs, action.componentId, (component) => {
     const newLayer = makeLayer(
       action.layerId,
       action.layerType,
@@ -425,15 +428,15 @@ export function addLayerActionHandler(
     );
     return {
       ...component,
-      layout: addLayer(component.layout, action.parentLayerId, newLayer)
+      layout: addLayer(component.layout, action.parentLayerId, newLayer),
     };
   });
   return {
     ...result,
     uiState: {
       ...uiStateComponentOrThrow(refs),
-      layerId: action.layerId
-    }
+      layerId: action.layerId,
+    },
   };
 }
 
@@ -452,8 +455,8 @@ function deleteLayer(
   return {
     ...root,
     children: root.children
-      .map(child => deleteLayer(child, layerIdToDelete))
-      .filter(x => x !== undefined) as T.Layer[]
+      .map((child) => deleteLayer(child, layerIdToDelete))
+      .filter((x) => x !== undefined) as T.Layer[],
   };
 }
 
@@ -462,10 +465,10 @@ function deleteComponentLayer(
   componentId: string,
   layerId: string
 ) {
-  const result = replaceComponent(refs, componentId, component => {
+  const result = replaceComponent(refs, componentId, (component) => {
     return {
       ...component,
-      layout: deleteLayer(component.layout!, layerId)
+      layout: deleteLayer(component.layout!, layerId),
     };
   });
 
@@ -473,8 +476,8 @@ function deleteComponentLayer(
     ...result,
     uiState: {
       ...uiStateComponentOrThrow(refs),
-      layerId: undefined
-    }
+      layerId: undefined,
+    },
   };
 }
 
@@ -487,13 +490,13 @@ function selectLayerHandler(action: T.SelectLayer, refs: T.Refs): T.Refs {
     ...refs,
     uiState: {
       ...uiStateComponentOrThrow(refs),
-      layerId: action.layerId
-    }
+      layerId: action.layerId,
+    },
   };
 }
 
 function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
-  const result = replaceComponent(refs, action.componentId, component => {
+  const result = replaceComponent(refs, action.componentId, (component) => {
     const layer = findLayerById(component.layout!, action.layerId);
 
     if (!layer) {
@@ -504,8 +507,8 @@ function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
       ...component,
       layout: updateLayer(component.layout, {
         ...layer,
-        name: action.name
-      })
+        name: action.name,
+      }),
     };
   });
 
@@ -516,8 +519,8 @@ function renameLayerHandler(action: T.RenameLayer, refs: T.Refs): T.Refs {
     uiState: {
       ...uiState,
       componentId: action.componentId,
-      layerId: action.layerId
-    }
+      layerId: action.layerId,
+    },
   };
 }
 
@@ -555,15 +558,15 @@ function insertLayer(
         children: root.children
           .slice(0, position)
           .concat([toInsert])
-          .concat(root.children.slice(position))
+          .concat(root.children.slice(position)),
       };
     }
 
     return {
       ...root,
-      children: root.children.map(child =>
+      children: root.children.map((child) =>
         insertLayer(child, toInsert, parentId, position)
-      )
+      ),
     };
   }
 
@@ -575,7 +578,7 @@ function insertLayer(
 }
 
 function moveLayerActionHandler(action: T.MoveLayer, refs: T.Refs) {
-  return replaceComponent(refs, action.componentId, component => {
+  return replaceComponent(refs, action.componentId, (component) => {
     return {
       ...component,
       layout: moveLayer(
@@ -583,48 +586,48 @@ function moveLayerActionHandler(action: T.MoveLayer, refs: T.Refs) {
         action.layerId,
         action.parentId,
         action.position
-      )
+      ),
     };
   });
 }
 
 function updateLayerPropHandler(action: T.UpdateLayerProp, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
     return {
-      props: { ...layer.props, [action.name]: action.value }
+      props: { ...layer.props, [action.name]: action.value },
     };
   });
 }
 
 function updateLayerTagHandler(action: T.UpdateLayerTag, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
     if (layer.type !== "text") {
       throw new Error(
         "Replace tag value is only supported for text layer for now"
       );
     }
     return {
-      tag: action.tag
+      tag: action.tag,
     };
   });
 }
 
 function updateLayerBindingHandler(action: T.UpdateLayerBinding, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
     return {
       bindings: {
         ...layer.bindings,
-        [action.layerProp]: { propName: action.componentProp }
-      }
+        [action.layerProp]: { propName: action.componentProp },
+      },
     };
   });
 }
 
 function deleteLayerBindingHandler(action: T.DeleteLayerBinding, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
     const { [action.layerProp]: unusedValue, ...newBindings } = layer.bindings;
     return {
-      bindings: newBindings
+      bindings: newBindings,
     };
   });
 }
@@ -635,62 +638,68 @@ function addComponentHandler(action: T.AddComponent, refs: T.Refs): T.Refs {
     components: set(refs.components, action.componentId, {
       name: action.name,
       props: [],
-      examples: []
+      examples: [],
     }),
     uiState: {
       type: "component",
       componentId: action.componentId,
       isEditing: true,
-      layerEditorMode: "html"
-    }
+      layerEditorMode: "html",
+    },
   };
 }
 
 function initProjectHandler(action: T.InitProject, refs: T.Refs): T.Refs {
   return {
     ...action.refs,
-    uiState: goToFirstComponentOrDefault(action.refs.components)
+    uiState: goToFirstComponentOrDefault(action.refs.components),
   };
 }
 
 function goToHandler(action: T.GoTo, refs: T.Refs) {
   return {
     ...refs,
-    uiState: action.to
+    uiState: action.to,
   };
 }
 
 function updateLayerStyleHandler(action: T.UpdateLayerStyle, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  const uiState = uiStateComponentOrThrow(refs);
+  if (uiState.layerId == null) {
+    throw new Error(
+      "Expected uiState.layerId to be defined to update layer style."
+    );
+  }
+  return replaceLayer(refs, uiState.componentId, uiState.layerId, (layer) => {
     if (action.mediaQueryId == null) {
       return {
-        style: { ...layer.style, ...action.style }
+        style: { ...layer.style, ...action.style },
       };
     }
     return {
-      mediaQueries: layer.mediaQueries.map(mq =>
+      mediaQueries: layer.mediaQueries.map((mq) =>
         mq.id === action.mediaQueryId
           ? {
               ...mq,
-              style: { ...mq.style, ...action.style }
+              style: { ...mq.style, ...action.style },
             }
           : mq
-      )
+      ),
     };
   });
 }
 
 function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, layer => {
+  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
     return {
       mediaQueries: [
         ...layer.mediaQueries,
         {
           id: action.mediaQueryId,
           minWidth: { type: "ref", id: action.breakpointId },
-          style: { ...layer.style }
-        }
-      ]
+          style: { ...layer.style },
+        },
+      ],
     };
   });
 }
@@ -698,7 +707,7 @@ function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs) {
 function updateRefHandler(action: T.UpdateRef, refs: T.Refs): T.Refs {
   return {
     ...refs,
-    [action.refType]: set(refs[action.refType], action.refId, action.newRef)
+    [action.refType]: set(refs[action.refType], action.refId, action.newRef),
   };
 }
 
@@ -708,7 +717,7 @@ function deleteRefHandler(action: T.DeleteRef, refs: T.Refs): T.Refs {
     [action.refType]: del(
       refs[action.refType] as Map<string, any>,
       action.refId
-    )
+    ),
   };
 }
 
@@ -723,8 +732,8 @@ function editComponentHandler(action: T.EditComponent, refs: T.Refs): T.Refs {
     uiState: {
       ...refs.uiState,
       isEditing: true,
-      layerId: component.layout?.id
-    }
+      layerId: component.layout?.id,
+    },
   };
 }
 
@@ -740,8 +749,8 @@ function stopEditComponentHandler(
     uiState: {
       ...refs.uiState,
       layerId: undefined,
-      isEditing: false
-    }
+      isEditing: false,
+    },
   };
 }
 
@@ -753,8 +762,8 @@ function setLayerEditorModeHandler(
     ...refs,
     uiState: {
       ...uiStateComponentOrThrow(refs),
-      layerEditorMode: action.mode
-    }
+      layerEditorMode: action.mode,
+    },
   };
 }
 
@@ -763,8 +772,8 @@ function hoverLayerHandler(action: T.HoverLayer, refs: T.Refs): T.Refs {
     ...refs,
     uiState: {
       ...uiStateComponentOrThrow(refs),
-      hoveredLayerId: action.layerId
-    }
+      hoveredLayerId: action.layerId,
+    },
   };
 }
 
@@ -796,9 +805,9 @@ function moveChildPositionUp(
     return refs;
   }
 
-  return replaceComponent(refs, componentId, component => {
+  return replaceComponent(refs, componentId, (component) => {
     return {
-      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex - 1)
+      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex - 1),
     };
   });
 }
@@ -815,9 +824,9 @@ function moveChildPositionDown(
     return refs;
   }
 
-  return replaceComponent(refs, componentId, component => {
+  return replaceComponent(refs, componentId, (component) => {
     return {
-      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex + 1)
+      layout: moveLayer(component.layout!, layer.id, parent.id, childIndex + 1),
     };
   });
 }
@@ -893,7 +902,7 @@ function handleArrowShortcutForPosition(
       refs.uiState.componentId,
       refs.uiState.layerId,
       () => ({
-        alignSelf: "flex-start"
+        alignSelf: "flex-start",
       })
     );
   }
@@ -909,7 +918,7 @@ function handleArrowShortcutForPosition(
       refs.uiState.componentId,
       refs.uiState.layerId,
       () => ({
-        alignSelf: "flex-end"
+        alignSelf: "flex-end",
       })
     );
   }
@@ -933,7 +942,7 @@ function handleArrowShortcutForSize(
     refs,
     refs.uiState.componentId,
     refs.uiState.layerId,
-    style => {
+    (style) => {
       const propertyName =
         key === "ArrowUp" || key === "ArrowDown" ? "height" : "width";
       const value = style[propertyName];
@@ -943,7 +952,7 @@ function handleArrowShortcutForSize(
           : decrement(value, true);
 
       return {
-        [propertyName]: newValue ? lengthToString(newValue) : undefined
+        [propertyName]: newValue ? lengthToString(newValue) : undefined,
       };
     }
   );
@@ -1046,7 +1055,7 @@ function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
     refs,
     uiState.componentId,
     uiState.layerId,
-    style => {
+    (style) => {
       const offsetX = calculateResizeOffsetX(action);
       const offsetY = calculateResizeOffsetY(action);
 
@@ -1059,11 +1068,11 @@ function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
           lengthWidth
             ? {
                 value: lengthWidth.value + offsetX,
-                unit: lengthWidth.unit
+                unit: lengthWidth.unit,
               }
             : {
                 value: action.canvasSize.width + offsetX,
-                unit: "px" as Unit
+                unit: "px" as Unit,
               }
         );
       }
@@ -1075,11 +1084,11 @@ function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
           lengthHeight
             ? {
                 value: lengthHeight.value + offsetY,
-                unit: lengthHeight.unit
+                unit: lengthHeight.unit,
               }
             : {
                 value: action.canvasSize.height + offsetY,
-                unit: "px" as Unit
+                unit: "px" as Unit,
               }
         );
       }

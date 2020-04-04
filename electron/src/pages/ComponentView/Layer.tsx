@@ -4,12 +4,12 @@ import * as T from "../../types";
 import { assertUnreachable } from "../../utils";
 import { getComponentOrThrow } from "../../layerUtils";
 import { memo } from "react";
+import { useRefs } from "./RefsContext";
 
 type RefCallback = (layerId: string, element: HTMLBaseElement | null) => void;
 
 type Props = {
   layer: T.Layer;
-  refs: T.Refs;
   width: number;
   props: T.LayerProps;
   refCallback?: RefCallback;
@@ -85,15 +85,15 @@ function getLayerStyles(
   width: number
 ) {
   const styles = mediaQueries
-    .map(mq => {
+    .map((mq) => {
       return {
         minWidth: refs.breakpoints.get(mq.minWidth.id)!.value.value,
-        style: mq.style
+        style: mq.style,
       };
     })
-    .filter(mq => mq.minWidth <= width)
+    .filter((mq) => mq.minWidth <= width)
     .sort((a, b) => a.minWidth - b.minWidth)
-    .map(mq => mq.style);
+    .map((mq) => mq.style);
   styles.unshift(defaultStyle);
   return styles;
 }
@@ -102,7 +102,7 @@ function merge<TItem>(array: TItem[]): TItem {
   return array.reduce((previousItem, currentItem) => {
     return {
       ...previousItem,
-      ...currentItem
+      ...currentItem,
     };
   });
 }
@@ -143,12 +143,12 @@ function makeDisplayStyle(style: T.Display) {
       flexWrap: style.flexWrap,
       justifyContent: style.justifyContent,
       alignItems: style.alignItems,
-      alignContent: style.alignContent
+      alignContent: style.alignContent,
     };
   }
 
   return {
-    display: style.display
+    display: style.display,
   };
 }
 
@@ -194,7 +194,7 @@ function makeTextLayerStyle(style: T.LayerStyle, refs: T.Refs) {
     textAlign: style.textAlign,
     textDecoration: textDecorationToCss(style),
     alignSelf: style.alignSelf,
-    ...makeStyleOverrides(style, refs)
+    ...makeStyleOverrides(style, refs),
   };
 }
 
@@ -208,7 +208,7 @@ function makeLayerStyle(
     layer.mediaQueries,
     refs,
     width
-  ).map(style => makeTextLayerStyle(style, refs));
+  ).map((style) => makeTextLayerStyle(style, refs));
   return merge(styles);
 }
 
@@ -237,11 +237,10 @@ function makeChildren(
       return contentOrBindingContent(layer, props);
     case "link":
       return layer.children.length > 0
-        ? layer.children.map(c => (
+        ? layer.children.map((c) => (
             <Layer
               key={c.id}
               layer={c}
-              refs={refs}
               width={width}
               props={props}
               overlayLayerId={overlayLayerId}
@@ -250,11 +249,10 @@ function makeChildren(
           ))
         : contentOrBindingContent(layer, props);
     case "container":
-      return layer.children.map(c => (
+      return layer.children.map((c) => (
         <Layer
           key={c.id}
           layer={c}
-          refs={refs}
           width={width}
           props={props}
           overlayLayerId={overlayLayerId}
@@ -276,7 +274,7 @@ function makeDimensionsStyle(layer: T.Dimensions) {
     maxHeight: layer.maxHeight ? layer.maxHeight : "auto",
     width: layer.width ? layer.width : "auto",
     minWidth: layer.minWidth ? layer.minWidth : "auto",
-    maxWidth: layer.maxWidth ? layer.maxWidth : "auto"
+    maxWidth: layer.maxWidth ? layer.maxWidth : "auto",
   };
 }
 
@@ -285,7 +283,7 @@ function makeMarginStyle(layer: T.Margin) {
     marginTop: layer.marginTop,
     marginRight: layer.marginRight,
     marginBottom: layer.marginBottom,
-    marginLeft: layer.marginLeft
+    marginLeft: layer.marginLeft,
   };
 }
 
@@ -294,7 +292,7 @@ function makePaddingStyle(layer: T.Padding) {
     paddingTop: layer.paddingTop,
     paddingRight: layer.paddingRight,
     paddingBottom: layer.paddingBottom,
-    paddingLeft: layer.paddingLeft
+    paddingLeft: layer.paddingLeft,
   };
 }
 
@@ -319,7 +317,7 @@ function imagePropToSrc(src: string | undefined) {
   return src;
 }
 
-function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
+function makeLayerProps(layer: T.Layer) {
   switch (layer.type) {
     case "image":
       const src = imagePropToSrc(layer.props.src);
@@ -328,14 +326,14 @@ function makeLayerProps(layer: T.Layer, refs: T.Refs, width: number) {
         src,
         height: layer.props.height,
         width: layer.props.width,
-        alt: layer.props.alt
+        alt: layer.props.alt,
       };
     case "text":
     case "container":
       return {};
     case "link":
       return {
-        href: layer.props.href
+        href: layer.props.href,
       };
     case "component":
       return layer.props;
@@ -349,7 +347,7 @@ function applyBindings(
   componentProps: T.LayerProps
 ) {
   const newProps = {
-    ...props
+    ...props,
   };
   for (let prop in layer.bindings) {
     const value = componentProps[layer.bindings[prop].propName];
@@ -378,11 +376,7 @@ export function makeJsxLayerProps(
     if (component.layout == null) {
       return {};
     }
-    const _props = applyBindings(
-      makeLayerProps(layer, refs, width),
-      layer,
-      props
-    );
+    const _props = applyBindings(makeLayerProps(layer), layer, props);
     return makeJsxLayerProps(
       component.layout,
       refs,
@@ -394,11 +388,7 @@ export function makeJsxLayerProps(
   }
 
   const css = makeLayerStyle(layer, refs, width);
-  const result = applyBindings(
-    makeLayerProps(layer, refs, width),
-    layer,
-    props
-  );
+  const result = applyBindings(makeLayerProps(layer), layer, props);
   result.css = css;
   result.ref = ref;
   result.key = layer.id;
@@ -426,7 +416,8 @@ function getNonVirtualLayer(
  * Component needs to be memoized to avoid rerendering after setState on refCallback
  */
 const Layer = memo(
-  ({ layer, refs, width, props, refCallback, overlayLayerId }: Props) => {
+  ({ layer, width, props, refCallback, overlayLayerId }: Props) => {
+    const refs = useRefs();
     const nonVirtualLayer = getNonVirtualLayer(refs, layer);
 
     if (nonVirtualLayer == null) {
@@ -443,7 +434,7 @@ const Layer = memo(
         width,
         props,
         overlayLayerId == null ? layer.id : overlayLayerId,
-        refCallback ? element => refCallback(layer.id, element) : undefined
+        refCallback ? (element) => refCallback(layer.id, element) : undefined
       ),
       makeChildren(
         nonVirtualLayer,

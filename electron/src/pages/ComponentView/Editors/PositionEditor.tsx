@@ -33,28 +33,28 @@ export default function PositionEditor({
           <div css={[row, { paddingTop: "8px" }]}>
             <LengthPropertyEditor
               label="Top"
-              style={style}
+              value={style.top}
               onChange={onChange}
               property="top"
               onlyPositive={false}
             />
             <LengthPropertyEditor
               label="Right"
-              style={style}
+              value={style.right}
               onChange={onChange}
               property="right"
               onlyPositive={false}
             />
             <LengthPropertyEditor
               label="Bottom"
-              style={style}
+              value={style.bottom}
               onChange={onChange}
               property="bottom"
               onlyPositive={false}
             />
             <LengthPropertyEditor
               label="Left"
-              style={style}
+              value={style.left}
               onChange={onChange}
               property="left"
               onlyPositive={false}

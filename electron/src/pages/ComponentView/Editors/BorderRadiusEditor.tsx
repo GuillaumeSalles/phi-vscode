@@ -16,28 +16,28 @@ export default function BorderRadius({ style, onChange }: Props) {
       <div css={row}>
         <LengthPropertyEditor
           label="T/L"
-          style={style}
+          value={style.borderTopLeftRadius}
           onChange={onChange}
           property="borderTopLeftRadius"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="T/R"
-          style={style}
+          value={style.borderTopRightRadius}
           onChange={onChange}
           property="borderTopRightRadius"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="B/R"
-          style={style}
+          value={style.borderBottomRightRadius}
           onChange={onChange}
           property="borderBottomRightRadius"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="B/L"
-          style={style}
+          value={style.borderBottomLeftRadius}
           onChange={onChange}
           property="borderBottomLeftRadius"
           onlyPositive={true}

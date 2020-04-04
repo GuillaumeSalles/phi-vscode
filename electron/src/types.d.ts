@@ -146,8 +146,6 @@ export type DeleteLayerBinding = {
 
 export type UpdateLayerStyle = {
   type: "updateLayerStyle";
-  componentId: string;
-  layerId: string;
   style: Partial<LayerStyle>;
   mediaQueryId?: string;
 };

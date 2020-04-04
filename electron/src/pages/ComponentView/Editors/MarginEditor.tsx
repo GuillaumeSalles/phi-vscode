@@ -16,28 +16,28 @@ export default function MarginEditor({ margin, onChange }: Props) {
       <div css={row}>
         <LengthPropertyEditor
           label="Top"
-          style={margin}
+          value={margin.marginTop}
           onChange={onChange}
           property="marginTop"
           onlyPositive={false}
         />
         <LengthPropertyEditor
           label="Right"
-          style={margin}
+          value={margin.marginRight}
           onChange={onChange}
           property="marginRight"
           onlyPositive={false}
         />
         <LengthPropertyEditor
           label="Bottom"
-          style={margin}
+          value={margin.marginBottom}
           onChange={onChange}
           property="marginBottom"
           onlyPositive={false}
         />
         <LengthPropertyEditor
           label="Left"
-          style={margin}
+          value={margin.marginLeft}
           onChange={onChange}
           property="marginLeft"
           onlyPositive={false}

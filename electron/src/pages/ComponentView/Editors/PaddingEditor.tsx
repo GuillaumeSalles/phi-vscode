@@ -16,28 +16,28 @@ export default function PaddingEditor({ padding, onChange }: Props) {
       <div css={row}>
         <LengthPropertyEditor
           label="Top"
-          style={padding}
+          value={padding.paddingTop}
           onChange={onChange}
           property="paddingTop"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="Right"
-          style={padding}
+          value={padding.paddingRight}
           onChange={onChange}
           property="paddingRight"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="Bottom"
-          style={padding}
+          value={padding.paddingBottom}
           onChange={onChange}
           property="paddingBottom"
           onlyPositive={true}
         />
         <LengthPropertyEditor
           label="Left"
-          style={padding}
+          value={padding.paddingLeft}
           onChange={onChange}
           property="paddingLeft"
           onlyPositive={true}

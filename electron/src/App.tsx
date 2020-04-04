@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useEffect, useCallback } from "react";
+import { useEffect, useReducer } from "react";
 import * as T from "./types";
-import { useState } from "react";
 import { onAction } from "./bridge";
 import Colors from "./pages/Colors";
 import Typography from "./pages/Typography";
@@ -28,31 +27,28 @@ function makeInitialState(): T.Refs {
 
 const initialState = makeInitialState();
 
-function App() {
-  const [refs, setRefs] = useState<T.Refs>(initialState);
+function reducer(state: T.Refs, action: T.Action) {
+  // console.group("Apply Action");
+  // console.log("Action: ", action);
+  const newRefs = _applyAction(action, state);
+  if (newRefs === state) {
+    return state;
+  }
+  // console.log("New State: ", newRefs);
+  // console.groupEnd();
+  onAction(action, newRefs);
+  return newRefs;
+}
 
-  const applyAction = useCallback(
-    (action: T.Action) => {
-      console.group("Apply Action");
-      console.log("Action: ", action);
-      const newRefs = _applyAction(action, refs);
-      if (newRefs === refs) {
-        return;
-      }
-      console.log("New State: ", newRefs);
-      console.groupEnd();
-      onAction(action, newRefs);
-      setRefs(newRefs);
-    },
-    [refs]
-  );
+function App() {
+  const [refs, applyAction] = useReducer(reducer, initialState);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       applyAction({
         type: "globalShortcutAction",
         key: event.key,
-        metaKey: event.metaKey
+        metaKey: event.metaKey,
       });
 
       // Disable navigate back on Chrome
@@ -76,12 +72,12 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [applyAction, refs]);
+  }, [refs]);
 
   useEffect(() => {
     function listener(e: MessageEvent) {
       if (e.data.type === "setValue") {
-        setRefs(jsonToRefs(undefined, true, JSON.parse(e.data.value)));
+        //applyAction(jsonToRefs(undefined, true, JSON.parse(e.data.value)));
       }
     }
 

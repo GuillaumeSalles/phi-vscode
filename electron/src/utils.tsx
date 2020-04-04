@@ -1,3 +1,5 @@
+import React from "react";
+
 export function getContrastColor(hex: string) {
   if (hex.indexOf("#") === 0) {
     hex = hex.slice(1);
@@ -19,7 +21,7 @@ export function getContrastColor(hex: string) {
 export function listToEntries<TKey extends string>(
   items: TKey[]
 ): Array<[TKey, string]> {
-  return items.map(item => [item, item]);
+  return items.map((item) => [item, item]);
 }
 
 export function assertUnreachable(x: never): never {
@@ -41,7 +43,7 @@ const keysToBlock = new Set([
   "ArrowUp",
   "ArrowDown",
   "ArrowLeft",
-  "ArrowRight"
+  "ArrowRight",
 ]);
 
 /**
@@ -51,4 +53,17 @@ export function stopKeydownPropagationIfNecessary(event: React.KeyboardEvent) {
   if (keysToBlock.has(event.key)) {
     event.stopPropagation();
   }
+}
+
+export function shallowEqualForPropsWithLogs(prev: any, next: any) {
+  // TODO: Handle missing keys
+  for (const key in prev) {
+    if (prev[key] !== next[key]) {
+      console.log(`Memo failed because of ${key}`, prev, next);
+      return false;
+    }
+  }
+
+  console.log(`Memo successful`, prev, next);
+  return true;
 }
