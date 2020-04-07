@@ -149,7 +149,6 @@ export type DeleteLayerBinding = {
 export type UpdateLayerStyle = {
   type: "updateLayerStyle";
   style: Partial<LayerStyle>;
-  mediaQueryId?: string;
 };
 
 export type AddMediaQuery = {
@@ -217,6 +216,11 @@ export type ResetAction = {
   refs: Refs;
 };
 
+export type SelectMediaQuery = {
+  type: "selectMediaQuery";
+  mediaQuery?: string;
+};
+
 export type Action =
   | GoTo
   | GlobalShortcutAction
@@ -229,6 +233,7 @@ export type Action =
   | RenameLayer
   | MoveLayer
   | MoveLayerUpOrDown
+  | SelectMediaQuery
   | SelectLayer
   | HoverLayer
   | ResizeLayer

@@ -16,8 +16,9 @@ import StyleOverridesEditor from "./StyleOverridesEditor";
 import TypographyEditor from "./TypographyEditor";
 import {
   assertUnreachable,
-  stopKeydownPropagationIfNecessary
+  stopKeydownPropagationIfNecessary,
 } from "../../../utils";
+import { uiStateComponentOrThrow } from "../../../refsUtil";
 
 type Props<TLayer> = {
   layer: TLayer;
@@ -46,13 +47,14 @@ export default function LayerEditor<TLayer extends T.Layer>({
   componentId,
   applyAction,
   refs,
-  parentLayer
+  parentLayer,
 }: Props<TLayer>) {
-  const [mediaQuery, setMediaQuery] = useState("default");
-  const isDefault = mediaQuery === "default";
+  const uiState = uiStateComponentOrThrow(refs);
+  const mediaQuery = uiState.mediaQuery;
+  const isDefault = mediaQuery == null;
   const style = isDefault
     ? layer.style
-    : layer.mediaQueries.find(mq => mq.id === mediaQuery)!.style;
+    : layer.mediaQueries.find((mq) => mq.id === mediaQuery)!.style;
 
   const addMediaQuery = (id: string, breakpoint: T.Ref): void => {
     applyAction({
@@ -60,9 +62,8 @@ export default function LayerEditor<TLayer extends T.Layer>({
       componentId,
       layerId: layer.id,
       mediaQueryId: id,
-      breakpointId: breakpoint.id
+      breakpointId: breakpoint.id,
     });
-    setMediaQuery(id);
   };
 
   const updateLayerStyle = useCallback(
@@ -70,7 +71,6 @@ export default function LayerEditor<TLayer extends T.Layer>({
       applyAction({
         type: "updateLayerStyle",
         style,
-        mediaQueryId: mediaQuery !== "default" ? mediaQuery : undefined
       });
     },
     [applyAction, mediaQuery]
@@ -91,7 +91,9 @@ export default function LayerEditor<TLayer extends T.Layer>({
           selectedId={mediaQuery}
           layer={layer}
           onAdd={addMediaQuery}
-          onChange={setMediaQuery}
+          onChange={(mediaQuery) =>
+            applyAction({ type: "selectMediaQuery", mediaQuery })
+          }
           refs={refs}
         />
       </div>

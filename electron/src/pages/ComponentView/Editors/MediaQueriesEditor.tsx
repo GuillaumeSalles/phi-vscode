@@ -8,19 +8,19 @@ import AddButton from "../../../components/AddButton";
 import {
   useDialogForm,
   FormSelect,
-  useSelectFormEntry
+  useSelectFormEntry,
 } from "../../../components/Form";
 import uuid from "uuid/v4";
-import React from "react";
+import React, { useCallback } from "react";
 import SecondaryButton from "../../../components/SecondaryButton";
 import Button from "../../../components/Button";
 import Section from "./Section";
 
 type Props = {
   layer: T.Layer;
-  onChange: (id: string) => void;
+  onChange: (id?: string) => void;
   onAdd: (id: string, breakpoint: T.Ref) => void;
-  selectedId: string;
+  selectedId?: string;
   refs: T.Refs;
 };
 
@@ -43,18 +43,18 @@ export default function MediaQueriesEditor({
   selectedId,
   onAdd,
   onChange,
-  refs
+  refs,
 }: Props) {
   const defaultMediaQuery: [string, string] = ["default", "default"];
   const options = [defaultMediaQuery].concat(
-    layer.mediaQueries.map(mq => [mq.id, mediaQueryToString(mq, refs)])
+    layer.mediaQueries.map((mq) => [mq.id, mediaQueryToString(mq, refs)])
   );
 
   const canAddMediaQueries = options.length < refs.breakpoints.size + 1;
 
-  const existing = new Set(layer.mediaQueries.map(m => m.minWidth.id));
+  const existing = new Set(layer.mediaQueries.map((m) => m.minWidth.id));
   const newOptions = Array.from(refs.breakpoints.entries())
-    .filter(entry => !existing.has(entry[0]))
+    .filter((entry) => !existing.has(entry[0]))
     .map(breakpointEntryToOption);
 
   const selectedMediaQueryEntry = useSelectFormEntry(undefined);
@@ -64,10 +64,14 @@ export default function MediaQueriesEditor({
       id:
         selectedMediaQueryEntry.value != null
           ? selectedMediaQueryEntry.value
-          : newOptions[0][0]
+          : newOptions[0][0],
     });
     selectedMediaQueryEntry.setValue(undefined);
   });
+
+  const onChangeCallback = useCallback((mediaQuery) => {
+    onChange(mediaQuery === "default" ? undefined : mediaQuery);
+  }, []);
 
   return (
     <Section
@@ -82,8 +86,8 @@ export default function MediaQueriesEditor({
       <Field label="Breakpoint">
         <Select
           width="100%"
-          value={selectedId}
-          onChange={onChange}
+          value={selectedId || "default"}
+          onChange={onChangeCallback}
           options={options}
         />
       </Field>

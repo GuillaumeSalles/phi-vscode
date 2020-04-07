@@ -286,6 +286,7 @@ export type UIStateComponent = {
   layerId?: string;
   hoveredLayerId?: string;
   isEditing: boolean;
+  mediaQuery?: string;
   layerEditorMode: LayerEditorMode;
 };
 

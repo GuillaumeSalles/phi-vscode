@@ -72,17 +72,27 @@ function replaceLayer<TLayer extends T.Layer>(
 
 function replaceLayerStyle(
   refs: T.Refs,
-  componentId: string,
-  layerId: string,
+  uiState: T.UIStateComponent,
   update: (style: T.LayerStyle) => Partial<LayerStyle>
 ) {
-  return replaceLayer(refs, componentId, layerId, (layer) => {
+  if (uiState.layerId == null) {
+    throw new Error("Cannot replace layer style if not layer selected");
+  }
+  return replaceLayer(refs, uiState.componentId, uiState.layerId, (layer) => {
+    if (uiState.mediaQuery == null) {
+      return {
+        style: { ...layer.style, ...update(layer.style) },
+      };
+    }
     return {
-      ...layer,
-      style: {
-        ...layer.style,
-        ...update(layer.style),
-      },
+      mediaQueries: layer.mediaQueries.map((mq) =>
+        mq.id === uiState.mediaQuery
+          ? {
+              ...mq,
+              style: { ...mq.style, ...update(mq.style) },
+            }
+          : mq
+      ),
     };
   });
 }
@@ -671,14 +681,14 @@ function updateLayerStyleHandler(action: T.UpdateLayerStyle, refs: T.Refs) {
     );
   }
   return replaceLayer(refs, uiState.componentId, uiState.layerId, (layer) => {
-    if (action.mediaQueryId == null) {
+    if (uiState.mediaQuery == null) {
       return {
         style: { ...layer.style, ...action.style },
       };
     }
     return {
       mediaQueries: layer.mediaQueries.map((mq) =>
-        mq.id === action.mediaQueryId
+        mq.id === uiState.mediaQuery
           ? {
               ...mq,
               style: { ...mq.style, ...action.style },
@@ -689,19 +699,34 @@ function updateLayerStyleHandler(action: T.UpdateLayerStyle, refs: T.Refs) {
   });
 }
 
-function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs) {
-  return replaceLayer(refs, action.componentId, action.layerId, (layer) => {
-    return {
-      mediaQueries: [
-        ...layer.mediaQueries,
-        {
-          id: action.mediaQueryId,
-          minWidth: { type: "ref", id: action.breakpointId },
-          style: { ...layer.style },
-        },
-      ],
-    };
-  });
+function addMediaQueryHandler(action: T.AddMediaQuery, refs: T.Refs): T.Refs {
+  const newRefs = replaceLayer(
+    refs,
+    action.componentId,
+    action.layerId,
+    (layer) => {
+      return {
+        mediaQueries: [
+          ...layer.mediaQueries,
+          {
+            id: action.mediaQueryId,
+            minWidth: { type: "ref", id: action.breakpointId },
+            style: { ...layer.style },
+          },
+        ],
+      };
+    }
+  );
+
+  const uiState = uiStateComponentOrThrow(newRefs);
+
+  return {
+    ...newRefs,
+    uiState: {
+      ...uiState,
+      mediaQuery: action.mediaQueryId,
+    },
+  };
 }
 
 function updateRefHandler(action: T.UpdateRef, refs: T.Refs): T.Refs {
@@ -897,16 +922,11 @@ function handleArrowShortcutForPosition(
     (dir === "column-reverse" && key === "ArrowRight") ||
     (dir === "row-reverse" && key === "ArrowDown")
   ) {
-    return replaceLayerStyle(
-      refs,
-      refs.uiState.componentId,
-      refs.uiState.layerId,
-      (style) => {
-        return {
-          alignSelf: style.alignSelf === "flex-end" ? "center" : "flex-start",
-        };
-      }
-    );
+    return replaceLayerStyle(refs, refs.uiState, (style) => {
+      return {
+        alignSelf: style.alignSelf === "flex-end" ? "center" : "flex-start",
+      };
+    });
   }
 
   if (
@@ -915,16 +935,11 @@ function handleArrowShortcutForPosition(
     (dir === "column-reverse" && key === "ArrowLeft") ||
     (dir === "row-reverse" && key === "ArrowUp")
   ) {
-    return replaceLayerStyle(
-      refs,
-      refs.uiState.componentId,
-      refs.uiState.layerId,
-      (style) => {
-        return {
-          alignSelf: style.alignSelf === "flex-start" ? "center" : "flex-end",
-        };
-      }
-    );
+    return replaceLayerStyle(refs, refs.uiState, (style) => {
+      return {
+        alignSelf: style.alignSelf === "flex-start" ? "center" : "flex-end",
+      };
+    });
   }
 
   return refs;
@@ -942,24 +957,19 @@ function handleArrowShortcutForSize(
     return refs;
   }
 
-  return replaceLayerStyle(
-    refs,
-    refs.uiState.componentId,
-    refs.uiState.layerId,
-    (style) => {
-      const propertyName =
-        key === "ArrowUp" || key === "ArrowDown" ? "height" : "width";
-      const value = style[propertyName];
-      const newValue =
-        key === "ArrowDown" || key === "ArrowRight"
-          ? increment(value)
-          : decrement(value, true);
+  return replaceLayerStyle(refs, refs.uiState, (style) => {
+    const propertyName =
+      key === "ArrowUp" || key === "ArrowDown" ? "height" : "width";
+    const value = style[propertyName];
+    const newValue =
+      key === "ArrowDown" || key === "ArrowRight"
+        ? increment(value)
+        : decrement(value, true);
 
-      return {
-        [propertyName]: newValue ? lengthToString(newValue) : undefined,
-      };
-    }
-  );
+    return {
+      [propertyName]: newValue ? lengthToString(newValue) : undefined,
+    };
+  });
 }
 
 function globalShortcutActionHandler(
@@ -1055,55 +1065,61 @@ function resizeLayerStyleHandler(action: T.ResizeLayer, refs: T.Refs): T.Refs {
     );
   }
 
-  return replaceLayerStyle(
-    refs,
-    uiState.componentId,
-    uiState.layerId,
-    (style) => {
-      const offsetX = calculateResizeOffsetX(action);
-      const offsetY = calculateResizeOffsetY(action);
+  return replaceLayerStyle(refs, uiState, (style) => {
+    const offsetX = calculateResizeOffsetX(action);
+    const offsetY = calculateResizeOffsetY(action);
 
-      const newStyle: Partial<T.LayerStyle> = {};
+    const newStyle: Partial<T.LayerStyle> = {};
 
-      if (offsetX !== 0) {
-        const lengthWidth = parseLength(style.width, true);
+    if (offsetX !== 0) {
+      const lengthWidth = parseLength(style.width, true);
 
-        newStyle.width = lengthToString(
-          lengthWidth
-            ? {
-                value: lengthWidth.value + offsetX,
-                unit: lengthWidth.unit,
-              }
-            : {
-                value: action.canvasSize.width + offsetX,
-                unit: "px" as Unit,
-              }
-        );
-      }
-
-      if (offsetY !== 0) {
-        const lengthHeight = parseLength(style.height, true);
-
-        newStyle.height = lengthToString(
-          lengthHeight
-            ? {
-                value: lengthHeight.value + offsetY,
-                unit: lengthHeight.unit,
-              }
-            : {
-                value: action.canvasSize.height + offsetY,
-                unit: "px" as Unit,
-              }
-        );
-      }
-
-      return newStyle;
+      newStyle.width = lengthToString(
+        lengthWidth
+          ? {
+              value: lengthWidth.value + offsetX,
+              unit: lengthWidth.unit,
+            }
+          : {
+              value: action.canvasSize.width + offsetX,
+              unit: "px" as Unit,
+            }
+      );
     }
-  );
+
+    if (offsetY !== 0) {
+      const lengthHeight = parseLength(style.height, true);
+
+      newStyle.height = lengthToString(
+        lengthHeight
+          ? {
+              value: lengthHeight.value + offsetY,
+              unit: lengthHeight.unit,
+            }
+          : {
+              value: action.canvasSize.height + offsetY,
+              unit: "px" as Unit,
+            }
+      );
+    }
+
+    return newStyle;
+  });
 }
 
 function resetHandler(action: T.ResetAction, refs: T.Refs): T.Refs {
   return action.refs;
+}
+
+function selectMediaQueryHandler(action: T.SelectMediaQuery, refs: T.Refs) {
+  const uiState = uiStateComponentOrThrow(refs);
+  return {
+    ...refs,
+    uiState: {
+      ...uiState,
+      mediaQuery: action.mediaQuery,
+    },
+  };
 }
 
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
@@ -1114,6 +1130,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return globalShortcutActionHandler(action, refs);
     case "reset":
       return resetHandler(action, refs);
+    case "selectMediaQuery":
+      return selectMediaQueryHandler(action, refs);
     case "initProject":
       return initProjectHandler(action, refs);
     case "addComponentProp":
