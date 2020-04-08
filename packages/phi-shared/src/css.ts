@@ -176,7 +176,7 @@ function layerStyleOverridesToCss(
   }
 
   return style.overrides
-    .map(override => {
+    .map((override) => {
       return `.${componentName}-${layerName}${override.pseudoClass} {
       ${layerStyleToCss(override.style, refs)}
     }`;
@@ -195,7 +195,7 @@ export function layerToCss(
     layer.style,
     refs
   );
-  const mqStyles = Array.from(layer.mediaQueries.values()).map(mq => {
+  const mqStyles = Array.from(layer.mediaQueries.values()).map((mq) => {
     const bp = refs.breakpoints.get(mq.minWidth.id);
     if (!bp) {
       throw new Error("Breakpoint not found");

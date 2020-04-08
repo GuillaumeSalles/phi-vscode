@@ -5,7 +5,7 @@ module.exports = (pluginOptions = {}) => (nextConfig = {}) => {
     webpack(config, options) {
       config.module.rules.push({
         test: extension,
-        use: [options.defaultLoaders.babel, require.resolve("./dist/loader")]
+        use: [options.defaultLoaders.babel, require.resolve("./dist/loader")],
       });
 
       if (typeof nextConfig.webpack === "function") {
@@ -13,6 +13,6 @@ module.exports = (pluginOptions = {}) => (nextConfig = {}) => {
       }
 
       return config;
-    }
+    },
   });
 };

@@ -5,7 +5,7 @@ import {
   makeDefaultColors,
   makeDefaultFontSizes,
   makeDefaultFontFamilies,
-  makeDefaultBreakpoints
+  makeDefaultBreakpoints,
 } from "./factories";
 
 function makeRefsFixture(): T.Refs {
@@ -16,7 +16,7 @@ function makeRefsFixture(): T.Refs {
     fontSizes: makeDefaultFontSizes(),
     fontFamilies: makeDefaultFontFamilies(),
     breakpoints: makeDefaultBreakpoints(),
-    components: new Map()
+    components: new Map(),
   };
 }
 
@@ -31,11 +31,11 @@ test("findLayerById", () => {
         children: [
           makeContainerLayer(refs, {
             id: "1.1.1",
-            children: [makeContainerLayer(refs, { id: "1.1.1.1" })]
-          })
-        ]
-      })
-    ]
+            children: [makeContainerLayer(refs, { id: "1.1.1.1" })],
+          }),
+        ],
+      }),
+    ],
   });
   expect(findLayerById(root, "1.1.1.1")!.id).toEqual("1.1.1.1");
 });

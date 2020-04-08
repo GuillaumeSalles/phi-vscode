@@ -6,7 +6,7 @@ export function filterComponentsWhenLayer(
   refs: T.Refs,
   layerPredicate: (layer: T.Layer) => boolean
 ) {
-  return valuesAsArray(refs.components).filter(component =>
+  return valuesAsArray(refs.components).filter((component) =>
     layerTreeToArray(component.layout).some(layerPredicate)
   );
 }
@@ -19,7 +19,7 @@ export function refsToJson(current: T.Refs) {
       fontSizes: mapToArray(current.fontSizes),
       fontFamilies: mapToArray(current.fontFamilies),
       breakpoints: mapToArray(current.breakpoints),
-      components: mapToArray(current.components)
+      components: mapToArray(current.components),
     },
     null,
     2
@@ -27,9 +27,9 @@ export function refsToJson(current: T.Refs) {
 }
 
 function mapToArray(map: Map<string, any>) {
-  return Array.from(map.entries()).map(entry => ({
+  return Array.from(map.entries()).map((entry) => ({
     id: entry[0],
-    ...entry[1]
+    ...entry[1],
   }));
 }
 

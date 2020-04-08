@@ -29,7 +29,7 @@ export class PhiTextEditorProvider implements vscode.CustomTextEditorProvider {
       PhiTextEditorProvider.viewType,
       this,
       {
-        enableFindWidget: true
+        enableFindWidget: true,
       }
     );
 
@@ -75,13 +75,13 @@ class PhiTextEditor extends Disposable {
     super();
 
     panel.webview.options = {
-      enableScripts: true
+      enableScripts: true,
     };
 
     this.setPanelHtml(panel);
 
     this._register(
-      vscode.workspace.onDidChangeTextDocument(e => {
+      vscode.workspace.onDidChangeTextDocument((e) => {
         if (e.document === this.document) {
           this.update();
         }
@@ -89,7 +89,7 @@ class PhiTextEditor extends Disposable {
     );
 
     this._register(
-      panel.webview.onDidReceiveMessage(message => {
+      panel.webview.onDidReceiveMessage((message) => {
         switch (message.type) {
           case "edit":
             this.doEdit(message.value);
@@ -151,12 +151,12 @@ class PhiTextEditor extends Disposable {
 
     const jsFiles = await readdir(jsFolder);
     const jsTags = jsFiles
-      .map(file => path.parse(file))
+      .map((file) => path.parse(file))
       .filter(
-        parseResult =>
+        (parseResult) =>
           parseResult.ext === ".js" && !parseResult.base.includes("runtime")
       )
-      .map(parseResult => {
+      .map((parseResult) => {
         const uri = this.panel.webview.asWebviewUri(
           vscode.Uri.file(path.join(jsFolder, parseResult.base))
         );
@@ -166,9 +166,9 @@ class PhiTextEditor extends Disposable {
 
     const cssFiles = await readdir(cssFolder);
     const cssTags = cssFiles
-      .map(file => path.parse(file))
-      .filter(parseResult => parseResult.ext === ".css")
-      .map(parseResult => {
+      .map((file) => path.parse(file))
+      .filter((parseResult) => parseResult.ext === ".css")
+      .map((parseResult) => {
         const uri = this.panel.webview.asWebviewUri(
           vscode.Uri.file(path.join(cssFolder, parseResult.base))
         );
@@ -311,7 +311,7 @@ class PhiTextEditor extends Disposable {
 
     this.panel.webview.postMessage({
       type: "setValue",
-      value: this.document.getText()
+      value: this.document.getText(),
     });
     this.syncedVersion = this.document.version;
   }

@@ -1,7 +1,7 @@
 import * as T from "./types";
 import { refsToJson } from "./refsUtil";
 
-export default function() {
+export default function () {
   const r = (window as any).require;
   const fs = r("fs") as typeof import("fs");
   const util = r("util") as typeof import("util");
@@ -16,7 +16,7 @@ export default function() {
       current.fileName === undefined
         ? electron.remote.dialog.showSaveDialog({
             title: "Save project",
-            defaultPath: "NewProject.phi"
+            defaultPath: "NewProject.phi",
           })
         : current.fileName;
 
@@ -37,6 +37,6 @@ export default function() {
     writeFile,
     readFile,
     electron,
-    onAction: () => {}
+    onAction: () => {},
   };
 }

@@ -10,7 +10,7 @@ export function tsNodesToString(nodes: ReadonlyArray<ts.Node>) {
   );
 
   const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed
+    newLine: ts.NewLineKind.LineFeed,
   });
 
   return printer.printList(

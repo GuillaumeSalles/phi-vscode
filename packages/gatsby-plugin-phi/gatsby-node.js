@@ -10,10 +10,10 @@ function onCreateWebpackConfig({ actions, loaders }) {
       rules: [
         {
           test: /\.phi$/,
-          use: [jsLoader, require.resolve("./dist/js-loader")]
-        }
-      ]
-    }
+          use: [jsLoader, require.resolve("./dist/js-loader")],
+        },
+      ],
+    },
   });
 }
 

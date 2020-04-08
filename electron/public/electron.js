@@ -15,8 +15,8 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   function onNew() {
@@ -38,7 +38,7 @@ function createWindow() {
       url.format({
         pathname: path.join(__dirname, "/../public/index.html"),
         protocol: "file:",
-        slashes: true
+        slashes: true,
       })
   );
 

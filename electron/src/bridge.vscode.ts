@@ -5,7 +5,7 @@ const actionTypesToIgnoreForUndoRedo = new Set<T.ActionType>([
   "selectLayer",
   "hoverLayer",
   "editComponent",
-  "stopEditComponent"
+  "stopEditComponent",
 ]);
 
 function onAction(action: T.Action, refs: T.Refs) {
@@ -22,16 +22,16 @@ function onAction(action: T.Action, refs: T.Refs) {
   vscode.setState({ value });
   vscode.postMessage({
     type: "edit",
-    value
+    value,
   });
 }
 
-export default function() {
+export default function () {
   return {
     electron: {
       ipcRenderer: {
         on: () => {},
-        removeListener: () => {}
+        removeListener: () => {},
       },
       remote: {
         dialog: {
@@ -40,9 +40,9 @@ export default function() {
           },
           showSaveDialog: () => {
             throw new Error("Not implemented");
-          }
-        }
-      }
+          },
+        },
+      },
     },
     writeFile: () => {
       throw new Error("Not implemented");
@@ -53,6 +53,6 @@ export default function() {
     save: async () => {
       throw new Error("Not implemented");
     },
-    onAction
+    onAction,
   };
 }

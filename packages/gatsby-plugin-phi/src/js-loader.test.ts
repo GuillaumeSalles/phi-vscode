@@ -5,39 +5,39 @@ const colors = [
   {
     id: "color-1",
     name: "color-name",
-    value: "#000000"
-  }
+    value: "#000000",
+  },
 ];
 
 const fontSizes = [
   {
     id: "fontSize-1",
     name: "default",
-    value: "15px"
-  }
+    value: "15px",
+  },
 ];
 
 const fontFamilies = [
   {
     id: "fontFamily-1",
     name: "default",
-    value: "-apple-system"
-  }
+    value: "-apple-system",
+  },
 ];
 
 const breakpoints = [
   {
     id: "breakpoint-1",
     name: "default",
-    value: { type: "px", value: 544 }
-  }
+    value: { type: "px", value: 544 },
+  },
 ];
 
 const data = {
   breakpoints,
   colors,
   fontFamilies,
-  fontSizes
+  fontSizes,
 };
 
 test("component without props and single image layer", () => {
@@ -60,7 +60,7 @@ test("component without props and single image layer", () => {
                 src: "images/DefaultProfile.png",
                 alt: "profile-picture",
                 height: "",
-                width: ""
+                width: "",
               },
               mediaQueries: [],
               style: {
@@ -73,19 +73,19 @@ test("component without props and single image layer", () => {
                 width: "100%",
                 borderTopColor: {
                   type: "ref",
-                  id: "color-1"
+                  id: "color-1",
                 },
                 borderRightColor: {
                   type: "ref",
-                  id: "color-1"
+                  id: "color-1",
                 },
                 borderBottomColor: {
                   type: "ref",
-                  id: "color-1"
+                  id: "color-1",
                 },
                 borderLeftColor: {
                   type: "ref",
-                  id: "color-1"
+                  id: "color-1",
                 },
                 borderTopStyle: "solid",
                 borderRightStyle: "solid",
@@ -96,13 +96,13 @@ test("component without props and single image layer", () => {
                 borderBottomWidth: "4px",
                 borderLeftWidth: "4px",
                 maxWidth: "136px",
-                maxHeight: "136px"
+                maxHeight: "136px",
               },
-              bindings: {}
+              bindings: {},
             },
-            examples: []
-          }
-        ]
+            examples: [],
+          },
+        ],
       })
     )
   ).toBe(``);

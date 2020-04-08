@@ -7,7 +7,7 @@ import {
   createComponentPropsDestructuration,
   layerTreeToArray,
   layerToCss,
-  createLayerPropertiesJsx
+  createLayerPropertiesJsx,
 } from "@phi/shared";
 
 function createLayerJsx(
@@ -30,7 +30,7 @@ function createLayerJsx(
         ts.createIdentifier("className"),
         ts.createStringLiteral(`${componentName}-${layer.name}`)
       ),
-      ...layerJsxProperties
+      ...layerJsxProperties,
     ],
     createLayerChildrenJsx(component, componentName, layer, components)
   );
@@ -49,7 +49,7 @@ function createLayerChildrenJsx(
       return [];
     case "link":
     case "container":
-      return layer.children.map(child =>
+      return layer.children.map((child) =>
         createLayerJsx(
           component,
           componentName,
@@ -93,25 +93,25 @@ function createComponentJsx(component: T.Component, refs: T.Refs) {
                 ts.createJsxAttribute(
                   ts.createIdentifier("jsx"),
                   ts.createJsxExpression(undefined, ts.createTrue())
-                )
+                ),
               ],
               [
                 ts.createJsxExpression(
                   undefined,
                   ts.createNoSubstitutionTemplateLiteral(
                     layerTreeToArray(component.layout)
-                      .map(layer =>
+                      .map((layer) =>
                         layerToCss(kebabToPascal(component.name), layer, refs)
                       )
                       .join("\n\n")
                   )
-                )
+                ),
               ]
-            )
+            ),
           ],
           ts.createJsxJsxClosingFragment()
         )
-      )
+      ),
     ])
   );
 }
@@ -121,8 +121,8 @@ export function phiToJs(data: any) {
 
   return T.tsNodesToString(
     Array.from(refs.components.values())
-      .filter(c => c.layout != null)
-      .map(c => createComponentJsx(c, refs))
+      .filter((c) => c.layout != null)
+      .map((c) => createComponentJsx(c, refs))
   );
 }
 

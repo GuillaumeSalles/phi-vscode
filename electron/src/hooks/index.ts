@@ -3,7 +3,7 @@ import { validateRefName } from "../validators";
 import {
   useStringFormEntry,
   FormEntry,
-  useDialogForm
+  useDialogForm,
 } from "../components/Form";
 import { valuesAsArray } from "../helpers/immutable-map";
 import uuid from "uuid/v4";
@@ -15,7 +15,7 @@ export function useToggle(defaultValue: boolean) {
   return {
     isActive: isActive,
     activate: () => setValue(true),
-    deactivate: () => setValue(false)
+    deactivate: () => setValue(false),
   };
 }
 
@@ -25,7 +25,7 @@ export function useStateWithGetter<T>(
   const [value, setValue] = useState<T | undefined>(undefined);
   return [
     value === undefined ? getter() : value,
-    (newValue: T) => setValue(newValue)
+    (newValue: T) => setValue(newValue),
   ];
 }
 
@@ -34,8 +34,8 @@ function getComponentsThatUseRef(
   components: T.ComponentMap,
   isLayerUsingRef: (layer: T.Layer, refId: string) => boolean
 ) {
-  return valuesAsArray(components).filter(component =>
-    layerTreeToArray(component.layout).some(l => isLayerUsingRef(l, refId))
+  return valuesAsArray(components).filter((component) =>
+    layerTreeToArray(component.layout).some((l) => isLayerUsingRef(l, refId))
   );
 }
 
@@ -60,7 +60,7 @@ export function useWarningDialog(title: string, description: string) {
         } else if (e.key === "Escape") {
           setIsOpen(false);
         }
-      }
+      },
     },
     okProps: {
       onClick: () => setIsOpen(false),
@@ -73,8 +73,8 @@ export function useWarningDialog(title: string, description: string) {
           e.preventDefault();
         }
       },
-      ref: okButtonRef
-    }
+      ref: okButtonRef,
+    },
   };
 }
 
@@ -94,7 +94,7 @@ export function useDeleteRefDialog<TRef extends { name: string }>(
         components,
         isLayerUsingRef
       )
-        .map(c => `"${c.name}"`)
+        .map((c) => `"${c.name}"`)
         .join(", ")}.`
     : "";
   return useWarningDialog(
@@ -116,7 +116,7 @@ export function useRefManagement<TRef extends { name: string }>(
 ) {
   const [selectedRefId, selectRef] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const nameEntry: FormEntry<string, any> = useStringFormEntry("", value =>
+  const nameEntry: FormEntry<string, any> = useStringFormEntry("", (value) =>
     validateRefName(value, selectedRefId, refs, prefix)
   );
   const dialog = useDialogForm([nameEntry].concat(formEntries), () => {
@@ -124,7 +124,7 @@ export function useRefManagement<TRef extends { name: string }>(
       type: "updateRef",
       refType,
       refId: isEditing ? selectedRefId! : uuid(),
-      newRef: formToRef(nameEntry.value)
+      newRef: formToRef(nameEntry.value),
     });
   });
   const deleteRefDialog = useDeleteRefDialog(
@@ -174,7 +174,7 @@ export function useRefManagement<TRef extends { name: string }>(
           applyAction({ type: "deleteRef", refId: selectedRefId!, refType });
           selectRef(null);
         }
-      }
-    }
+      },
+    },
   };
 }

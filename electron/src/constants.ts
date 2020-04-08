@@ -5,7 +5,7 @@ export const layerTypes: T.LayerType[] = [
   "text",
   "link",
   "image",
-  "component"
+  "component",
 ];
 
 export const positionList: T.PositionProperty[] = ["relative", "absolute"];
@@ -14,7 +14,7 @@ export const flexDirectionList: T.FlexDirection[] = [
   "column",
   "row",
   "column-reverse",
-  "row-reverse"
+  "row-reverse",
 ];
 
 export const flexWrapList: T.FlexWrap[] = ["nowrap", "wrap", "wrap-reverse"];
@@ -25,7 +25,7 @@ export const justifyContentList: T.JustifyContent[] = [
   "center",
   "space-between",
   "space-around",
-  "space-evenly"
+  "space-evenly",
 ];
 
 export const alignItemsList: T.AlignItems[] = [
@@ -33,7 +33,7 @@ export const alignItemsList: T.AlignItems[] = [
   "flex-start",
   "flex-end",
   "center",
-  "baseline"
+  "baseline",
 ];
 
 export const alignContentList: T.AlignContent[] = [
@@ -42,7 +42,7 @@ export const alignContentList: T.AlignContent[] = [
   "center",
   "space-between",
   "space-around",
-  "stretch"
+  "stretch",
 ];
 
 export const borderStyleList: T.BorderStyle[] = [
@@ -55,7 +55,7 @@ export const borderStyleList: T.BorderStyle[] = [
   "groove",
   "ridge",
   "inset",
-  "outset"
+  "outset",
 ];
 
 export const propertyTypes: T.ComponentPropType[] = ["text"];

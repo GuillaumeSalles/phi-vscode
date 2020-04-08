@@ -20,7 +20,7 @@ type API = {
       dialog: {
         showSaveDialog: ({
           title,
-          defaultPath
+          defaultPath,
         }: {
           title: string;
           defaultPath: string;

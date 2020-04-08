@@ -2,14 +2,14 @@ import * as T from "../types";
 import {
   deleteComponentPropHandler,
   editComponentPropHandler,
-  addLayerActionHandler
+  addLayerActionHandler,
 } from "../actions";
 import {
   makeContainerLayer,
   makeTextLayer,
   makeComponentLayer,
   makeDefaultProject,
-  makeComponent
+  makeComponent,
 } from "../factories";
 import { getComponentOrThrow } from "../layerUtils";
 
@@ -26,15 +26,15 @@ describe("deleteComponentProp", () => {
       name: "name",
       props: [{ name: "my-prop", type: "text" }],
       layout: makeTextLayer(refs, {
-        bindings: { content: { propName: prop } }
+        bindings: { content: { propName: prop } },
       }),
-      examples: []
+      examples: [],
     });
     const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
-        prop
+        prop,
       },
       refs
     );
@@ -53,18 +53,20 @@ describe("deleteComponentProp", () => {
         children: [
           makeContainerLayer(refs, {
             children: [
-              makeTextLayer(refs, { bindings: { content: { propName: prop } } })
-            ]
-          })
-        ]
+              makeTextLayer(refs, {
+                bindings: { content: { propName: prop } },
+              }),
+            ],
+          }),
+        ],
       }),
-      examples: []
+      examples: [],
     });
     const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
-        prop
+        prop,
       },
       refs
     );
@@ -83,7 +85,7 @@ describe("deleteComponentProp", () => {
     refs.components.set(componentId, {
       name: "name",
       props: [{ name: "my-prop", type: "text" }],
-      examples: []
+      examples: [],
     });
 
     const parentComponent: T.Component = {
@@ -91,28 +93,28 @@ describe("deleteComponentProp", () => {
       props: [
         {
           name: "dummmy-prop",
-          type: "text"
-        }
+          type: "text",
+        },
       ],
       layout: {
         ...makeComponentLayer(refs, "child", componentId),
         props: {
-          [prop]: "text"
+          [prop]: "text",
         },
         bindings: {
           [prop]: {
-            propName: "dummyProp"
-          }
-        }
+            propName: "dummyProp",
+          },
+        },
       },
-      examples: []
+      examples: [],
     };
     refs.components.set(parentComponentId, parentComponent);
     const newRefs = deleteComponentPropHandler(
       {
         type: "deleteComponentProp",
         componentId,
-        prop
+        prop,
       },
       refs
     );
@@ -132,14 +134,14 @@ describe("editComponentProp", () => {
     refs.components.set(componentId, {
       name: "name",
       props: [{ name: oldProp, type: "text" }],
-      examples: []
+      examples: [],
     });
     const newRefs = editComponentPropHandler(
       {
         type: "editComponentProp",
         componentId,
         oldProp: oldProp,
-        newProp: newProp
+        newProp: newProp,
       },
       refs
     );
@@ -158,7 +160,7 @@ describe("addLayer", () => {
         type: "addLayer",
         componentId: "componentId",
         layerType: "text",
-        layerId
+        layerId,
       },
       refs
     );
@@ -182,8 +184,8 @@ describe("addLayer", () => {
       "componentId",
       makeComponent({
         layout: makeContainerLayer(refs, {
-          id: "parentLayer"
-        })
+          id: "parentLayer",
+        }),
       })
     );
     const newRefs = addLayerActionHandler(
@@ -192,7 +194,7 @@ describe("addLayer", () => {
         componentId: "componentId",
         layerType: "text",
         layerId,
-        parentLayerId: "parentLayer"
+        parentLayerId: "parentLayer",
       },
       refs
     );

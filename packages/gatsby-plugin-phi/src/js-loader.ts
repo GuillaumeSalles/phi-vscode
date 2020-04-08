@@ -7,7 +7,7 @@ import {
   createComponentPropsDestructuration,
   createLayerPropertiesJsx,
   arrayToMap,
-  tsNodesToString
+  tsNodesToString,
 } from "@phi/shared";
 
 function createLayerJsx(
@@ -35,7 +35,7 @@ function createLayerJsx(
           )
         )
       ),
-      ...createLayerPropertiesJsx(component, layer, components)
+      ...createLayerPropertiesJsx(component, layer, components),
     ],
     createLayerChildrenJsx(component, componentName, layer, components)
   );
@@ -54,7 +54,7 @@ function createLayerChildrenJsx(
       return [];
     case "link":
     case "container":
-      return layer.children.map(child =>
+      return layer.children.map((child) =>
         createLayerJsx(component, componentName, child, components)
       );
   }
@@ -81,7 +81,7 @@ function createComponentJsx(
           component.layout!,
           components
         )
-      )
+      ),
     ])
   );
 }
@@ -91,8 +91,8 @@ export function phiToJs(data: any) {
 
   return tsNodesToString(
     Array.from(components.values())
-      .filter(c => c.layout != null)
-      .map(c => createComponentJsx(c, components))
+      .filter((c) => c.layout != null)
+      .map((c) => createComponentJsx(c, components))
   );
 }
 

@@ -18,9 +18,9 @@ function makeMenu(options) {
               { role: "hideothers" },
               { role: "unhide" },
               { type: "separator" },
-              { role: "quit" }
-            ]
-          }
+              { role: "quit" },
+            ],
+          },
         ]
       : []),
     // { role: 'fileMenu' }
@@ -32,24 +32,24 @@ function makeMenu(options) {
           accelerator: "CmdOrCtrl+N",
           click: () => {
             options.onNew();
-          }
+          },
         },
         {
           label: "Open",
           accelerator: "CmdOrCtrl+O",
           click: () => {
             options.onOpen();
-          }
+          },
         },
         {
           label: "Save",
           accelerator: "CmdOrCtrl+S",
           click: () => {
             options.onSave();
-          }
+          },
         },
-        isMac ? { role: "close" } : { role: "quit" }
-      ]
+        isMac ? { role: "close" } : { role: "quit" },
+      ],
     },
     // { role: 'editMenu' }
     {
@@ -69,11 +69,11 @@ function makeMenu(options) {
               { type: "separator" },
               {
                 label: "Speech",
-                submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }]
-              }
+                submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }],
+              },
             ]
-          : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }])
-      ]
+          : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }]),
+      ],
     },
     // { role: 'viewMenu' }
     {
@@ -87,8 +87,8 @@ function makeMenu(options) {
         { role: "zoomin" },
         { role: "zoomout" },
         { type: "separator" },
-        { role: "togglefullscreen" }
-      ]
+        { role: "togglefullscreen" },
+      ],
     },
     // { role: 'windowMenu' }
     {
@@ -101,10 +101,10 @@ function makeMenu(options) {
               { type: "separator" },
               { role: "front" },
               { type: "separator" },
-              { role: "window" }
+              { role: "window" },
             ]
-          : [{ role: "close" }])
-      ]
+          : [{ role: "close" }]),
+      ],
     },
     {
       role: "help",
@@ -115,14 +115,14 @@ function makeMenu(options) {
             require("electron").shell.openExternalSync(
               "https://electronjs.org"
             );
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
   return Menu.buildFromTemplate(template);
 }
 
 module.exports = {
-  makeMenu
+  makeMenu,
 };

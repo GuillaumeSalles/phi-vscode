@@ -1,0 +1,21 @@
+{
+  "name": "not-a-package",
+  "version": "0.0.0",
+  "description": "Design components for the web in Visual Studio Code. Generate code you code you ~~can trust~~ (ok, maybe not yet).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuillaumeSalles/phi-vscode.git"
+  },
+  "scripts": {
+    "format": "prettier \"**/*.js\" --write  "
+  },
+  "author": "",
+  "license": "GNU GPL V3.0",
+  "bugs": {
+    "url": "https://github.com/GuillaumeSalles/phi-vscode/issues"
+  },
+  "homepage": "https://github.com/GuillaumeSalles/phi-vscode#readme",
+  "devDependencies": {
+    "prettier": "2.0.4"
+  }
+}

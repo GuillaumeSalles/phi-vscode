@@ -4,7 +4,7 @@ import {
   makeDefaultProject,
   makeComponent,
   makeComponentProp,
-  makeComponentLayer
+  makeComponentLayer,
 } from "../../factories";
 import { set } from "../../helpers/immutable-map";
 
@@ -15,8 +15,8 @@ describe("makeJsxLayerProps", () => {
     const refs = makeDefaultProject();
     const layer = makeLinkLayer(refs, {
       props: {
-        href: "href-value"
-      }
+        href: "href-value",
+      },
     });
     expect(makeJsxLayerProps(layer, refs, width, {}).href).toBe("href-value");
   });
@@ -25,24 +25,24 @@ describe("makeJsxLayerProps", () => {
     let refs = makeDefaultProject();
     const layer = makeLinkLayer(refs, {
       props: {
-        href: "href-value"
+        href: "href-value",
       },
       bindings: {
         href: {
-          propName: "component-prop-href"
-        }
-      }
+          propName: "component-prop-href",
+        },
+      },
     });
     const component = makeComponent({
-      props: [makeComponentProp({ name: "component-prop-href" })]
+      props: [makeComponentProp({ name: "component-prop-href" })],
     });
     refs = {
       ...refs,
-      components: refs.components.set("componentId", component)
+      components: refs.components.set("componentId", component),
     };
     expect(
       makeJsxLayerProps(layer, refs, width, {
-        ["component-prop-href"]: "href-new-value"
+        ["component-prop-href"]: "href-new-value",
       }).href
     ).toBe("href-new-value");
   });
@@ -51,24 +51,24 @@ describe("makeJsxLayerProps", () => {
     let refs = makeDefaultProject();
     const layer = makeLinkLayer(refs, {
       props: {
-        href: "href-value"
+        href: "href-value",
       },
       bindings: {
         href: {
-          propName: "component-prop-href"
-        }
-      }
+          propName: "component-prop-href",
+        },
+      },
     });
     const component = makeComponent({
-      props: [makeComponentProp({ name: "component-prop-href" })]
+      props: [makeComponentProp({ name: "component-prop-href" })],
     });
     refs = {
       ...refs,
-      components: refs.components.set("componentId", component)
+      components: refs.components.set("componentId", component),
     };
     expect(
       makeJsxLayerProps(layer, refs, width, {
-        ["component-prop-href"]: "href-new-value"
+        ["component-prop-href"]: "href-new-value",
       }).href
     ).toBe("href-new-value");
   });
@@ -81,10 +81,10 @@ describe("makeJsxLayerProps", () => {
       layout: makeLinkLayer(refs, {
         bindings: {
           href: {
-            propName: "child-component-prop"
-          }
-        }
-      })
+            propName: "child-component-prop",
+          },
+        },
+      }),
     });
 
     refs.components = set(refs.components, "childComponentId", childComponent);
@@ -96,15 +96,15 @@ describe("makeJsxLayerProps", () => {
       {
         bindings: {
           ["child-component-prop"]: {
-            propName: "parent-component-prop"
-          }
-        }
+            propName: "parent-component-prop",
+          },
+        },
       }
     );
 
     const parentComponent = makeComponent({
       props: [makeComponentProp({ name: "parent-component-prop" })],
-      layout: componentLayer
+      layout: componentLayer,
     });
 
     refs.components = set(
@@ -115,10 +115,10 @@ describe("makeJsxLayerProps", () => {
 
     expect(
       forwardJsxLayerProps(componentLayer, refs, width, {
-        ["parent-component-prop"]: "prop-value"
+        ["parent-component-prop"]: "prop-value",
       })
     ).toEqual({
-      "child-component-prop": "prop-value"
+      "child-component-prop": "prop-value",
     });
   });
 });

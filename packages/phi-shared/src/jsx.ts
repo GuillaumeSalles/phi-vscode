@@ -49,7 +49,7 @@ export function createComponentPropsDestructuration(component: T.Component) {
       undefined,
       undefined,
       ts.createObjectBindingPattern(
-        component.props.map(prop => {
+        component.props.map((prop) => {
           return ts.createBindingElement(
             undefined,
             undefined,
@@ -61,7 +61,7 @@ export function createComponentPropsDestructuration(component: T.Component) {
       undefined,
       undefined,
       undefined
-    )
+    ),
   ];
 }
 
@@ -83,7 +83,7 @@ function componentLayerAttributeMap(
   const map = new Map();
   for (let prop in layer.props) {
     const componentProp = component.props.find(
-      componentProp => componentProp.name === prop
+      (componentProp) => componentProp.name === prop
     );
     if (componentProp == null) {
       throw new Error(`Component prop with id ("${prop}") not found`);
@@ -106,7 +106,7 @@ function propValueToAttributeValue(
       return ts.createStringLiteral(value);
     }
     return ts.createCall(ts.createIdentifier("require"), undefined, [
-      ts.createStringLiteral(value)
+      ts.createStringLiteral(value),
     ]);
   }
 
@@ -131,7 +131,7 @@ function createSimpleAttributeMap(
           .map(([propName, value]) => {
             return [
               layerPropNameToJsxAttributeName(propName),
-              propValueToAttributeValue(layer.type, propName, value)
+              propValueToAttributeValue(layer.type, propName, value),
             ];
           })
       );
@@ -148,7 +148,7 @@ export function createLayerPropertiesJsx(
   for (let prop in layer.bindings) {
     const propName = layer.bindings[prop].propName;
 
-    const componentProp = component.props.find(p => p.name === propName);
+    const componentProp = component.props.find((p) => p.name === propName);
     if (componentProp == null) {
       throw new Error(`Prop (${propName}) not found`);
     }

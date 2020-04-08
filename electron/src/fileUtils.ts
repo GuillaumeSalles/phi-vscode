@@ -25,7 +25,7 @@ export function jsonToRefs(
     fontSizes: arrayToMap(data.fontSizes),
     fontFamilies: arrayToMap(data.fontFamilies),
     breakpoints: arrayToMap(data.breakpoints),
-    colors: arrayToMap(data.colors)
+    colors: arrayToMap(data.colors),
   };
 }
 
