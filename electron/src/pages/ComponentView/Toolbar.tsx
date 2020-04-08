@@ -19,9 +19,10 @@ export default function Toolbar({ applyAction, refs }: Props) {
   const uiState = uiStateComponentOrThrow(refs);
   const rootLayer = getComponentOrThrow(uiState.componentId, refs).layout;
   const disabled =
-    rootLayer != null &&
-    rootLayer.type !== "container" &&
-    rootLayer.type !== "link";
+    (rootLayer != null &&
+      rootLayer.type !== "container" &&
+      rootLayer.type !== "link") ||
+    (rootLayer != null && uiState.layerId == null);
 
   const popover = useToggle(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ export default function Toolbar({ applyAction, refs }: Props) {
       parentLayerId: uiState.layerId,
       componentId: uiState.componentId,
       layerId: uuid(),
-      layerComponentId
+      layerComponentId,
     });
   }
 
@@ -43,8 +44,8 @@ export default function Toolbar({ applyAction, refs }: Props) {
         row,
         {
           height: "40px",
-          background: colors.topBarBackground
-        }
+          background: colors.topBarBackground,
+        },
       ]}
     >
       <ToolbarItem disabled={disabled} onClick={() => addLayer("text")}>
@@ -73,11 +74,11 @@ export default function Toolbar({ applyAction, refs }: Props) {
             css={[
               column,
               {
-                background: colors.topBarBackground
-              }
+                background: colors.topBarBackground,
+              },
             ]}
           >
-            {Array.from(refs.components).map(entry => {
+            {Array.from(refs.components).map((entry) => {
               return (
                 <button
                   key={entry[0]}
@@ -93,9 +94,9 @@ export default function Toolbar({ applyAction, refs }: Props) {
                       cursor: "pointer",
                       color: colors.sideBarForeground,
                       ":hover:enabled": {
-                        backgroundColor: colors.listHoverBackground
-                      }
-                    }
+                        backgroundColor: colors.listHoverBackground,
+                      },
+                    },
                   ]}
                   onClick={() => addLayer("component", entry[0])}
                 >
@@ -129,7 +130,7 @@ function ToolbarItem({ children, onClick, disabled }: ToolbarItemProps) {
         justifyContent: "center",
         background: "transparent",
         border: "none",
-        color: colors.sideBarForeground
+        color: colors.sideBarForeground,
       }}
     >
       {children}
