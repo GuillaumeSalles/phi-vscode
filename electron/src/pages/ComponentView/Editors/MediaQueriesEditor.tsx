@@ -69,9 +69,12 @@ export default function MediaQueriesEditor({
     selectedMediaQueryEntry.setValue(undefined);
   });
 
-  const onChangeCallback = useCallback((mediaQuery) => {
-    onChange(mediaQuery === "default" ? undefined : mediaQuery);
-  }, []);
+  const onChangeCallback = useCallback(
+    (mediaQuery) => {
+      onChange(mediaQuery === "default" ? undefined : mediaQuery);
+    },
+    [onChange]
+  );
 
   return (
     <Section

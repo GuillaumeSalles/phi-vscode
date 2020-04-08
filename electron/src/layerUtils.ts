@@ -50,7 +50,7 @@ export function findLayerByIdWithParent(
   if (root.id === id) {
     return {
       layer: root,
-      parent: undefined
+      parent: undefined,
     };
   }
 
@@ -63,7 +63,7 @@ export function findLayerByIdWithParent(
         }
         return {
           layer: result.layer,
-          parent: root
+          parent: root,
         };
       }
     }
@@ -71,8 +71,12 @@ export function findLayerByIdWithParent(
 
   return {
     layer: undefined,
-    parent: undefined
+    parent: undefined,
   };
+}
+
+export function isResizable(layer?: T.Layer) {
+  return layer && layer.type !== "component";
 }
 
 export function updateLayer(
@@ -90,7 +94,7 @@ export function updateLayer(
   if (canHaveChildren(rootLayer)) {
     return {
       ...rootLayer,
-      children: rootLayer.children.map(child => updateLayer(child, newLayer))
+      children: rootLayer.children.map((child) => updateLayer(child, newLayer)),
     };
   }
 
@@ -113,9 +117,10 @@ export function isLayerUsingRef(
   refId: string,
   isUsingRef: (style: T.LayerStyle, refId: string) => boolean
 ): boolean {
-  return [layer.style, ...layer.mediaQueries.map(mq => mq.style)].some(style =>
-    isUsingRef(style, refId)
-  );
+  return [
+    layer.style,
+    ...layer.mediaQueries.map((mq) => mq.style),
+  ].some((style) => isUsingRef(style, refId));
 }
 
 export function getComponentOrThrow(

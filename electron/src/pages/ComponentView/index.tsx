@@ -5,7 +5,7 @@ import { column, mainPadding, row, colors } from "../../styles";
 import * as T from "../../types";
 import {
   filterComponentsWhenLayer,
-  uiStateComponentOrThrow
+  uiStateComponentOrThrow,
 } from "../../refsUtil";
 import Component from "./Component";
 // import SettingsEditor from "./SettingsEditor";
@@ -24,7 +24,7 @@ import Button from "../../components/Button";
 import {
   useStringFormEntry,
   useDialogForm,
-  FormInput
+  FormInput,
 } from "../../components/Form";
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
@@ -39,11 +39,11 @@ const tabStyle = css({
   border: "none",
   cursor: "pointer",
   color: colors.sideBarForeground,
-  background: colors.sideBarBackground
+  background: colors.sideBarBackground,
 });
 
 const selectedTabStyle = css(tabStyle, {
-  background: colors.sideBarSectionHeaderBackground
+  background: colors.sideBarSectionHeaderBackground,
 });
 
 type Props = {
@@ -59,30 +59,30 @@ function ComponentView({
   refs,
   applyAction,
   componentId,
-  layerId
+  layerId,
 }: Props) {
   const component = refs.components.get(componentId)!;
   const uiState = uiStateComponentOrThrow(refs);
 
-  const nameEntry = useStringFormEntry("", value =>
+  const nameEntry = useStringFormEntry("", (value) =>
     validateRefName(value, componentId, refs.components, "Components")
   );
   const renameComponentDialog = useDialogForm([nameEntry], () => {
     applyAction({
       type: "renameComponent",
       componentId,
-      name: nameEntry.value
+      name: nameEntry.value,
     });
   });
 
   const componentsThatUseCurrentComponent = filterComponentsWhenLayer(
     refs,
-    l => l.type === "component" && l.componentId === componentId
+    (l) => l.type === "component" && l.componentId === componentId
   );
   const deleteRefDialog = useWarningDialog(
     `Can't delete component ${component.name}`,
     `${component.name} is used by ${componentsThatUseCurrentComponent
-      .map(c => `"${c.name}"`)
+      .map((c) => `"${c.name}"`)
       .join(", ")}.`
   );
 
@@ -102,8 +102,8 @@ function ComponentView({
             {
               alignItems: "center",
               height: "48px",
-              background: colors.topBarBackground
-            }
+              background: colors.topBarBackground,
+            },
           ]}
         >
           <div css={{ flex: "0", width: "200px", minWidth: "200px" }}>
@@ -118,15 +118,15 @@ function ComponentView({
                 flex: "1 1 auto",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "300px"
-              }
+                width: "300px",
+              },
             ]}
           >
             <div
               css={{
                 margin: "0",
                 fontWeight: 400,
-                fontSize: "18px"
+                fontSize: "18px",
               }}
             >
               {component.name}
@@ -148,7 +148,7 @@ function ComponentView({
                   margin="0 12px 0 0"
                   onClick={() => {
                     applyAction({
-                      type: "editComponent"
+                      type: "editComponent",
                     });
                   }}
                 />
@@ -201,7 +201,7 @@ function ComponentView({
         <div
           css={[
             column,
-            { height: "100%", overflowX: "hidden", paddingTop: "20px" }
+            { height: "100%", overflowX: "hidden", paddingTop: "20px" },
           ]}
         >
           <div
@@ -212,9 +212,9 @@ function ComponentView({
                 flex: "1 1 auto",
                 overflowX: "auto",
                 "::-webkit-scrollbar-corner": {
-                  background: "transparent"
-                }
-              }
+                  background: "transparent",
+                },
+              },
             ]}
           >
             <Component
@@ -222,6 +222,7 @@ function ComponentView({
               component={component}
               refs={refs}
               applyAction={applyAction}
+              selectedLayer={selectedLayer}
             />
             <OkCancelModal
               {...deleteRefDialog.dialogProps}
@@ -264,8 +265,8 @@ function ComponentView({
                 width: "268px",
                 minWidth: "268px",
                 background: colors.sideBarBackground,
-                height: "100%"
-              }
+                height: "100%",
+              },
             ]}
           >
             <div
@@ -274,8 +275,8 @@ function ComponentView({
                 {
                   flex: "0 0 auto",
                   height: "40px",
-                  alignItems: "stretch"
-                }
+                  alignItems: "stretch",
+                },
               ]}
             >
               <button
@@ -332,8 +333,8 @@ function ComponentView({
                 width: "268px",
                 minWidth: "268px",
                 background: colors.sideBarBackground,
-                height: "100%"
-              }
+                height: "100%",
+              },
             ]}
           >
             <ComponentExamplesEditor

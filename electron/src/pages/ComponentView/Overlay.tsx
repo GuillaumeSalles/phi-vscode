@@ -3,9 +3,11 @@ import { jsx, css } from "@emotion/core";
 import * as T from "../../types";
 import { Fragment } from "react";
 import { uiStateComponentOrThrow } from "../../refsUtil";
+import { isResizable } from "../../layerUtils";
 
 type Props = {
   refs: T.Refs;
+  layer?: T.Layer;
   containerRect?: DOMRect;
   domRefs: Map<string, HTMLBaseElement>;
   applyAction: T.ApplyAction;
@@ -19,10 +21,16 @@ const anchorStyle = css({
   width: "8px",
   height: "8px",
   background: "white",
-  border: `solid 1px ${color}`
+  border: `solid 1px ${color}`,
 });
 
-export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
+export function Overlay({
+  refs,
+  domRefs,
+  containerRect,
+  applyAction,
+  layer,
+}: Props) {
   const uiState = uiStateComponentOrThrow(refs);
 
   const selectedLayerRect = uiState.layerId
@@ -46,13 +54,13 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
         type: "resizeLayer",
         canvasSize: {
           height: selectedLayerRect!.height,
-          width: selectedLayerRect!.width
+          width: selectedLayerRect!.width,
         },
         offset: {
           x: e.clientX - initialX,
-          y: e.clientY - initialY
+          y: e.clientY - initialY,
         },
-        direction
+        direction,
       });
       initialX = e.clientX;
       initialY = e.clientY;
@@ -80,7 +88,7 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
             left: hoveredLayerRect.left - overlayRect.left,
             width: hoveredLayerRect.width,
             height: hoveredLayerRect.height,
-            pointerEvents: "none"
+            pointerEvents: "none",
           }}
         />
       )}
@@ -95,7 +103,7 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
               right: 0,
               height: "1px",
               borderTop: selectedLayerLines,
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           />
           {/* Ruler-Bottom */}
@@ -110,7 +118,7 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
               right: 0,
               height: "1px",
               borderTop: selectedLayerLines,
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           />
           {/* Ruler-Left */}
@@ -122,7 +130,7 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
               left: selectedLayerRect.left - overlayRect.left,
               width: "1px",
               borderRight: selectedLayerLines,
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           />
           {/* Ruler-Right */}
@@ -137,153 +145,157 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
                 selectedLayerRect.width,
               width: "1px",
               borderRight: selectedLayerLines,
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           />
 
-          {/* Bottom-Right */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "bottom-right")}
-            css={[
-              anchorStyle,
-              {
-                top:
-                  selectedLayerRect.top -
-                  overlayRect.top +
-                  selectedLayerRect.height -
-                  4,
-                left:
-                  selectedLayerRect.left -
-                  overlayRect.left +
-                  selectedLayerRect.width -
-                  4,
-                cursor: "nwse-resize"
-              }
-            ]}
-          />
+          {isResizable(layer) && (
+            <Fragment>
+              {/* Bottom-Right */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "bottom-right")}
+                css={[
+                  anchorStyle,
+                  {
+                    top:
+                      selectedLayerRect.top -
+                      overlayRect.top +
+                      selectedLayerRect.height -
+                      4,
+                    left:
+                      selectedLayerRect.left -
+                      overlayRect.left +
+                      selectedLayerRect.width -
+                      4,
+                    cursor: "nwse-resize",
+                  },
+                ]}
+              />
 
-          {/* Right */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "right")}
-            css={[
-              anchorStyle,
-              {
-                top:
-                  selectedLayerRect.top -
-                  overlayRect.top +
-                  selectedLayerRect.height / 2 -
-                  4,
-                left:
-                  selectedLayerRect.left -
-                  overlayRect.left +
-                  selectedLayerRect.width -
-                  4,
-                cursor: "ew-resize"
-              }
-            ]}
-          />
+              {/* Right */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "right")}
+                css={[
+                  anchorStyle,
+                  {
+                    top:
+                      selectedLayerRect.top -
+                      overlayRect.top +
+                      selectedLayerRect.height / 2 -
+                      4,
+                    left:
+                      selectedLayerRect.left -
+                      overlayRect.left +
+                      selectedLayerRect.width -
+                      4,
+                    cursor: "ew-resize",
+                  },
+                ]}
+              />
 
-          {/* Top-Right */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "top-right")}
-            css={[
-              anchorStyle,
-              {
-                top: selectedLayerRect.top - overlayRect.top - 4,
-                left:
-                  selectedLayerRect.left -
-                  overlayRect.left +
-                  selectedLayerRect.width -
-                  4,
-                cursor: "nesw-resize"
-              }
-            ]}
-          />
+              {/* Top-Right */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "top-right")}
+                css={[
+                  anchorStyle,
+                  {
+                    top: selectedLayerRect.top - overlayRect.top - 4,
+                    left:
+                      selectedLayerRect.left -
+                      overlayRect.left +
+                      selectedLayerRect.width -
+                      4,
+                    cursor: "nesw-resize",
+                  },
+                ]}
+              />
 
-          {/* Top */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "top")}
-            css={[
-              anchorStyle,
-              {
-                top: selectedLayerRect.top - overlayRect.top - 4,
-                left:
-                  selectedLayerRect.left -
-                  overlayRect.left +
-                  selectedLayerRect.width / 2 -
-                  4,
-                cursor: "ns-resize"
-              }
-            ]}
-          />
+              {/* Top */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "top")}
+                css={[
+                  anchorStyle,
+                  {
+                    top: selectedLayerRect.top - overlayRect.top - 4,
+                    left:
+                      selectedLayerRect.left -
+                      overlayRect.left +
+                      selectedLayerRect.width / 2 -
+                      4,
+                    cursor: "ns-resize",
+                  },
+                ]}
+              />
 
-          {/* Top-Left */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "top-left")}
-            css={[
-              anchorStyle,
-              {
-                top: selectedLayerRect.top - overlayRect.top - 4,
-                left: selectedLayerRect.left - overlayRect.left - 4,
-                cursor: "nwse-resize"
-              }
-            ]}
-          />
+              {/* Top-Left */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "top-left")}
+                css={[
+                  anchorStyle,
+                  {
+                    top: selectedLayerRect.top - overlayRect.top - 4,
+                    left: selectedLayerRect.left - overlayRect.left - 4,
+                    cursor: "nwse-resize",
+                  },
+                ]}
+              />
 
-          {/* Left */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "left")}
-            css={[
-              anchorStyle,
-              {
-                top:
-                  selectedLayerRect.top -
-                  overlayRect.top +
-                  selectedLayerRect.height / 2 -
-                  4,
-                left: selectedLayerRect.left - overlayRect.left - 4,
-                cursor: "ew-resize"
-              }
-            ]}
-          />
+              {/* Left */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "left")}
+                css={[
+                  anchorStyle,
+                  {
+                    top:
+                      selectedLayerRect.top -
+                      overlayRect.top +
+                      selectedLayerRect.height / 2 -
+                      4,
+                    left: selectedLayerRect.left - overlayRect.left - 4,
+                    cursor: "ew-resize",
+                  },
+                ]}
+              />
 
-          {/* Bottom-Left */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "bottom-left")}
-            css={[
-              anchorStyle,
-              {
-                top:
-                  selectedLayerRect.top -
-                  overlayRect.top +
-                  selectedLayerRect.height -
-                  4,
-                left: selectedLayerRect.left - overlayRect.left - 4,
-                cursor: "nesw-resize"
-              }
-            ]}
-          />
+              {/* Bottom-Left */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "bottom-left")}
+                css={[
+                  anchorStyle,
+                  {
+                    top:
+                      selectedLayerRect.top -
+                      overlayRect.top +
+                      selectedLayerRect.height -
+                      4,
+                    left: selectedLayerRect.left - overlayRect.left - 4,
+                    cursor: "nesw-resize",
+                  },
+                ]}
+              />
 
-          {/* Bottom */}
-          <div
-            onMouseDown={e => onAnchorMouseDown(e, "bottom")}
-            css={[
-              anchorStyle,
-              {
-                top:
-                  selectedLayerRect.top -
-                  overlayRect.top +
-                  selectedLayerRect.height -
-                  4,
-                left:
-                  selectedLayerRect.left -
-                  overlayRect.left +
-                  selectedLayerRect.width / 2 -
-                  4,
-                cursor: "ns-resize"
-              }
-            ]}
-          />
+              {/* Bottom */}
+              <div
+                onMouseDown={(e) => onAnchorMouseDown(e, "bottom")}
+                css={[
+                  anchorStyle,
+                  {
+                    top:
+                      selectedLayerRect.top -
+                      overlayRect.top +
+                      selectedLayerRect.height -
+                      4,
+                    left:
+                      selectedLayerRect.left -
+                      overlayRect.left +
+                      selectedLayerRect.width / 2 -
+                      4,
+                    cursor: "ns-resize",
+                  },
+                ]}
+              />
+            </Fragment>
+          )}
 
           <div
             css={{
@@ -299,7 +311,7 @@ export function Overlay({ refs, domRefs, containerRect, applyAction }: Props) {
               fontWeight: 500,
               paddingTop: "4px",
               textAlign: "center",
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           >
             {selectedLayerRect.width} x {selectedLayerRect.height}

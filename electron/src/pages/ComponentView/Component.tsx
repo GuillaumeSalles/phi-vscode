@@ -12,6 +12,7 @@ type Props = {
   component: T.Component;
   refs: T.Refs;
   applyAction: T.ApplyAction;
+  selectedLayer?: T.Layer;
 };
 
 type ComponentExampleViewerProps = {
@@ -20,6 +21,7 @@ type ComponentExampleViewerProps = {
   component: T.Component;
   refs: T.Refs;
   applyAction: T.ApplyAction;
+  selectedLayer?: T.Layer;
 };
 
 function ComponentExampleViewer({
@@ -28,6 +30,7 @@ function ComponentExampleViewer({
   example,
   artboard,
   applyAction,
+  selectedLayer,
 }: ComponentExampleViewerProps) {
   /**
    * Original idea from sebmarkbage https://github.com/facebook/react/issues/14072#issuecomment-446777406
@@ -109,6 +112,7 @@ function ComponentExampleViewer({
           refs={refs}
           containerRect={containerRef.current?.getBoundingClientRect()}
           applyAction={applyAction}
+          layer={selectedLayer}
         />
       </div>
     </div>
@@ -121,7 +125,7 @@ const defaultExample = {
   props: {},
 };
 
-function Component({ component, refs, applyAction }: Props) {
+function Component({ component, refs, applyAction, selectedLayer }: Props) {
   return (
     <RefsProvider refs={refs}>
       <div css={column}>
@@ -137,6 +141,7 @@ function Component({ component, refs, applyAction }: Props) {
                     example={example}
                     artboard={entry[1]}
                     applyAction={applyAction}
+                    selectedLayer={selectedLayer}
                   />
                 );
               })}
