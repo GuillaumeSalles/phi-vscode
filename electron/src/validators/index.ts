@@ -14,7 +14,7 @@ export function validateRefName(
     return `${prefix} name is required`;
   }
   if (!kebabCaseRegex.test(value)) {
-    return `${prefix} name should not start with number and should follow the "kebab case" format`;
+    return `${prefix} name should not start with a number and should follow the "kebab case" format`;
   }
   if (existingRefId) {
     const currentRef = map.get(existingRefId);
@@ -22,7 +22,7 @@ export function validateRefName(
       return;
     }
   }
-  if (valuesAsArray(map).some(b => b.name === value)) {
+  if (valuesAsArray(map).some((b) => b.name === value)) {
     return `${prefix} name must be unique`;
   }
 }
@@ -62,7 +62,7 @@ export function validateLayerName(
   root: T.Layer | undefined
 ): string | undefined {
   const layersArray = new Map(
-    layerTreeToArray(root).map(layer => [layer.id, layer])
+    layerTreeToArray(root).map((layer) => [layer.id, layer])
   );
   return validateRefName(value, null, layersArray, "Layer");
 }
