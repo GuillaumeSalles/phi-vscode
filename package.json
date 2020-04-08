@@ -6,9 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/GuillaumeSalles/phi-vscode.git"
   },
-  "scripts": {
-    "format": "prettier \"**/*.js\" --write  "
-  },
+  "scripts": {},
   "author": "",
   "license": "GNU GPL V3.0",
   "bugs": {
