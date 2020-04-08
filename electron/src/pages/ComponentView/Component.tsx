@@ -7,6 +7,7 @@ import { useState, useCallback, useRef } from "react";
 import { Overlay } from "./Overlay";
 import { del, set } from "../../helpers/immutable-map";
 import { RefsProvider } from "./RefsContext";
+import { uiStateComponentOrThrow } from "../../refsUtil";
 
 type Props = {
   component: T.Component;
@@ -53,6 +54,8 @@ function ComponentExampleViewer({
     },
     []
   );
+
+  const uiState = uiStateComponentOrThrow(refs);
 
   return (
     <div key={example.id} css={[column, { marginRight: "48px" }]}>
@@ -107,13 +110,15 @@ function ComponentExampleViewer({
             refCallback={refCallback}
           />
         )}
-        <Overlay
-          domRefs={domRefs}
-          refs={refs}
-          containerRect={containerRef.current?.getBoundingClientRect()}
-          applyAction={applyAction}
-          layer={selectedLayer}
-        />
+        {uiState.isEditing && (
+          <Overlay
+            domRefs={domRefs}
+            refs={refs}
+            containerRect={containerRef.current?.getBoundingClientRect()}
+            applyAction={applyAction}
+            layer={selectedLayer}
+          />
+        )}
       </div>
     </div>
   );
