@@ -24,14 +24,14 @@ Phi is using a VS Code the [Custom webview editor API](https://github.com/micros
 
 ### Install the Phi Extension
 
-- Download the VSCode extension https://marketplace.visualstudio.com/items?itemName=GuillaumeSalles.phi-vscode
+Download the VSCode extension https://marketplace.visualstudio.com/items?itemName=GuillaumeSalles.phi-vscode
 
-- Create a new a file with a `.phi` extension and save it.
+Create a new a file with a `.phi` extension and save it.
 
-- At this point, you should be able to see the Phi Editor in VSCode
+At this point, you should be able to see the Phi Editor in VSCode
   ![Phi Extension preview in vscode](/assets/HelloWorld.png)
 
-- You are now ready to design your own components!
+You are now ready to design your own components!
 
 ### Import components in your Gatsby project
 
