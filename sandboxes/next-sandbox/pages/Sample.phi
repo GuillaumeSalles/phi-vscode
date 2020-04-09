@@ -1,11 +1,10 @@
 {
   "uiState": {
     "type": "component",
-    "componentId": "96e1910f-cc4b-44df-8275-612e7857122d",
+    "componentId": "48317ffa-8fde-4b3a-8460-ed391c6f4bd4",
     "isEditing": true,
-    "layerEditorMode": "css",
-    "hoveredLayerId": "5b88c79a-fb31-4b4b-b319-fd1812f98327",
-    "layerId": "5b88c79a-fb31-4b4b-b319-fd1812f98327"
+    "layerEditorMode": "html",
+    "layerId": "b5863eba-4bd0-49af-bee2-f155b4178814"
   },
   "colors": [
     {
@@ -240,6 +239,234 @@
           "alignContent": "stretch",
           "overrides": [],
           "width": "450px"
+        }
+      }
+    },
+    {
+      "id": "f47f6e62-2bb7-46b9-bcb3-78b6d6537a28",
+      "name": "text",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "text",
+        "id": "61695140-5af2-4a10-9432-6657ed9ba49c",
+        "name": "text",
+        "tag": "span",
+        "mediaQueries": [],
+        "bindings": {},
+        "props": {
+          "content": "Hello World"
+        },
+        "style": {
+          "display": "block",
+          "textDecoration": {
+            "isUnderlined": false,
+            "isStrikedThrough": false
+          },
+          "color": {
+            "type": "ref",
+            "id": "805f4f43-a4c8-4851-b854-95569e864057"
+          },
+          "fontFamily": {
+            "type": "ref",
+            "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8"
+          },
+          "fontSize": {
+            "type": "ref",
+            "id": "a481de76-c516-4194-9af8-74dc61dd8c87"
+          },
+          "textAlign": "left",
+          "lineHeight": 1.2,
+          "overrides": [],
+          "backgroundColor": {
+            "type": "ref",
+            "id": "8dea480b-346c-4a97-a040-c746dcebd560"
+          },
+          "paddingTop": "5px",
+          "paddingRight": "5px",
+          "paddingBottom": "5px",
+          "paddingLeft": "5px"
+        }
+      }
+    },
+    {
+      "id": "48317ffa-8fde-4b3a-8460-ed391c6f4bd4",
+      "name": "container-with-text",
+      "props": [],
+      "examples": [],
+      "layout": {
+        "type": "container",
+        "id": "3da84a74-b61a-4705-93c6-35e5cd13d49a",
+        "name": "container",
+        "tag": "div",
+        "mediaQueries": [],
+        "children": [
+          {
+            "type": "text",
+            "id": "dc8287b8-d368-40a3-b408-be2c49b21fd0",
+            "name": "flex-start",
+            "tag": "span",
+            "mediaQueries": [],
+            "bindings": {},
+            "props": {
+              "content": "flex-start"
+            },
+            "style": {
+              "display": "block",
+              "textDecoration": {
+                "isStrikedThrough": false,
+                "isUnderlined": false
+              },
+              "color": {
+                "type": "ref",
+                "id": "805f4f43-a4c8-4851-b854-95569e864057"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8"
+              },
+              "fontSize": {
+                "type": "ref",
+                "id": "a481de76-c516-4194-9af8-74dc61dd8c87"
+              },
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "overrides": [],
+              "paddingTop": "5px",
+              "paddingRight": "5px",
+              "paddingBottom": "5px",
+              "paddingLeft": "5px",
+              "alignSelf": "flex-start"
+            }
+          },
+          {
+            "type": "text",
+            "id": "2aeb675e-7d07-4669-88ea-5354b7584b82",
+            "name": "center",
+            "tag": "span",
+            "mediaQueries": [],
+            "bindings": {},
+            "props": {
+              "content": "center"
+            },
+            "style": {
+              "display": "block",
+              "textDecoration": {
+                "isStrikedThrough": false,
+                "isUnderlined": false
+              },
+              "color": {
+                "type": "ref",
+                "id": "805f4f43-a4c8-4851-b854-95569e864057"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8"
+              },
+              "fontSize": {
+                "type": "ref",
+                "id": "a481de76-c516-4194-9af8-74dc61dd8c87"
+              },
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "overrides": [],
+              "alignSelf": "center",
+              "paddingTop": "5px",
+              "paddingRight": "5px",
+              "paddingBottom": "5px",
+              "paddingLeft": "5px"
+            }
+          },
+          {
+            "type": "text",
+            "id": "2884401f-b10c-46ce-ba12-7d49df4b35b2",
+            "name": "flex-end",
+            "tag": "span",
+            "mediaQueries": [],
+            "bindings": {},
+            "props": {
+              "content": "flex-end"
+            },
+            "style": {
+              "display": "block",
+              "textDecoration": {
+                "isStrikedThrough": false,
+                "isUnderlined": false
+              },
+              "color": {
+                "type": "ref",
+                "id": "805f4f43-a4c8-4851-b854-95569e864057"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8"
+              },
+              "fontSize": {
+                "type": "ref",
+                "id": "a481de76-c516-4194-9af8-74dc61dd8c87"
+              },
+              "textAlign": "right",
+              "lineHeight": 1.2,
+              "overrides": [],
+              "paddingTop": "5px",
+              "paddingRight": "5px",
+              "paddingBottom": "5px",
+              "paddingLeft": "5px",
+              "alignSelf": "flex-end"
+            }
+          },
+          {
+            "type": "text",
+            "id": "b5863eba-4bd0-49af-bee2-f155b4178814",
+            "name": "underline-striked",
+            "tag": "span",
+            "mediaQueries": [],
+            "bindings": {},
+            "props": {
+              "content": "decoration"
+            },
+            "style": {
+              "display": "block",
+              "textDecoration": {
+                "isUnderlined": true,
+                "isStrikedThrough": true
+              },
+              "color": {
+                "type": "ref",
+                "id": "805f4f43-a4c8-4851-b854-95569e864057"
+              },
+              "fontFamily": {
+                "type": "ref",
+                "id": "18276f0a-ec40-4e7a-b683-8f6002b0cae8"
+              },
+              "fontSize": {
+                "type": "ref",
+                "id": "a481de76-c516-4194-9af8-74dc61dd8c87"
+              },
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "overrides": [],
+              "paddingTop": "5px",
+              "paddingRight": "5px",
+              "paddingBottom": "5px",
+              "paddingLeft": "5px"
+            }
+          }
+        ],
+        "bindings": {},
+        "props": {},
+        "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "flexWrap": "nowrap",
+          "justifyContent": "flex-start",
+          "alignItems": "stretch",
+          "alignContent": "stretch",
+          "overrides": [],
+          "backgroundColor": {
+            "type": "ref",
+            "id": "3746d7c6-005b-4434-8a9c-652cb78e3379"
+          }
         }
       }
     }

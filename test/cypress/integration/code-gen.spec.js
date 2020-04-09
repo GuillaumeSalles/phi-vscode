@@ -1,4 +1,10 @@
-const components = ["Square", "SquaresColumn", "NineSquares"];
+const components = [
+  "Square",
+  "SquaresColumn",
+  "NineSquares",
+  "Text",
+  "ContainerWithText",
+];
 
 describe("Gatsby", function () {
   function testComponent(componentName) {

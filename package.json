@@ -6,7 +6,11 @@
     "type": "git",
     "url": "git+https://github.com/GuillaumeSalles/phi-vscode.git"
   },
-  "scripts": {},
+  "scripts": {
+    "start:sandboxes": "concurrently \"npm run start:gatsby-sandbox\" \"npm run start:next-sandbox\"",
+    "start:gatsby-sandbox": "cd ./sandboxes/gatsby-site && npm start",
+    "start:next-sandbox": "cd ./sandboxes/next-sandbox && npm run dev"
+  },
   "author": "",
   "license": "GNU GPL V3.0",
   "bugs": {
@@ -14,6 +18,7 @@
   },
   "homepage": "https://github.com/GuillaumeSalles/phi-vscode#readme",
   "devDependencies": {
+    "concurrently": "5.1.0",
     "prettier": "2.0.4"
   }
 }

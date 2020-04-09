@@ -13,7 +13,7 @@
     "gatsby-plugin-sharp": "^2.1.5",
     "gatsby-source-filesystem": "^2.0.39",
     "gatsby-transformer-sharp": "^2.1.21",
-    "gatsby-plugin-phi": "file:../../packages/gatsby-plugin-phi",
+    "@phijs/gatsby-plugin-phi": "file:../../packages/gatsby-plugin-phi",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

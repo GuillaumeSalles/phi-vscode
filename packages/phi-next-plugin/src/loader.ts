@@ -23,6 +23,7 @@ function createLayerJsx(
       [...layerJsxProperties]
     );
   }
+
   return createSimpleJsxElement(
     layer.tag,
     [
@@ -55,7 +56,7 @@ function createLayerChildrenJsx(
           componentName,
           child,
           components,
-          createLayerPropertiesJsx(component, layer, components)
+          createLayerPropertiesJsx(component, child, components)
         )
       );
   }
