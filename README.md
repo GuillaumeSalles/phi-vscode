@@ -83,7 +83,7 @@ import { HelloWorld } from "./path/to/file.phi";
 const IndexPage = () => <HelloWorld />;
 ```
 
-### Conventions
+## Conventions
 
 Components names are defined as `kebab-case` in Phi but are imported as `PascalCase`.
 Example `hello-world` becomes `HelloWorld`.
