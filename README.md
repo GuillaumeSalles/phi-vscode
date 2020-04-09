@@ -54,7 +54,7 @@ module.exports = {
 
 Import your component directly from your react code.
 
-```javascript
+```jsx
 import { HelloWorld } from "./path/to/file.phi";
 
 const IndexPage = () => <HelloWorld />;
@@ -77,7 +77,7 @@ module.exports = withPhi();
 
 Import your component directly from your react code.
 
-```javascript
+```jsx
 import { HelloWorld } from "./path/to/file.phi";
 
 const IndexPage = () => <HelloWorld />;
