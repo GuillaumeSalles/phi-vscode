@@ -304,7 +304,8 @@ export function Overlay({
               top:
                 selectedLayerRect.top -
                 overlayRect.top +
-                selectedLayerRect.height,
+                selectedLayerRect.height +
+                4 /* Offset to make it prettier */,
               left: selectedLayerRect.left - overlayRect.left - 50,
               width: selectedLayerRect.width + 100,
               color,
@@ -315,7 +316,17 @@ export function Overlay({
               pointerEvents: "none",
             }}
           >
-            {round(selectedLayerRect.width)} x {round(selectedLayerRect.height)}
+            <span
+              css={{
+                padding: "2px 4px",
+                background: color,
+                color: "white",
+                borderRadius: "2px",
+              }}
+            >
+              {round(selectedLayerRect.width)} x{" "}
+              {round(selectedLayerRect.height)}
+            </span>
           </div>
         </Fragment>
       )}
