@@ -4,7 +4,7 @@ Design components for the web in Visual Studio Code. Generate code you ~~can tru
 
 ## What is Phi for VS Code?
 
-Phi is a Visual Studio Code extension that lets you define the specs of your components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) is supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
+Phi is a Visual Studio Code extension that lets you define the specs of your components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) are supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
 **Phi is still in alpha so you will encounters some bugs.**
 
@@ -60,7 +60,7 @@ import { HelloWorld } from "./path/to/file.phi";
 const IndexPage = () => <HelloWorld />;
 ```
 
-### Import components in your Next.js project
+##https://www.twitch.tv/grandvice8 Next.js integration
 
 Install `@phijs/next-plugin` in your Next.js project
 
