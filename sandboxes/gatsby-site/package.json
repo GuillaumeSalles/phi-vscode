@@ -2,7 +2,7 @@
   "name": "gatsby-plugin-phi-sandbox",
   "private": true,
   "description": "Sandbox to test gatsby-plugin-phi",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "author": "Guillaume Salles",
   "dependencies": {
     "gatsby": "^2.9.4",
