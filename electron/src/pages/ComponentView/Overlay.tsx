@@ -4,6 +4,7 @@ import * as T from "../../types";
 import { Fragment } from "react";
 import { uiStateComponentOrThrow } from "../../refsUtil";
 import { isResizable } from "../../layerUtils";
+import { round } from "../../utils";
 
 type Props = {
   refs: T.Refs;
@@ -314,7 +315,7 @@ export function Overlay({
               pointerEvents: "none",
             }}
           >
-            {selectedLayerRect.width} x {selectedLayerRect.height}
+            {round(selectedLayerRect.width)} x {round(selectedLayerRect.height)}
           </div>
         </Fragment>
       )}

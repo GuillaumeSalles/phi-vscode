@@ -67,3 +67,7 @@ export function shallowEqualForPropsWithLogs(prev: any, next: any) {
   console.log(`Memo successful`, prev, next);
   return true;
 }
+
+export function round(value: number) {
+  return Math.round((value + Number.EPSILON) * 10) / 10;
+}

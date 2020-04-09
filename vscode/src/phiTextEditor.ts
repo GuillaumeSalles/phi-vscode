@@ -27,10 +27,7 @@ export class PhiTextEditorProvider implements vscode.CustomTextEditorProvider {
   public register(): vscode.Disposable {
     const provider = vscode.window.registerCustomEditorProvider(
       PhiTextEditorProvider.viewType,
-      this,
-      {
-        enableFindWidget: true,
-      }
+      this
     );
 
     return vscode.Disposable.from(provider);
