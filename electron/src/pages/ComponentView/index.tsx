@@ -29,6 +29,7 @@ import {
 import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
 import Toolbar from "./Toolbar";
+import { stopKeydownPropagationIfNecessary } from "../../utils";
 
 const tabStyle = css({
   display: "flex",
@@ -258,6 +259,7 @@ function ComponentView({
       right={
         uiState.isEditing && selectedLayer ? (
           <div
+            onKeyDown={stopKeydownPropagationIfNecessary}
             css={[
               column,
               {
