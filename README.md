@@ -33,7 +33,7 @@ At this point, you should be able to see the Phi Editor in VSCode
 
 You are now ready to design your own components!
 
-### Import components in your Gatsby project
+## Gatsby integration
 
 Install `@phijs/gatsby-plugin-phi` in your Gatsby project
 
@@ -60,7 +60,7 @@ import { HelloWorld } from "./path/to/file.phi";
 const IndexPage = () => <HelloWorld />;
 ```
 
-##https://www.twitch.tv/grandvice8 Next.js integration
+## Next.js integration
 
 Install `@phijs/next-plugin` in your Next.js project
 
