@@ -4,7 +4,7 @@ Design components for the web in Visual Studio Code. Generate code you ~~can tru
 
 ## What is Phi for VS Code?
 
-Phi is a Visual Studio Code extension that lets you define the specs of your components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) is supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
+Phi is a Visual Studio Code extension that lets you define the specs of your components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) are supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
 **Phi is still in alpha so you will encounters some bugs.**
 
@@ -24,16 +24,16 @@ Phi is using a VS Code the [Custom webview editor API](https://github.com/micros
 
 ### Install the Phi Extension
 
-- Download the VSCode extension https://marketplace.visualstudio.com/items?itemName=GuillaumeSalles.phi-vscode
+Download the VSCode extension https://marketplace.visualstudio.com/items?itemName=GuillaumeSalles.phi-vscode
 
-- Create a new a file with a `.phi` extension and save it.
+Create a new a file with a `.phi` extension and save it.
 
-- At this point, you should be able to see the Phi Editor in VSCode
+At this point, you should be able to see the Phi Editor in VSCode
   ![Phi Extension preview in vscode](/assets/HelloWorld.png)
 
-- You are now ready to design your own components!
+You are now ready to design your own components!
 
-### Import components in your Gatsby project
+## Gatsby integration
 
 Install `@phijs/gatsby-plugin-phi` in your Gatsby project
 
@@ -54,13 +54,13 @@ module.exports = {
 
 Import your component directly from your react code.
 
-```javascript
+```jsx
 import { HelloWorld } from "./path/to/file.phi";
 
 const IndexPage = () => <HelloWorld />;
 ```
 
-### Import components in your Next.js project
+## Next.js integration
 
 Install `@phijs/next-plugin` in your Next.js project
 
@@ -77,13 +77,13 @@ module.exports = withPhi();
 
 Import your component directly from your react code.
 
-```javascript
+```jsx
 import { HelloWorld } from "./path/to/file.phi";
 
 const IndexPage = () => <HelloWorld />;
 ```
 
-### Conventions
+## Conventions
 
 Components names are defined as `kebab-case` in Phi but are imported as `PascalCase`.
 Example `hello-world` becomes `HelloWorld`.
