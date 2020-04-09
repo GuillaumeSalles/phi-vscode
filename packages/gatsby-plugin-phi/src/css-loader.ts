@@ -1,5 +1,5 @@
-import * as T from "@phi/shared";
-import { layerTreeToArray, layerToCss, jsonToRefs } from "@phi/shared";
+import * as T from "@phijs/shared";
+import { layerTreeToArray, layerToCss, jsonToRefs } from "@phijs/shared";
 
 function componentToCss(component: T.Component, refs: T.Refs) {
   return layerTreeToArray(component.layout)

@@ -1,5 +1,5 @@
 import ts from "typescript";
-import * as T from "@phi/shared";
+import * as T from "@phijs/shared";
 import {
   assertUnreachable,
   createSimpleJsxElement,
@@ -8,7 +8,7 @@ import {
   layerTreeToArray,
   layerToCss,
   createLayerPropertiesJsx,
-} from "@phi/shared";
+} from "@phijs/shared";
 
 function createLayerJsx(
   component: T.Component,

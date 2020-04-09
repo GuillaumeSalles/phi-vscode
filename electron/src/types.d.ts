@@ -1,4 +1,4 @@
-import { Refs } from "@phi/shared";
+import { Refs } from "@phijs/shared";
 
 export type RefType = "fontFamilies" | "fontSizes" | "breakpoints" | "colors";
 
@@ -260,4 +260,4 @@ export type ActionType = Action["type"];
 
 export type ApplyAction = (action: Action) => void;
 
-export * from "@phi/shared";
+export * from "@phijs/shared";

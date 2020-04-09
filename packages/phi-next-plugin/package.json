@@ -1,6 +1,6 @@
 {
-  "name": "@phi/next-plugin",
-  "version": "0.4.0",
+  "name": "@phijs/next-plugin",
+  "version": "0.4.3",
   "description": "Phi plugin for next.js",
   "repository": {
     "type": "git",
@@ -8,14 +8,19 @@
     "directory": "packages/phi-next-plugin"
   },
   "main": "index.js",
+  "files": [
+    "dist",
+    "index.js"
+  ],
   "scripts": {
     "start": "tsc --watch",
+    "build": "tsc",
     "test": "jest --watch"
   },
   "author": "Guillaume Salles",
   "license": "GNU GPL V3.0",
   "dependencies": {
-    "@phi/shared": "0.4.0",
+    "@phijs/shared": "0.4.0",
     "typescript": "^3.5.2"
   },
   "devDependencies": {

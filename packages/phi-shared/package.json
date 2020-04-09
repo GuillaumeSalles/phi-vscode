@@ -1,7 +1,7 @@
 {
-  "name": "@phi/shared",
-  "version": "0.4.0",
-  "description": "Shared utils between @phi packages",
+  "name": "@phijs/shared",
+  "version": "0.4.3",
+  "description": "Shared utils between @phijs packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/GuillaumeSalles/phi-vscode.git",
@@ -12,6 +12,9 @@
     "start": "tsc --watch",
     "test": "jest --watch"
   },
+  "files": [
+    "dist"
+  ],
   "author": "Guillaume Salles",
   "license": "GNU GPL V3.0",
   "devDependencies": {
@@ -19,7 +22,8 @@
     "@types/prettier": "^1.18.1",
     "jest": "^24.8.0",
     "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
     "typescript": "> 3.5"

@@ -1,5 +1,5 @@
 import ts from "typescript";
-import * as T from "@phi/shared";
+import * as T from "@phijs/shared";
 import {
   assertUnreachable,
   createSimpleJsxElement,
@@ -8,7 +8,7 @@ import {
   createLayerPropertiesJsx,
   arrayToMap,
   tsNodesToString,
-} from "@phi/shared";
+} from "@phijs/shared";
 
 function createLayerJsx(
   component: T.Component,
@@ -103,7 +103,7 @@ export default function gatsbyJsLoader(source: string) {
 
   return `
 import React from "react"
-import styles from "!style-loader!css-loader?modules=true!gatsby-plugin-phi/dist/css-loader?modules!${this.resourcePath}"
+import styles from "!style-loader!css-loader?modules=true!@phijs/gatsby-plugin-phi/dist/css-loader?modules!${this.resourcePath}"
 
 ${result}
 `;

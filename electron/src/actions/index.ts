@@ -11,7 +11,7 @@ import {
 import uuid from "uuid/v4";
 import { makeLayer } from "../factories";
 import { uiStateComponentOrThrow } from "../refsUtil";
-import { assertUnreachable, LayerStyle } from "@phi/shared";
+import { assertUnreachable, LayerStyle } from "@phijs/shared";
 import {
   decrement,
   lengthToString,
