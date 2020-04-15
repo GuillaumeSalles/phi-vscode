@@ -39,9 +39,7 @@ function componentImport(name: string) {
 
 function componentWithoutProps(name: string) {
   return `function Basic() {
-  return (
-    <${name} />
-  );
+  return <${name} />;
 }`;
 }
 
@@ -87,15 +85,12 @@ export default function CodeExamples({ component }: Props) {
         {
           zIndex: 2,
           flex: 0,
-          padding: "20px 40px",
-          height: "300px",
+          padding: "0 40px 16px",
           maxHeight: "300px",
-          minHeight: "300px",
-          background: colors.sideBarBackground
-        }
+          background: colors.topBarBackground,
+        },
       ]}
     >
-      <h1 css={heading}>React</h1>
       <pre
         css={{
           background: colors.canvasBackground,
@@ -105,8 +100,8 @@ export default function CodeExamples({ component }: Props) {
           margin: "0.5em 0px",
           overflow: "auto",
           "::-webkit-scrollbar-corner": {
-            background: "transparent"
-          }
+            background: "transparent",
+          },
         }}
       >
         <code css={{ fontFamily: fonts.mono, color: colors.sideBarForeground }}>

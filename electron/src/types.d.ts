@@ -221,6 +221,11 @@ export type SelectMediaQuery = {
   mediaQuery?: string;
 };
 
+export type ToggleCodeVisibility = {
+  type: "toggleCodeVisibility";
+  isVisible: boolean;
+};
+
 export type Action =
   | GoTo
   | GlobalShortcutAction
@@ -254,6 +259,7 @@ export type Action =
   | UpdateComponentExampleProp
   | UpdateLayerStyle
   | AddMediaQuery
+  | ToggleCodeVisibility
   | SetLayerEditorMode;
 
 export type ActionType = Action["type"];

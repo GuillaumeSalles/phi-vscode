@@ -7,8 +7,10 @@
     "url": "git+https://github.com/GuillaumeSalles/phi-vscode.git"
   },
   "scripts": {
+    "start": "concurrently \"npm run start:shared\" \"npm run start:app\"",
+    "start:shared": "cd ./packages/phi-shared/ && npm start",
     "link:shared": "cd ./packages/phi-shared/ && npm link && cd ../../electron && npm link @phijs/shared",
-    "start": "npm run link:shared && cd ./electron && npm start",
+    "start:app": "npm run link:shared && cd ./electron && npm start",
     "start:sandboxes": "concurrently \"npm run start:gatsby-sandbox\" \"npm run start:next-sandbox\"",
     "start:gatsby-sandbox": "cd ./sandboxes/gatsby-site && npm start",
     "start:next-sandbox": "cd ./sandboxes/next-sandbox && npm run dev"

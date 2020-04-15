@@ -28,6 +28,7 @@ function goToFirstComponentOrDefault(components: T.ComponentMap): T.UIState {
         componentId: firstKey(components),
         isEditing: false,
         layerEditorMode: "html",
+        isCodeVisible: false,
       };
 }
 
@@ -655,6 +656,7 @@ function addComponentHandler(action: T.AddComponent, refs: T.Refs): T.Refs {
       componentId: action.componentId,
       isEditing: true,
       layerEditorMode: "html",
+      isCodeVisible: false,
     },
   };
 }
@@ -1122,6 +1124,20 @@ function selectMediaQueryHandler(action: T.SelectMediaQuery, refs: T.Refs) {
   };
 }
 
+function toggleCodeVisibilityHandler(
+  action: T.ToggleCodeVisibility,
+  refs: T.Refs
+) {
+  const uiState = uiStateComponentOrThrow(refs);
+  return {
+    ...refs,
+    uiState: {
+      ...uiState,
+      isCodeVisible: action.isVisible,
+    },
+  };
+}
+
 export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
   switch (action.type) {
     case "goTo":
@@ -1190,6 +1206,8 @@ export default function applyAction(action: T.Action, refs: T.Refs): T.Refs {
       return setLayerEditorModeHandler(action, refs);
     case "hoverLayer":
       return hoverLayerHandler(action, refs);
+    case "toggleCodeVisibility":
+      return toggleCodeVisibilityHandler(action, refs);
   }
 }
 

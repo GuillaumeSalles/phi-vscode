@@ -288,6 +288,7 @@ export type UIStateComponent = {
   isEditing: boolean;
   mediaQuery?: string;
   layerEditorMode: LayerEditorMode;
+  isCodeVisible: boolean;
 };
 
 export type LayerEditorMode = "html" | "css";

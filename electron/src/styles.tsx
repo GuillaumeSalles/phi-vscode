@@ -69,31 +69,31 @@ export const colors = {
 
   seletableCardForeground: "black",
 
-  topBarBackground: "var(--vscode-activityBar-background)"
+  topBarBackground: "var(--vscode-activityBar-background)",
 };
 
 export const fonts = {
-  mono: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`
+  mono: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`,
 };
 
 export const column = css({
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 });
 
 export const row = css({
   display: "flex",
-  flexDirection: "row"
+  flexDirection: "row",
 });
 
 export const mainPadding = css({
-  padding: "40px 0 40px 40px"
+  padding: "40px 0 40px 40px",
 });
 
 export const heading = css({
   margin: "0",
   fontWeight: 400,
-  fontSize: "24px"
+  fontSize: "24px",
 });
 
 export const sectionTitle = css({
@@ -102,19 +102,19 @@ export const sectionTitle = css({
   textTransform: "uppercase",
   letterSpacing: "1.3px",
   fontWeight: 400,
-  color: colors.sideBarSectionHeaderForeground
+  color: colors.sideBarSectionHeaderForeground,
 });
 
 export const separator = {
   margin: "4px 0",
   border: "none",
-  borderTop: "solid 1px #DDD"
+  borderTop: "solid 1px #DDD",
 };
 
 export const subHeading = css({
   margin: "0",
   fontWeight: 400,
-  fontSize: "20px"
+  fontSize: "20px",
 });
 
 export const primaryButton = css({
@@ -127,12 +127,13 @@ export const primaryButton = css({
   color: colors.buttonForeground,
   background: colors.buttonBackground,
   cursor: "pointer",
+  whiteSpace: "nowrap",
   ":hover": {
-    background: colors.buttonHoverBackground
+    background: colors.buttonHoverBackground,
   },
   ":disabled": {
-    cursor: "not-allowed"
-  }
+    cursor: "not-allowed",
+  },
 });
 
 export const textInput = css({
@@ -152,11 +153,11 @@ export const textInput = css({
   padding: "4px 4px",
   ":focus": {
     outline: "1px solid -webkit-focus-ring-color",
-    outlineOffset: "-1px"
+    outlineOffset: "-1px",
   },
   "::-webkit-input-placeholder": {
-    color: colors.inputPlaceholderForeground
-  }
+    color: colors.inputPlaceholderForeground,
+  },
 });
 
 export const styleEditorInput = css({
@@ -177,8 +178,8 @@ export const styleEditorInput = css({
     "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
   ":focus": {
     borderColor: colors.primary,
-    outline: 0
-  }
+    outline: 0,
+  },
 });
 
 export const checkboxInputLabel = css({
@@ -196,8 +197,8 @@ export const checkboxInputLabel = css({
     "border 0.2s ease 0s, background 0.2s ease 0s, color 0.2s ease-out 0s",
   ":focus": {
     borderColor: colors.primary,
-    outline: 0
-  }
+    outline: 0,
+  },
 });
 
 export const input = css({
@@ -215,11 +216,11 @@ export const input = css({
   borderStyle: "none",
   borderColor: "initial",
   borderImage: "initial",
-  outline: "0px"
+  outline: "0px",
 });
 
 export const shadow1 = {
-  boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px"
+  boxShadow: "rgba(0, 0, 0, 0.12) 0px 2px 5px 0px",
 };
 
 export const selectableCard = css(
@@ -232,8 +233,8 @@ export const selectableCard = css(
     borderStyle: "solid",
     color: colors.seletableCardForeground,
     ":hover": {
-      boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
-    }
+      boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",
+    },
   },
   shadow1
 );
@@ -242,5 +243,5 @@ export const card = css({
   boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px",
   background: "white",
   borderRadius: "2px",
-  transition: "all 0.2s ease 0s"
+  transition: "all 0.2s ease 0s",
 });

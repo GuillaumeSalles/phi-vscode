@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
-import React from "react";
+import React, { useState } from "react";
 import { column, mainPadding, row, colors } from "../../styles";
 import * as T from "../../types";
 import { uiStateComponentOrThrow } from "../../refsUtil";
@@ -53,6 +53,7 @@ function ComponentView({
 }: Props) {
   const component = refs.components.get(componentId)!;
   const uiState = uiStateComponentOrThrow(refs);
+  const isCodeVisible = uiState.isCodeVisible;
 
   const isEditingHTML = uiState.layerEditorMode === "html";
 
@@ -106,16 +107,24 @@ function ComponentView({
             />
           </div>
           <div css={[row]}>
-            {uiState.isEditing ? (
-              <React.Fragment>
+            <React.Fragment>
+              <Button
+                text={isCodeVisible ? "Hide code" : "View code"}
+                margin="0 12px 0 0"
+                onClick={() => {
+                  applyAction({
+                    type: "toggleCodeVisibility",
+                    isVisible: !isCodeVisible,
+                  });
+                }}
+              />
+              {uiState.isEditing ? (
                 <Button
                   margin="0 12px 0 0"
                   text="Done"
                   onClick={() => applyAction({ type: "stopEditComponent" })}
                 />
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
+              ) : (
                 <Button
                   text="Edit"
                   margin="0 12px 0 0"
@@ -125,8 +134,8 @@ function ComponentView({
                     });
                   }}
                 />
-              </React.Fragment>
-            )}
+              )}
+            </React.Fragment>
           </div>
           {/* <SettingsEditor refs={refs} applyAction={applyAction} /> */}
         </div>
@@ -155,9 +164,10 @@ function ComponentView({
         <div
           css={[
             column,
-            { height: "100%", overflowX: "hidden", paddingTop: "20px" },
+            { height: "100%", overflowX: "hidden", paddingTop: "48px" },
           ]}
         >
+          {isCodeVisible && <CodeExamples component={component} />}
           <div
             css={[
               column,
@@ -179,9 +189,6 @@ function ComponentView({
               selectedLayer={selectedLayer}
             />
           </div>
-          {uiState.isEditing === false && (
-            <CodeExamples component={component} />
-          )}
         </div>
       }
       right={

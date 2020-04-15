@@ -355,6 +355,7 @@ export function makeDefaultProject(): T.Refs {
     componentId: firstKey(components),
     isEditing: false,
     layerEditorMode: "html",
+    isCodeVisible: false,
   };
 
   return refs;
