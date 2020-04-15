@@ -14,6 +14,7 @@ export default function Modal(props: Props) {
   return ReactDOM.createPortal(
     <div
       css={{
+        zIndex: 100,
         display: props.isOpen ? "flex" : "none",
         height: "100vh",
         width: "100vw",
@@ -23,7 +24,7 @@ export default function Modal(props: Props) {
         top: 0,
         bottom: 0,
         left: 0,
-        right: 0
+        right: 0,
       }}
     >
       <div css={{ zIndex: 1 }} onKeyDown={stopKeydownPropagationIfNecessary}>
@@ -31,16 +32,14 @@ export default function Modal(props: Props) {
       </div>
       <div
         css={{
-          backgroundColor: "rgb(0, 0, 0)",
           bottom: "0px",
           height: "100%",
           left: "0px",
           opacity: 0,
-          pointerEvents: "all",
           position: "fixed",
           top: "0px",
           width: "100%",
-          transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0s"
+          transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0s",
         }}
       />
     </div>,
