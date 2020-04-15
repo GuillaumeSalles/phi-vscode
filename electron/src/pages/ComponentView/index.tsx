@@ -3,33 +3,22 @@ import { jsx, css } from "@emotion/core";
 import React from "react";
 import { column, mainPadding, row, colors } from "../../styles";
 import * as T from "../../types";
-import {
-  filterComponentsWhenLayer,
-  uiStateComponentOrThrow,
-} from "../../refsUtil";
+import { uiStateComponentOrThrow } from "../../refsUtil";
 import Component from "./Component";
 // import SettingsEditor from "./SettingsEditor";
 import CodeExamples from "./CodeExamples";
-import SecondaryButton from "../../components/SecondaryButton";
 import LayersTree from "../../components/LayersTree";
 import LayerEditor from "./Editors/LayerEditor";
 import HtmlEditor from "./Editors/HtmlEditor";
 import { Layout } from "../../components/Layout";
 import ComponentProps from "./ComponentProps";
 import { findLayerByIdWithParent } from "../../layerUtils";
-import { useWarningDialog } from "../../hooks";
 import HtmlLayerBindings from "./Editors/HtmlLayerBindings";
-import OkCancelModal from "../../components/OkCancelModal";
 import Button from "../../components/Button";
-import {
-  useStringFormEntry,
-  useDialogForm,
-  FormInput,
-} from "../../components/Form";
-import { validateRefName } from "../../validators";
 import ComponentExamplesEditor from "./Editors/ComponentExamplesEditor";
 import Toolbar from "./Toolbar";
 import { stopKeydownPropagationIfNecessary } from "../../utils";
+import TitleMenu from "./TitleMenu";
 
 const tabStyle = css({
   display: "flex",
@@ -64,28 +53,6 @@ function ComponentView({
 }: Props) {
   const component = refs.components.get(componentId)!;
   const uiState = uiStateComponentOrThrow(refs);
-
-  const nameEntry = useStringFormEntry("", (value) =>
-    validateRefName(value, componentId, refs.components, "Components")
-  );
-  const renameComponentDialog = useDialogForm([nameEntry], () => {
-    applyAction({
-      type: "renameComponent",
-      componentId,
-      name: nameEntry.value,
-    });
-  });
-
-  const componentsThatUseCurrentComponent = filterComponentsWhenLayer(
-    refs,
-    (l) => l.type === "component" && l.componentId === componentId
-  );
-  const deleteRefDialog = useWarningDialog(
-    `Can't delete component ${component.name}`,
-    `${component.name} is used by ${componentsThatUseCurrentComponent
-      .map((c) => `"${c.name}"`)
-      .join(", ")}.`
-  );
 
   const isEditingHTML = uiState.layerEditorMode === "html";
 
@@ -132,6 +99,11 @@ function ComponentView({
             >
               {component.name}
             </div>
+            <TitleMenu
+              refs={refs}
+              applyAction={applyAction}
+              component={component}
+            />
           </div>
           <div css={[row]}>
             {uiState.isEditing ? (
@@ -151,25 +123,6 @@ function ComponentView({
                     applyAction({
                       type: "editComponent",
                     });
-                  }}
-                />
-                <Button
-                  margin="0 12px 0 0"
-                  text="Rename"
-                  onClick={() => {
-                    renameComponentDialog.open();
-                    nameEntry.setValue(component.name);
-                  }}
-                />
-                <Button
-                  text="Delete"
-                  margin="0 12px 0 0"
-                  onClick={() => {
-                    if (componentsThatUseCurrentComponent.length === 0) {
-                      applyAction({ type: "deleteComponent", componentId });
-                    } else {
-                      deleteRefDialog.open();
-                    }
                   }}
                 />
               </React.Fragment>
@@ -224,31 +177,6 @@ function ComponentView({
               refs={refs}
               applyAction={applyAction}
               selectedLayer={selectedLayer}
-            />
-            <OkCancelModal
-              {...deleteRefDialog.dialogProps}
-              buttons={<Button text="Ok" {...deleteRefDialog.okProps} />}
-            />
-            <OkCancelModal
-              title="Rename component"
-              {...renameComponentDialog.dialogProps}
-              buttons={
-                <React.Fragment>
-                  <SecondaryButton
-                    text="Cancel"
-                    {...renameComponentDialog.cancelButtonProps}
-                  />
-                  <Button text="Add" {...renameComponentDialog.okButtonProps} />
-                </React.Fragment>
-              }
-              form={
-                <React.Fragment>
-                  <FormInput
-                    placeholder="Name your component"
-                    {...nameEntry.inputProps}
-                  />
-                </React.Fragment>
-              }
             />
           </div>
           {uiState.isEditing === false && (

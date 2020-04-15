@@ -107,13 +107,15 @@ export default function LayerEditor<TLayer extends T.Layer>({
           style={style}
           onChange={updateLayerStyle}
         />
-        {style.display !== "none" && layer.type !== "container" && (
-          <TypographyEditor
-            style={style}
-            onChange={updateLayerStyle}
-            refs={refs}
-          />
-        )}
+        {style.display !== "none" &&
+          layer.type !== "container" &&
+          layer.type !== "image" && (
+            <TypographyEditor
+              style={style}
+              onChange={updateLayerStyle}
+              refs={refs}
+            />
+          )}
         {style.display !== "none" && (
           <React.Fragment>
             {parentLayer != null && (
