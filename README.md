@@ -20,8 +20,6 @@ Phi is a Visual Studio Code extension that lets you define the specs of your com
 
 ## Getting Started
 
-Phi is using a VS Code the [Custom webview editor API](https://github.com/microsoft/vscode/issues/77131). It's only available in the insiders build so there is no way to download it from the VS Code extensions marketplace (yet).
-
 ### Install the Phi Extension
 
 Download the VSCode extension https://marketplace.visualstudio.com/items?itemName=GuillaumeSalles.phi-vscode
