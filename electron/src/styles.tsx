@@ -39,7 +39,7 @@ export const colors = {
   sideBarBackground: "var(--vscode-sideBar-background)",
   canvasBackground: "var(--vscode-editor-background)",
 
-  primary: "var(--vscode-statusBar-background)",
+  primary: "var(--vscode-button-background)",
   border: "#DDDDDD",
 
   buttonForeground: "var(--vscode-button-foreground)",

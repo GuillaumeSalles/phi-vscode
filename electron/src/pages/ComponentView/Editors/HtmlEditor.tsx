@@ -17,7 +17,7 @@ const tags: T.TextLayerTag[] = [
   "h5",
   "h6",
   "p",
-  "span"
+  "span",
 ];
 const textTagsOptions = listToEntries(tags);
 
@@ -38,7 +38,7 @@ export default function HtmlEditor(props: Props) {
       componentId,
       layerId: layer.id,
       name,
-      value
+      value,
     });
   }
 
@@ -47,7 +47,7 @@ export default function HtmlEditor(props: Props) {
       type: "updateLayerTag",
       componentId,
       layerId: layer.id,
-      tag
+      tag,
     });
   }
 
@@ -59,8 +59,8 @@ export default function HtmlEditor(props: Props) {
         <Section title="Default Props">
           <Field label="Tag">
             <Select
-              value={props.layer.props.tag}
-              onChange={tag => updateLayerTag(tag)}
+              value={props.layer.tag}
+              onChange={(tag) => updateLayerTag(tag)}
               options={textTagsOptions}
             />
           </Field>
@@ -68,7 +68,7 @@ export default function HtmlEditor(props: Props) {
             <TextAreaInput
               placeholder="content"
               value={props.layer.props.content}
-              onChange={content => updateLayerProp("content", content)}
+              onChange={(content) => updateLayerProp("content", content)}
             />
           </Field>
         </Section>
@@ -79,7 +79,7 @@ export default function HtmlEditor(props: Props) {
       const refComponent = getComponentOrThrow(props.layer.componentId, refs);
       return (
         <Section title="Default Props">
-          {refComponent.props.map(prop => {
+          {refComponent.props.map((prop) => {
             return (
               <Field key={prop.name} label={prop.name}>
                 <TextInput
@@ -89,7 +89,7 @@ export default function HtmlEditor(props: Props) {
                       ? ""
                       : props.layer.props[prop.name]
                   }
-                  onChange={value => updateLayerProp(prop.name, value)}
+                  onChange={(value) => updateLayerProp(prop.name, value)}
                 />
               </Field>
             );
@@ -103,14 +103,14 @@ export default function HtmlEditor(props: Props) {
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.content}
-              onChange={content => updateLayerProp("content", content)}
+              onChange={(content) => updateLayerProp("content", content)}
             />
           </Field>
           <Field label="href">
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.href}
-              onChange={href => updateLayerProp("href", href)}
+              onChange={(href) => updateLayerProp("href", href)}
             />
           </Field>
         </Section>
@@ -122,28 +122,28 @@ export default function HtmlEditor(props: Props) {
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.src}
-              onChange={src => updateLayerProp("src", src)}
+              onChange={(src) => updateLayerProp("src", src)}
             />
           </Field>
           <Field label="height">
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.height}
-              onChange={height => updateLayerProp("height", height)}
+              onChange={(height) => updateLayerProp("height", height)}
             />
           </Field>
           <Field label="width">
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.width}
-              onChange={width => updateLayerProp("width", width)}
+              onChange={(width) => updateLayerProp("width", width)}
             />
           </Field>
           <Field label="alt">
             <TextInput
               cssOverrides={{ width: "100%" }}
               value={props.layer.props.alt}
-              onChange={alt => updateLayerProp("height", alt)}
+              onChange={(alt) => updateLayerProp("height", alt)}
             />
           </Field>
         </Section>
