@@ -2,7 +2,7 @@
   "name": "phi-vscode",
   "displayName": "Phi",
   "description": "Design components for the web in Visual Studio Code",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "GuillaumeSalles",
   "repository": {
     "type": "git",

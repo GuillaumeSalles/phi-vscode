@@ -4,7 +4,7 @@ Design components for the web in Visual Studio Code. Generate code you ~~can tru
 
 ## What is Phi for VS Code?
 
-Phi is a Visual Studio Code extension that lets you define the specs of your components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) are supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
+Phi is a Visual Studio Code extension that lets you design react components and then generate code you can use in your web apps (only [Gatsby](https://www.gatsbyjs.org/) and [Next.js](https://nextjs.org/) are supported right now). By limiting the scope to the web platform, Phi can leverage powerful CSS features like media queries and pseudo classes to generate a good part of your design system.
 
 **Phi is still in alpha so you will encounters some bugs.**
 
@@ -27,7 +27,7 @@ Download the VSCode extension https://marketplace.visualstudio.com/items?itemNam
 Create a new a file with a `.phi` extension and save it.
 
 At this point, you should be able to see the Phi Editor in VSCode
-  ![Phi Extension preview in vscode](/assets/HelloWorld.png)
+![Phi Extension preview in vscode](/assets/HelloWorld.png)
 
 You are now ready to design your own components!
 
