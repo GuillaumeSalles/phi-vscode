@@ -13,7 +13,9 @@
     "start:app": "npm run link:shared && cd ./electron && npm start",
     "start:sandboxes": "concurrently \"npm run start:gatsby-sandbox\" \"npm run start:next-sandbox\"",
     "start:gatsby-sandbox": "cd ./sandboxes/gatsby-site && npm start",
-    "start:next-sandbox": "cd ./sandboxes/next-sandbox && npm run dev"
+    "start:next-sandbox": "cd ./sandboxes/next-sandbox && npm run dev",
+    "version:vscode": "cd ./vscode && npm version",
+    "build:vscode": "cd ./vscode && npm run package"
   },
   "author": "",
   "license": "GNU GPL V3.0",
