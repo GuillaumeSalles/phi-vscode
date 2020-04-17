@@ -16,6 +16,7 @@ type Props = {
 
 const color = "rgb(0,110,197)";
 const selectedLayerLines = `dashed 1px ${color}`;
+const rulerWidth = "2px";
 
 const anchorStyle = css({
   position: "absolute",
@@ -99,11 +100,14 @@ export function Overlay({
           <div
             css={{
               position: "absolute",
-              top: selectedLayerRect.top - overlayRect.top,
+              bottom:
+                overlayRect.bottom -
+                selectedLayerRect.bottom +
+                selectedLayerRect.height,
               left: 0,
               right: 0,
-              height: "1px",
-              borderTop: selectedLayerLines,
+              height: rulerWidth,
+              borderBottom: selectedLayerLines,
               pointerEvents: "none",
             }}
           />
@@ -117,7 +121,7 @@ export function Overlay({
                 selectedLayerRect.height,
               left: 0,
               right: 0,
-              height: "1px",
+              height: rulerWidth,
               borderTop: selectedLayerLines,
               pointerEvents: "none",
             }}
@@ -128,8 +132,11 @@ export function Overlay({
               position: "absolute",
               top: 0,
               bottom: 0,
-              left: selectedLayerRect.left - overlayRect.left,
-              width: "1px",
+              right:
+                overlayRect.right -
+                selectedLayerRect.right +
+                selectedLayerRect.width,
+              width: rulerWidth,
               borderRight: selectedLayerLines,
               pointerEvents: "none",
             }}
@@ -144,8 +151,8 @@ export function Overlay({
                 selectedLayerRect.left -
                 overlayRect.left +
                 selectedLayerRect.width,
-              width: "1px",
-              borderRight: selectedLayerLines,
+              width: rulerWidth,
+              borderLeft: selectedLayerLines,
               pointerEvents: "none",
             }}
           />
